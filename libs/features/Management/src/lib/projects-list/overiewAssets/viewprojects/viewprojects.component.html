@@ -1,0 +1,13 @@
+
+<div class="grid grid-cols-12 gap-4">
+  <div class="col-span-12 lg:col-span-9">
+<lib-shared-overview [dataLoading]="loadDataProjects" [data]="ProjectData" [entries]="entries"></lib-shared-overview>
+
+  </div>
+  <div class="col-span-12 lg:col-span-3">
+    <lib-system-actions
+      [dataEntityTypeId]="29"
+      [entityId]="projectId">
+    </lib-system-actions>
+  </div>
+</div>

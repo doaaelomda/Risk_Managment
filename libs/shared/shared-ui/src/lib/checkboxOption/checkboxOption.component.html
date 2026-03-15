@@ -1,0 +1,12 @@
+<button
+  class="flex w-full align-items-center justify-between check_selectors cursor-pointer p-3 border rounded-lg hover:shadow-md"
+  [ngClass]="{ 'selected': checked }"
+  (click)="handleClick()"
+>
+  <div class="flex gap-2 items-center">
+    <img [src]="image" alt="" width="50px" height="50px" />
+    <label for="" class="text-base font-medium text-gray-800">
+      {{ label | translate }}
+    </label>
+  </div>
+</button>

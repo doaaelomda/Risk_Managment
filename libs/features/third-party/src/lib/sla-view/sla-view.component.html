@@ -1,0 +1,13 @@
+<section>
+  <div class="header flex items-center justify-between flex-wrap mb-8">
+    <div class="title flex items-center gap-4 flex-wrap">
+      <h2 class="text-2xl font-semibold text-gray-800">
+        {{ data?.name || '-' }}
+      </h2>
+    </div>
+  </div>
+
+  <lib-shared-tabs [hasComments]="false" [hasAttachments]="false"></lib-shared-tabs>
+
+  <router-outlet></router-outlet>
+</section>

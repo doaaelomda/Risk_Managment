@@ -1,0 +1,205 @@
+
+
+<section>
+  <lib-new-table
+    [loading]="loadingTable"
+    [table_data]="dataTable"
+    [table_title]="'STRATEGY.'+translateKey+'_TABLENAME' | translate"
+    [badge_title]="'STRATEGY.'+translateKey | translate"
+    [dataViewId]="dataViewId"
+    [entityID_Name]="entityID_Name"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="items"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="{type:'route',data:view_entityRouter}"
+    [table_actions_permissions]="{ module: 'STRATEGY', feature: 'GOALS', action: 'VIEW' }"
+  >
+  @if(_PermissionSystemService.can('STRATEGY' , 'GOALS' , 'ADD')){
+
+    <button
+      (click)="isAddingNew = true"
+      addition_action
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+    >
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'STRATEGY.ADD_NEW_' + translateKey | translate }}</span>
+    </button>
+  }
+  </lib-new-table>
+</section>
+
+<lib-delete-confirm-popup
+  [titleDelete]="'STRATEGY.DELETE_' + translateKey + '_TITLE'"
+  [descriptionDelete]="'STRATEGY.DELETE_' + translateKey + '_DESC'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        [loading]="isDeleteLoading"
+        (onClick)="deleteItem()"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+<p-dialog
+  [header]="getDialogHeader() | translate"
+  [modal]="true"
+  (onHide)="isAddingNew = false; current_row_selected = ''; tabForm.reset()"
+  [(visible)]="isAddingNew"
+  styleClass="w-[50rem]"
+>
+  @if(tabForm){
+  <form [formGroup]="tabForm" class="grid grid-cols-12 gap-6 mb-6">
+    <!-- English Name -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'STRATEGY_PLAN.NAME_PLACEHOLDER' | translate"
+        [inputLabel]="'STRATEGY_PLAN.NAME' | translate"
+        [control]="tabForm.get('name')!"
+        [controlNameInput]="'name'"
+      >
+      </lib-input-text>
+    </div>
+
+    <!-- Arabic Name -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'STRATEGY_PLAN.NAME_AR_PLACEHOLDER' | translate"
+        [inputLabel]="'STRATEGY_PLAN.NAME_AR' | translate"
+        [control]="tabForm.get('nameAr')!"
+        [controlNameInput]="'nameAr'"
+      >
+      </lib-input-text>
+    </div>
+
+       <div class="col-span-12">
+        <lib-textarea-ui
+          [placeholder]="'STRATEGY_PLAN.DESCRIPTION_PLACEHOLDER' | translate"
+          [inputLabel]="'STRATEGY_PLAN.DESCRIPTION' | translate"
+          [control]="tabForm.get('description')!"
+          [controlNameInput]="'description'"
+        >
+        </lib-textarea-ui>
+      </div>
+
+      <!-- Description Arabic -->
+         <div class="col-span-12">
+        <lib-textarea-ui
+          [placeholder]="'STRATEGY_PLAN.DESCRIPTION_AR_PLACEHOLDER' | translate"
+          [inputLabel]="'STRATEGY_PLAN.DESCRIPTION_AR' | translate"
+          [control]="tabForm.get('descriptionAr')!"
+          [controlNameInput]="'descriptionAr'"
+        >
+        </lib-textarea-ui>
+      </div>
+
+    <!-- Owner Role -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'STRATEGY_PLAN.OWNER_ROLE_PLACEHOLDER' | translate"
+        [label]="'STRATEGY_PLAN.OWNER_ROLE' | translate"
+        [control]="tabForm.get('ownerRoleID')!"
+        [formControlNameInput]="'ownerRoleID'"
+        [options]="roleList"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      >
+      </lib-ui-dropdown>
+    </div>
+
+    <!-- Start Date -->
+    <!-- <div class="md:col-span-6 col-span-12">
+      <lib-date-packer
+        [placeholder]="'STRATEGY_PLAN.START_DATE_PLACEHOLDER' | translate"
+        [inputLabel]="'STRATEGY_PLAN.START_DATE' | translate"
+        [control]="tabForm.get('startDate')!"
+        [controlNameInput]="'startDate'">
+      </lib-date-packer>
+    </div> -->
+
+    <!-- End Date -->
+    <!-- <div class="md:col-span-6 col-span-12">
+      <lib-date-packer
+        [placeholder]="'STRATEGY_PLAN.END_DATE_PLACEHOLDER' | translate"
+        [inputLabel]="'STRATEGY_PLAN.END_DATE' | translate"
+        [control]="tabForm.get('endDate')!"
+        [controlNameInput]="'endDate'">
+      </lib-date-packer>
+    </div> -->
+
+    <!-- Color -->
+    <!-- <div class="md:col-span-6 col-span-12">
+      <p class="text-sm font-medium mb-1 block">{{ 'STRATEGY_PLAN.COLOR' | translate }}</p>
+      <input type="color" formControlName="color" class="w-full h-10 rounded border border-gray-300" />
+    </div> -->
+
+    <!-- Importance Order -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-number
+        [placeholder]="'STRATEGY_PLAN.IMPORTANCE_ORDER_PLACEHOLDER' | translate"
+        [inputLabel]="'STRATEGY_PLAN.IMPORTANCE_ORDER' | translate"
+        [control]="tabForm.get('importanceOrder')!"
+        [controlNameInput]="'importanceOrder'"
+      >
+      </lib-input-number>
+    </div>
+
+    <!-- Status -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'STRATEGY_PLAN.STATUS_PLACEHOLDER' | translate"
+        [label]="'STRATEGY_PLAN.STATUS' | translate"
+        [control]="tabForm.get('strategicGoalStatusTypeID')!"
+        [formControlNameInput]="'strategicGoalStatusTypeID'"
+        [options]="statusList"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      >
+      </lib-ui-dropdown>
+    </div>
+
+    <!-- Priority -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'STRATEGY_PLAN.PRIORITY_PLACEHOLDER' | translate"
+        [label]="'STRATEGY_PLAN.PRIORITY' | translate"
+        [control]="tabForm.get('strategicGoalPriorityLevelTypeID')!"
+        [formControlNameInput]="'strategicGoalPriorityLevelTypeID'"
+        [options]="priorityList"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      >
+      </lib-ui-dropdown>
+    </div>
+  </form>
+  }
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-2">
+      <p-button
+        [label]="'BUTTONS.CANCEL' | translate"
+        severity="secondary"
+        styleClass="default_btn cancel"
+        (onClick)="isAddingNew = false"
+      />
+      <p-button
+        [loading]="isLoading"
+        [disabled]="tabForm.invalid"
+        [label]="'BUTTONS.SAVE' | translate"
+        (onClick)="save()"
+        styleClass="default_btn"
+      />
+    </div>
+  </ng-template>
+</p-dialog>

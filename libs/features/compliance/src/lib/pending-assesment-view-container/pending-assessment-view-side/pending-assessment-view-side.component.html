@@ -1,0 +1,41 @@
+<div class="search mb-5">
+  <lib-input-search></lib-input-search>
+</div>
+<div class="card flex justify-content-center">
+
+  @if(files.length){
+  <p-tree styleClass="node_wrapper p-0" class="w-full" [value]="files" draggableScope="self" droppableScope="self"
+    (onNodeSelect)="onNodeSelect($event.node)">
+    <ng-template let-node pTemplate="default">
+      <button class="flex gap-2 items-start w-full link" [ngClass]="{ selected_node: node === selectedNode }"
+        (click)="handleNodeClick(node);onNodeSelect(node)">
+        <p class="nodeName text-start flex-1" [title]="node?.name">
+          <i class="fi fi-rr-layers layers-ico"></i>
+          {{ node?.name }}
+        </p>
+        <div class="flex items-center gap-2">
+          @if(node?.children?.length){
+          <button (click)="toggleNode( node,$event)" class="iconActionWrapper">
+            <i class="fi fi-rr-angle-small-{{ node.expanded ? 'up' : 'down' }}"></i>
+          </button>
+          }
+        </div>
+      </button>
+    </ng-template>
+  </p-tree>
+  }
+  @else if (cuurentAssessmentControls.length) {
+  <div class="node_wrapper_custom">
+    @for ( node of cuurentAssessmentControls ; track node) {
+    <button [ngClass]="{'active_control':node?.controlAssessmentID === current_selected_control?.controlAssessmentID }" (click)="handleActiveControl(node)" class="flex gap-2 items-start w-full link rounded-lg" >
+      <p class="nodeName  text-start flex-1 text-sm" [title]="node?.name">
+        <i class="fi fi-rr-layers layers-ico"></i>
+        {{ node?.name }}
+      </p>
+    </button>
+    }
+  </div>
+  }
+</div>
+<div class="col-span-12 lg:col-span-6 flex flex-col gap-3 view_data_container">
+</div>

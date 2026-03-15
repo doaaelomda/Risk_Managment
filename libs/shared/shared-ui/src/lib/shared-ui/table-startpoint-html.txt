@@ -1,0 +1,57 @@
+<!-- 🔹 Shared UI Table -->
+<lib-shared-ui
+  #sharedUiComp
+  [view_entityRouter]="viewRoute"
+  [entityID_Name]="entityIdField"
+  [dataViewId]="dataEntityId"
+  [selected_profile_column]="selectedProfileId"
+  [filter_id_input]="dataEntityId"
+  [action_items]="actionItems"
+  [total_items_input]="pagination.totalItems"
+  [badge_name]="labels.badge | translate"
+  [table_name]="labels.table | translate"
+  [loadingState]="loading"
+  [dataList]="tableData"
+  [defultprofile]="defaultProfile"
+  [profilesList]="entityProfiles"
+  (filter_emitter)="handleFilter($event)"
+  (sortEmiter)="handleSort($event)"
+  (selected_emiter)="setSelected($event)"
+  (paginationEvent)="getListData($event)"
+  (showDeleteEvent)="toggleDeleteModal(true)"
+>
+  <!-- ➕ Add Button -->
+  <button
+    addition_action
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+  >
+    <i class="fi fi-br-plus w-5 h-5"></i>
+    <span>{{ labels.add | translate }}</span>
+  </button>
+</lib-shared-ui>
+
+<!-- 🔸 Delete Confirmation Popup -->
+<lib-delete-confirm-popup
+  [titleDelete]="labels.titleDelete | translate"
+  [descriptionDelete]="labels.descDelete | translate"
+  [visibleInput]="deleteModalVisible"
+  (hideEmiter)="toggleDeleteModal(false)"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <!-- Cancel -->
+    <div class="cancel_btn">
+      <button class="w-40" (click)="toggleDeleteModal(false)">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <!-- Confirm Delete -->
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="delete()"
+        [loading]="loadingDelete"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

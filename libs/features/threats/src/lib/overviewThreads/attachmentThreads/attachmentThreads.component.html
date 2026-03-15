@@ -1,0 +1,25 @@
+<div class="">
+  <lib-new-attach-list [loadingSatate]="loadingState" (action_emiter)="handleActionSingleFile($event)"
+    (add_emiter)="handleShowAdd($event)" [files]="risks_attachments">
+  </lib-new-attach-list>
+</div>
+
+
+<lib-attachments-ui
+  [dataEntityId]="controlAssessmentID"
+  [dataEntityTypeId]="49"
+  [fileUsageTypeID]="'49'"
+  [show_add_dailog]="show_add_dailog"
+  (added)="handleAdded($event)"
+></lib-attachments-ui>
+
+
+<lib-view-attachement (modelVisibleEmiter)="handleHideView($event)" [modelVisible]="displayModal" [selected_file_Input$]="selected_file_show" ></lib-view-attachement>
+
+<lib-edit-attachment
+  [visible]="edit_file_name"
+  [title]="current_title_update"
+  [loading]="loadUpdate"
+  (save)="handleUpdateTitle($event)"
+  (cancel_Modal)="edit_file_name = false"
+></lib-edit-attachment>

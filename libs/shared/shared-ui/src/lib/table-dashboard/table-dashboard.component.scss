@@ -1,0 +1,62 @@
+.head{
+  background-color: #F9FAFB;
+}
+
+.col_container{
+  cursor: move;
+}
+
+
+.col_container.dis_curs{
+  cursor: not-allowed	!important;
+}
+
+.header{
+    box-shadow: 0px 1px 2px 0px #1018280F;
+
+box-shadow: 0px 1px 3px 0px #1018281A;
+}
+
+.table_container{
+  box-shadow: 0px 1px 2px 0px #1018280F;
+
+box-shadow: 0px 1px 3px 0px #1018281A;
+
+}
+
+
+
+.avatar img{
+  width: 60 ;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.table_title_header{
+  color: rgba(16, 24, 40, 1);
+  font-size: 18px;
+  font-weight: 500;
+}
+::ng-deep .action_btn{
+  background-color: transparent;
+  border-color: rgba(122, 90, 248, 1)
+
+}
+.progress_outer{
+  @apply bg-success_color/25 rounded-md h-2;
+  .inner{
+    @apply bg-success_color rounded-md h-2;
+  }
+}
+
+
+
+.custom_height{
+  height: 60dvh ;
+}
+
+
+
+.header{
+  border-color: #EAECF0
+}

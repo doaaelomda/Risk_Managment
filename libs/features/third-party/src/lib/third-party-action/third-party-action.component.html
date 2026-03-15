@@ -1,0 +1,220 @@
+<section class="form_sec mb-6">
+  <div class="header border-b border-gray_light pb-6">
+    <h2 class="text-lg font-medium text-[#101828]">
+      {{
+        current_update_id
+          ? ('THIRD_PARTY.UPDATE_THIRD_PARTY' | translate)
+          : ('THIRD_PARTY.ADD_NEW_THIRD_PARTY' | translate)
+      }}
+    </h2>
+  </div>
+
+  <form [formGroup]="thirdPartyForm" class="grid grid-cols-12 gap-6 mb-6 py-2">
+    <!-- <div class="md:col-span-6 col-span-12">
+      <lib-input-text [placeholder]="'THIRD_PARTY.LEGAL_NAME_PLACEHOLDER' | translate"
+        [inputLabel]="'THIRD_PARTY.LEGAL_NAME' | translate" [control]="thirdPartyForm.get('legalName')!"
+        [controlNameInput]="'legalName'">
+      </lib-input-text>
+    </div> -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'THIRD_PARTY.NAME_PLACEHOLDER' | translate"
+        [inputLabel]="'THIRD_PARTY.NAME' | translate"
+        [control]="thirdPartyForm.get('name')!"
+        [controlNameInput]="'name'"
+      >
+      </lib-input-text>
+    </div>
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'THIRD_PARTY.NAME_AR_PLACEHOLDER' | translate"
+        [inputLabel]="'THIRD_PARTY.NAME_AR' | translate"
+        [control]="thirdPartyForm.get('nameAr')!"
+        [controlNameInput]="'nameAr'"
+      >
+      </lib-input-text>
+    </div>
+
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'THIRD_PARTY.CATEGORY_PLACEHOLDER' | translate"
+        [label]="'THIRD_PARTY.CATEGORY' | translate"
+        [control]="thirdPartyForm.get('thirdPartyCategoryTypeID')!"
+        [formControlNameInput]="'thirdPartyCategoryTypeID'"
+        [options]="ThirdPartyCategoryType"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      >
+      </lib-ui-dropdown>
+    </div>
+
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="
+          'THIRD_PARTY.CRITICAL_LEVEL_TYPE_PLACEHOLDER' | translate
+        "
+        [label]="'THIRD_PARTY.CRITICAL_LEVEL_TYPE' | translate"
+        [control]="thirdPartyForm.get('thirdPartyCriticalityLevelTypeID')!"
+        [formControlNameInput]="'thirdPartyCriticalityLevelTypeID'"
+        [options]="ThirdPartyCriticalityLevelType"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      >
+      </lib-ui-dropdown>
+    </div>
+
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'THIRD_PARTY.STATUS_PLACEHOLDER' | translate"
+        [label]="'THIRD_PARTY.STATUS' | translate"
+        [control]="thirdPartyForm.get('thirdPartyStatusTypeID')!"
+        [formControlNameInput]="'thirdPartyStatusTypeID'"
+        [options]="statusTypes"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      >
+      </lib-ui-dropdown>
+    </div>
+
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-number
+        [placeholder]="
+          'THIRD_PARTY.REGISTRATION_NUMBER_PLACEHOLDER' | translate
+        "
+        [inputLabel]="'THIRD_PARTY.REGISTRATION_NUMBER' | translate"
+        [control]="thirdPartyForm.get('registrationNumber')!"
+        [controlNameInput]="'registrationNumber'"
+      >
+      </lib-input-number>
+    </div>
+
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'THIRD_PARTY.PRIMARY_EMAIL_PLACEHOLDER' | translate"
+        [inputLabel]="'THIRD_PARTY.PRIMARY_EMAIL' | translate"
+        [control]="thirdPartyForm.get('primaryEmail')!"
+        [controlNameInput]="'primaryEmail'"
+      >
+      </lib-input-text>
+    </div>
+
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'THIRD_PARTY.PRIMARY_PHONE_PLACEHOLDER' | translate"
+        [inputLabel]="'THIRD_PARTY.PRIMARY_PHONE' | translate"
+        [control]="thirdPartyForm.get('primaryPhone')!"
+        [controlNameInput]="'primaryPhone'"
+      >
+      </lib-input-text>
+    </div>
+
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-url
+        [placeholder]="'THIRD_PARTY.WEBSITE_PLACEHOLDER' | translate"
+        [inputLabel]="'THIRD_PARTY.WEBSITE' | translate"
+        [control]="thirdPartyForm.get('website')!"
+        [controlNameInput]="'website'"
+      >
+      </lib-input-url>
+    </div>
+
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'THIRD_PARTY.COUNTRY_PLACEHOLDER' | translate"
+        [label]="'THIRD_PARTY.COUNTRY' | translate"
+        [control]="thirdPartyForm.get('countryID')!"
+        [formControlNameInput]="'countryID'"
+        [options]="countries"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      >
+      </lib-ui-dropdown>
+    </div>
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'THIRD_PARTY.CITY_PLACEHOLDER' | translate"
+        [inputLabel]="'THIRD_PARTY.CITY' | translate"
+        [control]="thirdPartyForm.get('city')!"
+        [controlNameInput]="'city'"
+      >
+      </lib-input-text>
+    </div>
+
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'THIRD_PARTY.ADDRESS_LINE1_PLACEHOLDER' | translate"
+        [inputLabel]="'THIRD_PARTY.ADDRESS_LINE1' | translate"
+        [control]="thirdPartyForm.get('addressLine1')!"
+        [controlNameInput]="'addressLine1'"
+      >
+      </lib-input-text>
+    </div>
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'THIRD_PARTY.STATEPROVINCE_PLACEHOLDER' | translate"
+        [inputLabel]="'THIRD_PARTY.STATEPROVINCE' | translate"
+        [control]="thirdPartyForm.get('stateProvince')!"
+        [controlNameInput]="'stateProvince'"
+      >
+      </lib-input-text>
+    </div>
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-number
+        [placeholder]="'THIRD_PARTY.POSTAL_CODE_PLACEHOLDER' | translate"
+        [inputLabel]="'THIRD_PARTY.POSTAL_CODE' | translate"
+        [control]="thirdPartyForm.get('postalCode')!"
+        [controlNameInput]="'postalCode'"
+      >
+      </lib-input-number>
+    </div>
+
+    <div class="col-span-12">
+      <lib-textarea-ui
+        [placeholder]="'THIRD_PARTY.DESCRIPTION_PLACEHOLDER' | translate"
+        [inputLabel]="'THIRD_PARTY.DESCRIPTION' | translate"
+        [control]="thirdPartyForm.get('description')!"
+        [controlNameInput]="'description'"
+      >
+      </lib-textarea-ui>
+    </div>
+
+    <div class="col-span-12">
+      <lib-textarea-ui
+        [placeholder]="'THIRD_PARTY.DESCRIPTION_AR_PLACEHOLDER' | translate"
+        [inputLabel]="'THIRD_PARTY.DESCRIPTION_AR' | translate"
+        [control]="thirdPartyForm.get('descriptionAr')!"
+        [controlNameInput]="'descriptionAr'"
+      >
+      </lib-textarea-ui>
+    </div>
+
+    <div class="col-span-12">
+      <lib-textarea-ui
+        [placeholder]="'THIRD_PARTY.NOTES_PLACEHOLDER' | translate"
+        [inputLabel]="'THIRD_PARTY.NOTES' | translate"
+        [control]="thirdPartyForm.get('notes')!"
+        [controlNameInput]="'notes'"
+      >
+      </lib-textarea-ui>
+    </div>
+  </form>
+</section>
+
+<!-- Buttons -->
+<div
+  class="col-span-12 flex items-center gap-4 justify-end py-6 border-t border-gray_light"
+>
+  <div class="cancel_btn">
+    <button [routerLink]="['/gfw-portal/third-party/list']">
+      {{ 'RISK_MANAGMENT.Cancel' | translate }}
+    </button>
+  </div>
+  <div class="action_btn">
+    <p-button
+      [disabled]="thirdPartyForm.invalid"
+      [label]="'RISK_MANAGMENT.SaveChanges' | translate"
+      [loading]="isLoading"
+      (onClick)="submit()"
+    ></p-button>
+  </div>
+</div>

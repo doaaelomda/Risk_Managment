@@ -1,0 +1,12 @@
+<header class="flex px-12 items-center justify-between">
+  <div class="logo">
+    <img src="images/logo_small.svg" alt="" />
+  </div>
+
+  <div>
+    <button (click)="toggleLanguages()" class="flex items-center gap-1 sm:gap-2 p-4 text-sm">
+      <img src="images/globe-02.png" class="w-5" alt="lang" />
+      <span class="inline lang"> {{currentLang}} </span>
+    </button>
+  </div>
+</header>

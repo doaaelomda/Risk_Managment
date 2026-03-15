@@ -1,0 +1,179 @@
+<section>
+  <div class="pending-assessment-card">
+
+    <div class="main_Information">
+      <h2 class="text-gray-900 font-medium text-xl">
+        {{ 'pending_assessment.headers_view' | translate }}
+      </h2>
+
+      @if(getGovControlDataArray?.name){
+      <div class="grid grid-cols-12 py-3 gap-7">
+        <div class="col-span-12">
+          <h2 class="text-gray-500 font-medium text-[16px] mb-2">
+            {{ 'pending_assessment.welcome' | translate }}
+          </h2>
+          <p class="text-gray-700 font-medium text-[18px]">
+            {{ getGovControlDataArray?.name }}
+          </p>
+        </div>
+      </div>
+      }
+    </div>
+
+    @if(getGovControlDataArray?.fullControlText){
+    <div class="DESCRIPTION py-3">
+      <h2 class="text-gray-900 font-medium text-xl">
+        {{ 'Control_view.DESCRIPTION' | translate }}
+      </h2>
+      <p class="text-gray-500 font-medium text-[16px] py-2">
+        {{ getGovControlDataArray?.fullControlText }}
+      </p>
+    </div>
+    }
+    <div class="CurrentStatus">
+      <h2 class="text-gray-900 font-medium text-xl my-3">{{ 'pending_assessment.CurrentStatus' | translate }}</h2>
+      <div class="flex flex-wrap gap-3">
+        @for (type of statusCards; track $index; let i = $index) {
+        @if (type?.value) {
+        <button class="{{ type.class }} card inline-flex w-max flex-col"
+          [class]="'card-status' + (i === 0 ? '' : i + 1)" [class.active_type]="type?.id === selected_type?.id"
+          (click)="handleSetSelectedType(type)">
+          <div class="flex gap-2 items-center mb-2 whitespace-nowrap">
+            <i [class]="type.icon + ' text-primaryColor-500 text-sm'"></i>
+            <span class="text-[#475467] font-medium text-base whitespace-nowrap">
+              {{ type?.value }}
+            </span>
+          </div>
+
+          <div class="flex">
+            <span class="whitespace-nowrap" [ngClass]="'progress_span' + (i === 0 ? '' : i + 1)">
+              {{ ('pending_assessment.' + type.key) | translate }}
+            </span>
+          </div>
+        </button>
+        }
+        }
+      </div>
+
+    </div>
+
+    <div class="perviousAssessment py-9">
+      <h2 class="headers_view mb-2.5">
+        {{ 'pending_assessment.PreviousAssessment' | translate }}
+      </h2>
+      @if (!loading &&dataList.length === 0) {
+      <div class="flex flex-col gap-2 items-center empty_state_wrapper">
+        <img src="images/no-document.svg" alt="empty-state" />
+        <p class="text-gray-900 font-semibold text-[18px] mb-1">{{'ATTACHMENT.NOTUPLOADED' |translate}}</p>
+        <p class="text-gray-500 font-normal text-[16px] mb-1">{{'ATTACHMENT.UPLOADFILES' |translate}}</p>
+      </div>
+      }@else if(dataList.length > 0 && !loading) {
+      <p-accordion class="w-full">
+        @for (item of dataList; track item.govControlComplianceAssessmentID) {
+        <p-accordionTab>
+          <ng-template pTemplate="header">
+            <div class="custom-accordion-header w-full flex items-center gap-4">
+              <i class="fi fi-br-layers"></i>
+              <h2>{{ item.govControlName }}</h2>
+            </div>
+          </ng-template>
+
+          <div class="flex flex-wrap gap-5 mb-4">
+            @if(item.assessmentDate){
+            <div class=" flex gap-2 items-center">
+              <span class="text-gray-500 font-medium text-[16px]">{{ 'pending_assessment.Date' | translate }} :</span>
+              <img src="images/icons/calendar.svg" alt="" />
+              <p class="text-gray-700 font-medium text-[18px]">
+                {{ item.assessmentDate | date:'MMM d, y' }}
+              </p>
+            </div>
+            }
+            @if(item.assessedByTitle){
+            <div class=" flex gap-2 items-center">
+              <span class="text-gray-500 font-medium text-[16px]">{{ 'pending_assessment.Assessor' | translate }}
+                :</span>
+              <div class="w-[30px] h-[30px] flex items-center justify-center rounded-full">
+                <img class="w-full h-full" src="images/Avatar2.svg" alt="user-img" />
+              </div>
+              <p class="text-gray-700 font-medium text-[18px]">
+                {{ item.assessedByTitle }}
+              </p>
+            </div>
+            }
+
+            @if( item.govControlImplementationStatusTypeName){
+            <div class=" flex gap-2 items-center">
+              <span class="text-gray-500 font-medium text-[16px]">{{ 'pending_assessment.ComplianceStatus' | translate
+                }}
+                :</span>
+              <p class="badge" [ngClass]="item.govControlImplementationStatusTypeColor?.toLowerCase()">
+                {{ item.govControlImplementationStatusTypeName }}
+              </p>
+
+            </div>
+            }
+          </div>
+
+
+          <div class="col-span-12 card-finding border-primaryColor-500">
+
+            <p class="text-primaryColor-600 font-semibold text-xl mb-3">{{'pending_assessment.Finding' |translate}}</p>
+            @if(item.findings){
+            <div class="mb-6">
+              <p class="text-gray-900 font-medium text-[16px] mb-2">
+                {{ 'pending_assessment.Comments' | translate }}
+              </p>
+              <p class="text-gray-500 font-normal text-[16px]">
+                {{ item.findings }}
+              </p>
+            </div>
+            }
+
+            @if(item.recommendations){
+            <div class="mb-6">
+              <p class="text-gray-900 font-medium text-[16px] mb-2">
+                {{ 'pending_assessment.Recommendation' | translate }}
+              </p>
+              <p class="text-gray-500 font-normal text-[16px]">
+                {{ item.recommendations }}
+              </p>
+            </div>
+            }
+
+            <div class="flex flex-wrap gap-3 ">
+              @if(item.assessmentDate){
+              <div class=" flex gap-2 items-center">
+                <span class="text-gray-500 font-medium text-[16px]">{{ 'pending_assessment.Date' | translate }} :</span>
+                <img src="images/icons/calendar.svg" alt="" />
+                <p class="text-gray-700 font-medium text-[18px]">
+                  {{ item.assessmentDate | date:'MMM d, y' }}
+                </p>
+              </div>
+              }
+
+              @if( item.govControlImplementationStatusTypeName){
+              <div class=" flex gap-2 items-center">
+                <span class="text-gray-500 font-medium text-[16px]">{{ 'MODAL_VIEW.STATUS' | translate }} :</span>
+                <p class="badge" [ngClass]="item.govControlImplementationStatusTypeColor?.toLowerCase()">
+                  {{ item.govControlImplementationStatusTypeName }}
+                </p>
+
+              </div>
+              }
+            </div>
+          </div>
+        </p-accordionTab>
+        }
+      </p-accordion>
+      }@else {
+      <lib-loader></lib-loader>
+      }
+    </div>
+
+
+
+
+
+
+  </div>
+</section>

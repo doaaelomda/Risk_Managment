@@ -1,0 +1,202 @@
+<section class="form_sec">
+  <div class="header border-b border-gray_light pb-6 mb-6">
+    <h2 class="text-lg font-medium text-gray-900">
+      {{ current_update_id ? ('AWARENESS.UPDATE_CAMPAIGN' | translate) : ('AWARENESS.ADD_CAMPAIGN' | translate) }}
+    </h2>
+  </div>
+
+  <form [formGroup]="campaign_form" class="grid grid-cols-12 gap-6 mb-6">
+
+    <!-- Name -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'AWARENESS.NAME_PLACEHOLDER' | translate"
+        [inputLabel]="'AWARENESS.NAME' | translate"
+        [control]="campaign_form.get('name')!"
+        [controlNameInput]="'name'"
+        [validations]="validationsRequired">
+      </lib-input-text>
+    </div>
+
+        <!-- Awareness Content Type -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'AWARENESS.CONTENT_TYPE_PLACEHOLDER' | translate"
+        [label]="'AWARENESS.CONTENT_TYPE' | translate"
+        [control]="campaign_form.get('awarenessContentTypeID')!"
+        [formControlNameInput]="'awarenessContentTypeID'"
+        [options]="contentTypes"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+        [validations]="validationsRequired">
+      </lib-ui-dropdown>
+    </div>
+
+    <!-- Awareness Campaign Type -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'AWARENESS.TYPE_PLACEHOLDER' | translate"
+        [label]="'AWARENESS.TYPE' | translate"
+        [control]="campaign_form.get('awarenessCampaignTypeID')!"
+        [formControlNameInput]="'awarenessCampaignTypeID'"
+        [options]="campaignTypes"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+        [validations]="validationsRequired">
+      </lib-ui-dropdown>
+    </div>
+
+    <!-- Awareness Status -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'AWARENESS.STATUS_PLACEHOLDER' | translate"
+        [label]="'AWARENESS.STATUS' | translate"
+        [control]="campaign_form.get('awarenessCampaignStatusTypeID')!"
+        [formControlNameInput]="'awarenessCampaignStatusTypeID'"
+        [options]="statusTypes"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+        [validations]="validationsRequired">
+      </lib-ui-dropdown>
+    </div>
+
+
+
+        <!-- Require Quiz Pass -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'AWARENESS.REQUIRE_QUIZ_PASS' | translate"
+        [label]="'AWARENESS.REQUIRE_QUIZ_PASS' | translate"
+        [control]="campaign_form.get('requireQuizPass')!"
+        [formControlNameInput]="'requireQuizPass'"
+        [options]="booleanOptions"
+        [optionLabel]="'label'"
+        [optionValue]="'id'" [validations]="validationsRequired">
+      </lib-ui-dropdown>
+    </div>
+
+        <!-- Min Score To Pass -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-number
+        [placeholder]="'AWARENESS.MIN_SCORE_PLACEHOLDER' | translate"
+        [inputLabel]="'AWARENESS.MIN_SCORE' | translate"
+        [control]="campaign_form.get('minScoreToPass')!"
+        [controlNameInput]="'minScoreToPass'">
+      </lib-input-number>
+    </div>
+
+        <!-- Government Document ID -->
+    <!-- <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'AWARENESS.GOV_DOC_ID_PLACEHOLDER' | translate"
+        [label]="'AWARENESS.GOV_DOC_ID' | translate"
+        [control]="campaign_form.get('govDocuemntID')!"
+        [formControlNameInput]="'govDocuemntID'"
+        [options]="govDocuemnt"
+        [optionLabel]="'label'"
+        [optionValue]="'id'">
+      </lib-ui-dropdown>
+    </div> -->
+
+
+    <!-- Start Date -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-date-packer
+        [placeholder]="'AWARENESS.START_DATE_PLACEHOLDER' | translate"
+        [inputLabel]="'AWARENESS.START_DATE' | translate"
+        [control]="campaign_form.get('startDate')!"
+        [controlNameInput]="'startDate'" [validations]="validationsRequired">
+      </lib-date-packer>
+    </div>
+
+    <!-- Due Date -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-date-packer
+        [placeholder]="'AWARENESS.DUE_DATE_PLACEHOLDER' | translate"
+        [inputLabel]="'AWARENESS.DUE_DATE' | translate"
+        [control]="campaign_form.get('dueDate')!"
+        [controlNameInput]="'dueDate'">
+      </lib-date-packer>
+    </div>
+
+
+
+
+
+
+        <!-- Reminder Interval -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-number
+        [placeholder]="'AWARENESS.REMINDER_INTERVAL_PLACEHOLDER' | translate"
+        [inputLabel]="'AWARENESS.REMINDER_INTERVAL' | translate"
+        [control]="campaign_form.get('reminderIntervalDays')!"
+        [controlNameInput]="'reminderIntervalDays'" [validations]="validationsRequired">
+      </lib-input-number>
+    </div>
+
+    <!-- Max Reminders -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-number
+        [placeholder]="'AWARENESS.MAX_REMINDERS_PLACEHOLDER' | translate"
+        [inputLabel]="'AWARENESS.MAX_REMINDERS' | translate"
+        [control]="campaign_form.get('maxReminders')!"
+        [controlNameInput]="'maxReminders'" [validations]="validationsRequired">
+      </lib-input-number>
+    </div>
+
+            <!-- External URL -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-url
+        [placeholder]="'AWARENESS.EXTERNAL_URL_PLACEHOLDER' | translate"
+        [inputLabel]="'AWARENESS.EXTERNAL_URL' | translate"
+        [control]="campaign_form.get('externalUrl')!"
+        [controlNameInput]="'externalUrl'">
+      </lib-input-url>
+    </div>
+
+
+    <!-- Grace Days -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-number
+        [placeholder]="'AWARENESS.GRACE_DAYS_PLACEHOLDER' | translate"
+        [inputLabel]="'AWARENESS.GRACE_DAYS' | translate"
+        [control]="campaign_form.get('graceDays')!"
+        [controlNameInput]="'graceDays'">
+      </lib-input-number>
+    </div>
+
+
+
+    <!-- Delivery Subject -->
+    <!-- <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'AWARENESS.DELIVERY_SUBJECT_PLACEHOLDER' | translate"
+        [inputLabel]="'AWARENESS.DELIVERY_SUBJECT' | translate"
+        [control]="campaign_form.get('deliverySubject')!"
+        [controlNameInput]="'deliverySubject'">
+      </lib-input-text>
+    </div> -->
+
+    <!-- Delivery Message -->
+    <!-- <div class="col-span-12">
+      <lib-textarea-ui
+        [placeholder]="'AWARENESS.DELIVERY_MESSAGE_PLACEHOLDER' | translate"
+        [inputLabel]="'AWARENESS.DELIVERY_MESSAGE' | translate"
+        [control]="campaign_form.get('deliveryMessage')!"
+        [controlNameInput]="'deliveryMessage'">
+      </lib-textarea-ui>
+    </div> -->
+
+  </form>
+
+  <div class="col-span-12 flex items-center gap-4 justify-end py-6 border-t border-gray_light">
+    <div class="cancel_btn">
+      <button [routerLink]="'/gfw-portal/awareness/campaign-list'" routerLinkActive="router-link-active">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+    <div class="action_btn flex">
+      <p-button [label]="'BUTTONS.SAVE' | translate" [loading]="isLoading" (onClick)="submit()"></p-button>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,51 @@
+<section>
+
+
+    <lib-new-table
+    [table_actions_permissions]="{ module: 'THIRDPARTIES', feature: 'THIRDPARTYEXCEPTIONS', action: 'VIEW' }"
+
+    [loading]="loadingTable"
+    [table_data]="dataTable"
+    [table_title]="'EXCEPTIONS.LIST_TITLE' | translate"
+    [badge_title]="'EXCEPTIONS.exception' | translate"
+    [dataViewId]="61"
+    [entityID_Name]="'grcExceptionID'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="items"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+  >
+
+    @if(_PermissionSystemService.can('THIRDPARTIES' , 'THIRDPARTYEXCEPTIONS' , 'ADD')
+){
+        <button addition_action (click)="addException()"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'EXCEPTIONS.ADD_BUTTON' | translate }}</span>
+    </button>
+    }
+  </lib-new-table>
+</section>
+
+<lib-delete-confirm-popup
+  [titleDelete]="'EXCEPTIONS.DELETE_TITLE' | translate"
+  [descriptionDelete]="'EXCEPTIONS.DELETE_DESC' | translate"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteException()"
+        [loading]="loadDeleted"
+        [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

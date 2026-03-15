@@ -1,0 +1,25 @@
+<section class="flex items-center justify-between">
+  <div class="flex justify-center items-center gap-4">
+    <h4 class="text-2xl font-semibold text-gray-800"> {{incidentData?.name || '-'}}</h4>
+    <h6 class="text-primary font-bold text-2xl mx-4">
+      └─{{ data?.resolutionSummary }}
+    </h6>
+  </div>
+
+  <div class="flex justify-center items-center gap-4">
+    <div class="flex">
+      <p class="m-0 font-medium text-gray_color">
+        {{ 'INCIDENT.CLOSURE_METHOD' | translate }}:
+      </p>
+      <h4 class="badge"> {{data?.closureMethod}}</h4>
+    </div>
+    <div class="flex">
+      <p class="m-0 font-medium text-gray_color">
+        {{ 'INCIDENT.CLOSURE_DATE' | translate }}:
+      </p>
+      <h4 class="font-semibold text-gray-800"> {{data?.closureDate | date: 'MMM d, y' }}</h4>
+    </div>
+  </div>
+</section>
+<lib-shared-tabs></lib-shared-tabs>
+<router-outlet></router-outlet>

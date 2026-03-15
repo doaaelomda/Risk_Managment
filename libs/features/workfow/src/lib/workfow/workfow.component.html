@@ -1,0 +1,95 @@
+<lib-new-table [loading]="isLoading" [table_data]="workflowList" [table_title]="'WORKFLOW.WORKFLOW' | translate"
+  [badge_title]="'WORKFLOW.WORKFLOW' | translate" [dataViewId]="32" [entityID_Name]="'wfid'" [isShownAction]="true"
+  (payload_emiter)="handleDataTable($event)" [action_items]="action_items" (currentActionRow)="setSelectedRow($event)"
+  [columnControl]="columnControl"
+  [table_actions_permissions]="{ module: 'WORKFLOW', feature: 'WORKFLOW', action: 'VIEW' }"
+  >
+  @if(_PermissionSystemService.can('WORKFLOW' , 'WORKFLOW' , 'ADD')){
+  <button (click)="addNewWorkFlow()" addition_action
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+    <i class="fi fi-br-plus w-5 h-5"></i>
+    <span>{{ 'WORKFLOW.ADD_NEW_WORKFLOW' | translate }}</span>
+  </button>
+}
+</lib-new-table>
+<!-- </lib-shared-ui> -->
+
+<lib-delete-confirm-popup [titleDelete]="'WORKFLOW.WORKFLOW_DELETE_TITLE' | translate"
+  [descriptionDelete]="'WORKFLOW.DELETE_WORKFLOW_DESC' | translate" (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible">
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="handleClosedDelete()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button (onClick)="deleteWorkflow()" [loading]="isDeleting" [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+<div class="action_dailog">
+  <p-dialog header="Header" [closable]="false" [(visible)]="openModal" [modal]="true" [dismissableMask]="true"
+    [draggable]="false" (onHide)="initWorkFlowForm()" styleClass="w-[50rem]">
+    <ng-template pTemplate="header"> </ng-template>
+
+    <div class="container">
+      <!-- Header -->
+      <div class="head pb-4 border-b border-gray_light">
+        <h2 class="font-medium text-gray-800 text-lg mb-2">
+          @if (!isEditing) {
+          <span>{{ 'WORKFLOW.Define_Workflow' | translate }}</span>
+          }@else {
+          <span>{{ 'WORKFLOW.edit_Workflow' | translate }}</span>
+
+          }
+        </h2>
+        <p class="text-gray_color">
+          {{ 'RISK_ACTION.HEADER_DESC' | translate }}
+        </p>
+      </div>
+
+      <!-- Form -->
+      <form [formGroup]="workflowForm">
+        <div class="form_control grid grid-cols-12 gap-6 items-center py-4 border-b border-gray_light">
+          <div class="col-span-6">
+            <lib-input-text [placeholder]="'WORKFLOW.NameEn' | translate" [control]="workflowForm.get('name')!"
+              [inputLabel]="'WORKFLOW.NameEn' | translate" [controlNameInput]="'name'" [validations]="validationsname">
+            </lib-input-text>
+          </div>
+
+          <div class="col-span-6">
+            <lib-input-text [placeholder]="'WORKFLOW.NameAr' | translate" [control]="workflowForm.get('nameAr')!"
+              [inputLabel]="'WORKFLOW.NameAr' | translate" [validations]="validationsname"
+              [controlNameInput]="'nameAr'">
+            </lib-input-text>
+          </div>
+
+          <div class="col-span-6">
+            <lib-ui-dropdown [label]="'WORKFLOW.DataEntityType'|translate" class="col-span-6"
+              [placeholder]="'WORKFLOW.DataEntityType' | translate" [control]="workflowForm.get('dataEntityTypeID')!"
+              [formControlNameInput]="'dataEntityTypeID'" [options]="userTypes" [optionLabel]="'label'"
+              [optionValue]="'id'" [validations]="dateEntityIdValidations">
+            </lib-ui-dropdown>
+          </div>
+        </div>
+      </form>
+
+      <div class="flex justify-end gap-4 py-4">
+        <div class="cancel_btn">
+          <button (click)="openModal = false">
+            {{ 'RISK_ACTION.CANCEL' | translate }}
+          </button>
+        </div>
+        <div class="action_btn">
+          <p-button [disabled]="workflowForm.invalid"
+            [label]="!selectworkflow ? ('RISK_ACTION.SAVE' | translate) : ('BUTTONS.UPDATE' | translate) " [outlined]="true"
+            severity="secondary" [loading]="isSaving" (onClick)="submit()">
+          </p-button>
+        </div>
+      </div>
+    </div>
+  </p-dialog>
+</div>

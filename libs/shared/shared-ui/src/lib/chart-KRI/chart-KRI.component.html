@@ -1,0 +1,167 @@
+<div class="w-full h-full py-7 px-6 border border-gray_light rounded-2xl">
+  <div class="flex justify-between gap-4">
+    <h1 class="text-lg font-semibold">{{ data?.title }}</h1>
+    <div class="flex gap-2 items-center">
+      @if(mode() === 'edit'){
+
+      <button
+        (click)="
+          actionEmitter.emit({
+            widget: chart_config_input()?.data,
+            event: 'delete',
+            value: chart_config_input()?.data
+          })
+        "
+        class="filter_dashboard_action-btn danger"
+      >
+        <i class="fi fi-rr-trash"></i>
+      </button>
+      <button
+        (click)="setting_visible = true"
+        class="filter_dashboard_action-btn"
+      >
+        <i class="fi fi-rr-settings"></i>
+      </button>
+      <button
+        (click)="filter_visible = true"
+        class="filter_dashboard_action-btn flex items-center"
+        [ngClass]="{
+          'gap-0': current_widget_applied_filters.length === 0,
+          'gap-2': current_widget_applied_filters.length > 0
+        }"
+      >
+        <div class="icon">
+          <i
+            [ngClass]="{
+              'text-primary': current_widget_applied_filters.length === 0,
+              'text-primary': current_widget_applied_filters.length > 0
+            }"
+            class="fi fi-rr-filter w-5 h-5"
+          ></i>
+        </div>
+        <span
+          [ngClass]="{
+            'text-white_color': current_widget_applied_filters.length > 0,
+            'gap-1': current_widget_applied_filters.length > 0,
+            'text-primary': current_widget_applied_filters.length > 0
+          }"
+          class="flex items-center justify-center font-medium text-lg"
+        >
+          @if(current_widget_applied_filters.length){
+          <div class="count_badge text-primary">
+            <span>{{ current_widget_applied_filters.length }}</span>
+          </div>
+          <span class="text-primary">{{
+            'HEARDE_TABLE.FILTER' | translate
+          }}</span>
+          }
+        </span>
+        @if(current_widget_applied_filters.length > 0){
+
+        <button>
+          <svg
+            width="10"
+            height="10"
+            viewBox="0 0 10 10"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.16634 0.833252L0.833008 9.16659M0.833008 0.833252L9.16634 9.16659"
+              stroke="#7A5AF8"
+              stroke-width="1.67"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+        }
+      </button>
+      <p-dropdown
+        [options]="widthOptions"
+        [(ngModel)]="selectedWidth"
+        optionLabel="value"
+        [placeholder]="'Select Width'"
+        optionValue="value"
+        (onChange)="handleWidthChange()"
+      >
+      </p-dropdown>
+
+      }
+    </div>
+  </div>
+  <div class="w-full h-full relative">
+    <div #kriChart class="kri_chart"></div>
+  </div>
+</div>
+<div class="action_dailog">
+  <p-dialog
+    [draggable]="false"
+    [position]="'right'"
+    header="Edit Profile"
+    [modal]="false"
+    [(visible)]="filter_visible"
+    styleClass="min-w-[40rem]"
+  >
+    <ng-template pTemplate="header"> </ng-template>
+
+    <lib-filter-dashboard
+      [current_filters]="current_widget_applied_filters"
+      (filter_emiter)="handleDataFilter($event)"
+      [data_viewId]="data?.dataViewID"
+      [reportId]="data?.id"
+    ></lib-filter-dashboard>
+  </p-dialog>
+</div>
+<p-dialog
+  [draggable]="false"
+  [position]="'right'"
+  header=" Widget Setting "
+  [modal]="false"
+  [(visible)]="setting_visible"
+  styleClass="min-w-[35rem]"
+>
+  <ng-template pTemplate="header">
+    <h2>Widget Setting</h2>
+  </ng-template>
+  @if(setting_form){
+  <form [formGroup]="setting_form" action="">
+    <div
+      class="field flex flex-wrap items-center border-b border-gray_light py-4"
+    >
+      <label class="font-bold w-1/4" for="code">Widget Title</label>
+      <div class="w-3/4">
+        <lib-input-text
+          [placeholder]="'Enter Title'"
+          [control]="setting_form?.get('title')!"
+          [controlNameInput]="'title'"
+        >
+        </lib-input-text>
+      </div>
+    </div>
+    <div
+      class="field flex flex-wrap items-center border-b border-gray_light py-4"
+    >
+      <label class="font-bold w-1/4" for="code">Widget Title (Arabic)</label>
+      <div class="w-3/4">
+        <lib-input-text
+          [placeholder]="'Enter Title Arabic'"
+          [control]="setting_form?.get('titleAr')!"
+          [controlNameInput]="'titleAr'"
+        >
+        </lib-input-text>
+      </div>
+    </div>
+  </form>
+  }
+
+  <ng-template pTemplate="footer">
+    <div class="action_btn">
+      <p-button
+        (onClick)="saveSettings()"
+        [loading]="loadingSave"
+        [label]="'Save'"
+      />
+    </div>
+  </ng-template>
+</p-dialog>

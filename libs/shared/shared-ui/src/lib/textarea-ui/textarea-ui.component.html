@@ -1,0 +1,16 @@
+<div class="form_group">
+  <div class="flex items-center justify-between mb-2">
+    <label class="block " for="
+    ">{{label|translate}}</label>
+    <ng-content select="[addition-action]"></ng-content>
+  </div>
+  <textarea [dir]="isArabicInput ? 'rtl' : 'ltr'"  type="text" rows="5" [placeholder]="currentPlaceHolder|translate" pInputText [formControlName]="controlName" ></textarea>
+
+  @if(currentControl.errors &&  currentControl.touched && currentValidations.length){
+    @for(val of currentValidations ; track val){
+      @if(currentControl.getError(val.key)){
+        <p class="text-sm p-1 text-danger_color">{{val.message | translate}}</p>
+      }
+    }
+  }
+</div>

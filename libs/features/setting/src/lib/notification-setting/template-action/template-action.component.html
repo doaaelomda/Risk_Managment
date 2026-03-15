@@ -1,0 +1,319 @@
+<section>
+  <h2 class="mb-6 text-2xl font-semibold text-gray-800">
+    {{ 'NOTIFICATION_SETTING.NOTFICATION_TEMPLATE' | translate }}
+  </h2>
+
+  <div class="steps">
+    @for (step of visibleSteps; let i = $index ; track $index) {
+    <div class="stepContainer"  [ngClass]="{
+       'justify-center': visibleSteps.length === 1,
+
+       'justify-start': visibleSteps.length > 1 && i === 0,
+       'justify-center': visibleSteps.length > 2 && i > 0 && i < visibleSteps.length - 1,
+       'justify-end': visibleSteps.length > 1 && i === visibleSteps.length - 1
+     }">
+      @if (visibleSteps.length > 1) {
+      <div class="middle-line" [ngClass]="{
+               'first-line': i === 0,
+               'last-line': i === visibleSteps.length - 1
+             }">
+      </div>
+      }
+
+      <div class="step">
+        <button class="step_icon" (click)="step?.command()" [ngClass]="{ active: step?.id === currentStep }">
+          <i [class]="step?.icon"></i>
+        </button>
+
+        <h3 class="step_name" [ngClass]="{ active: step?.id === currentStep }">
+          {{ step?.name || '-' }}
+        </h3>
+
+        <span class="step_desc">
+          {{ step?.description || '-' }}
+        </span>
+      </div>
+    </div>
+    }
+
+  </div>
+
+  <div class="content px-6 mb-8">
+    @switch (currentStep) {
+    @case(1) {
+    <div class="basics_info">
+      <form [formGroup]="basicsInfoForm" class="grid grid-cols-12 gap-6" action="">
+        <div class="col-span-12">
+          <lib-input-text [placeholder]="'NOTIFICATION_SETTING.ENTER_TITLE' | translate" [validations]="[
+                  {
+                    key: 'required',
+                    message: 'NOTIFICATION_SETTING.TITLE_IS_REQUIRED' | translate
+                  }
+                ]" [control]="basicsInfoForm.get('name')!" [inputLabel]="'NOTIFICATION_SETTING.TITLE' | translate"
+            [controlNameInput]="'name'"></lib-input-text>
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown [label]="'NOTIFICATION_SETTING.STATUS' | translate"
+            [placeholder]="'NOTIFICATION_SETTING.SELECT_STATUS' | translate" [formControlNameInput]="'isActive'"
+            [options]="status" optionLabel="label" optionValue="value"
+            [control]="basicsInfoForm.get('isActive')!"></lib-ui-dropdown>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <lib-dropdown-checkbox [placeholder]="'NOTIFICATION_SETTING.SELECT_RECEIVER' | translate"
+            [label]="'NOTIFICATION_SETTING.RECEIVER' | translate"
+            [control]="basicsInfoForm.get('attributeReceiverIDs')!" [options]="recivers" optionLabel="label"
+            optionValue="id" [formControlNameInput]="'attributeReceiverIDs'">
+          </lib-dropdown-checkbox>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <lib-dropdown-checkbox [placeholder]="'NOTIFICATION_SETTING.SELECT_USERS' | translate"
+            [label]="'NOTIFICATION_SETTING.SELECT_USERS' | translate" [control]="basicsInfoForm.get('userReceiverIDs')!"
+            [options]="mangerUsers" optionLabel="userName" optionValue="id" [template_type]="'user'"
+            [formControlNameInput]="'userReceiverIDs'">
+          </lib-dropdown-checkbox>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <lib-dropdown-checkbox [placeholder]="'NOTIFICATION_SETTING.SELECT_ROLES' | translate"
+            [label]="'NOTIFICATION_SETTING.SELECT_ROLES' | translate" [control]="basicsInfoForm.get('roleReceiverIDs')!"
+            [options]="rolesList" optionLabel="label" optionValue="id" [formControlNameInput]="'roleReceiverIDs'">
+          </lib-dropdown-checkbox>
+        </div>
+
+
+
+      </form>
+    </div>
+    } @case(2) {
+    <div class="internal_notification">
+      <form [formGroup]="internalForm" class="grid gap-6 grid-cols-12" action="">
+        <div class="md:col-span-6 col-span-12">
+          <lib-input-text [placeholder]="
+              'NOTIFICATION_SETTING.ENTER_NOTIFICATION_TITLE' | translate
+            " [validations]="[]" [control]="internalForm.get('internalTemplateTitle')!"
+            [inputLabel]="'NOTIFICATION_SETTING.NOTIFICATION_TITLE' | translate"
+            [controlNameInput]="'internalTemplateTitle'">
+            <div addition-action class="icon_btn">
+              <button (click)="
+                  handleVaraibleControl(internalForm.get('internalTemplateTitle')!)
+                " class="btn">
+                <i class="fi fi-rr-record-vinyl"></i>
+              </button>
+            </div>
+          </lib-input-text>
+        </div>
+
+        <div class="md:col-span-6 col-span-12">
+          <lib-input-text [placeholder]="
+              'NOTIFICATION_SETTING.ENTER_NOTIFICATION_TITLE_AR' | translate
+            " [validations]="[]" [control]="internalForm.get('internalTemplateTitleAr')!" [inputLabel]="
+              'NOTIFICATION_SETTING.NOTIFICATION_TITLE_AR' | translate
+            " [controlNameInput]="'internalTemplateTitleAr'">
+            <div addition-action class="icon_btn">
+              <button (click)="
+                  handleVaraibleControl(
+                    internalForm.get('internalTemplateTitleAr')!
+                  )
+                " class="btn">
+                <i class="fi fi-rr-record-vinyl"></i>
+              </button>
+            </div>
+          </lib-input-text>
+        </div>
+
+        <div class="col-span-12">
+          <lib-textarea-ui [placeholder]="
+              'NOTIFICATION_SETTING.ENTER_NOTIFICATION_CONTENT' | translate
+            " [inputLabel]="
+              'NOTIFICATION_SETTING.NOTIFICATION_CONTENT' | translate
+            " [validations]="[]" [control]="internalForm.get('internalTemplateContent')!"
+            [controlNameInput]="'internalTemplateContent'">
+            <div addition-action class="icon_btn">
+              <button (click)="
+                  handleVaraibleControl(internalForm.get('internalTemplateContent')!)
+                " class="btn">
+                <i class="fi fi-rr-record-vinyl"></i>
+              </button>
+            </div>
+          </lib-textarea-ui>
+        </div>
+
+        <div class="col-span-12">
+          <lib-textarea-ui [placeholder]="
+              'NOTIFICATION_SETTING.ENTER_NOTIFICATION_CONTENT_AR' | translate
+            " [inputLabel]="
+              'NOTIFICATION_SETTING.NOTIFICATION_CONTENT_AR' | translate
+            " [validations]="[]" [control]="internalForm.get('internalTemplateContentAr')!"
+            [controlNameInput]="'internalTemplateContentAr'">
+            <div addition-action class="icon_btn">
+              <button (click)="
+                  handleVaraibleControl(
+                    internalForm.get('internalTemplateContentAr')!
+                  )
+                " class="btn">
+                <i class="fi fi-rr-record-vinyl"></i>
+              </button>
+            </div>
+          </lib-textarea-ui>
+        </div>
+      </form>
+    </div>
+    } @case(3) {
+    <div class="internal_notification grid grid-cols-12 gap-4">
+      <form [formGroup]="externalForm" class="col-span-8 grid gap-6 grid-cols-12" action="">
+        <div class="md:col-span-6 col-span-12">
+          <lib-input-text [placeholder]="'NOTIFICATION_SETTING.ENTER_EMAIL_TITLE' | translate" [validations]="[]"
+            [control]="externalForm.get('externalTemplateTitle')!"
+            [inputLabel]="'NOTIFICATION_SETTING.EMAIL_TITLE' | translate" [controlNameInput]="'externalTemplateTitle'">
+            <div addition-action class="icon_btn">
+              <button (click)="
+                  handleVaraibleControl(
+                    externalForm.get('externalTemplateTitle')!
+                  )
+                " class="btn">
+                <i class="fi fi-rr-record-vinyl"></i>
+              </button>
+            </div>
+          </lib-input-text>
+        </div>
+
+        <div class="md:col-span-6 col-span-12">
+          <lib-input-text [placeholder]="
+              'NOTIFICATION_SETTING.ENTER_EMAIL_TITLE_AR' | translate
+            " [validations]="[]" [control]="externalForm.get('externalTemplateTitleAr')!"
+            [inputLabel]="'NOTIFICATION_SETTING.EMAIL_TITLE_AR' | translate"
+            [controlNameInput]="'externalTemplateTitleAr'">
+            <div addition-action class="icon_btn">
+              <button (click)="
+                  handleVaraibleControl(
+                    externalForm.get('externalTemplateTitleAr')!
+                  )
+                " class="btn">
+                <i class="fi fi-rr-record-vinyl"></i>
+              </button>
+            </div>
+          </lib-input-text>
+        </div>
+
+        <div class="col-span-12">
+          <div class="flex mb-2 items-center justify-between">
+            <p class="font-medium">
+              {{
+              'NOTIFICATION_SETTING.EMAIL_NOTIFICATION_CONTENT' | translate
+              }}
+            </p>
+            <div class="icon_btn">
+              <button (click)="
+                  handleVaraibleControl(
+                    externalForm.get('externalTemplateContent')!
+                  )
+                " class="btn">
+                <i class="fi fi-rr-record-vinyl"></i>
+              </button>
+            </div>
+          </div>
+          <lib-editor [height]="'250px'" [control]="externalForm.get('externalTemplateContent')!"
+            [controlNameInput]="'externalTemplateContent'"></lib-editor>
+        </div>
+
+        <div class="col-span-12">
+          <div class="flex mb-2 items-center justify-between">
+            <p class="font-medium">
+              {{
+              'NOTIFICATION_SETTING.EMAIL_NOTIFICATION_CONTENT_AR' | translate
+              }}
+            </p>
+            <div class="icon_btn">
+              <button (click)="
+                  handleVaraibleControl(
+                    externalForm.get('externalTemplateContentAr')!
+                  )
+                " class="btn">
+                <i class="fi fi-rr-record-vinyl"></i>
+              </button>
+            </div>
+          </div>
+
+          <lib-editor [height]="'250px'" [control]="externalForm.get('externalTemplateContentAr')!"
+            [controlNameInput]="'externalTemplateContentAr'"></lib-editor>
+        </div>
+      </form>
+
+      <div class="col-span-4">
+        <h4 class="font-medium mb-2">
+          {{ 'NOTIFICATION_SETTING.PREVIEW' | translate }}
+        </h4>
+        <div class="content_preview">
+          <p class="mb-4">
+            <span>{{ 'NOTIFICATION_SETTING.SUBJECT' | translate }}: </span>
+            {{ externalForm.get('externalTemplateTitle')?.value }}
+          </p>
+          <p class="mb-2">{{ 'NOTIFICATION_SETTING.CONTENT' | translate }}:</p>
+          <div [innerHTML]="externalForm.get('externalTemplateContent')?.value | safeHtml" class="text-wrap"></div>
+        </div>
+      </div>
+    </div>
+    } }
+  </div>
+</section>
+
+<div class="col-span-12 flex items-center gap-4 justify-end py-6 border-t border-gray_light">
+  <div class="cancel_btn">
+    <button (click)="handleCancel()">
+      {{ 'RISK_MANAGMENT.Cancel' | translate }}
+    </button>
+  </div>
+  <div class="action_btn">
+    <p-button [disabled]="disabledBtn()" (onClick)="handleSubmitData()" [loading]="load_save"
+      [label]="'RISK_MANAGMENT.SaveChanges' | translate">
+    </p-button>
+  </div>
+</div>
+
+<div class="action_dailog">
+  <p-dialog (onHide)="resetVaraibleList()" [(visible)]="show_varaible" [modal]="true" [dismissableMask]="true"
+    [draggable]="false" styleClass="w-[888px]">
+    <ng-template pTemplate="header"></ng-template>
+
+    <div class="content">
+      <div class="header flex flex-col gap-2 mb-5">
+        <div class="icon_head flex items-center justify-center">
+          <i class="fi fi-rr-tags text-xl font-semibold"></i>
+        </div>
+        <h2 class="text-[#101828] text-lg font-medium">
+          {{ 'NOTIFICATION_SETTING.ADD_EVENT_FIELD' | translate }}
+        </h2>
+        <!-- <p class="text-gray_light text-sm">
+          {{ 'NOTIFICATION_SETTING.LABELS_HELP_ORGANIZE' | translate }}
+        </p> -->
+      </div>
+
+      <div class="varaibles flex items-center gap-3 flex-wrap">
+        @for (varible of varaibles_list; track $index) {
+        @if(varible?.notificationTagName){
+        <button (click)="setVariableInput(varible)" [ngClass]="{ selected: varible.isSelected }" class="var_btn">
+          {{ varible?.notificationTagName }}
+        </button>
+        } }
+      </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <div class="flex justify-end gap-4">
+        <div class="cancel_btn">
+          <button (click)="show_varaible = false; currentControlEffect = null">
+            {{ 'RISK_ACTION.CANCEL' | translate }}
+          </button>
+        </div>
+        <!-- <div class="action_btn">
+          <p-button
+            [label]="'NOTIFICATION_SETTING.ADD_LABELS' | translate"
+            [outlined]="true"
+            severity="secondary"
+          >
+          </p-button>
+        </div> -->
+      </div>
+    </ng-template>
+  </p-dialog>
+</div>

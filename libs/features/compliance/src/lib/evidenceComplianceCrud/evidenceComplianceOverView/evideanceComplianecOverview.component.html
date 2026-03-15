@@ -1,0 +1,52 @@
+<div class="flex justify-between items-center">
+  <div class="flex name_threats gap-3">
+    <div>
+
+      @if(loadDatathreats){
+      <p-skeleton width="150px" height="20px" borderRadius="8px"></p-skeleton>
+      }
+      @else {
+      <span class=" header-para">{{threatsData?.name}}</span>
+      }
+
+    </div>
+
+    @if(threatsData?.taskTitle){
+
+    <div>
+      @if(loadDatathreats){
+      <p-skeleton width="150px" height="20px" borderRadius="8px"></p-skeleton>
+      }
+      <p class="text-gray_color m-0">
+        {{ '(' + threatsData?.taskTitle + ')' }}
+      </p>
+    </div>
+    }
+  </div>
+  <div class="flex gap-2">
+    <div>
+      @if(threatsData?.evidenceTypeStatusTypeName){
+      <div class="flex gap-2">
+        <h2 class="font-medium text-gray_color">{{'EVIDENCE_VERSION.STATUS' | translate}}:</h2>
+        <p class="badge">
+          {{ threatsData?.evidenceTypeStatusTypeName }}
+        </p>
+      </div>
+      }
+    </div>
+    <div>
+      @if(threatsData?.organizationalUnitName){
+      <div class="flex gap-2">
+        <h2 class="font-medium text-gray_color">{{'TABS.DEPARTMENT' | translate}} :</h2>
+        <p class="font-semibold text-gray-800">
+          {{ threatsData?.organizationalUnitName }}
+        </p>
+      </div>
+      }
+    </div>
+  </div>
+</div>
+<lib-shared-tabs [permissionFeature]="{module:'COMPLIANCE' , feature:'EVIDENCECOMPLIANCE'}"
+  [tabs]="tabs"></lib-shared-tabs>
+
+<router-outlet></router-outlet>

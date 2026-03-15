@@ -1,0 +1,49 @@
+<div class="action_dailog">
+  <p-dialog
+    [header]="'ON_GOING_ASSESSMENTS.LINK_EVIDENCE' | translate"
+    [modal]="true"
+    [dismissableMask]="true"
+    [draggable]="false"
+    (onShow)="handleOnShow()"
+    (onHide)="hideEmitter.emit(false)"
+    [(visible)]="isLinkingEvidence"
+    styleClass="w-[85%] h-[95%]"
+  >
+    <ng-template pTemplate="header"> </ng-template>
+
+    @if(isLinkingEvidence){
+    <div class="container">
+      <lib-new-table
+        [loading]="loadingEvidencesTypes"
+        [selections_input]="linked_evidancesIDS"
+        [table_data]="evidencesTypes"
+        [table_title]="'ON_GOING_ASSESSMENTS.EVIDENCES_TYPES' | translate"
+        [badge_title]="'ON_GOING_ASSESSMENTS.TYPE' | translate"
+        [dataViewId]="73"
+        [entityID_Name]="'evidenceTypeID'"
+        (selectionEmitter)="handleEvidenceTypeSelection($event)"
+        [isShownAction]="false"
+        (payload_emiter)="handleEvidenceTypesData($event)"
+        [table_config]="{ type: 'multiSelect' }"
+        [columnControl]="{ type: 'modal' }"
+        [table_actions_permissions]="{
+          module: 'COMPLIANCE',
+          feature: 'EVIDENCECOMPLIANCE',
+          action: 'VIEW'
+        }"
+      >
+        <p-button
+          [loading]="saving"
+          class="bg-primary text-white text-sm rounded-lg default_btn"
+          addition_action
+          pButton
+          icon="pi pi-check"
+          (onClick)="linkEvidence()"
+          [label]="'Save Changes'"
+        >
+        </p-button>
+      </lib-new-table>
+    </div>
+    }
+  </p-dialog>
+</div>

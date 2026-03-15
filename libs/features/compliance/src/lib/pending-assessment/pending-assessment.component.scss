@@ -1,0 +1,115 @@
+::ng-deep .p-accordion-header-link {
+  border: 1.15px solid rgba(189, 180, 254, 1);
+  background: rgba(244, 243, 255, 1);
+  border-top-left-radius: 9.17px;
+  border-top-right-radius: 9.17px;
+  padding: 18.34px 22.93px 18.34px 18.34px;
+  color: rgba(74, 31, 184, 1);
+  font-size: 18px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+.accordion-toggle-icon {
+  font-size: 1.2rem;
+  color: rgba(74, 31, 184, 1);
+}
+.content_wrapper {
+  padding: 18px 27px;
+  border-radius: 14px;
+  border: 1.15px solid #d0d5dd;
+}
+.assessment_card {
+  border: 1.15px solid #ddd;
+  &.active {
+    border: 1.15px solid #6938ef;
+  }
+  border-radius: 9px;
+  .assessment_card__top {
+    padding: 18px;
+  }
+  .assessment_card__bottom {
+    padding: 18px 27px;
+  }
+  .title {
+    color: #101828;
+    font-size: 18.3px;
+    font-weight: 500;
+  }
+  .count {
+    width: 30px;
+    height: 30px;
+    color: #7a5af8;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .description {
+    color: #667085;
+    font-size: 16px;
+    font-weight: 400;
+    text-align: start;
+  }
+  .createBtn {
+    border: 1.15px solid #f4f3ff;
+    box-shadow: 0px 1.15px 2.29px 0px #1018280d;
+    background-color: #f4f3ff;
+    padding: 11.4px 18.3px;
+    border-radius: 9px;
+    color: #5925dc;
+    font-size: 16px;
+    font-weight: 500;
+  }
+}
+
+::ng-deep .perviousAssessment {
+  .p-accordion-content {
+    padding: 18.34px;
+    border-radius: 9px;
+    border: 1.15px solid rgba(189, 180, 254, 1);
+    border-top: none;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+}
+.header-item {
+  span {
+    color: #667085;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  p {
+    color: #344054;
+    font-size: 18px;
+    font-weight: 500;
+  }
+}
+.custom_badge {
+  width: fit-content;
+  height: 35px;
+  border: 0.74px solid #0ba5ec;
+  border-radius: 25.69px;
+  padding: 3.2px 12.8px;
+  color: #0ba5ec;
+  span {
+    font-size: 19px;
+    font-weight: 500;
+  }
+}
+.custom_txt_area {
+  border: 1.15px solid #d0d5dd;
+  box-shadow: 0px 1.15px 2.29px 0px #1018280d;
+  height: 175px;
+  color: #667085;
+  font-size: 18.3px;
+  font-weight: 400;
+  padding: 12px 16px;
+}
+
+::ng-deep .action_dailog{
+  .p-dialog-header{
+    padding:  1rem;
+  }
+  .p-dialog-header .p-dialog-header-icons{
+    display: none;
+  }
+}

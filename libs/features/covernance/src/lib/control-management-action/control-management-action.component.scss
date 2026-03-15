@@ -1,0 +1,22 @@
+::ng-deep .capAccordion {
+    .p-accordion-toggle-icon {
+        @apply hidden;
+    }
+}
+
+::ng-deep .custome_cap {
+
+    .p-toggleable-content{
+      display: none ;
+    }
+
+  &.capApplied{
+
+      .p-toggleable-content{
+      display: block;
+    }
+  }
+
+
+
+}

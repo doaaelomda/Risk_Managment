@@ -1,0 +1,12 @@
+<div class="flex name_questions gap-3">
+  @if(loadDataAwarness){
+  <p-skeleton width="150px" height="20px" borderRadius="8px"></p-skeleton>
+  }
+  @else {
+  <span class="header-para">{{awarenessData?.campaignName}}</span>
+  }
+</div>
+
+<lib-shared-tabs  [permissionFeature]="{module:'AWARNESS' , feature:'AUDIENCE'}"></lib-shared-tabs>
+
+<router-outlet></router-outlet>

@@ -1,0 +1,41 @@
+::ng-deep .editor-wrapper .p-editor-container .p-editor-toolbar.ql-snow,.ql-toolbar.ql-snow  {
+  border: 0;
+}
+
+::ng-deep .editor-wrapper .p-editor-container .p-editor-toolbar {
+     background: none;
+     border-top-right-radius: 0;
+     border-top-left-radius: 0;
+}
+
+::ng-deep .editor-wrapper .p-editor-container .p-editor-content .ql-editor {
+  border: 1px solid #D0D5DD;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+}
+
+::ng-deep .editor-wrapper .ql-container.ql-snow {
+  border: 0 !important;
+}
+
+::ng-deep .editor-wrapper .ql-snow .ql-picker.ql-header {
+    width: 244px;
+    border: 1px solid #D0D5DD;
+    background: #FFFFFF;
+    padding: 10px 14px;
+    border-radius: 8px;
+    height: 44px;
+}
+::ng-deep .editor-wrapper .ql-snow .ql-formats{
+    display: inline-flex;
+}
+
+::ng-deep .editor-wrapper .p-editor-container .p-editor-toolbar.ql-snow .ql-picker .ql-picker-label {
+    border: 0 none;
+    color: #101828;
+    font-size: 16px;
+    font-weight: 400;
+  }

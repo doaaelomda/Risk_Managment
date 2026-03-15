@@ -1,0 +1,374 @@
+<!-- Handle Entities List in New Table -->
+<section class="py-5">
+  <lib-new-table
+    [loading]="loadingStateTable"
+    [table_data]="dataList"
+    [table_title]="'BREAD_CRUMB_TITLES.findings' | translate"
+    [badge_title]="'BREAD_CRUMB_TITLES.findings' | translate"
+    [dataViewId]="34"
+    [entityID_Name]="'findingID'"
+    [isShownAction]="!readOnly"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="items"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+  >
+  @if(!readOnly && canAdd){
+        <button
+      addition_action
+      (click)="showAction()"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+    >
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'BREAD_CRUMB_TITLES.ADD_New_Finding' | translate }} </span>
+    </button>
+  }
+  </lib-new-table>
+</section>
+
+<!-- Add or Update Entity -->
+<p-dialog
+  [(visible)]="show_action"
+  (onHide)="onModalClose()"
+  [modal]="true"
+  [dismissableMask]="true"
+  [draggable]="false"
+  [closable]="false"
+  styleClass="w-[62.5rem] h-[43.5rem]"
+>
+  <ng-template pTemplate="header">
+    <!-- Header -->
+    <div>
+      <h2 class="text-[#101828] text-lg font-medium">
+        {{
+          (updateFinding
+            ? 'RISK_ACTION.UPDATE_FINDING'
+            : 'RISK_ACTION.HEADER_Finding'
+          ) | translate
+        }}
+      </h2>
+
+      <p class="text-[#667085] text-sm font-normal">
+        {{ 'RISK_ACTION.DESC_FINDING' | translate }}
+      </p>
+    </div>
+  </ng-template>
+  <div class="container">
+    <div
+      class="w-full flex justify-start items-center flex-wrap border-b-[1px] border-gray_light"
+    >
+      @for (tab of tabs; track $index) {
+      <button
+        (click)="setActiveTab(tab)"
+        class="tab_btn"
+        [ngClass]="{ active: activeTab === tab.id }"
+      >
+        {{ tab.name }}
+      </button>
+      }
+    </div>
+
+    @switch (activeTab) { @case (1) {
+    <form [formGroup]="basicInfoForm">
+      <div class="grid grid-cols-12 gap-4 py-3">
+        <div class="col-span-12">
+          <lib-input-text
+            [placeholder]="'FINDING.TITLE' | translate"
+            [inputLabel]="'FINDING.TITLE' | translate"
+            [validations]="ValidationsRequired"
+            [controlNameInput]="'title'"
+            [control]="basicInfoForm.get('title')!"
+          >
+          </lib-input-text>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <lib-input-text
+            [placeholder]="'FINDING.REFERENCE_CODE' | translate"
+            [inputLabel]="'FINDING.REFERENCE_CODE' | translate"
+            [controlNameInput]="'referenceCode'"
+            [control]="basicInfoForm.get('referenceCode')!"
+          >
+          </lib-input-text>
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown
+            [placeholder]="'FINDING.CATEGORY' | translate"
+            [label]="'FINDING.CATEGORY' | translate"
+            [control]="basicInfoForm.get('findingCategoryID')!"
+            [formControlNameInput]="'findingCategoryID'"
+            [options]="categories"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+            [validations]="ValidationsRequired"
+          >
+          </lib-ui-dropdown>
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown
+            [placeholder]="'FINDING.SOURCE_TYPE' | translate"
+            [label]="'FINDING.SOURCE_TYPE' | translate"
+            [control]="basicInfoForm.get('findingSourceTypeID')!"
+            [validations]="ValidationsRequired"
+            [formControlNameInput]="'findingSourceTypeID'"
+            [options]="sourceTypes"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+          >
+          </lib-ui-dropdown>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown
+            [placeholder]="'FINDING.SEVERITY_LEVEL' | translate"
+            [label]="'FINDING.SEVERITY_LEVEL' | translate"
+            [control]="basicInfoForm.get('findingSeverityLevelTypeID')!"
+            [formControlNameInput]="'findingSeverityLevelTypeID'"
+            [options]="severityLevels"
+            [optionLabel]="'label'"
+            [validations]="ValidationsRequired"
+            [optionValue]="'id'"
+          >
+          </lib-ui-dropdown>
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown
+            [placeholder]="'RooteCause.STATUS' | translate"
+            [label]="'RooteCause.STATUS' | translate"
+            [control]="basicInfoForm.get('findingStatusTypeID')!"
+            [formControlNameInput]="'findingStatusTypeID'"
+            [options]="findingStatusType"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+            [validations]="ValidationsRequired"
+          >
+          </lib-ui-dropdown>
+        </div>
+      </div>
+    </form>
+    } @case (2) {
+    <form [formGroup]="ownerShipForm">
+      <div class="grid grid-cols-12 gap-4 py-3">
+        <div class="col-span-12">
+          <lib-user-dropdown
+            [placeholder]="'FINDING.REMEDIATION_OWNER_USER' | translate"
+            [label]="'FINDING.REMEDIATION_OWNER_USER' | translate"
+            [control]="ownerShipForm.get('remediationOwnerUserID')!"
+            [formControlNameInput]="'remediationOwnerUserID'"
+            [options]="remediationOwners"
+            [optionLabel]="'userName'"
+            [optionValue]="'id'"
+            [validations]="ValidationsRequired"
+          >
+          </lib-user-dropdown>
+        </div>
+
+        <div class="col-span-12">
+          <lib-user-dropdown
+            [placeholder]="'FINDING.OWNER_USER' | translate"
+            [label]="'FINDING.OWNER_USER' | translate"
+            [control]="ownerShipForm.get('ownerUserID')!"
+            [formControlNameInput]="'ownerUserID'"
+            [options]="assigneeUserID"
+            [optionLabel]="'userName'"
+            [optionValue]="'id'"
+            [validations]="ValidationsRequired"
+          >
+          </lib-user-dropdown>
+        </div>
+        <div class="col-span-12">
+          <lib-user-dropdown
+            [placeholder]="'FINDING.ASSIGNEE_USER' | translate"
+            [label]="'FINDING.ASSIGNEE_USER' | translate"
+            [control]="ownerShipForm.get('assigneeUserID')!"
+            [formControlNameInput]="'assigneeUserID'"
+            [options]="assigneeUserID"
+            [optionLabel]="'userName'"
+            [optionValue]="'id'"
+            [validations]="ValidationsRequired"
+          >
+          </lib-user-dropdown>
+        </div>
+        <div class="col-span-12">
+          <lib-user-dropdown
+            [placeholder]="'FINDING.VERIFICATION_USER' | translate"
+            [label]="'FINDING.VERIFICATION_USER' | translate"
+            [control]="ownerShipForm.get('verificationUserID')!"
+            [formControlNameInput]="'verificationUserID'"
+            [options]="verificationUserID"
+            [optionLabel]="'userName'"
+            [optionValue]="'id'"
+          >
+          </lib-user-dropdown>
+        </div>
+        <div class="col-span-12">
+          <lib-ui-dropdown
+            [placeholder]="'FINDING.OWNER_ROLE' | translate"
+            [label]="'FINDING.OWNER_ROLE' | translate"
+            [control]="ownerShipForm.get('ownerRoleID')!"
+            [formControlNameInput]="'ownerRoleID'"
+            [options]="assigneeRoleID"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+            [validations]="ValidationsRequired"
+          >
+          </lib-ui-dropdown>
+        </div>
+      </div>
+    </form>
+    } @case (3) {
+    <form [formGroup]="datesForm">
+      <div class="grid grid-cols-12 gap-4 py-3">
+        <div class="col-span-12">
+          <lib-date-packer
+            [placeholder]="'FINDING.VERIFICATION_DATE' | translate"
+            [inputLabel]="'FINDING.VERIFICATION_DATE' | translate"
+            [control]="datesForm.get('verificationDate')!"
+            [controlNameInput]="'verificationDate'"
+          >
+          </lib-date-packer>
+        </div>
+        <div class="col-span-12">
+          <lib-date-packer
+            [placeholder]="'FINDING.DUE_DATE' | translate"
+            [inputLabel]="'FINDING.DUE_DATE' | translate"
+            [control]="datesForm.get('dueDate')!"
+            [controlNameInput]="'dueDate'"
+          >
+          </lib-date-packer>
+        </div>
+        <div class="col-span-12">
+          <lib-date-packer
+            [placeholder]="'FINDING.REMEDIATION_TARGET_DATE' | translate"
+            [inputLabel]="'FINDING.REMEDIATION_TARGET_DATE' | translate"
+            [control]="datesForm.get('remediationTargetDate')!"
+            [controlNameInput]="'remediationTargetDate'"
+          >
+          </lib-date-packer>
+        </div>
+      </div>
+    </form>
+
+    } @case (4) {
+    <form [formGroup]="rootCauseForm">
+      <div class="grid grid-cols-12 gap-4 py-3">
+        <div class="col-span-12">
+          <lib-textarea-ui
+            [inputLabel]="'FINDING.ROOT_CAUSE' | translate"
+            [controlNameInput]="'rootCause'"
+            [placeholder]="'FINDING.ROOT_CAUSE' | translate"
+            [control]="rootCauseForm.get('rootCause')!"
+          >
+          </lib-textarea-ui>
+        </div>
+        <div class="col-span-12">
+          <lib-textarea-ui
+            [inputLabel]="'FINDING.IMPACT' | translate"
+            [controlNameInput]="'impact'"
+            [placeholder]="'FINDING.IMPACT' | translate"
+            [control]="rootCauseForm.get('impact')!"
+          >
+          </lib-textarea-ui>
+        </div>
+      </div>
+    </form>
+
+    } @case (5) {
+    <form [formGroup]="detailsForm">
+      <div class="grid grid-cols-12 gap-4 py-3">
+        <div class="col-span-12">
+          <lib-textarea-ui
+            [inputLabel]="'FINDING.OBSERVATION' | translate"
+            [controlNameInput]="'observation'"
+            [placeholder]="'FINDING.OBSERVATION' | translate"
+            [control]="detailsForm.get('observation')!"
+          >
+          </lib-textarea-ui>
+        </div>
+
+        <div class="col-span-12">
+          <lib-ui-dropdown
+            [placeholder]="'FINDING.VERIFICATION_OUTCOME' | translate"
+            [label]="'FINDING.VERIFICATION_OUTCOME' | translate"
+            [control]="detailsForm.get('findingVerificationOutcomeTypeID')!"
+            [validations]="ValidationsRequired"
+            [formControlNameInput]="'findingVerificationOutcomeTypeID'"
+            [options]="verificationOutcomes"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+          >
+          </lib-ui-dropdown>
+        </div>
+        <div class="col-span-12">
+          <lib-textarea-ui
+            [inputLabel]="'FINDING.RECOMMENDATION' | translate"
+            [controlNameInput]="'recommendation'"
+            [placeholder]="'FINDING.RECOMMENDATION' | translate"
+            [control]="detailsForm.get('recommendation')!"
+          >
+          </lib-textarea-ui>
+        </div>
+      </div>
+    </form>
+
+    } }
+  </div>
+  <ng-template pTemplate="footer">
+    <!-- Action Buttons -->
+    <div class="flex justify-end gap-4 mt-4">
+      <div class="cancel_btn">
+        <button (click)="show_action = false; onModalClose()">
+          {{ 'BUTTONS.CANCEL' | translate }}
+        </button>
+      </div>
+      <div class="action_btn">
+        <p-button
+          [label]="'BUTTONS.SAVE' | translate"
+          [outlined]="true"
+          severity="secondary"
+          (onClick)="submit()"
+        >
+        </p-button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<!-- View Popup Entity -->
+@if(showViewModal){
+<lib-view-finding
+  [relatedEntityId]="dataEntityTypeID()"
+  (hide_emitter)="showViewModal = false"
+  [authId]="1"
+  [FindingData]="FindingData"
+  [loading]="loadingData"
+  [fileUsageTypeId]="1"
+  [show_view]="showViewModal"
+  [BusinessTaskTypeID]="5"
+></lib-view-finding>
+}
+
+<!-- Delete Popup Entity -->
+<lib-delete-confirm-popup
+  [titleDelete]="'RISK_MANAGMENT.FINDINGS_DELETE_TITLE'"
+  [descriptionDelete]="'RISK_MANAGMENT.DELETE_FINDINGS_DESC'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="handleClosedDelete($event)">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteFinding()"
+        [loading]="loadDelted"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

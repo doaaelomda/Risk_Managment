@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>gfw-portal</title>
+  <base href="./" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <script ngCspNonce="CSP_NONCE">
+  if (window.trustedTypes && window.trustedTypes.createPolicy) {
+    window.trustedTypes.createPolicy('default', {
+      createHTML: (string) => string, // You can add actual sanitization logic here
+      createScript: (string) => string,
+      createScriptURL: (string) => string,
+    });
+  }
+</script>
+  <!-- Webpack nonce -->
+  <script ngCspNonce="CSP_NONCE">
+    window.__webpack_nonce__ = "CSP_NONCE";
+  </script>
+</head>
+
+<body class="mat-typography">
+  <app-root ngCspNonce="CSP_NONCE"></app-root>
+</body>
+</html>

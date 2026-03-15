@@ -1,0 +1,38 @@
+<!-- Handle Data in Header -->
+
+<div class="header mb-8 flex items-center justify-between">
+  <div>
+    @if(isLoading){
+    <p-skeleton width="15rem" styleClass="mb-2" />
+    }@else {
+    <h2 class="text-2xl font-semibold text-gray-800">{{ data_dashboard?.name }}</h2>
+    }
+  </div>
+
+  <div class="flex items-center gap-4">
+    <div class="flex items-center gap-2">
+      <p class="m-0 font-medium text-gray_color">
+        {{ 'TABS.STATUS' | translate }}
+      </p>
+      <span [ngClass]="{'green':data_dashboard?.isActive , 'red':!data_dashboard?.isActive}"
+        class="font-semibold badge">
+        <div class="small_doted"></div>
+        <span>{{data_dashboard?.isActive ? 'Active':'InActive'}}</span>
+      </span>
+    </div>
+    <div class="flex items-center gap-2">
+      <p class="m-0 font-medium text-gray_color">
+        {{'Dashboard.TABS.Created_at' | translate}}
+      </p>
+      <span class="font-medium">{{data_dashboard?.createdDate | date : 'dd , MMM yy h:m a'}}</span>
+    </div>
+  </div>
+</div>
+
+<!-- handle Shared TABS -->
+<lib-shared-tabs [tabs]="tabs"  [permissionFeature]="{module:'DASHBOURD' , feature:'DASHBOURD'}" [hasAttachments]="false" [hasComments]="false"></lib-shared-tabs>
+
+<!-- Router Outlet -->
+<div class="pt-8">
+  <router-outlet></router-outlet>
+</div>

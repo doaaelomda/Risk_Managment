@@ -1,0 +1,218 @@
+<div class="container mt-7 gap-6 grid grid-cols-12">
+
+  <div [ngClass]="hasActions ? 'col-span-8' : 'col-span-12'">
+
+    <div class="grid grid-cols-12 gap-4">
+      @if(_translateS.currentLang === 'ar'){
+      <div class="col-span-12 pb-3 ">
+        <h3 class="text-gray-800 font-medium text[16px] mb-2">{{ 'GOV_DOC.DESCRIPTION_AR' | translate }}</h3>
+        @if (!loadDataDocument) {
+        <p class="welcome">{{ DocumentData.descriptionAr }}</p>
+        } @else {
+        <p-skeleton width="12rem" />
+        }
+      </div>
+      }
+      @else{
+      <div class="col-span-12 pb-3 ">
+        <h3 class="text-gray-800 font-medium text[16px] mb-2">{{ 'GOV_DOC.DESCRIPTION_EN' | translate }}</h3>
+        @if (!loadDataDocument) {
+        <p class="welcome">{{ DocumentData.description }}</p>
+        } @else {
+        <p-skeleton width="12rem" />
+        }
+      </div>
+      }
+    </div>
+
+    @if (
+    DocumentData?.govDocumentTypeName ||
+    DocumentData?.govDocumentContentTypes?.length ||
+    DocumentData?.fileId
+    ) {
+    <div class="grid grid-cols-12 gap-4">
+      <div class="col-span-12 pb-5">
+        <h3 class="text-gray-800 font-medium text[16px] mb-2">{{ 'GOV_DOC.ContentDetails' | translate }}</h3>
+
+        <div class="status">
+          <div class="grid grid-cols-12">
+
+            @if (DocumentData?.govDocumentTypeName) {
+            <div class="col-span-4 p-6">
+              <div class="border-Assessment">
+                <h3 class="text-gray-800 font-medium text[16px] mb-2">
+                  {{ 'Control_view.GOV_DOCUMENT_TYPE' | translate }}
+                </h3>
+                <span class="welcome">{{ DocumentData.govDocumentTypeName }}</span>
+              </div>
+            </div>
+            }
+
+            @if (DocumentData?.govDocumentContentTypes?.length) {
+            <div [ngClass]=" DocumentData?.fileId ? 'col-span-4 p-6' : 'col-span-8 p-6'">
+              <div [ngClass]="DocumentData?.fileId ? '' : 'border-Assessment'">
+                <h3 class="text-gray-800 font-medium text[16px] mb-2">
+                  {{ 'AWARENESS.CONTENT_TYPE_PLACEHOLDER' | translate }}
+                </h3>
+                <div class="flex gap-4">
+                  @for (type of DocumentData.govDocumentContentTypes; track type) {
+                  <span class="badge">{{ type.name }}</span>
+                  }
+                </div>
+              </div>
+            </div>
+            }
+
+            @if (DocumentData?.fileId) {
+            <div class="col-span-4 py-6">
+              <lib-file-card [file]="DocumentData.fileId" (action_emitter)="handleFileAction($event)">
+              </lib-file-card>
+            </div>
+            }
+
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+
+    @if (DocumentData?.ownerRoleName || DocumentData?.coordinatorUserName) {
+    <div class="grid grid-cols-12 gap-4">
+      <div class="col-span-12 pb-5">
+        <h3 class="text-progress my-3">{{ 'TABS.ROLES' | translate }}</h3>
+
+        <div class="status">
+          <div class="grid grid-cols-12">
+
+            @if (DocumentData?.ownerRoleName) {
+            <div class="col-span-6 py-3 px-6">
+              <div class="border-Assessment">
+                <h3 class="text-gray-800 font-medium text[16px] mb-2">
+                  {{ 'RISK_MANAGMENT.OWNER' | translate }}
+                </h3>
+                <div class="flex gap-4 items-center">
+                  <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0.800781" y="0.601562" width="28.8" height="28.8" rx="14.4" fill="#F4F3FF" />
+                    <path
+                      d="M22.2012 21.3031V19.9031C22.2012 18.5984 21.3088 17.5022 20.1012 17.1913M17.6512 8.90666C18.6773 9.32203 19.4012 10.328 19.4012 11.5031C19.4012 12.6782 18.6773 13.6842 17.6512 14.0996M18.7012 21.3031C18.7012 19.9985 18.7012 19.3462 18.488 18.8316C18.2039 18.1455 17.6588 17.6004 16.9727 17.3163C16.4581 17.1031 15.8058 17.1031 14.5012 17.1031H12.4012C11.0965 17.1031 10.4442 17.1031 9.92966 17.3163C9.24358 17.6004 8.69849 18.1455 8.41431 18.8316C8.20117 19.3462 8.20117 19.9985 8.20117 21.3031M16.2512 11.5031C16.2512 13.0495 14.9976 14.3031 13.4512 14.3031C11.9048 14.3031 10.6512 13.0495 10.6512 11.5031C10.6512 9.95673 11.9048 8.70312 13.4512 8.70312C14.9976 8.70312 16.2512 9.95673 16.2512 11.5031Z"
+                      stroke="#6938EF" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span class="paraggarpStauts">
+                    {{ DocumentData.ownerRoleName }}
+                  </span>
+                </div>
+              </div>
+            </div>
+            }
+
+            @if (DocumentData?.coordinatorUserName) {
+            <div class="col-span-6 py-3">
+              <h3 class="text-gray-800 font-medium text[16px] mb-2">
+                {{ 'RISK_MANAGMENT.Coordinator' | translate }}
+              </h3>
+              <div class="flex gap-4 items-center">
+                <img alt="" src="images/Avatar2.svg" class="w-10 h-10" />
+                <span class="paraggarpStauts">
+                  {{ DocumentData.coordinatorUserName }}
+                </span>
+              </div>
+            </div>
+            }
+
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+
+    @if (DocumentData?.revisionDate || DocumentData?.revisionPeriod) {
+    <div class="grid grid-cols-12 gap-4">
+      <div class="col-span-12 pb-5">
+        <h3 class="text-progress my-3">{{ 'GOV_DOC.Review' | translate }}</h3>
+
+        <div class="status">
+          <div class="grid grid-cols-12">
+
+            @if (DocumentData?.revisionDate) {
+            <div class="col-span-6 py-3 px-6">
+              <div class="border-Assessment">
+                <h3 class="text-gray-800 font-medium text[16px] mb-2">
+                  {{ 'GOV_DOC.Revision_DATE' | translate }}
+                </h3>
+                <div class="welcome gap-2 flex">
+                  <img alt="" src="images/icons/calendar.svg" />
+                  <span class="paraggarpStauts">
+                    {{ DocumentData.revisionDate | date:'MMM d, y' }}
+                  </span>
+                </div>
+              </div>
+            </div>
+            }
+
+            @if (DocumentData?.revisionPeriod) {
+            <div class="col-span-6 py-3">
+              <h3 class="text-gray-800 font-medium text[16px] mb-2">
+                {{ 'GOV_DOC.Review_Period' | translate }}
+              </h3>
+              <span class="paraggarpStauts">
+                {{ DocumentData.revisionPeriod }}
+              </span>
+            </div>
+            }
+
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+
+    @if (DocumentData?.dataClassificationName || DocumentData?.wfName) {
+    <div class="grid grid-cols-12 gap-4">
+      <div class="col-span-12 pb-5">
+        <h3 class="text-progress my-3">{{ 'GOV_DOC.Review' | translate }}</h3>
+
+        <div class="status">
+          <div class="grid grid-cols-12">
+
+            @if (DocumentData?.dataClassificationName) {
+            <div class="col-span-6 py-3 px-6">
+              <div class="border-Assessment">
+                <h3 class="text-gray-800 font-medium text[16px] mb-2">
+                  {{ 'GOV_DOC.DataClassification' | translate }}
+                </h3>
+                <span class="paraggarpStauts">
+                  {{ DocumentData.dataClassificationName }}
+                </span>
+              </div>
+            </div>
+            }
+
+            @if (DocumentData?.wfName) {
+            <div class="col-span-6 py-3">
+              <h3 class="text-gray-800 font-medium text[16px] mb-2">
+                {{ 'GOV_DOC.WorkflowApproval' | translate }}
+              </h3>
+              <span class="paraggarpStauts">
+                {{ DocumentData.wfName }}
+              </span>
+            </div>
+            }
+
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+
+  </div>
+
+
+  <div [hidden]="!hasActions" class="col-span-4">
+    <lib-system-actions  (foundActionEmitter)="onFoundAction($event)" [dataEntityTypeId]="76" [entityId]="docId">
+    </lib-system-actions>
+  </div>
+
+
+  <lib-view-attachement (modelVisibleEmiter)="handleHideView($event)" [modelVisible]="displayModal"
+    [selected_file_Input$]="selected_file_show">
+  </lib-view-attachement>

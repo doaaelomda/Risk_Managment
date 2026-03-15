@@ -1,0 +1,103 @@
+<section class="form_sec">
+  <div class="header border-b border-gray_light pb-6 mb-6">
+    <h2 class="text-lg font-medium text-[#101828]">
+      {{ current_updated_id ? ('LessonLearn.Update_LessonLearn' | translate) : ('LessonLearn.ADD_BUTTON' | translate) }}
+    </h2>
+  </div>
+
+<form [formGroup]="LessonLearnForm" class="grid grid-cols-12 gap-6 mb-6">
+
+  <!-- Name -->
+  <div class="col-span-12 lg:col-span-6">
+    <lib-input-text
+      [placeholder]="'LessonLearn.NAME_PLACEHOLDER' | translate"
+      [inputLabel]="'LessonLearn.NAME' | translate"
+      [control]="LessonLearnForm.get('name')!"
+      [controlNameInput]="'name'"
+      [validations]="validationsRequired">
+    </lib-input-text>
+  </div>
+
+
+  <!-- Documented By (User) -->
+  <div class="col-span-12 lg:col-span-6">
+    <lib-ui-dropdown
+      [placeholder]="'LessonLearn.DOCUMENTED_BY_PLACEHOLDER' | translate"
+      [label]="'LessonLearn.DOCUMENTED_BY' | translate"
+      [control]="LessonLearnForm.get('documentedByUserID')!"
+      [formControlNameInput]="'documentedByUserID'"
+      [options]="usersList"
+      [optionLabel]="'name'"
+      [optionValue]="'id'"
+      [validations]="validationsRequired">
+    </lib-ui-dropdown>
+  </div>
+
+  <!-- Category -->
+  <div class="col-span-12 lg:col-span-6">
+    <lib-ui-dropdown
+      [placeholder]="'LessonLearn.CATEGORY_PLACEHOLDER' | translate"
+      [label]="'LessonLearn.CATEGORY' | translate"
+      [control]="LessonLearnForm.get('lessonsLearnedCategoryID')!"
+      [formControlNameInput]="'lessonsLearnedCategoryID'"
+      [options]="categoriesList"
+      [optionLabel]="'label'"
+      [optionValue]="'id'"
+      [validations]="validationsRequired">
+    </lib-ui-dropdown>
+  </div>
+
+  <!-- Type -->
+  <div class="col-span-12 lg:col-span-6">
+    <lib-ui-dropdown
+      [placeholder]="'LessonLearn.TYPE_PLACEHOLDER' | translate"
+      [label]="'LessonLearn.TYPE' | translate"
+      [control]="LessonLearnForm.get('lessonsLearnedTypeID')!"
+      [formControlNameInput]="'lessonsLearnedTypeID'"
+      [options]="lessonsTypes"
+      [optionLabel]="'label'"
+      [optionValue]="'id'"
+      [validations]="validationsRequired">
+    </lib-ui-dropdown>
+  </div>
+
+    <!-- Description -->
+  <div class="col-span-12">
+    <lib-textarea-ui
+      [placeholder]="'LessonLearn.DESCRIPTION_PLACEHOLDER' | translate"
+      [inputLabel]="'LessonLearn.DESCRIPTION' | translate"
+      [control]="LessonLearnForm.get('description')!"
+      [controlNameInput]="'description'">
+    </lib-textarea-ui>
+  </div>
+     <div class="col-span-12 lg:col-span-6">
+  @if(current_updated_id){
+        <lib-ui-dropdown
+          [placeholder]="'orginazation.isActive' | translate"
+          [label]="'orginazation.isActive' | translate"
+          [control]="LessonLearnForm.get('isActive')!"
+          [formControlNameInput]="'isActive'"
+          [options]="isActiveArray"
+          [optionLabel]="'label'"
+          [optionValue]="'value'"
+        >
+        </lib-ui-dropdown>
+  }
+     </div>
+
+</form>
+
+
+  <div class="flex justify-end gap-4 py-4">
+    <div class="cancel_btn">
+      <button [routerLink]="['/gfw-portal/incident/viewincident/' + generalId + '/lesson-Learning']">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+    <div class="action_btn">
+      <p-button [label]='current_updated_id ? ("BUTTONS.UPDATE" | translate) : ("BUTTONS.SAVE" | translate)'
+        [outlined]="true" [loading]="isLoading" severity="secondary" (onClick)="submit()">
+      </p-button>
+    </div>
+  </div>
+</section>

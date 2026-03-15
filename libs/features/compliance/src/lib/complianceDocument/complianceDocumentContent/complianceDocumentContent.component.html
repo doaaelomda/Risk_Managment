@@ -1,0 +1,747 @@
+<!-- handle Header  -->
+@if(!loading){ @if(!items.length){
+<div class="flex justify-center items-center flex-col gap-2 py-4">
+  <div class="flex flex-col gap-2 items-center empty_state_wrapper">
+    <img src="images/no-document.svg" alt="empty-state" />
+    <p class="text-gray-900 font-semibold text-[18px] mb-1">
+      {{ 'ATTACHMENT.NOTUPLOADED' | translate }}
+    </p>
+    <p class="text-gray-500 font-normal text-[16px] mb-1">
+      {{ 'ATTACHMENT.UPLOADFILES' | translate }}
+    </p>
+  </div>
+  @if(_PermissionSystemService.can('COMPLIANCE' , 'COMPLIANCEDOCUMENTCONTENT' ,
+  'ADD')){
+  <button class="add-btn" (click)="setModifiedItem(); isModifing = true">
+    {{ 'CONTENT.ADD_BUTTON' | translate }}
+  </button>
+  }
+</div>
+}@else {
+<div class="header flex items-center justify-between my-4">
+  <div>
+    <h2 class="text-2xl font-medium mb-3">
+      {{ 'CONTENT.Complince_Strctured_Content' | translate }}
+    </h2>
+    <p class="text-gray_light">{{ 'CONTENT.SUB_HERDER' | translate }}</p>
+  </div>
+  @if(_PermissionSystemService.can('COMPLIANCE' , 'COMPLIANCEDOCUMENTCONTENT' ,
+  'ADD')){
+  <div class="action_btn">
+    <button class="btn gap-2" (click)="setModifiedItem(); isModifing = true">
+      <i class="fi fi-rr-plus"></i>
+      {{ 'CONTENT.ADD_NEW_CONTENT_ITEM' | translate }}
+    </button>
+  </div>
+  }
+</div>
+
+<!-- handle Tree Nodes  -->
+<div class="grid grid-cols-12 gap-x-3">
+  <div class="col-span-12 lg:col-span-6">
+    <p-tree
+      styleClass="node_wrapper p-0"
+      class="w-full"
+      [value]="items"
+      [draggableNodes]="true"
+      [droppableNodes]="true"
+      draggableScope="self"
+      droppableScope="self"
+      (onNodeDrop)="handleDrop($event)"
+    >
+      <ng-template let-node pTemplate="default">
+        <button
+          class="flex gap-2 items-start w-full link"
+          [ngClass]="{
+            selected_node:
+              node?.id === selectedNode?.complianceDocumentElementID ||
+              node.active
+          }"
+          [ngStyle]="
+            node?.id === selectedNode?.complianceDocumentElementID
+              ? {
+
+                  backgroundColor: node?.backColor || '#f4f3ff'
+                }
+              : {}
+          "
+          (click)="handleNodeClick(node)"
+        >
+          <p class="nodeName flex-1 text-start" [title]="node?.name" [ngStyle]="{
+              color: node?.foreColor || '#6938ef',
+          }">
+            <i class="fi fi-rr-layers layers-ico text-xl" [ngStyle]="{
+              color: node?.foreColor || '#6938ef',
+          }"></i>
+            {{ node?.name }}
+          </p>
+          <div class="flex items-center gap-2">
+            <button
+              class="iconActionWrapper"
+              (click)="
+                stopPropregation($event);
+                menu.toggle($event);
+                modifingNode = node
+              "
+            >
+              <i class="fi fi-br-menu-dots" [ngStyle]="{
+              color: node?.foreColor || '#6938ef',
+          }"></i>
+            </button>
+            @if(node?.children?.length){
+            <button
+              (click)="toggleNode($event, node)"
+              class="iconActionWrapper"
+            >
+              <i
+                class="fi fi-rr-angle-small-{{ node.expanded ? 'up' : 'down' }}"
+               [ngStyle]="{
+              color: node?.foreColor || '#6938ef',
+          }"></i>
+            </button>
+            }
+          </div>
+        </button>
+      </ng-template>
+    </p-tree>
+  </div>
+  <div
+    class="col-span-12 lg:col-span-6 flex flex-col gap-3 view_data_container"
+  >
+    @if(selectedNode) {
+    <div class="flex flex-col view_data">
+      <span>{{ 'CONTENT.NAME' | translate }}</span>
+      @if(currentLang === 'en'){
+      <p
+        class="content_txt"
+        [innerHTML]="
+          selectedNode.complianceDocumentElementName | nl2br | safeHtml
+        "
+      ></p>
+      }@else{
+      <p
+        class="content_txt"
+        [innerHTML]="
+          selectedNode.complianceDocumentElementNameAr | nl2br | safeHtml
+        "
+      ></p>
+      }
+    </div>
+
+    <div class="flex flex-col view_data">
+      <span>{{ 'CONTENT.CONTENT' | translate }}</span>
+      @if(currentLang === 'en'){
+      <p
+        class="content_txt"
+        [innerHTML]="selectedNode.elementText | nl2br | safeHtml"
+      ></p>
+      }@else{
+      <p
+        class="content_txt"
+        [innerHTML]="selectedNode.elementTextAr | nl2br | safeHtml"
+      ></p>
+      }
+    </div>
+
+    <div class="flex flex-col view_data">
+      <span>{{ 'GOVERNANCE_STANDARDS.OBJECTIVE' | translate }}</span>
+      @if(currentLang === 'en'){
+      <p
+        class="content_txt"
+        [innerHTML]="selectedNode.objective | nl2br | safeHtml"
+      ></p>
+      }@else{
+      <p
+        class="content_txt"
+        [innerHTML]="selectedNode.objectiveAr | nl2br | safeHtml"
+      ></p>
+      }
+    </div>
+    <div class="flex flex-col view_data">
+      <span>{{ 'GOVERNANCE_STANDARDS.GUIDES' | translate }}</span>
+      @if(currentLang === 'en'){
+      <p
+        class="content_txt"
+        [innerHTML]="selectedNode.guides | nl2br | safeHtml"
+      ></p>
+      }@else{
+      <p
+        class="content_txt"
+        [innerHTML]="selectedNode.guidesAr | nl2br | safeHtml"
+      ></p>
+      }
+    </div>
+
+    @if(selectedNode?.grcDocumentElementTypeName){
+    <div class="flex flex-col view_data">
+      <span>{{ 'MAIN_INFO.DOC_ELE_CLASSFICATION_PROFILE' | translate }}</span>
+      <p class="content_txt">{{ selectedNode.grcDocumentElementTypeName }}</p>
+    </div>
+    } @if(selectedNode?.referenceCode){
+    <div class="flex flex-col view_data">
+      <span>{{ 'CONTENT.REFERENCE_CODE' | translate }}</span>
+      <p class="content_txt">{{ selectedNode.referenceCode }}</p>
+    </div>
+    } @if(selectedNode?.complianceDocumentName){
+    <div class="flex flex-col view_data">
+      <span>{{ 'Control_view.ComplianceDocument' | translate }}</span>
+      <p class="content_txt">{{ selectedNode.complianceDocumentName }}</p>
+    </div>
+    } @if(selectedNode?.organizationUnitName){
+    <div class="flex flex-col view_data">
+      <span>{{
+        'NEW_CONTROL.fields.OrganizationalUnitID.label' | translate
+      }}</span>
+      <p class="content_txt">{{ selectedNode.organizationUnitName }}</p>
+    </div>
+    } @if(selectedNode?.responsableUserName){
+    <div class="flex flex-col view_data">
+      <span>{{ 'RISK_ACTION.RESPONSIBLE_USER' | translate }}</span>
+      <p class="content_txt">{{ selectedNode.responsableUserName }}</p>
+    </div>
+    } @if(selectedNode?.responsableRoleName){
+    <div class="flex flex-col view_data">
+      <span>{{ 'RISK_ACTION.RESPONSIBLE_ROLE' | translate }}</span>
+      <p class="content_txt">{{ selectedNode.responsableRoleName }}</p>
+    </div>
+    } @if(selectedNode?.foreColor){
+    <div class="flex flex-col view_data">
+      <span>{{ 'CONTENT.TEXTCOLOR' | translate }}</span>
+      <span class="content_txt">
+        {{ selectedNode.foreColor || '-' }}
+      </span>
+    </div>
+    } @if(selectedNode?.backColor){
+    <div class="flex flex-col view_data">
+      <span>{{ 'CONTENT.BGCOLOR' | translate }}</span>
+      <span class="content_txt">
+        {{ selectedNode.backColor || '-' }}
+      </span>
+    </div>
+    } @if(selectedNode?.elementTypeName){
+    <div class="flex flex-col view_data">
+      <span>{{ 'CONTENT.ELEMENT_TYPE' | translate }}</span>
+      <p class="content_txt">{{ selectedNode.elementTypeName }}</p>
+    </div>
+    } @if(selectedNode?.govControlMaturityLevelName){
+    <div class="flex flex-col view_data">
+      <span>{{
+        'GOVERNANCE_STANDARDS.CONTROL_MATURITY_LEVEL' | translate
+      }}</span>
+      <span
+        class="content_txt badge {{
+          selectedNode.govControlMaturityLevelColor
+        }}"
+      >
+        {{ selectedNode.govControlMaturityLevelName || '-' }}
+      </span>
+    </div>
+    } @if(selectedNode?.parentName){
+    <div class="flex flex-col view_data">
+      <span>{{ 'GOVERNANCE_STANDARDS.PARENT_NAME' | translate }}</span>
+      <p class="content_txt">{{ selectedNode.parentName }}</p>
+    </div>
+    } @if(selectedNode?.govControlName){
+    <div class="flex flex-col view_data">
+      <span>{{ 'CONTENT.GOV_CONTROL' | translate }}</span>
+      <p class="content_txt">{{ selectedNode.govControlName }}</p>
+    </div>
+    } @if(selectedNode?.isMandatory !== null){
+    <div class="flex flex-col view_data">
+      <span>{{ 'CONTENT.IS_MANDATORY' | translate }}</span>
+      <p class="content_txt">{{ selectedNode.isMandatory ? 'Yes' : 'No' }}</p>
+    </div>
+    } @if(selectedNode?.orderNumber){
+    <div class="flex flex-col view_data">
+      <span>{{ 'ControlRequirement.ORDER_NUMBER' | translate }}</span>
+      <p class="content_txt">{{ selectedNode.orderNumber }}</p>
+    </div>
+    } @if(selectedNode?.externalReference){
+    <div class="flex flex-col view_data">
+      <span>{{ 'CONTENT.EXTERNAL_REFERENCE' | translate }}</span>
+      <p class="content_txt">{{ selectedNode.externalReference }}</p>
+    </div>
+    } @if(selectedNode?.wieght){
+    <div class="flex flex-col view_data">
+      <span>{{ 'CONTENT.WEIGHT' | translate }}</span>
+      <p class="content_txt">{{ selectedNode.wieght }}</p>
+    </div>
+    } @if(selectedNode?.code){
+    <div class="flex flex-col view_data">
+      <span>{{ 'CONTENT.CODE' | translate }}</span>
+      <p class="content_txt">{{ selectedNode.code }}</p>
+    </div>
+    } } @else {
+    <div class="text-gray-500 text-center py-6">
+      {{ 'CONTENT.SELECT_NODE_TO_SHOW' | translate }}
+    </div>
+    }
+  </div>
+</div>
+
+} }@else {
+
+<!-- Skeleton Card -->
+<div class="header flex flex-col my-4">
+  <p-skeleton height="2rem" width="18rem" styleClass="mb-2" />
+  <p-skeleton height="1.5rem" width="13rem" />
+</div>
+<div class="grid grid-cols-12 gap-x-3">
+  <div class="col-span-12 lg:col-span-6 flex flex-col gap-3">
+    <p-skeleton height="3rem" />
+    <p-skeleton height="3rem" />
+    <p-skeleton height="3rem" />
+    <p-skeleton height="3rem" />
+    <p-skeleton height="3rem" />
+  </div>
+  <div class="col-span-12 lg:col-span-6 flex flex-col gap-3">
+    <p-skeleton height="5rem" />
+    <p-skeleton height="5rem" />
+    <p-skeleton height="5rem" />
+    <p-skeleton height="5rem" />
+  </div>
+</div>
+
+}
+
+<!-- Popup to add Item -->
+<div class="action-dailog">
+  <p-dialog
+    [dismissableMask]="true"
+    [header]="dialogHeaderText"
+    [modal]="true"
+    [(visible)]="isModifing"
+    styleClass="w-[50rem] h-[40rem]"
+  >
+    @if(modifiedItem){
+    <div [formGroup]="modifiedItem" class="flex flex-col justify-center">
+      <div class="inputs_wrap mb-2">
+        <label for="">
+          {{ 'CONTENT.CLASSFICATIONS' | translate }}
+        </label>
+        <div class="flex item-center gap-4 flex-wrap">
+          @for (option of elementOptions; track $index) {
+          <button
+            (click)="setElementOption(option)"
+            class=" flex justify-center items-center gap-2 border-[1px] {{
+              modifiedItem.get('grcDocumentElementClassificationID')?.value ===
+              option.id
+                ? 'border-primary_custom'
+                : 'border-gray_light'
+            }} rounded-md p-3 cursor-pointer"
+          >
+            <p-radioButton
+              [inputId]="`${option?.label}__${option?.id}_${$index}`"
+              [value]="option?.id"
+              formControlName="grcDocumentElementClassificationID"
+            />
+            <label
+              [for]="`${option?.label}__${option?.id}_${$index}`"
+              class="ml-2"
+            >
+              {{ option?.label }}
+            </label>
+          </button>
+          }
+        </div>
+        <!-- <div class="col-span-8">
+        <lib-ui-dropdown
+          [control]="modifiedItem.get('grcDocumentElementClassificationID')!"
+          [formControlNameInput]="'grcDocumentElementClassificationID'"
+          [options]="elementOptions"
+          [optionLabel]="'label'"
+          [optionValue]="'id'"
+          [placeholder]="'CONTENT.SELECT_ELEMENT_TYPE' | translate"
+        ></lib-ui-dropdown>
+      </div> -->
+      </div>
+
+      <div class="inputs_wrap grid grid-cols-12">
+        <label class="col-span-4" for="">
+          {{ 'CONTENT.NAME' | translate }}
+        </label>
+        <div class="col-span-8">
+          <input
+            [placeholder]="'CONTENT.PLACEHOLDERS.NAME' | translate"
+            type="text"
+            pInputText
+            formControlName="name"
+          />
+        </div>
+      </div>
+      <div class="inputs_wrap grid grid-cols-12">
+        <label class="col-span-4" for="">{{
+          'CONTENT.NAME_AR' | translate
+        }}</label>
+        <div class="col-span-8">
+          <input
+            [placeholder]="'CONTENT.PLACEHOLDERS.NAME_AR' | translate"
+            type="text"
+            pInputText
+            formControlName="nameAr"
+          />
+        </div>
+      </div>
+      <div class="inputs_wrap grid grid-cols-12">
+        <label class="col-span-4" for="">
+          {{ 'GOVERNANCE_STANDARDS.CONTROL_MATURITY_LEVEL' | translate }}
+        </label>
+        <div class="col-span-8">
+          <lib-ui-dropdown
+            [placeholder]="
+              'GOVERNANCE_STANDARDS.CONTROL_MATURITY_LEVEL' | translate
+            "
+            [control]="modifiedItem.get('GovControlMaturityLevelID')!"
+            [formControlNameInput]="'GovControlMaturityLevelID'"
+            [validations]="[]"
+            [options]="controlMaturityLevels"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+          >
+          </lib-ui-dropdown>
+        </div>
+      </div>
+      <div class="inputs_wrap grid grid-cols-12">
+        <div class="col-span-4">
+          <label for="">
+            {{ 'NEW_CONTROL.fields.OrganizationalUnitID.label' | translate }}
+          </label>
+        </div>
+        <div class="col-span-8">
+          <lib-tree-select-ui
+            [nodes_input]="orgUnits"
+            [placeholder]="
+              'NEW_CONTROL.fields.OrganizationalUnitID.placeholder' | translate
+            "
+            [control]="modifiedItem.get('organizationUnitID')!"
+            [formControlNameInput]="'organizationUnitID'"
+          >
+          </lib-tree-select-ui>
+        </div>
+      </div>
+
+      <div class="inputs_wrap grid grid-cols-12">
+        <label class="col-span-4" for="">
+          {{ 'RISK_ACTION.RESPONSIBLE_USER' | translate }}
+        </label>
+        <div class="col-span-8">
+          <lib-ui-dropdown
+            [placeholder]="'RISK_ACTION.SELECT_RESPONSIBLE_USER' | translate"
+            [control]="modifiedItem.get('responsableUserID')!"
+            [formControlNameInput]="'responsableUserID'"
+            [validations]="[]"
+            [options]="users"
+            [optionLabel]="'name'"
+            [optionValue]="'id'"
+          >
+          </lib-ui-dropdown>
+        </div>
+      </div>
+
+      <div class="inputs_wrap grid grid-cols-12">
+        <label class="col-span-4" for="">
+          {{ 'RISK_ACTION.RESPONSIBLE_ROLE' | translate }}
+        </label>
+        <div class="col-span-8">
+          <lib-ui-dropdown
+            [placeholder]="'RISK_ACTION.SELECT_RESPONSIBLE_ROLE' | translate"
+            [control]="modifiedItem.get('responsableRoleID')!"
+            [formControlNameInput]="'responsableRoleID'"
+            [validations]="[]"
+            [options]="roles"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+          >
+          </lib-ui-dropdown>
+        </div>
+      </div>
+
+      <div class="inputs_wrap grid grid-cols-12">
+        <label class="col-span-4" for="">
+          {{ 'CONTENT.TEXTCOLOR' | translate }}
+        </label>
+        <div class="col-span-8">
+          <lib-input-text
+            [placeholder]="'CONTENT.TEXTCOLOR' | translate"
+            [control]="modifiedItem.get('foreColor')!"
+            [controlNameInput]="'foreColor'"
+          >
+          </lib-input-text>
+        </div>
+      </div>
+
+      <div class="inputs_wrap grid grid-cols-12">
+        <label class="col-span-4" for="">
+          {{ 'CONTENT.BGCOLOR' | translate }}
+        </label>
+        <div class="col-span-8">
+          <lib-input-text
+            [placeholder]="'CONTENT.BGCOLOR' | translate"
+            [control]="modifiedItem.get('backColor')!"
+            [controlNameInput]="'backColor'"
+          >
+          </lib-input-text>
+        </div>
+      </div>
+
+      <div class="inputs_wrap grid grid-cols-12">
+        <label class="col-span-4" for="">{{
+          'CONTENT.CONTENT' | translate
+        }}</label>
+        <div class="col-span-8">
+          <lib-textarea-ui
+            [placeholder]="'CONTENT.PLACEHOLDERS.CONTENT' | translate"
+            [control]="modifiedItem.get('elementText')!"
+            [controlNameInput]="'elementText'"
+          >
+          </lib-textarea-ui>
+        </div>
+      </div>
+
+      <div class="inputs_wrap grid grid-cols-12">
+        <label class="col-span-4" for="">{{
+          'CONTENT.CONTENT_AR' | translate
+        }}</label>
+        <div class="col-span-8">
+          <lib-textarea-ui
+            [placeholder]="'CONTENT.PLACEHOLDERS.CONTENT_AR' | translate"
+            [control]="modifiedItem.get('elementTextAr')!"
+            [controlNameInput]="'elementTextAr'"
+          >
+          </lib-textarea-ui>
+        </div>
+      </div>
+      <div class="inputs_wrap grid grid-cols-12">
+        <label class="col-span-4" for="">{{
+          'GOVERNANCE_STANDARDS.OBJECTIVE' | translate
+        }}</label>
+        <div class="col-span-8">
+          <lib-textarea-ui
+            [placeholder]="
+              'GOVERNANCE_STANDARDS.PLACEHOLDERS.OBJECTIVE' | translate
+            "
+            [control]="modifiedItem.get('objective')!"
+            [controlNameInput]="'objective'"
+          >
+          </lib-textarea-ui>
+        </div>
+      </div>
+      <div class="inputs_wrap grid grid-cols-12">
+        <label class="col-span-4" for="">{{
+          'GOVERNANCE_STANDARDS.OBJECTIVE_AR' | translate
+        }}</label>
+        <div class="col-span-8">
+          <lib-textarea-ui
+            [placeholder]="
+              'GOVERNANCE_STANDARDS.PLACEHOLDERS.OBJECTIVE_AR' | translate
+            "
+            [control]="modifiedItem.get('objectiveAr')!"
+            [controlNameInput]="'objectiveAr'"
+          >
+          </lib-textarea-ui>
+        </div>
+      </div>
+      <div class="inputs_wrap grid grid-cols-12">
+        <label class="col-span-4" for="">{{
+          'GOVERNANCE_STANDARDS.GUIDES' | translate
+        }}</label>
+        <div class="col-span-8">
+          <lib-textarea-ui
+            [placeholder]="
+              'GOVERNANCE_STANDARDS.PLACEHOLDERS.GUIDES' | translate
+            "
+            [control]="modifiedItem.get('guides')!"
+            [controlNameInput]="'guides'"
+          >
+          </lib-textarea-ui>
+        </div>
+      </div>
+      <div class="inputs_wrap grid grid-cols-12">
+        <label class="col-span-4" for="">{{
+          'GOVERNANCE_STANDARDS.GUIDES_AR' | translate
+        }}</label>
+        <div class="col-span-8">
+          <lib-textarea-ui
+            [placeholder]="
+              'GOVERNANCE_STANDARDS.PLACEHOLDERS.GUIDES_AR' | translate
+            "
+            [control]="modifiedItem.get('guidesAr')!"
+            [controlNameInput]="'guidesAr'"
+          >
+          </lib-textarea-ui>
+        </div>
+      </div>
+      <div class="inputs_wrap grid grid-cols-12">
+        <label for="" class="col-span-4">{{
+          'CONTENT.REFERENCE_CODE' | translate
+        }}</label>
+        <div class="col-span-8">
+          <input
+            [placeholder]="'CONTENT.PLACEHOLDERS.REFERENCE_CODE' | translate"
+            type="text"
+            pInputText
+            formControlName="referenceCode"
+          />
+        </div>
+      </div>
+      <div class="inputs_wrap grid grid-cols-12">
+        <label for="" class="col-span-4">{{
+          'CONTENT.WEIGHT' | translate
+        }}</label>
+        <div class="col-span-8">
+          <input
+            [placeholder]="'CONTENT.PLACEHOLDERS.WEIGHT' | translate"
+            type="number"
+            pInputText
+            formControlName="wieght"
+          />
+        </div>
+      </div>
+
+      <!-- <div
+      class="inputs_wrap grid grid-cols-12"
+      [ngClass]="{ no_border: !isEditing }"
+    >
+      <label class="col-span-4" for="">{{
+        'CONTENT.ELEMENT' | translate
+      }}</label>
+      <div class="col-span-8">
+        <lib-ui-dropdown
+          [control]="modifiedItem.get('grcDocumentElementClassificationID')!"
+          [formControlNameInput]="'grcDocumentElementClassificationID'"
+          [options]="elementOptions"
+          [optionLabel]="'label'"
+          [optionValue]="'id'"
+          [placeholder]="'CONTENT.PLACEHOLDERS.ELEMENT' | translate"
+        ></lib-ui-dropdown>
+      </div>
+    </div> -->
+
+      @if(isEditing){
+      <div class="inputs_wrap grid grid-cols-12 no_border">
+        <label class="col-span-4" for="">{{
+          'CONTENT.GOVERNANCE_CONTROL' | translate
+        }}</label>
+        <div class="col-span-8">
+          <lib-ui-dropdown
+            [control]="modifiedItem.get('govControlID')!"
+            [formControlNameInput]="'govControlID'"
+            [options]="govControlList"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+            [placeholder]="
+              'CONTENT.PLACEHOLDERS.GOVERNANCE_CONTROL' | translate
+            "
+          ></lib-ui-dropdown>
+        </div>
+      </div>
+      }
+    </div>
+
+    <ng-template pTemplate="footer">
+      <div class="flex justify-end w-full py-2">
+        <p-button
+          (onClick)="addNewItem()"
+          [loading]="isCreating"
+          [disabled]="modifiedItem.invalid"
+          [label]="'BUTTONS.SAVE' | translate"
+          styleClass="default_btn"
+        >
+        </p-button>
+      </div>
+    </ng-template>
+    }
+  </p-dialog>
+</div>
+
+<!-- menu Action Item -->
+<p-menu #menu [model]="actions" [popup]="true" />
+@if(dragNode){
+<p-dialog
+  [draggable]="false"
+  [dismissableMask]="false"
+  [modal]="true"
+  [(visible)]="isShowingDragDropModal"
+  styleClass="w-[50rem] h-[40rem]"
+>
+  <ng-template pTemplate="header">
+    <div class="border-b-[1px] border-gray_light pb-3 w-full">
+      <h2 class="text-[#101828] text-lg font-medium">
+        {{ 'CONTENT.CLASSFICATIONS' | translate }}
+      </h2>
+    </div>
+  </ng-template>
+  <div class="mb-3">
+    <div class="flex item-center gap-4 flex-wrap">
+      @for (option of elementOptions; track $index) {
+      <button
+        (click)="setDragNodeElement(option.id)"
+        class="flex justify-center items-center gap-2 border-[1px] border-gray_light rounded-md py-5 px-6 cursor-pointer"
+        [ngClass]="{
+          active_border:
+            dragNode?.grcDocumentElementClassificationID === option.id
+        }"
+      >
+        <span class="text-[#344054] font-medium text-lg">
+          {{ option?.label }}
+        </span>
+      </button>
+      }
+    </div>
+  </div>
+  <div
+    class="flex items-center gap-4 border-[1px] border-[#D0D5DD] rounded-lg py-3 px-6 w-full flex-wrap"
+  >
+    <div class="flex flex-col gap-2 justify-start items-start">
+      <span class="text-[#667085] text-sm font-medium">
+        {{ 'VERSIONS.From' | translate }}
+      </span>
+      <span class="text-[#344054] font-medium text-base">
+        {{ dragNode?.name }}
+      </span>
+    </div>
+    <i class="fi fi-rr-angle-right text-[#98A2B3] text-lg"></i>
+    <div class="flex flex-col gap-2 justify-start items-start">
+      @if(dropNode){
+      <span class="text-[#667085] text-sm font-medium">
+        {{ 'VERSIONS.To' | translate }}
+      </span>
+      <span class="text-[#344054] font-medium text-base">
+        {{ dropNode?.name }}
+      </span>
+      }@else {
+      <span class="text-[#667085] text-sm font-medium">
+        {{ 'GOVERNANCE_STANDARDS.OTHER_CATEGORY' | translate }}
+      </span>
+      }
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="flex items-center justify-between">
+      <p-button
+        pButton
+        class="bg-white_color text-[#344054] text-sm border border-gray_light rounded-lg"
+        [label]="'BUTTONS.CANCEL' | translate"
+        icon="pi pi-times"
+        (click)="isShowingDragDropModal = false; getDocsContent()"
+      />
+      <div class="flex justify-end items-center gap-4">
+        @if(dragContext && dragContext.canMerge){
+
+        <p-button
+          (onClick)="handleMergeActionElement()"
+          [label]="'Merge'"
+          styleClass="btn default_btn transparent"
+        ></p-button>
+        } @if(dragContext && dragContext.canMove){
+        <p-button
+          (onClick)="handleMoveActionElement()"
+          [label]="'Move'"
+          styleClass="btn default_btn"
+        ></p-button>
+        }
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+}

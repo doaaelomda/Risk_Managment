@@ -1,0 +1,60 @@
+<section class="attachment_container border border-gray_light/50 rounded-lg p-5 shadow-sm">
+  <div class="header flex items-center justify-between mb-12">
+    <div class="badge bg-primary/30 text-primary font-medium">
+      {{dataList.length}} Attachments
+    </div>
+
+  <div class="action_btn">
+    <p-button [label]="'RISK_MANAGMENT.ADD_NEW_ATTACHMENT' | translate " (onClick)="addAttachmentVisible = true" icon="fi fi-rr-plus"  >
+    </p-button>
+  </div>
+  </div>
+
+
+  <div class="attachments_list">
+    @for(attach of dataList; track attach.id) {
+      <div class="single_attachment mb-4 border border-gray_light/50 p-4 rounded-lg flex items-center justify-between flex-wrap">
+        <div class="info flex flex-wrap items-start gap-3">
+          <div class="icon ">
+            <i class="fi fi-rr-file"></i>
+          </div>
+          <div class="details">
+            <h2 class="font-medium mb-1">{{attach.name?.split('')?.length > 8 ? attach.name?.split('')?.slice(0,8).join('') + '...':attach?.name}}</h2>
+            <div class="flex items-center gap-2 flex-wrap">
+              <p class="text-gray_color">{{attach.size}} - 100% uploaded</p>
+              <div class="badge">
+                {{attach.AttachType}}
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="actions flex items-center gap-4 ">
+          <button class="text-primary text-lg font-medium"><i class="fi fi-rr-trash"></i></button>
+          <button class="text-primary text-lg font-medium"><i class="fi fi-br-progress-download"></i></button>
+          <button class="text-primary text-lg font-semibold"><i class="fi fi-rr-eye"></i></button>
+        </div>
+      </div>
+    }
+  </div>
+</section>
+
+
+<p-dialog
+  [header]="'RISK_MANAGMENT.ADD_NEW_ATTACHMENT'|translate"
+  [(visible)]="addAttachmentVisible"
+  [modal]="true"
+  [dismissableMask]="true"
+  [draggable]="false"
+  styleClass="w-[50rem]"
+  [position]="'center'"
+>
+
+
+
+<lib-attach-ui></lib-attach-ui>
+
+</p-dialog>
+
+

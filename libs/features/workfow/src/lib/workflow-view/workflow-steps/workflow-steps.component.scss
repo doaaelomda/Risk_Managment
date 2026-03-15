@@ -1,0 +1,21 @@
+::ng-deep .action_dailog {
+  .p-dialog-header {
+    padding: 1rem;
+  }
+  .p-dialog-header .p-dialog-header-icons {
+    display: none;
+  }
+}
+
+.first_sec {
+  background-color: #fafaff;
+}
+.custom_border_bottom {
+  border-bottom: 1px solid #EAECF0;
+  padding-bottom: 8px;
+}
+h3.title {
+  color: #344054;
+  font-size: 16px;
+  font-weight: 500;
+}

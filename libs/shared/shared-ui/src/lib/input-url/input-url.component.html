@@ -1,0 +1,27 @@
+<div class="form_group">
+  @if(currentLabel){
+    <div class="flex items-center justify-between mb-2">
+      <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -->
+      <label class="block text-sm font-medium text-gray_color">
+        {{ currentLabel | translate }}
+      </label>
+      <ng-content select="[addition-action]"></ng-content>
+    </div>
+  }
+  <div class="input-container flex items-center">
+    <span class="prefix">https://</span>
+    <input
+      type="text"
+      pInputText
+      [placeholder]="currentPlaceHolder | translate"
+      [formControlName]="controlName"
+      class="custom-input"
+    />
+  </div>
+
+  @if(currentControl?.errors && currentControl?.touched){
+    <p class="text-sm text-danger_color p-1">
+      {{ 'VALIDATION.REQUIRED' | translate }}
+    </p>
+  }
+</div>

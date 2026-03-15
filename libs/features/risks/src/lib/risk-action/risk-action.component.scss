@@ -1,0 +1,62 @@
+.main_info{
+  box-shadow: 0px 1px 3px 0px var(--black_color);
+}
+
+
+
+::ng-deep .action_section .p-accordion .p-accordion-header .p-accordion-header-link{
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  @apply bg-sec_color;
+  &:hover{
+    @apply bg-sec_color;
+  }
+}
+
+::ng-deep .action_section {
+  .p-accordion{
+    border: 1px solid var(--gray-300);
+    box-shadow: 0px 1px 3px 0px var(--black_color);
+    border-radius: .5rem;
+  }
+
+  &.invaild{
+    .p-accordion{
+      border: 1px solid var(--error-500);
+    }
+  }
+}
+
+
+::ng-deep .action_section .p-accordion .p-accordion-content
+{
+  @apply bg-sec_color;
+}
+
+
+::ng-deep .action_section .p-accordion p-accordiontab .p-accordion-tab{
+  margin-bottom: 0;
+}
+::ng-deep .form_group .p-multiselect{
+  width: 100%;
+}
+
+
+
+.multi_icon{
+  width: 40px;
+  height: 40px;
+  @apply flex text-primaryColor-700 items-center justify-center bg-white_color border-2 border-gray-300 rounded-lg;
+  box-shadow: 0px 1px 2px 0px var( --gray_color);
+
+
+}
+
+
+
+
+.risk-arrow {
+  transform: translateX(-50%);
+  transition: left 0.3s ease;
+  z-index: 10;
+}

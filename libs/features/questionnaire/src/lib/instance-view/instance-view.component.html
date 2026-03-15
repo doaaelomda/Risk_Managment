@@ -1,0 +1,32 @@
+<div class="name_process">
+  @if(loadingData){
+  <p-skeleton width="150px" height="20px" borderRadius="8px"></p-skeleton>
+  }
+  @else {
+
+
+  <div class="flex justify-between items-center">
+    <h4 class="font-semibold text-gray-800 text-lg"> {{data?.name}}</h4>
+    <div class="flex gap-2">
+      @if(data?.expirationDate){
+      <div class="flex items-center">
+        <p class="font-medium text-gray-500">{{'INSTANCE.EXPIRATION_DATE' | translate}}:</p>
+         <img src="images/icons/calendar.svg" alt="">
+        <p class="font-semibold text-gray-800">{{data?.expirationDate | date: 'MMM d, y' }}</p>
+      </div>
+      }
+
+      @if(data?.questionnaireInstanceStatusName){
+      <div class="flex items-center">
+        <p class="font-medium text-gray-500">{{'INSTANCE.STATUS' | translate}}:</p>
+        <p class="badge">{{data?.questionnaireInstanceStatusName}}</p>
+      </div>
+      }
+    </div>
+  </div>
+  }
+
+  <lib-shared-tabs [permissionFeature]="{module:moduleName , feature:featureName}" [tabs]="tabs"
+    [hasAttachments]="false" [hasComments]="false"></lib-shared-tabs>
+
+  <router-outlet></router-outlet>

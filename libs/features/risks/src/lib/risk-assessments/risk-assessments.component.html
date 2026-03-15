@@ -1,0 +1,314 @@
+
+@if(isShowSample){
+  <lib-sample-assessment [riskData]="riskData" ></lib-sample-assessment>
+}@else {
+  <section class="pt-8">
+
+
+    <lib-new-table
+      [loading]="loading"
+      [table_data]="dataTable"
+      [table_title]="'HEARDE_TABLE.Assessments' | translate"
+      [badge_title]="'HEARDE_TABLE.Risk_Assessments_List' | translate"
+      [dataViewId]="2"
+      [entityID_Name]="'id'"
+      [isShownAction]="true"
+      (payload_emiter)="handleDataTable($event)"
+      [action_items]="items_table"
+      (currentActionRow)="setSelected($event)"
+      [columnControl]="columnControl"
+          [table_actions_permissions]="{ module: 'RISKS', feature: 'ASSESSMENT', action: 'VIEW' }"
+
+    >
+    @if(_PermissionSystemService.can('RISKS' , 'ASSESSMENT','ADD')) {
+      <button
+        addition_action
+        (click)="menu.toggle($event)"
+        class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+      >
+        <i class=""></i>
+        <span>{{ 'HEARDE_TABLE.ADD_NEW_RISK_ASSESS' | translate }}</span>
+        <i class="fi fi-rr-angle-small-down"></i>
+      </button>
+    }
+  </lib-new-table>
+  </section>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p-menu #menu [model]="items" [appendTo]="'body'" [popup]="true" />
+<p-dialog
+  header="'RISK_VIEW.MAIN_INFORMATION'"
+  [(visible)]="quickAddVisible"
+  [modal]="true"
+  [dismissableMask]="true"
+  (onHide)="initRiskForm()"
+  [draggable]="false"
+  styleClass="w-[50rem]"
+  [position]="'center'"
+>
+  <ng-template pTemplate="header">
+    <h3 class="text-gray-800 font-bold text-1xl">
+      {{ 'RISK_VIEW.MAIN_INFORMATION' | translate }}
+    </h3>
+  </ng-template>
+  <h6>{{ 'RISK_VIEW.UPDATE_PHOTO' | translate }}</h6>
+
+  <div class="border-b border-gray_light my-4"></div>
+
+  <ng-template pTemplate="content">
+    <div class="p-fluid" [formGroup]="form">
+      <!-- Code -->
+      <div class="field flex items-center border-b border-gray_light py-4">
+        <label class="font-bold w-1/4" for="code">{{
+          'RISK_MANAGMENT.CODE' | translate
+        }}</label>
+        <div class="w-3/4">
+          <lib-input-text
+            [placeholder]="'PLACEHOLDERS.ENTER_RISK_CODE' | translate"
+            [control]="form.get('assessmentCode')!"
+            [controlNameInput]="'assessmentCode'"
+          >
+          </lib-input-text>
+        </div>
+      </div>
+
+      <!-- Risk Title -->
+      <div class="field flex items-center border-b border-gray_light py-4">
+        <label class="font-bold w-1/4" for="title">{{
+          'RISK_MANAGMENT.TITLE' | translate
+        }}</label>
+        <div class="w-3/4">
+          <lib-input-text
+            [placeholder]="'PLACEHOLDERS.ENTER_RISK_TITLE' | translate"
+            [validations]="validations"
+            [control]="form.get('assessmentText')!"
+            [controlNameInput]="'assessmentText'"
+          >
+          </lib-input-text>
+        </div>
+      </div>
+
+      <!-- WorkFlow -->
+      <div class="field flex border-b border-gray_light py-4">
+        <div class="w-1/4 flex gap-2 items-start">
+          <div class="text-sm">
+            <p class="font-bold block mb-1">
+              {{ 'RISK_MANAGMENT.WORKFLOW' | translate }}
+            </p>
+          </div>
+        </div>
+        <div class="w-3/4">
+          <lib-ui-dropdown
+            [placeholder]="'PLACEHOLDERS.SELECT_WORKFLOW' | translate"
+            [control]="form.get('wfid')!"
+            [options]="workflow"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+            [formControlNameInput]="'wfid'"
+          >
+          </lib-ui-dropdown>
+        </div>
+      </div>
+
+      <!-- Type -->
+      <div class="field flex border-b border-gray_light py-4">
+        <div class="w-1/4 flex gap-2 items-start">
+          <div class="text-sm">
+            <p class="font-bold block mb-1">
+              {{ 'RISK_MANAGMENT.TYPE' | translate }}
+            </p>
+          </div>
+        </div>
+        <div class="w-3/4">
+          <lib-ui-dropdown
+            [placeholder]="'PLACEHOLDERS.SELECT_TYPE' | translate"
+            [control]="form.get('riskAssessmentTypeID')!"
+            [options]="Type"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+            [formControlNameInput]="'riskAssessmentTypeID'"
+          >
+          </lib-ui-dropdown>
+        </div>
+      </div>
+
+      <!-- Control Effectiveness Level -->
+      <div class="field flex border-b border-gray_light py-4">
+        <div class="w-1/4 flex gap-2 items-start">
+          <div class="text-sm">
+            <p class="font-bold block mb-1">
+              {{ 'RISK_MANAGMENT.CONTROL_EFFECTIVENESS' | translate }}
+            </p>
+          </div>
+        </div>
+        <div class="w-3/4">
+          @if (form.get('show_asset')?.value) {
+          <lib-ui-dropdown
+            [placeholder]="
+              'PLACEHOLDERS.SELECT_CONTROL_EFFECTIVENESS' | translate
+            "
+            [control]="form.get('controlEffectivenessLevelID')!"
+            [options]="EffectivenessLevel"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+            [formControlNameInput]="'controlEffectivenessLevelID'"
+          >
+          </lib-ui-dropdown>
+          }
+        </div>
+      </div>
+
+      <!-- Identified Date -->
+      <div class="field flex items-center border-b border-gray_light py-4">
+        <label class="font-bold w-1/4" for="assessmentDate">{{
+          'RISK_MANAGMENT.IDENTIFIED_DATE' | translate
+        }}</label>
+        <div class="w-3/4">
+          <lib-date-packer
+            [placeholder]="'PLACEHOLDERS.SELECT_DATE' | translate"
+            [control]="form.get('assessmentDate')!"
+            [controlNameInput]="'assessmentDate'"
+          >
+          </lib-date-packer>
+        </div>
+      </div>
+
+      <!-- Scope Description -->
+      <div class="field flex border-b border-gray_light py-4">
+        <div class="w-1/4">
+          <label class="font-bold block mb-1" for="Des1">{{
+            'RISK_MANAGMENT.SCOPE_DESCRIPTION' | translate
+          }}</label>
+          <label for="Des2">{{
+            'RISK_MANAGMENT.SHORT_INTRO' | translate
+          }}</label>
+        </div>
+        <div class="w-3/4">
+          <lib-textarea-ui
+            [placeholder]="'PLACEHOLDERS.ENTER_DESCRIPTION' | translate"
+            [control]="form.get('scope')!"
+            [controlNameInput]="'scope'"
+          >
+          </lib-textarea-ui>
+        </div>
+      </div>
+
+      <!-- Assumptions Description -->
+      <div class="field flex border-b border-gray_light py-4">
+        <div class="w-1/4">
+          <label class="font-bold block mb-1" for="Des1">{{
+            'RISK_MANAGMENT.ASSUMPTIONS_DESCRIPTION' | translate
+          }}</label>
+          <label for="Des2">{{
+            'RISK_MANAGMENT.SHORT_INTRO' | translate
+          }}</label>
+        </div>
+        <div class="w-3/4">
+          <lib-textarea-ui
+            [placeholder]="'PLACEHOLDERS.ENTER_DESCRIPTION' | translate"
+            [control]="form.get('assumptions')!"
+            [controlNameInput]="'assumptions'"
+          >
+          </lib-textarea-ui>
+        </div>
+      </div>
+
+      <!-- Context Summary -->
+      <div class="field flex border-b border-gray_light py-4">
+        <div class="w-1/4">
+          <label class="font-bold block mb-1" for="Des1">{{
+            'RISK_MANAGMENT.CONTEXT_SUMMARY' | translate
+          }}</label>
+          <label for="Des2">{{
+            'RISK_MANAGMENT.SHORT_INTRO' | translate
+          }}</label>
+        </div>
+        <div class="w-3/4">
+          <lib-textarea-ui
+            [placeholder]="'PLACEHOLDERS.ENTER_DESCRIPTION' | translate"
+            [control]="form.get('contextSummary')!"
+            [controlNameInput]="'contextSummary'"
+          >
+          </lib-textarea-ui>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-2">
+      <p-button
+        pButton
+        class="bg-white_color text-gray-700 text-sm border border-gray_light rounded-lg"
+        [label]="'BUTTONS.CANCEL' | translate"
+        icon="pi pi-times"
+        (click)="quickAddVisible = false"
+      />
+      <p-button
+        pButton
+        class="bg-primary text-white text-sm rounded-lg"
+        [label]="'BUTTONS.SAVE' | translate"
+        [loading]="isLoading"
+        icon="pi pi-check"
+        (click)="submit()"
+      />
+    </div>
+  </ng-template>
+</p-dialog>
+<lib-delete-confirm-popup
+  [titleDelete]="'RISK_MANAGMENT.DELETE_ASSESSMENT_TITLE'"
+  [descriptionDelete]="'RISK_MANAGMENT.DELETE_ASSESSMENT_DESC'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn w-40">
+      <p-button
+        [label]="'BUTTONS.CANCEL' | translate"
+        class="w-full"
+        (onClick)="closeDeleteModal()"
+      />
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteRiskAssesment()"
+        [loading]="loadDelted"
+        [label]="'BUTTONS.DELETE' | translate"
+        class="w-full"
+        severity="danger"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

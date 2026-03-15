@@ -1,0 +1,104 @@
+<!-- <h1 class="text-lg text-[#101828] font-medium">{{ viewed_data?.name }}</h1> -->
+
+<section class="view_container">
+  <div class="header pb-4 border-b border-gray_light">
+    <h3 class="text-lg text-[#101828] font-medium">
+      {{ 'NOTIFICATION_SETTING.EXTERNAL_NOTFICATION' | translate }}
+    </h3>
+  </div>
+
+  <div class="grid grid-cols-12 gap-2">
+    <div
+      class="col-span-12 flex flex-wrap gap-3 border-b border-gray_light py-3"
+    >
+      <div class="item flex flex-col gap-2 items-start">
+        <span class="label">
+          {{ 'NOTIFICATION_SETTING.TITLE' | translate }}
+        </span>
+        <span class="value">{{ viewed_data?.externalTemplateTitle }}</span>
+      </div>
+
+      <div class="item flex flex-col gap-2 items-start">
+        <span class="label">
+          {{ 'NOTIFICATION_SETTING.STATUS' | translate }}
+        </span>
+
+        <span
+          class="badge"
+          [ngClass]="{
+            green: viewed_data?.isActive,
+            red: !viewed_data?.isActive
+          }"
+        >
+          <div class="small_doted"></div>
+          <span>
+            {{
+              (viewed_data?.isActive
+                ? 'NOTIFICATION_SETTING.ACTIVE'
+                : 'NOTIFICATION_SETTING.INACTIVE'
+              ) | translate
+            }}
+          </span>
+        </span>
+      </div>
+
+      @for (user of viewed_data.userReceivers; track $index) {
+      <div class="item mt-auto">
+        <lib-owner-user
+          [title]="
+            ($index === 0 ? 'NOTIFICATION_SETTING.USER_RECEIVERS' : '')
+              | translate
+          "
+          [hasBorder]="false"
+          [roleOrUser]="'user'"
+          [postionOwner]="user.name"
+          [loading]="loading"
+        ></lib-owner-user>
+      </div>
+
+      } @for (role of viewed_data.roleReceivers; track $index) {
+      <div class="item mt-auto">
+        <lib-owner-user
+          [title]="
+            ($index === 0 ? 'NOTIFICATION_SETTING.ROLE_RECEIVERS' : '')
+              | translate
+          "
+          [hasBorder]="false"
+          [roleOrUser]="'role'"
+          [postionOwner]="role.roleName"
+          [loading]="loading"
+        ></lib-owner-user>
+      </div>
+      } @for (attribute of viewed_data.attributeReceivers; track $index) {
+      <div class="item mt-auto">
+        <lib-owner-user
+          [title]="
+            ($index === 0 ? 'NOTIFICATION_SETTING.ATTRIBUTE_RECEIVERS' : '')
+              | translate
+          "
+          [hasBorder]="false"
+          [roleOrUser]="'role'"
+          [postionOwner]="attribute.dataEntityTypeAttributeName"
+          [loading]="loading"
+        ></lib-owner-user>
+      </div>
+      }
+    </div>
+
+    <div class="col-span-12 flex flex-col gap-2 items-start pb-3">
+      <span class="label">
+        {{ 'NOTIFICATION_SETTING.EMAIL_NOTFICATION_TITLE' | translate }}
+      </span>
+      <span class="value"> {{ viewed_data?.externalTemplateTitle }} </span>
+    </div>
+    <div class="col-span-12 pb-3">
+      <span class="label">
+        {{ 'NOTIFICATION_SETTING.EMAIL_NOTFICATION_CONTENT' | translate }}
+      </span>
+      <p
+        [innerHTML]="viewed_data?.externalTemplateContent | safeHtml"
+        class="notf_content"
+      ></p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,258 @@
+<section>
+  <div class="flex items-center flex-wrap gap-8 mb-3">
+    @if(!gettingSummary){ @for (item of summary; track $index) {
+    <div class="flex-1 min-w-[250px]">
+      <div
+        class="flex flex-col justify-center items-start gap-2.5 bg-[#F4F3FF] px-6 py-5 rounded-2xl"
+      >
+        <div class="flex gap-2 items-center justify-start">
+          <div
+            class="w-[40px] h-[40px] rounded-full bg-[#7A5AF8] flex justify-center items-center"
+          >
+            <i class="fi fi-sr-document text-xl text-[#fff]"></i>
+          </div>
+          <span class="text-[#151D48] font-semibold text-2xl">
+            {{ item.count }}
+          </span>
+        </div>
+        <p class="font-semibold text-lg text-[#425166]">{{ item.name | titlecase }}</p>
+      </div>
+    </div>
+    } }@else {
+    <div class="flex-1 min-w-[250px]">
+      <p-skeleton height="7rem"></p-skeleton>
+    </div>
+    <div class="flex-1 min-w-[250px]">
+      <p-skeleton height="7rem"></p-skeleton>
+    </div>
+    <div class="flex-1 min-w-[250px]">
+      <p-skeleton height="7rem"></p-skeleton>
+    </div>
+    <div class="flex-1 min-w-[250px]">
+      <p-skeleton height="7rem"></p-skeleton>
+    </div>
+    }
+  </div>
+
+  <lib-new-table
+    [loading]="loadingTable"
+    [table_data]="dataTable"
+    [table_title]="'MEETINGS.' + FEATURE_LIST_NAME | translate"
+    [badge_title]="'MEETINGS.' + FEATURE_PLURAL_NAME | translate"
+    [dataViewId]="DATA_VIEW_ID"
+    [entityID_Name]="ENTITY_ID_NAME"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="items"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{ module: 'MEETING', feature: 'MEETINGATTENDANCE', action: 'VIEW' }"
+  >
+    @if(_PermissionSystemService.can('MEETING' , 'MEETINGATTENDANCE' , 'ADD')){
+    <button
+      (click)="resetForm();visible_save_dialog = true"
+      addition_action
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+    >
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'MEETINGS.ADD_NEW_' + FEATURE_NAME | translate }}</span>
+    </button>
+  }
+  </lib-new-table>
+</section>
+
+<p-dialog
+  (onHide)="resetForm()"
+  [header]="
+    (current_row_selected ? 'MEETINGS.UPDATE_'+FEATURE_NAME : 'MEETINGS.ADD_NEW_' + FEATURE_NAME)
+      | translate
+  "
+  [modal]="true"
+  [(visible)]="visible_save_dialog"
+  styleClass="w-[50rem]"
+>
+  @if(form){
+  <form [formGroup]="form" class="grid grid-cols-12 gap-6 mb-6">
+    <!-- Participant Type -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [showClear]="false"
+        [placeholder]="'MEETINGS.PARTICIPANT_TYPE_PLACEHOLDER' | translate"
+        [label]="'MEETINGS.PARTICIPANT_TYPE' | translate"
+        [control]="form.get('meetingParticipantTypeID')!"
+        [formControlNameInput]="'meetingParticipantTypeID'"
+        [options]="participantTypeList"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      ></lib-ui-dropdown>
+    </div>
+
+    <!-- User -->
+    @if(form.get('meetingParticipantTypeID')?.value === 1){
+    <div class="md:col-span-6 col-span-12">
+      <lib-user-dropdown
+        [placeholder]="'MEETINGS.USER_PLACEHOLDER' | translate"
+        [label]="'MEETINGS.USER' | translate"
+        [control]="form.get('userID')!"
+        [formControlNameInput]="'userID'"
+        [options]="usersList"
+        [optionLabel]="'name'"
+        [optionValue]="'id'"
+      ></lib-user-dropdown>
+    </div>
+    }
+
+    <!-- Role -->
+    @if(form.get('meetingParticipantTypeID')?.value === 2){
+    <div class="md:col-span-6 col-span-12">
+      <lib-role-dropdown
+        [placeholder]="'MEETINGS.ROLE_PLACEHOLDER' | translate"
+        [label]="'MEETINGS.ROLE' | translate"
+        [control]="form.get('roleID')!"
+        [formControlNameInput]="'roleID'"
+        [options]="rolesList"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      ></lib-role-dropdown>
+    </div>
+    }
+
+    <!-- Third Party Contact -->
+    @if(form.get('meetingParticipantTypeID')?.value === 3){
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'MEETINGS.THIRD_PARTY_CONTACT_PLACEHOLDER' | translate"
+        [label]="'MEETINGS.THIRD_PARTY_CONTACT' | translate"
+        [control]="form.get('thirdPartyContactID')!"
+        [formControlNameInput]="'thirdPartyContactID'"
+        [options]="thirdPartyContactList"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      ></lib-ui-dropdown>
+    </div>
+    }
+
+    <!-- Attendance Status -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'MEETINGS.ATTENDANCE_STATUS_PLACEHOLDER' | translate"
+        [label]="'MEETINGS.ATTENDANCE_STATUS' | translate"
+        [control]="form.get('meetingAttendanceStatusTypeID')!"
+        [formControlNameInput]="'meetingAttendanceStatusTypeID'"
+        [options]="attendanceStatusList"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      ></lib-ui-dropdown>
+    </div>
+
+        <!-- Is Mandatory -->
+
+    <div class="md:col-span-6 col-span-12">
+      <div class="flex gap-2 items-center">
+        <label for="isMandatory">
+          {{ 'MEETINGS.IS_MANDATORY' | translate }}
+        </label>
+        <p-inputSwitch inputId="isMandatory" formControlName="isMandatory" />
+      </div>
+    </div>
+
+  </form>
+
+  }
+  <ng-template pTemplate="footer">
+    <p-button
+      styleClass="default_btn cancel"
+      (onClick)="resetForm()"
+      [label]="'BUTTONS.CANCEL' | translate"
+    ></p-button>
+    <p-button
+      [disabled]="form.invalid || validateSaveBtn()"
+      styleClass="default_btn ms-4"
+      (onClick)="add()"
+      [loading]="addLoading"
+      [label]="'BUTTONS.SAVE' | translate"
+    ></p-button>
+  </ng-template>
+</p-dialog>
+
+<lib-delete-confirm-popup
+  [titleDelete]="`MEETINGS.${FEATURE_NAME}_DELETE_TITLE`"
+  [descriptionDelete]="`MEETINGS.${FEATURE_NAME}_DELETE_DESC`"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="handleClosedDelete()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="delete()"
+        [loading]="loadDeleted"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+<p-dialog
+  [header]="
+    getAttendanceHeader(data) || ('MEETINGS.VIEW_' + FEATURE_NAME | translate)
+  "
+  [modal]="true"
+  (onHide)="current_row_selected = null; visible_view = false"
+  [(visible)]="visible_view"
+  styleClass="w-[40rem]"
+>
+  <div class="content">
+    <div class="grid grid-cols-12 gap-6">
+      <!-- 👤 Participant Type -->
+      <!-- <div class="col-span-12 lg:col-span-6">
+        <p class="text-sm font-medium text-gray_color">
+          {{ 'MEETINGS.PARTICIPANT_TYPE' | translate }}
+        </p>
+        <p class="text-[#344054] font-medium text-base">
+          {{
+            data?.meetingParticipantTypeName ??
+              data?.meetingParticipantTypeID ??
+              '-'
+          }}
+        </p>
+      </div> -->
+
+   <div class="col-span-12 lg:col-span-6 border-r border-gray-200">
+        <p class="text-sm font-medium text-gray_color">
+          {{ 'MEETINGS.PARTICIPANT' | translate }}
+        </p>
+        <p class="text-[#344054] font-medium text-base">
+          {{ data?.participantName ?? '-' }}
+        </p>
+      </div>
+      <!-- 📌 Mandatory -->
+      <div class="col-span-12 lg:col-span-6">
+        <p class="text-sm font-medium text-gray_color">
+          {{ 'MEETINGS.IS_MANDATORY' | translate }}
+        </p>
+        <p class="text-[#344054] font-medium text-base">
+          {{
+            data?.isMandatory
+              ? ('MEETINGS.YES' | translate)
+              : ('MEETINGS.NO' | translate)
+          }}
+        </p>
+      </div>
+
+      <!-- 📋 Attendance Status -->
+      <div class="col-span-12 lg:col-span-6">
+        <p class="text-sm font-medium text-gray_color">
+          {{ 'MEETINGS.ATTENDANCE_STATUS' | translate }}
+        </p>
+        <span class="badge {{data?.meetingAttendanceStatuTypeColor}}">
+          {{ data?.meetingAttendanceStatuTypeName ?? '-' }}
+        </span>
+      </div>
+    </div>
+  </div>
+</p-dialog>

@@ -1,0 +1,278 @@
+<div class="mx-auto">
+  <div class="grid grid-cols-12 gap-3 mb-2" [formGroup]="filtersForm">
+    <div class="col-span-12 lg:col-span-4">
+      @if(!loadingData){
+      <lib-input-search
+        (searchTermEmiter)="handleSearch($event)"
+      ></lib-input-search>
+      }@else{
+      <p-skeleton height="3rem"></p-skeleton>
+      }
+    </div>
+    <div class="col-span-12 lg:col-span-4">
+      @if(!loadingData){
+      <lib-ui-dropdown
+        [placeholder]="'PERMISSIONS.SELECT_PERMISSION_TYPE' | translate"
+        [label]="''"
+        [control]="filtersForm.get('permissionsType')!"
+        [options]="permissionTypes"
+        [optionLabel]="'label'"
+        [optionValue]="'label'"
+        [formControlNameInput]="'permissionsType'"
+      >
+      </lib-ui-dropdown>
+      }@else{
+      <p-skeleton height="3rem"></p-skeleton>
+      }
+    </div>
+
+    <div class="col-span-12 lg:col-span-4">
+      @if(!loadingData){
+      <lib-ui-dropdown
+        [placeholder]="'PERMISSIONS.Select_Permissions_Level' | translate"
+        [label]="''"
+        [control]="filtersForm.get('permissionsLevel')!"
+        [options]="permissionLevels"
+        [optionLabel]="'label'"
+        [optionValue]="'label'"
+        [formControlNameInput]="'permissionsLevel'"
+      >
+      </lib-ui-dropdown>
+      }@else{
+      <p-skeleton height="3rem"></p-skeleton>
+      }
+    </div>
+  </div>
+
+  @if(!loadingData){
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="p-2 max-h-[800px] overflow-y-auto">
+      <p-accordion
+        [activeIndex]="[0]"
+        [multiple]="true"
+        styleClass="permissionsAccordion"
+      >
+        @for (category of permissions; track $index) {
+        <div>
+          @if(category?.children?.length){
+          <p-accordionTab (selectedChange)="toggleTab(category)">
+            <ng-template pTemplate="header">
+              <div
+                class="flex items-center gap-2 w-full perm-container selected"
+                role="button"
+                tabindex="0"
+                (click)="handleSelectedPerm(category)"
+              >
+                @if (category?.icon) {
+                <i class="perm-icon" [class]="category?.icon"></i>
+                }
+
+                <span
+                  class="font-bold whitespace-nowrap text-gray-800 max-w-[90%] truncate"
+                >
+                  {{ category?.catName }}
+                </span>
+                <div
+                  class="{{
+                    isArabicLang ? 'mr-auto' : 'ml-auto'
+                  }} flex gap-2 items-center"
+                >
+                  <div class="expand-icon-wrapper">
+                    <i
+                      [ngClass]="{
+                        'fi fi-rr-angle-sm-up': category?.isExpanded,
+                        'fi fi-rr-angle-sm-down': !category?.isExpanded
+                      }"
+                    ></i>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+
+            <div class="flex flex-col gap-4">
+              @for (child of category?.children; track $index) {
+              <div>
+                @if(child?.children?.length){
+                <p-accordionTab (selectedChange)="toggleTab(child)">
+                  <ng-template pTemplate="header">
+                    <div
+                      class="flex items-center gap-2 w-full perm-container"
+                      [ngClass]="{ selected: child?.isSelected }"
+                      role="button"
+                      tabindex="0"
+                      (click)="handleSelectedPerm(child)"
+                    >
+                      <span class="font-bold whitespace-nowrap text-gray-800">
+                        {{ child?.catName }}
+                      </span>
+                      <div
+                        class="{{
+                          isArabicLang ? 'mr-auto' : 'ml-auto'
+                        }} flex gap-2 items-center"
+                      >
+                        <div class="expand-icon-wrapper">
+                          <i
+                            [ngClass]="{
+                              'fi fi-rr-angle-sm-up': child?.isExpanded,
+                              'fi fi-rr-angle-sm-down': !child?.isExpanded
+                            }"
+                          ></i>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-template>
+
+                  <!-- Recursive Children (optional) -->
+                  <!-- You can repeat similar structure here for deeper levels -->
+                </p-accordionTab>
+                }
+
+                <!-- If no more children -->
+                @if (!child?.children?.length) {
+                <div class="flex gap-2 items-center">
+                  <i
+                    class="fi fi-rr-arrow-turn-down-{{
+                      isArabicLang ? 'left' : 'right'
+                    }} arrow_right"
+                  ></i>
+                  <div
+                    class="flex items-center gap-2 w-full perm-container not_accordion"
+                    [ngClass]="{ selected: child?.isSelected }"
+                    role="button"
+                    tabindex="0"
+                    (click)="handleSelectedPerm(child)"
+                  >
+                    <span class="font-bold whitespace-nowrap text-gray-800">
+                      {{ child?.catName }}
+                    </span>
+                  </div>
+                </div>
+                }
+              </div>
+              }
+            </div>
+          </p-accordionTab>
+          }@else {
+          <div class="permissionDiv mb-3">
+            <div
+              class="flex items-center gap-2 w-full perm-container selected"
+              role="button"
+              tabindex="0"
+              (click)="handleSelectedPerm(category)"
+            >
+              @if (category?.icon) {
+              <i class="perm-icon" [class]="category?.icon"></i>
+              }
+
+              <span class="font-bold whitespace-nowrap text-gray-800">
+                {{ category?.catName }}
+              </span>
+            </div>
+          </div>
+
+          }
+        </div>
+        }
+      </p-accordion>
+    </div>
+
+    <div class="p-2 max-h-[800px] overflow-y-auto">
+      <div class="selected_permissions_container flex flex-col gap-3">
+        <div
+          class="flex justify-between w-full border-b-[1px] border-gray_light"
+        >
+          <h3 class="header">{{ selectedPerm?.catName }}</h3>
+          <div class="{{ isArabicLang ? 'mr-auto' : 'ml-auto' }}">
+            @if(selectedPerm?.permissions?.length){
+            <div
+              class="flex gap-2 items-center {{
+                isArabicLang ? 'flex-row-reverse' : ''
+              }}"
+            >
+              <p-inputSwitch
+                (onChange)="handleAllSelect('selected')"
+                [(ngModel)]="selectedPerm.allChecked"
+                inputId="selected_isAll"
+              ></p-inputSwitch>
+              <label for="selected_isAll">
+                {{ 'BUTTONS.ALL' | translate }}
+              </label>
+            </div>
+            }
+          </div>
+        </div>
+        @for (perm of selectedPerm?.permissions; track $index) {
+        <div class="selected_permission flex gap-2 items-center">
+          @if(perm?.icon){
+          <div
+            class="icon-wrapper flex justify-center items-center p-2 bg-gray-200 rounded-full"
+          >
+            <i [class]="perm?.icon" class="perm-icon"></i>
+          </div>
+          }
+
+          <p class="text truncate" [title]="perm?.name">
+            {{ perm?.name | titlecase }}
+          </p>
+          <span class="tag ">
+            {{ perm?.permissionTypeName }}
+          </span>
+          <div class="{{ isArabicLang ? 'mr-auto' : 'ml-auto' }}">
+            <p-inputSwitch
+              (click)="$event.stopPropagation()"
+              (onChange)="onSwitchChange()"
+              [(ngModel)]="perm.isChecked"
+            ></p-inputSwitch>
+          </div>
+        </div>
+        } @if (!selectedPerm?.permissions?.length) {
+        <span class="text-center">No data...</span>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="w-100 actionBtn flex gap-2 items-center justify-end">
+    @if(!getSelectedIds().length){
+    <span class="text-danger_text"
+      >At least one permission must be selected to proceed.</span
+    >
+    }
+
+    <p-button
+      [loading]="isSavingPerms"
+      [label]="'RISK_MANAGMENT.SAVE_CHANGES' | translate"
+      class="saveBtn actionBtn"
+      (click)="savePermissions()"
+    >
+    </p-button>
+    <button class="duplicateBtn actionBtn gap-1 items-center hidden">
+      <i class="fi fi-rr-copy"></i> <span>Duplicate to</span>
+      <i class="fi fi-ts-angle-small-down"></i>
+    </button>
+  </div>
+  }@else {
+
+  <div class="grid grid-cols-12 gap-4">
+    <div class="col-span-12 lg:col-span-6">
+      <div class="flex flex-col gap-4">
+        <p-skeleton height="4rem" />
+        <p-skeleton height="4rem" />
+        <p-skeleton height="4rem" />
+        <p-skeleton height="4rem" />
+        <p-skeleton height="4rem" />
+      </div>
+    </div>
+    <div class="col-span-12 lg:col-span-6">
+      <div class="flex flex-col gap-4">
+        <p-skeleton height="4rem" />
+        <p-skeleton height="4rem" />
+        <p-skeleton height="4rem" />
+        <p-skeleton height="4rem" />
+        <p-skeleton height="4rem" />
+      </div>
+    </div>
+  </div>
+
+  }
+</div>

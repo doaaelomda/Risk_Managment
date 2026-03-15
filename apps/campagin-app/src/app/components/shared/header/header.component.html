@@ -1,0 +1,28 @@
+<div class="h-[111px] p-8 bg-[#fff] flex px-12 items-center justify-between">
+  <button routerLink="/campaigns">
+    <img
+      class="h-[44px]"
+      src="images/grc-orbit-logo.svg"
+      alt="GRC-Orbit__logo"
+    />
+  </button>
+
+  <div class="flex gap-2 items-center">
+    <button
+      (click)="toggleLanguages()"
+      class="flex items-center gap-1 sm:gap-2 p-2 text-sm"
+    >
+      <img src="images/globe-02.png" class="w-5" alt="lang" />
+      <span class="inline lang"> {{ currentLang }} </span>
+    </button>
+    @if(loggedIn){
+    <button
+      title="Log out"
+      (click)="logOut()"
+      class="flex items-center gap-1 sm:gap-2 p-2 text-sm"
+    >
+      <i class="fi fi-rr-exit text-danger_color_text"></i>
+    </button>
+    }
+  </div>
+</div>

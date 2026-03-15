@@ -1,0 +1,11 @@
+.color-bg {
+    
+  .small_doted {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    @apply bg-primary;
+  }
+
+  @apply font-[500] py-1 px-2 gap-2 relative rounded-2xl bg-primary/10 text-primary_custom text-[14px] w-fit flex items-center;
+}

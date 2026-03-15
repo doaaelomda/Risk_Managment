@@ -1,0 +1,317 @@
+<div class="my-3">
+  <div class="chart_widget">
+    <div class="flex justify-end flex-wrap gap-3">
+      <div class="flex-1 flex items-center gap-3">
+        @if(!loadingAssessmentData){
+        <h4 class="text-lg font-semibold">
+          {{
+            setting_form?.get('title')?.value ||
+              assessmentSettings?.title ||
+              '-'
+          }}
+        </h4>
+        <span class="text-lg font-semibold badge">{{
+          currentAssessment?.label || '-'
+        }}</span>
+        }@else {
+        <p-skeleton height="2rem" width="10rem" styleClass="mb-2" />
+        <p-skeleton height="2rem" width="5rem" styleClass="mb-2" />
+
+        }
+      </div>
+      @if(mode() === 'edit'){
+
+      <button
+        (click)="
+          actionEmitter.emit({
+            widget: chart_config_input()?.data,
+            event: 'delete',
+            value: chart_config_input()?.data
+          })
+        "
+        class="filter_dashboard_action-btn danger"
+      >
+        <i class="fi fi-rr-trash"></i>
+      </button>
+      <button
+        (click)="setting_visible = true"
+        class="filter_dashboard_action-btn"
+      >
+        <i class="fi fi-rr-settings"></i>
+      </button>
+      <button
+        (click)="filter_visible = true"
+        class="filter_dashboard_action-btn flex items-center"
+        [ngClass]="{
+          'gap-0': current_widget_applied_filters.length === 0,
+          'gap-2': current_widget_applied_filters.length > 0
+        }"
+      >
+        <div class="icon">
+          <i
+            [ngClass]="{
+              'text-primary': current_widget_applied_filters.length === 0,
+              'text-primary': current_widget_applied_filters.length > 0
+            }"
+            class="fi fi-rr-filter w-5 h-5"
+          ></i>
+        </div>
+        <span
+          [ngClass]="{
+            'text-white_color': current_widget_applied_filters.length > 0,
+            'gap-1': current_widget_applied_filters.length > 0,
+            'text-primary': current_widget_applied_filters.length > 0
+          }"
+          class="flex items-center justify-center font-medium text-lg"
+        >
+          @if(current_widget_applied_filters.length){
+          <div class="count_badge text-primary">
+            <span>{{ current_widget_applied_filters.length }}</span>
+          </div>
+          <span class="text-primary">{{
+            'HEARDE_TABLE.FILTER' | translate
+          }}</span>
+          }
+        </span>
+        @if(current_widget_applied_filters.length > 0){
+
+        <button
+          (click)="
+            current_widget_applied_filters = [];
+            getAssessmentData(this.data?.dataResource)
+          "
+        >
+          <svg
+            width="10"
+            height="10"
+            viewBox="0 0 10 10"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.16634 0.833252L0.833008 9.16659M0.833008 0.833252L9.16634 9.16659"
+              stroke="#7A5AF8"
+              stroke-width="1.67"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+        }
+      </button>
+      <p-dropdown
+        [options]="widthOptions"
+        [(ngModel)]="selectedWidth"
+        optionLabel="value"
+        [placeholder]="'Select Width'"
+        optionValue="value"
+        (onChange)="handleWidthChange()"
+      >
+      </p-dropdown>
+
+      }
+    </div>
+
+    <div class="head mb-4 flex items-center justify-between flex-wrap">
+      <div class="content">
+        @if(!loadingAssessmentData){
+        <div class="analysis flex items-center gap-2 mb-4 flex-wrap">
+          <p class="text-2xl font-semibold text-gray-700">
+            {{ assessmentData?.status?.totalCount }} Controls
+          </p>
+          @for (control of controls; track $index) {
+          <span
+            class="number_badge {{ control?.color }}"
+            [pTooltip]="control?.title"
+            tooltipPosition="top"
+          >
+            {{ control?.count }}
+          </span>
+          }
+        </div>
+        }@else {
+        <p-skeleton height="2rem" styleClass="mb-2" />
+        }
+
+        <!-- <p class="text-sm text-gray-700">
+          The evaluation was completed on January 25, 2026.
+        </p> -->
+      </div>
+
+      <div class="image_campany">
+        <img src="images/image 40.svg" alt="" />
+      </div>
+    </div>
+
+    <div class="analysis_widget grid grid-cols-12 gap-3">
+      @if(!loadingAssessmentData){ @for(wid of analysises ; track $index ){
+      <div class="lg:col-span-4 md:col-span-6 col-span-12">
+        <div class="titile mb-2 flex items-center gap-2">
+          <div
+            class="icon w-7 flex items-center justify-center p-1 h-7 rounded bg-primaryColor-50 text-primaryColor-500"
+          >
+            <i [class]="wid.icon"></i>
+          </div>
+          <h5 class="text-sm text-gray-700">{{ wid?.title }}</h5>
+        </div>
+
+        <div class="val">
+          <p class="text-sm font-semibold mb-2 text-gray-700">
+            {{ wid?.value }} {{ wid?.title }}
+          </p>
+
+          <div class="progress-outer">
+            <p-progressBar [value]="wid?.value" />
+          </div>
+        </div>
+      </div>
+      } }@else {
+      <div class="lg:col-span-4 md:col-span-6 col-span-12">
+        <p-skeleton height="4rem" />
+      </div>
+      <div class="lg:col-span-4 md:col-span-6 col-span-12">
+        <p-skeleton height="4rem" />
+      </div>
+      <div class="lg:col-span-4 md:col-span-6 col-span-12">
+        <p-skeleton height="4rem" />
+      </div>
+      }
+    </div>
+  </div>
+</div>
+
+<div>
+  <p-dialog
+    [draggable]="false"
+    [position]="'right'"
+    header=" Widget Setting "
+    [modal]="false"
+    [(visible)]="setting_visible"
+    styleClass="min-w-[35rem]"
+  >
+    <ng-template pTemplate="header">
+      <h2>Widget Setting</h2>
+    </ng-template>
+    @if(setting_form){
+    <form [formGroup]="setting_form" action="">
+      <div
+        class="field flex flex-wrap items-center border-b border-gray_light py-4"
+      >
+        <label class="font-bold w-1/4" for="code">Widget Title</label>
+        <div class="w-3/4">
+          <lib-input-text
+            [placeholder]="'Enter Title'"
+            [control]="setting_form?.get('title')!"
+            [controlNameInput]="'title'"
+          >
+          </lib-input-text>
+        </div>
+      </div>
+      <div
+        class="field flex flex-wrap items-center border-b border-gray_light py-4"
+      >
+        <label class="font-bold w-1/4" for="code">Widget Title (Arabic)</label>
+        <div class="w-3/4">
+          <lib-input-text
+            [placeholder]="'Enter Title Arabic'"
+            [control]="setting_form?.get('titleAr')!"
+            [controlNameInput]="'titleAr'"
+          >
+          </lib-input-text>
+        </div>
+      </div>
+
+
+
+            <div
+        class="field flex flex-wrap items-center border-b border-gray_light py-4"
+      >
+        <label class="font-bold w-1/4" for="code"> Assessment Phase</label>
+        <div class="w-3/4">
+          <p-dropdown
+            [options]="assessmentsPhases"
+            optionValue="id"
+            optionLabel="label"
+            [showClear]="true"
+            styleClass="w-full"
+            [formControlName]="'compliancePhaseID'"
+            appendTo="body"
+            placeholder="Select  Assessment Phase"
+          ></p-dropdown>
+        </div>
+      </div>
+
+      <div
+        class="field flex flex-wrap items-center border-b border-gray_light py-4"
+      >
+        <label class="font-bold w-1/4" for="code">Widget Assessment</label>
+        <div class="w-3/4">
+          <p-dropdown
+            (onChange)="onAssessmentChange()"
+            [options]="assessments"
+            [(ngModel)]="currentAssessment"
+            [ngModelOptions]="{ standalone: true }"
+            optionLabel="label"
+            [showClear]="true"
+            styleClass="w-full"
+            appendTo="body"
+            placeholder="Select an assessment"
+          ></p-dropdown>
+        </div>
+      </div>
+
+
+            @if(currentAssessment){
+
+                  <div
+                class="field flex flex-wrap items-center border-b border-gray_light py-4"
+              >
+                <label class="font-bold w-1/4" for="code">Classfication </label>
+                <div class="w-3/4">
+                  <p-dropdown
+                    [options]="classfications"
+                    optionLabel="label"
+                             optionValue="id"
+                    [showClear]="true"
+                    styleClass="w-full"
+                    [formControlName]="'grcDocumentElementClassificationID'"
+                    appendTo="body"
+                    placeholder="Select Classification "
+                  ></p-dropdown>
+                </div>
+              </div>
+      }
+    </form>
+    }
+
+    <ng-template pTemplate="footer">
+      <div class="action_btn">
+        <p-button
+          (onClick)="saveSettings()"
+          [loading]="loadingSave"
+          [label]="'Save'"
+        />
+      </div>
+    </ng-template>
+  </p-dialog>
+
+  <div class="action_dailog">
+    <p-dialog
+      [draggable]="false"
+      [position]="'right'"
+      header="Edit Profile"
+      [modal]="false"
+      [(visible)]="filter_visible"
+      styleClass="min-w-[40rem]"
+    >
+      <ng-template pTemplate="header"> </ng-template>
+
+      <lib-filter-dashboard
+        [current_filters]="current_widget_applied_filters"
+        (filter_emiter)="handleDataFilter($event)"
+        [data_viewId]="data?.dataViewID"
+        [reportId]="data?.id"
+      ></lib-filter-dashboard>
+    </p-dialog>
+  </div>
+</div>

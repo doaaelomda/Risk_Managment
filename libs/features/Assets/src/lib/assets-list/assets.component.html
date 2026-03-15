@@ -1,0 +1,44 @@
+<section>
+  <lib-new-table
+    [loading]="loadingTable"
+    [table_data]="dataTable"
+    [table_title]="'BREAD_CRUMB_TITLES.ASSETS_LIST' | translate"
+    [badge_title]="'HEARDE_TABLE.ASSET' | translate"
+    [dataViewId]="28"
+    [entityID_Name]="'assetId'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="items"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{ module: 'ASSETS', feature: 'ASSETS', action: 'VIEW' }"
+  >
+      @if(_PermissionSystemService.can('ASSETS' , 'ASSETS' , 'ADD')){
+    <button addition_action [routerLink]="'/gfw-portal/assets/add'"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+      <i class="fi fi-br-plus w-5 h-5 "></i>
+      <span>{{'HEARDE_TABLE.ADD_NEW_ASSETS' |translate}}</span>
+    </button>
+  }
+  </lib-new-table>
+</section>
+
+
+
+<lib-delete-confirm-popup [titleDelete]="'ASSETS.DELETE_ASSET_TITLE'" [descriptionDelete]="'ASSETS.DELETE_ASSET_DESC'"
+  (hideEmiter)="handleClosedDelete($event)" [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button (onClick)="deleteAsset()" [loading]="loadDelted" [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+

@@ -1,0 +1,36 @@
+.selection_card{
+   &.selected{
+     border: 2px solid #9B8AFB;
+   }
+    box-shadow: 0px 1.19px 2.38px 0px #1018280F;
+
+box-shadow: 0px 1.19px 3.57px 0px #1018281A;
+background-color: #fff;
+padding: 14.29px;
+border-radius: 9.5px;
+.selection_icon {
+    background-color: #EBE9FE;
+    width: 55px;
+    height: 55px;
+    i {
+        color: #6938EF;
+        font-size: 24px;
+    }
+}
+.selection_txt {
+    .selection_title {
+        color: #344054;
+        font-size: 19px;
+        font-weight: 500;
+    }
+    .selection_desc {
+        color: #667085;
+        font-size: 16px;
+        font-weight: 400;
+    }
+}
+}
+.disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+}

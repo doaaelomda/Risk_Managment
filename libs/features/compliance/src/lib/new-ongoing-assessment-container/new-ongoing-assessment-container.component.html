@@ -1,0 +1,34 @@
+<section class="grid grid-cols-12 items-start gap-6">
+  <div class="col-span-4">
+    <lib-pending-assessment-view-side
+      (complianceAssessment_emiter)="setCurrentAssessmentData($event)"
+      (nodeClicked)="handleNodeClick($event)"
+    ></lib-pending-assessment-view-side>
+  </div>
+
+  <div class="col-span-8">
+    @if(assessmentItemResultID.length > 0) {
+    <p-accordion
+      (activeIndexChange)="handleActiveTab($event)"
+      [activeIndex]="activeIndex"
+    >
+      @for(resultId of assessmentItemResultID; track $index){
+      <p-accordionTab [header]="resultId?.complianceAssessmentPhaseName">
+        <lib-assessment-item-result-view
+          [node_data]="current_node_data"
+          [assessmentItemResultID]="resultId?.assessmentItemResultID"
+          [mode]="mode"
+        ></lib-assessment-item-result-view>
+      </p-accordionTab>
+      }
+    </p-accordion>
+
+    }@else {
+    <div class="flex flex-col gap-2 items-center empty_state_wrapper">
+      <img src="images/no-document.svg" alt="empty-state" />
+      <h2>No Assessment Item Result Found!</h2>
+      <p>There’s no Item Result here yet. You can add one below.</p>
+    </div>
+    }
+  </div>
+</section>

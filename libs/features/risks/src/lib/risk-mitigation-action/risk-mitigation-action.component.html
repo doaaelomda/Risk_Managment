@@ -1,0 +1,492 @@
+<div class="header flex items-center justify-between flex-wrap mb-12">
+  <div class="title flex items-center gap-4 flex-wrap">
+    @if (loading_data) {
+    <p-skeleton width="15rem" styleClass="mb-2" />
+    <p-skeleton width="10rem" styleClass="mb-2" />
+    } @else {
+    <h2 class="text-2xl font-semibold text-gray-800">
+      {{ current_risk_data ? current_risk_data?.riskTitle : '-' }}
+      @if(nameSubRisk){
+      <h6 class="text-primary font-bold text-2xl py-4 mx-4">
+        └─ {{ nameSubRisk ?? '-' }}
+      </h6>
+
+      }
+    </h2>
+    <p class="text-gray_color m-0">
+      {{
+        current_risk_data?.riskCode
+          ? '(' + current_risk_data.riskCode + ')'
+          : '-'
+      }}
+    </p>
+    }
+  </div>
+
+  <!-- <div class="content flex flex-wrap items-center gap-4">
+    <div class="flex items-center gap-2">
+      <p class="m-0 font-medium text-gray_color">
+        {{ 'TABS.RISK_RATING' | translate }}
+      </p>
+      <span class="badge Red">{{
+        current_risk_data?.riskImpactName ?? '-'
+      }}</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <p class="m-0 font-medium text-gray_color">
+        {{ 'TABS.MITIGATION' | translate }}
+      </p>
+      <span class="badge" [ngClass]="current_risk_data?.riskResponseTypeColor">{{
+        current_risk_data?.riskResponseTypeName ?? '-'
+      }}</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <p class="m-0 font-medium text-gray_color">
+        {{ 'TABS.STATUS' | translate }}
+      </p>
+
+      <span class="font-semibold">{{
+        current_risk_data?.riskMitigationPlanStatus ?? '-'
+      }}</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <p class="m-0 font-medium text-gray_color">
+        {{ 'TABS.DEPARTMENT' | translate }}
+      </p>
+
+      @if (current_risk_data?.organizationalUnits?.length > 0) {
+      <ng-container>
+        @for (unit of current_risk_data.organizationalUnits; track $index) {
+        <ng-container>
+          @if (unit?.label) {
+          <span class="font-semibold">
+            {{ unit.label }}
+          </span>
+          }
+        </ng-container>
+        }
+      </ng-container>
+      }@else {
+
+       <span class="font-semibold">-</span>
+        }
+
+    </div>
+  </div> -->
+</div>
+
+<section class="main_info p-6 rounded-lg bg-sec_color mb-8">
+  <div class="header border-b border-gray_light pb-6">
+    <h2 class="text-lg font-semibold">
+      {{ 'RISK_MANAGMENT.MAIN_INFO' | translate }}
+    </h2>
+    <p class="text-sm text-gray_color">
+      {{ 'RISK_MANAGMENT.REQUIRED_DATA' | translate }}
+    </p>
+  </div>
+
+  <form [formGroup]="form_main_info" class="grid grid-cols-12 gap-6 pt-6">
+    <!-- <div class="col-span-12 lg:col-span-6">
+      <lib-input-text
+        [placeholder]="'FIELDS.CODE'"
+        [validations]="validationsCode"
+        [control]="form_main_info.get('planCode')!"
+        [inputLabel]="'FIELDS.CODE'"
+        [controlNameInput]="'planCode'"
+      >
+      </lib-input-text>
+    </div> -->
+    <div class="col-span-12 lg:col-span-12">
+      <lib-input-text
+        [placeholder]="'FIELDS.TITLE'"
+        [validations]="validationsTitle"
+        [control]="form_main_info.get('name')!"
+        [inputLabel]="'FIELDS.TITLE'"
+        [controlNameInput]="'name'"
+      >
+      </lib-input-text>
+    </div>
+    <div class="col-span-12">
+      <lib-textarea-ui
+        [placeholder]="'MIGITATION.PLAN_DESCRIPTION'"
+        [inputLabel]="'MIGITATION.PLAN_DESCRIPTION'"
+        [validations]="validationsSummary"
+        [control]="form_main_info.get('description')!"
+        [controlNameInput]="'description'"
+      >
+      </lib-textarea-ui>
+    </div>
+    @if(showWF){
+    <div class="col-span-12 lg:col-span-6">
+      <lib-ui-dropdown
+        [placeholder]="'ASSESSMENT_RISK.SELECT_WF'"
+        [label]="'ASSESSMENT_RISK.WORK_FLOW'"
+        [validations]="validationsWF"
+        [control]="form_main_info.get('wfid')!"
+        [options]="work_flows"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+        [formControlNameInput]="'wfid'"
+      >
+      </lib-ui-dropdown>
+    </div>
+    }
+
+    <div class="col-span-12 lg:col-span-6">
+      <lib-ui-dropdown
+        [placeholder]="'MIGITATION.SELECT_RESPONSE_TYPE'"
+        [label]="'MIGITATION.RESPONSE_TYPE'"
+        [validations]="validationsResponseType"
+        [control]="form_main_info.get('riskResponseTypeID')!"
+        [options]="resaponse_types"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+        [formControlNameInput]="'riskResponseTypeID'"
+      >
+      </lib-ui-dropdown>
+    </div>
+    <div class="col-span-12 lg:col-span-6">
+      <lib-currency-input
+        [validations]="validationBudget"
+        [inputLabel]="'MIGITATION.BUDGET'"
+        [placeholder]="'MIGITATION.BUDGET'"
+        [controlNameInput]="'budget'"
+        [control]="form_main_info.get('budget')!"
+      >
+      </lib-currency-input>
+    </div>
+    <!-- <div class="col-span-12 lg:col-span-6">
+      <lib-ui-dropdown
+        [placeholder]="'MIGITATION.SELECT_PLAN_STATUS_TYPE'"
+        [label]="'MIGITATION.PLAN_STATUS_TYPE'"
+        [validations]="validationsResponseType"
+        [control]="form_main_info.get('riskMitigationPlanStatusTypeID')!"
+        [options]="RiskExistenceStatusType"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+        [formControlNameInput]="'riskMitigationPlanStatusTypeID'"
+      >
+      </lib-ui-dropdown>
+    </div> -->
+  </form>
+</section>
+
+<div class="action_section mb-6">
+  <p-accordion
+    class="w-full"
+    expandIcon="fi fi-rr-angle-small-down"
+    collapseIcon="fi fi-rr-angle-small-up"
+  >
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div class="flex items-center gap-4">
+          <h2>{{ 'MIGITATION.TARGET' | translate }}</h2>
+        </div>
+      </ng-template>
+
+      <form [formGroup]="target_form" class="grid grid-cols-12 gap-6">
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown
+            [placeholder]="'MIGITATION.SELECT_TARGET_RISK_IMPACT'"
+            [label]="'MIGITATION.TARGET_RISK_IMPACT'"
+            [control]="target_form.get('targetRiskImpactID')!"
+            [options]="impactArray"
+            [optionLabel]="'name'"
+            [optionValue]="'riskImpactID'"
+            [validations]="[]"
+            [formControlNameInput]="'targetRiskImpactID'"
+          >
+          </lib-ui-dropdown>
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown
+            [placeholder]="'MIGITATION.SELECT_TARGET_RISK_LIKELIHOOD'"
+            [label]="'MIGITATION.TARGET_RISK_LIKELIHOOD'"
+            [control]="target_form.get('targetRiskLikelihoodID')!"
+            [options]="likehoodarray"
+            [validations]="[]"
+            [optionLabel]="'name'"
+            [optionValue]="'riskLikelihoodID'"
+            [formControlNameInput]="'targetRiskLikelihoodID'"
+          >
+          </lib-ui-dropdown>
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-textarea-ui
+            [placeholder]="'MIGITATION.EN_JUSTIFICATION_RISK_IMPACT'"
+            [inputLabel]="'ASSESSMENT_RISK.JUSTIFICATION_RISK_IMAPCT'"
+            [validations]="[]"
+            [control]="target_form.get('justificationTargetedRiskImpact')!"
+            [controlNameInput]="'justificationTargetedRiskImpact'"
+          >
+          </lib-textarea-ui>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <lib-textarea-ui
+            [placeholder]="'ASSESSMENT_RISK.EN_JUSTIFI_RISK_LIKEHOOD'"
+            [inputLabel]="'MIGITATION.JUSTIFICATION_RISK_LIKELIHOOD'"
+            [validations]="[]"
+            [control]="target_form.get('justificationTargetedRiskLikelihood')!"
+            [controlNameInput]="'justificationTargetedRiskLikelihood'"
+          >
+          </lib-textarea-ui>
+        </div>
+      </form>
+    </p-accordionTab>
+  </p-accordion>
+</div>
+
+<div
+  [ngClass]="{ invaild: showErrorResponsbility }"
+  class="action_section mb-6"
+>
+  <p-accordion
+    class="w-full"
+    expandIcon="fi fi-rr-angle-small-down"
+    collapseIcon="fi fi-rr-angle-small-up"
+  >
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div class="flex items-center gap-4">
+          <h2>{{ 'RISK_MANAGMENT.Responsibilities' | translate }}</h2>
+          @if(showErrorResponsbility){
+          <i
+            pTooltip="Please complete all required fields."
+            tooltipPosition="top"
+            class="fi text-danger_color fi-rr-info"
+          ></i>
+          }
+        </div>
+      </ng-template>
+
+      <form [formGroup]="resposibility_form" class="grid grid-cols-12 gap-6">
+        <div class="col-span-12 lg:col-span-6">
+          <lib-user-dropdown
+            [placeholder]="'ASSESSMENT_RISK.MANGER_USER' | translate"
+            [label]="'ASSESSMENT_RISK.MANGER_USER' | translate"
+            [control]="resposibility_form.get('managerUserID')!"
+            [options]="mangers"
+            optionLabel="name"
+            optionValue="id"
+            icon="fi fi-rr-user"
+            [formControlNameInput]="'managerUserID'"
+          >
+          </lib-user-dropdown>
+        </div>
+
+        <!-- <div class="col-span-12 lg:col-span-6">
+          <lib-user-dropdown
+            [label]="'ASSESSMENT_RISK.MANGER_USER'"
+            placeholder="ASSESSMENT_RISK.ASSESSOR_BY"
+            [formControlNameInput]="'reviewedByUserID'"
+            [options]="users"
+            optionLabel="name"
+            optionValue="id"
+            [control]="resposibility_form.get('reviewedByUserID')!"
+          ></lib-user-dropdown>
+        </div> -->
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown
+            [placeholder]="'ASSESSMENT_RISK.Manger_Role'"
+            [label]="'ASSESSMENT_RISK.Manger_Role'"
+            [control]="resposibility_form.get('managerRoleID')!"
+            [options]="assessed"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+            icon="fi fi-rr-user"
+            [validations]="[]"
+            [formControlNameInput]="'managerRoleID'"
+          >
+          </lib-ui-dropdown>
+        </div>
+
+        <!-- <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown
+            icon="fi fi-rr-user"
+            [placeholder]="'ASSESSMENT_RISK.REVIEWR'"
+            [label]="'ASSESSMENT_RISK.SEL_REVIEWR'"
+            [control]="resposibility_form.get('approvedByUserID')!"
+            [options]="reviwer"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+            [formControlNameInput]="'approvedByUserID'"
+            [validations]="[]"
+          >
+          </lib-ui-dropdown>
+        </div> -->
+      </form>
+    </p-accordionTab>
+  </p-accordion>
+</div>
+
+<!-- Timelines -->
+<div class="action_section mb-6">
+  <p-accordion
+    class="w-full"
+    expandIcon="fi fi-rr-angle-small-down"
+    collapseIcon="fi fi-rr-angle-small-up"
+  >
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div>
+          <h2>{{ 'RISK_MANAGMENT.Timelines' | translate }}</h2>
+        </div>
+      </ng-template>
+
+      <form [formGroup]="timelines_from" class="grid grid-cols-12 gap-6">
+        <div class="col-span-12 lg:col-span-6">
+          <lib-date-packer
+            [placeholder]="'PLACEHOLDERS.Select_Date'"
+            [inputLabel]="'RISK_VIEW.START_DATE'"
+            [control]="timelines_from.get('expectedStartDate')!"
+            [controlNameInput]="'expectedStartDate'"
+          >
+          </lib-date-packer>
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-date-packer
+            [placeholder]="'PLACEHOLDERS.Select_Date'"
+            [inputLabel]="'RISK_VIEW.END_DATE'"
+            [control]="timelines_from.get('expectedEndDate')!"
+            [controlNameInput]="'expectedEndDate'"
+          >
+          </lib-date-packer>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <lib-date-packer
+            [placeholder]="'PLACEHOLDERS.Select_Date'"
+            [inputLabel]="'RISK_VIEW.ACTUAL_START_DATE'"
+            [control]="timelines_from.get('actualStartDate')!"
+            [controlNameInput]="'actualStartDate'"
+          >
+          </lib-date-packer>
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-date-packer
+            [placeholder]="'PLACEHOLDERS.Select_Date'"
+            [inputLabel]="'RISK_VIEW.ACTUAL_END_DATE'"
+            [control]="timelines_from.get('actualEndDate')!"
+            [controlNameInput]="'actualEndDate'"
+          >
+          </lib-date-packer>
+        </div>
+
+        <!-- <div class="col-span-12 lg:col-span-4">
+          <lib-date-packer
+            [placeholder]="'PLACEHOLDERS.Select_Date'"
+            [inputLabel]="'RISK_VIEW.APPROVAL_DATE'"
+            [control]="timelines_from.get('approveDate')!"
+            [controlNameInput]="'approveDate'"
+          >
+          </lib-date-packer>
+        </div> -->
+      </form>
+    </p-accordionTab>
+  </p-accordion>
+</div>
+
+<!-- @if(riskId){
+  <div class="action_section mb-6">
+    <p-accordion class="w-full" expandIcon="fi fi-rr-angle-small-down" collapseIcon="fi fi-rr-angle-small-up">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div>
+            <h2>{{"RISK_MANAGMENT.Comments"|translate}}</h2>
+          </div>
+        </ng-template>
+
+        <lib-comment-section></lib-comment-section>
+      </p-accordionTab>
+    </p-accordion>
+  </div>
+} -->
+
+<!-- <div class="action_section">
+  <p-accordion class="w-full" expandIcon="fi fi-rr-angle-small-down" collapseIcon="fi fi-rr-angle-small-up">
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div class="flex items-center gap-4">
+          <h2>{{"RISK_MANAGMENT.Attachment" |translate}}</h2>
+
+        </div>
+      </ng-template>
+
+      <form [formGroup]="attachment_form" class="grid grid-cols-12 gap-6 mb-6">
+        <div class="col-span-12 lg:col-span-6">
+          <lib-input-text [validations]="validationsAttachmentTitle" [placeholder]="'PLACEHOLDERS.Attachment_Title' " [validations]="[]"
+            [control]="attachment_form.get('title')!" [inputLabel]="'RISK_MANAGMENT.Attachment_Title' "
+            [controlNameInput]="'title'">
+          </lib-input-text>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown  [validations]="validationsAttachmentType"  [placeholder]="'PLACEHOLDERS.Attachment_Type' " [label]="'RISK_MANAGMENT.Attachment_Type' "
+            [control]="attachment_form.get('type')!" [options]="attachment_types" [optionLabel]="'label'"
+            [optionValue]="" [validations]="[]" [formControlNameInput]="'type'">
+          </lib-ui-dropdown>
+        </div>
+
+        <div class="col-span-12">
+          <lib-attach-ui (fileEventEmiter)="handleSelectedAttachment($event)"
+            [is_disabled_input]="attachment_form.get('title')?.value && attachment_form.get('type')?.value ? false : true"></lib-attach-ui>
+        </div>
+      </form>
+
+      <div class="attachments_display">
+        @for(attach of selectedAttachmens ; track attach ; let i = $index) {
+        <div class="single_attach mb-4 px-5 py-4 border border-primary rounded-lg flex items-center justify-between ">
+          <div class="info flex items-center gap-4">
+            <div class="icon">
+              <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="2" width="32" height="32" rx="16" fill="#EBE9FE" />
+                <rect x="2" y="2" width="32" height="32" rx="16" stroke="#F4F3FF" stroke-width="4" />
+                <path
+                  d="M18.6641 11.3334H13.9974C13.6438 11.3334 13.3046 11.4738 13.0546 11.7239C12.8045 11.9739 12.6641 12.3131 12.6641 12.6667V23.3334C12.6641 23.687 12.8045 24.0261 13.0546 24.2762C13.3046 24.5262 13.6438 24.6667 13.9974 24.6667H21.9974C22.351 24.6667 22.6902 24.5262 22.9402 24.2762C23.1903 24.0261 23.3307 23.687 23.3307 23.3334V16M18.6641 11.3334L23.3307 16M18.6641 11.3334V16H23.3307"
+                  stroke="#6938EF" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+
+            </div>
+            <div class="content">
+              <p class="title">{{attach.title}}</p>
+              <div class="flex items-center gap-2">
+                <p>{{ (attach.file.size / 1024) | number:'1.0-2' }} KB</p>
+                <span>-</span>
+                <p >{{attach.type.label}}</p>
+              </div>
+            </div>
+          </div>
+
+
+          <div >
+            <button (click)="removeAttach(i)" class="text-danger_color">
+              <i class="fi fi-rr-trash"></i>
+            </button>
+          </div>
+
+        </div>
+        }
+      </div>
+    </p-accordionTab>
+  </p-accordion>
+</div> -->
+
+<div
+  class="col-span-12 flex items-center gap-4 justify-end py-6 border-t border-gray_light"
+>
+  <div class="cancel_btn">
+    <button (click)="backList()" routerLinkActive="router-link-active">
+      {{ 'RISK_MANAGMENT.Cancel' | translate }}
+    </button>
+  </div>
+  <div class="action_btn">
+    <p-button
+      [label]="'RISK_MANAGMENT.SaveChanges' | translate"
+      [loading]="isLoading"
+      (onClick)="submit()"
+    >
+    </p-button>
+  </div>
+</div>

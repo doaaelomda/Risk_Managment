@@ -1,0 +1,136 @@
+<!-- Handle New Table to Show Data -->
+<lib-new-table
+  [table_actions_permissions]="{ module: 'RISKS', feature: 'METHODOLOGYFACTORLEVELS', action: 'VIEW' }"
+
+[loading]="isLoading" [table_data]="factorLevelList"
+  [table_title]="'FACTOR_LEVEL.TABLE_TITLE' | translate" [badge_title]="'FACTOR_LEVEL.BADGE_TITLE' | translate"
+  [dataViewId]="130" [entityID_Name]="'riskFactorLevelID'" [isShownAction]="true"
+  (payload_emiter)="handleDataTable($event)" [action_items]="action_items" (currentActionRow)="setSelectedRow($event)"
+  [columnControl]="columnControl">
+
+  @if(_PermissionSystemService.can('RISKS' , 'METHODOLOGYFACTORLEVELS' , 'ADD')){
+      <button addition_action (click)="addNewFactorLevel()"
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+    <i class="fi fi-br-plus w-5 h-5"></i>
+    <span>{{ 'FACTOR_LEVEL.ADD_BUTTON' | translate }}</span>
+  </button>
+  }
+</lib-new-table>
+
+<!-- Handle Delete Popup -->
+<lib-delete-confirm-popup [titleDelete]="'FACTOR_LEVEL.DELETE_TITLE' | translate"
+  [descriptionDelete]="'FACTOR_LEVEL.DELETE_DESC' | translate" (hideEmiter)="handleClosedDelete()"
+  [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="handleClosedDelete()">
+        {{ 'FACTOR_LEVEL.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button (onClick)="deleteFactorLevel()" [loading]="isDeleting" [label]="'FACTOR_LEVEL.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+
+<!-- add New Factor -->
+
+<p-dialog [(visible)]="quickAddVisible" [modal]="true" [dismissableMask]="true" [draggable]="false"
+  styleClass="w-[50rem]" [position]="'center'" (onHide)="closeQuickAddModal()" [closable]="false">
+
+  <h3 class="text-gray-800 font-bold text-1xl">
+    {{ riskFactorLevelID ? ('FACTOR_LEVEL.UPDATE_FACTOR' | translate) : ('FACTOR_LEVEL.ADD_BUTTON' | translate) }}
+  </h3>
+
+  <h6>{{'RISK_VIEW.UPDATE_PHOTO' | translate}}</h6>
+
+  <div class="border-b border-gray_light my-4"></div>
+
+  <ng-template pTemplate="content">
+    <div class="p-fluid" [formGroup]="form">
+
+
+      <div class="field flex flex-wrap items-center border-b border-gray_light py-4">
+        <label class="font-bold w-1/4" for="">{{'CONTENT.NAME' | translate}}</label>
+        <div class="w-3/4">
+          <lib-input-text [placeholder]="'CONTENT.NAME' | translate" [control]="form.get('name')!"
+            [controlNameInput]="'name'">
+          </lib-input-text>
+        </div>
+      </div>
+
+      <!--  Name (Arabic) -->
+      <div class="field flex flex-wrap items-center border-b border-gray_light py-4">
+        <label class="font-bold w-1/4" for="">{{'CONTENT.NAME_AR' | translate}}</label>
+        <div class="w-3/4">
+          <lib-input-text [placeholder]="'CONTENT.NAME_AR' | translate" [control]="form.get('nameAr')!"
+            [controlNameInput]="'nameAr'" [validations]="validationsRequired">
+          </lib-input-text>
+        </div>
+      </div>
+
+      <!--  Description (English) -->
+      <div class="field flex flex-wrap items-center border-b border-gray_light py-4">
+        <label class="font-bold w-1/4" for="">{{'CONTENT.DESCRIPTION' | translate}}</label>
+        <div class="w-3/4">
+          <lib-textarea-ui [placeholder]="'CONTENT.DESCRIPTION' | translate" [control]="form.get('description')!"
+            [controlNameInput]="'description'" [validations]="validationsRequired">
+          </lib-textarea-ui>
+        </div>
+      </div>
+      <!--  Description (Arabic) -->
+      <div class="field flex flex-wrap items-center border-b border-gray_light py-4">
+        <label class="font-bold w-1/4" for="">{{'CONTENT.DESCRIPTION_AR' | translate}}</label>
+        <div class="w-3/4">
+          <lib-textarea-ui [placeholder]="'CONTENT.DESCRIPTION_AR' | translate" [control]="form.get('descriptionAr')!"
+            [controlNameInput]="'descriptionAr'" [validations]="validationsRequired">
+          </lib-textarea-ui>
+        </div>
+      </div>
+      <!-- Code -->
+      <div class="field flex flex-wrap items-center border-b border-gray_light py-4">
+        <label class="font-bold w-1/4" for="">Weight</label>
+        <div class="w-3/4">
+          <lib-input-number [validations]="validationsRequired" [placeholder]="'Weight'" [control]="form.get('weight')!" [controlNameInput]="'weight'">
+          </lib-input-number >
+        </div>
+      </div>
+      <div class="field flex flex-wrap items-center border-b border-gray_light py-4">
+        <label class="font-bold w-1/4" for="">Minimum Value </label>
+        <div class="w-3/4">
+          <lib-input-number [validations]="validationsRequired" [placeholder]="'minValue'" [control]="form.get('minValue')!" [controlNameInput]="'minValue'">
+          </lib-input-number >
+        </div>
+      </div>
+      <div class="field flex flex-wrap items-center border-b border-gray_light py-4">
+        <label class="font-bold w-1/4" for="">Maxmum Value</label>
+        <div class="w-3/4">
+          <lib-input-number [validations]="validationsRequired" [placeholder]="'maxValue'" [control]="form.get('maxValue')!" [controlNameInput]="'maxValue'">
+          </lib-input-number >
+        </div>
+      </div>
+      <div class="field flex flex-wrap items-center border-b border-gray_light py-4">
+        <label class="font-bold w-1/4" for="">{{'CONTENT.COLOR' | translate}}</label>
+        <div class="w-3/4">
+          <lib-color-dropdown  [control]="form.get('color')!" [controlNameInput]="'color'"
+            [placeholder]="'CONTENT.COLOR' | translate">
+          </lib-color-dropdown>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <div class="flex flex-wrap justify-end gap-2">
+      <p-button pButton class="bg-white_color text-gray-700 text-sm border border-gray_light rounded-lg"
+        [label]="'BUTTONS.CANCEL' | translate" icon="pi pi-times" (click)="closeQuickAddModal()" />
+
+      <p-button pButton class="bg-primary text-white text-sm rounded-lg" [label]="'BUTTONS.SAVE' | translate"
+        [loading]="loadingBtn" icon="pi pi-check" (click)="submit()" />
+
+    </div>
+
+  </ng-template>
+</p-dialog>

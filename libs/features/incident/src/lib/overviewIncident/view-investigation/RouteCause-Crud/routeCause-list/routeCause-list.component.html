@@ -1,0 +1,131 @@
+<lib-shared-ui [dataViewId]="108" (openModal)="onViewRouteCauses($event)" [view_entityRouter]="'viewModal=true'"
+  [entityID_Name]="'rootCauseID'" [selected_profile_column]="selected_profile_column"
+  (filter_emitter)="handleFilter($event)" [filter_id_input]="108" [action_items]="items"
+  (sortEmiter)="handleSort($event)" [total_items_input]="pageginationObj.totalItems"
+  (selected_emiter)="setSelected($event)" [badge_name]="'RooteCause.RooteCause' | translate"
+  [table_name]="'RooteCause.LIST_TITLE' | translate" [loadingState]="loadingTable"
+  (paginationEvent)="getActivitiesData($event)" (showDeleteEvent)="handleShowDelete($event)" [dataList]="dataTable"
+  [defultprofile]="defultProfile" [profilesList]="RouteCauseLearnProfiles">
+
+  <button addition_action (click)="addRouteCauseLearn()"
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+    <i class="fi fi-br-plus w-5 h-5"></i>
+    <span>{{ 'RooteCause.ADD_BUTTON' | translate }}</span>
+  </button>
+</lib-shared-ui>
+<lib-delete-confirm-popup [titleDelete]="'RooteCause.DELETE_TITLE' | translate"
+  [descriptionDelete]="'RooteCause.DELETE_DESC' | translate" (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button (onClick)="deleteRouteCauseLearn()" [loading]="loadDeleted" [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+
+
+<div class="action_dailog">
+  <p-dialog [header]="RouteCausesData?.name || '-'" [(visible)]="showViewOptionPopup" [modal]="true"
+    [dismissableMask]="true" [draggable]="false" styleClass="w-[60%]" [closable]="true">
+
+    <div class="container p-4">
+      <div class="grid grid-cols-12 gap-4">
+
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-title header-para mb-3">{{ 'RooteCause.NAME' | translate }}</h3>
+          @if(!loading){
+          <p>{{ RouteCausesData?.name || '-' }}</p>
+          } @else {
+          <p-skeleton width="12rem"></p-skeleton>
+          }
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-title header-para mb-3">{{ 'RooteCause.DESCRIPTION' | translate }}</h3>
+          @if(!loading){
+          <p>{{ RouteCausesData?.description || '-' }}</p>
+          } @else {
+          <p-skeleton width="12rem"></p-skeleton>
+          }
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-title header-para mb-3">{{ 'RooteCause.TYPE' | translate }}</h3>
+          @if(!loading){
+          <p>{{ RouteCausesData?.rootCauseMethodologyName || '-' }}</p>
+          } @else {
+          <p-skeleton width="12rem"></p-skeleton>
+          }
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-title header-para mb-3">{{ 'RooteCause.DOCUMENTED_BY' | translate }}</h3>
+          @if(!loading){
+          <p>{{ RouteCausesData?.identifiedByUserName || '-' }}</p>
+          } @else {
+          <p-skeleton width="12rem"></p-skeleton>
+          }
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-title header-para mb-3">{{ 'RooteCause.CATEGORY' | translate }}</h3>
+          @if(!loading){
+          <p>{{ RouteCausesData?.rootCauseCategoryName || '-' }}</p>
+          } @else {
+          <p-skeleton width="12rem"></p-skeleton>
+          }
+        </div>
+
+        <div class="col-span-12">
+          <h3 class="header-title header-para mb-3">{{ 'RooteCause.WHY_QUESTIONS' | translate }}</h3>
+
+          <div class="space-y-4">
+            <div class="space-y-4">
+              @for (item of RouteCausesData?.whyList; track item.index) {
+              <div>
+                @if (!loading) {
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+
+                  <p class="font-semibold text-primary">
+                    {{ ('RooteCause.WHY' + item.index + '_QUESTION') | translate }}:
+                    <span class="font-normal">{{ item.question || '-' }}</span>
+                  </p>
+
+                  <p class="mt-1">
+                    {{ ('RooteCause.WHY' + item.index + '_ANSWER') | translate }}:
+                    {{ item.answer || '-' }}
+                  </p>
+
+                  <p class="mt-1 text-gray-600">
+                    {{ ('RooteCause.WHY' + item.index + '_NOTE') | translate }}:
+                    {{ item.note || '-' }}
+                  </p>
+
+                </div>
+                } @else {
+                <p-skeleton width="20rem"></p-skeleton>
+                }
+              </div>
+              }
+            </div>
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+    </div>
+
+  </p-dialog>
+
+</div>

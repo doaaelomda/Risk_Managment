@@ -1,0 +1,25 @@
+<div class="add_attach p-2 flex items-center gap-4 rounded-lg border border-gray_light">
+
+  <div class="icon w-12 h-12 rounded-lg flex items-center justify-center text-primary">
+    <img class="w-full h-full" [src]="iconSrc" alt="file icon">
+  </div>
+
+  <div class="content">
+    <p class="text-gray-800 font-semibold mb-1">{{ dataFile?.fileTitle }}</p>
+
+    <p class="text-sm">
+      {{ (dataFile?.fileSize / (1024 * 1024)) | number:'1.0-2' }} MB
+    </p>
+  </div>
+
+  <div class="actions flex gap-3 ml-auto">
+    <button (click)="handleAction('Show')" class="text-gray_color text-lg font-semibold">
+      <i class="fi fi-rr-eye"></i>
+    </button>
+
+    <button (click)="handleAction('Download')" class="text-gray_color text-lg font-medium">
+      <i class="fi fi-br-progress-download"></i>
+    </button>
+  </div>
+
+</div>

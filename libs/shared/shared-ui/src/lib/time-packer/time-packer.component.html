@@ -1,0 +1,22 @@
+<div class="form_group">
+  @if(label){
+
+    <label class="block mb-2" for="">{{label|translate}}</label>
+  }
+  <p-calendar
+   [inputId]="'calendar-timeonly'"
+  [appendTo]="'body'"
+    [iconDisplay]="'input'"
+    [showIcon]="true"
+    [placeholder]="currentPlaceHolder|translate"
+    [formControlName]="controlName"
+        [timeOnly]="true"
+      />
+    @if(currentControl.errors &&  currentControl.touched && currentValidations.length){
+    @for(val of currentValidations ; track val){
+      @if(currentControl.getError(val.key)){
+        <p class="text-sm p-1 text-danger_color">{{val.message | translate}}</p>
+      }
+    }
+  }
+</div>

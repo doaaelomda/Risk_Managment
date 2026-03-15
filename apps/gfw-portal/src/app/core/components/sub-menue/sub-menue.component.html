@@ -1,0 +1,19 @@
+<ul class="py-1 relative sub_menue-custom" [@submenue]="currentLink.expand && !sideState ? { value: 'sideStateFalse', params: { transitionParams: '.1s ease-in' } } :
+(currentLink.expand && sideState ? { value: 'visible', params: { transitionParams: '.3s ease-in-out' } } :
+{ value: 'hidden', params: { transitionParams: '.3s ease-in-out' } })">
+  @for(child of currentLink.children ; track child){
+    @if(child.visible()){
+      @if(child.children && child.children.length > 0){
+      <app-sidebar-single-item [currentItem]="child"></app-sidebar-single-item>
+
+      }@else {
+      <li class="">
+        <a [routerLink]="child.link.length ? child.link : '/invaiold'"  routerLinkActive="active-link" class="flex py-2 px-3 mb-1 rounded-md items-center gap-2">
+          <i [class]="child.icon"></i>
+          <span class="text-sm">{{isAr() ? child.nameAR : child.name}}</span>
+        </a>
+      </li>
+      }
+    }
+  }
+</ul>

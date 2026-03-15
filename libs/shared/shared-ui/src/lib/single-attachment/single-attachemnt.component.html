@@ -1,0 +1,15 @@
+<div class="grid grid-cols-3 gap-4 items-baseline">
+<div class="attach_container my-3  gap-4  border border-gray_light rounded-2xl ">
+  <div class="add_attach p-2 flex items-center gap-6 rounded-lg border border-primary">
+    <button
+      [disabled]="filesTemp?.length === 1"
+      (click)="add_emiter.emit(true)"
+      class="icon w-12 h-12 rounded-lg flex items-center justify-center text-primary border border-primary">
+      <i class="fi fi-br-plus"></i>
+    </button>
+    <div class="content">
+      <p class="text-gray-800 font-semibold mb-2">{{ 'ATTACHMENT.ADD_OR_USE_FILE' | translate }}</p>
+      <p>{{ 'ATTACHMENT.ALLOWED_FORMATS' | translate }}</p>
+    </div>
+  </div>
+</div>

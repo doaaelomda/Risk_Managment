@@ -1,0 +1,223 @@
+::ng-deep .frameworkAccordion {
+    .p-accordion-header-link {
+        height: 52px;
+        padding: 12px 16px;
+        border-radius: 7px;
+        background-color: var(--gray-50);
+        color: var(--primary-600);
+        font-size: 18px;
+        font-weight: 500;
+        .p-accordion-toggle-icon{
+            display: none;
+        }
+    }
+   .p-accordion-tab{
+     border: 1px solid var(--gray-300);
+     border-radius: 8px;
+
+   }
+
+}
+
+
+.col_container{
+  cursor: move;
+}
+
+
+.col_container.dis_curs{
+  cursor: not-allowed	!important;
+}
+
+.header{
+    box-shadow: 0px 1px 2px 0px var(--gray_color);
+
+box-shadow: 0px 1px 3px 0px var(--black_color);
+}
+
+.table_container{
+  box-shadow: 0px 1px 2px 0px var(--gray_color);
+
+box-shadow: 0px 1px 3px 0px var(--black_color);
+
+}
+
+.apply_btn:disabled{
+  cursor: auto;
+  pointer-events: none;
+}
+
+
+
+.avatar img{
+  width: 60 ;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.table_title_header{
+  color: rgba(16, 24, 40, 1);
+  font-size: 16px;
+  font-weight: 500;
+}
+::ng-deep .action_btn{
+  background-color: transparent;
+  border-color: rgba(122, 90, 248, 1)
+
+}
+.progress_outer{
+  @apply bg-success_color/25 rounded-md h-2;
+  .inner{
+    @apply bg-success_color rounded-md h-2;
+  }
+}
+
+
+
+.custom_height{
+  max-height: 500px  ;
+  overflow: hidden;
+}
+
+
+
+.header{
+  border-color: var(--gray-200)
+}
+
+
+::ng-deep .editor {
+  .p-editor-content {
+    height: 120px;
+  }
+
+}
+.color-bg {
+
+  .small_doted {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    @apply bg-primary;
+  }
+
+  @apply font-[500] py-1 px-2 gap-2 relative rounded-2xl bg-primary/10 text-primary_custom text-sm w-fit flex items-center;
+}
+
+.badge {
+  .small_doted {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    @apply bg-primary;
+  }
+
+  @apply font-[500] py-1 px-2 gap-2 relative rounded-2xl bg-primary/10 text-primary_custom text-sm w-fit flex items-center;
+
+  &.Blue,
+  &.blue {
+    background-color: var(--primary-50);
+    color: var(--primary-700);
+
+    .small_doted {
+      background-color: var(--primary-700);
+    }
+  }
+
+  &.Blue-Light,
+  &.blue-light {
+    background-color: var(--blue-25);
+    color: #026AA2;
+
+    .small_doted {
+      background-color: var(--primary-700);
+    }
+  }
+
+
+  &.Red,
+  &.red {
+    background-color: var(--error-50);
+    color: var(--error-700);
+
+    .small_doted {
+      background-color: var(--error-700);
+    }
+  }
+
+  &.Green,
+  &.green {
+    background-color: var(--success-50);
+    color: var(--success-700);
+
+    .small_doted {
+      background-color: var(--success-700);
+    }
+  }
+
+  &.Yellow,
+  &.yellow {
+    background-color: var(--warning-50);
+    color: var(--warning-700);
+
+    .small_doted {
+      background-color: var(--warning-700);
+    }
+  }
+
+
+  &.Gray,
+  &.gray {
+    background-color: var(--gray-100);
+    color: var(--gray-700);
+
+    .small_doted {
+      background-color: var(--gray-700);
+    }
+  }
+
+  &.Orange,
+  &.orange {
+    background-color: var(--warning-50);
+    color: var(--warning-700);
+
+    .small_doted {
+      background-color: var(--warning-700);
+    }
+  }
+
+  &.Blue,
+  &.blue {
+    @apply bg-info_bg text-info_text;
+  }
+
+  &.Gold,
+  &.gold {
+    @apply bg-danger_bg text-danger_text;
+  }
+}
+
+.header-active {
+  background-color: rgba(249, 250, 251, 1);
+  color: var(--primary-600);
+
+}
+
+.header-inactive {
+  background-color: rgba(249, 250, 251, 1);
+        color: rgba(16, 24, 40, 1);
+}
+
+::ng-deep .action_dailog{
+  .p-dialog-header{
+    padding:  1rem;
+  }
+  .p-dialog-header .p-dialog-header-icons{
+    display: none;
+  }
+}
+.title-cell {
+  white-space: nowrap;
+  width: fit-content;
+  max-width: max-content;
+}

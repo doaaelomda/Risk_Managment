@@ -1,0 +1,147 @@
+<!-- initialization dashboard -->
+<section>
+
+  @if(loading_dashboard_info){
+  <div class="h-96">
+    <lib-loader></lib-loader>
+  </div>
+  }@else {
+  @if(!dashConfig?.dashboard_Widgets?.length){
+  <div class="empty_container flex flex-col justify-center items-center gap-4">
+    <div class="img">
+      <img src="images/dashboard-empty.svg" alt="">
+    </div>
+    <div class="text-center mb-4">
+      <p class="font-semibold text-3xl">{{ 'Dashboard.EMPTY.TITLE' | translate }}</p>
+      <p class="text-gray_color font-medium text-xl">{{ 'Dashboard.EMPTY.SUBTITLE' | translate }}</p>
+    </div>
+    @if(_PermissionSystemService.can('DASHBOURD' , 'DESIGN' , 'ADD')){
+    <div class="action_btn">
+      <p-button (onClick)="show_add_dailog = true" [icon]="'fi fi-rr-plus'"
+        [label]="'Dashboard.EMPTY.ADD_WIDGET' | translate">
+      </p-button>
+    </div>
+  }
+  </div>
+  }@else {
+
+  <div>
+    <div class="header flex items-center justify-between p-4 mb-4 border-b border-gray_light">
+      <h2 class="text-2xl font-semibold text-gray-800 capitalize">{{dashConfig?.dashboard_Title}}</h2>
+
+      @if(_PermissionSystemService.can('DASHBOURD' , 'DESIGN' , 'ADD')){
+      <div class="action_btn">
+        <p-button (onClick)="show_add_dailog = true" [icon]="'fi fi-rr-plus'"
+          [label]="'Dashboard.EMPTY.ADD_WIDGET' | translate">
+        </p-button>
+      </div>
+    }
+
+    </div>
+    <div class="dash_container ">
+
+      <lib-dashboard-builder [current_report_id]="this.current_dashboard_id"
+        (dashboard_config_emitter)="handleChangeDashboardWidgets($event)" [mode]="'edit'"
+        [dashboard_config]="dashConfig"></lib-dashboard-builder>
+    </div>
+  </div>
+
+  <div class="action_btn flex items-center justify-start w-fit">
+    <button (click)="handlePreviewStep();" class="btn">
+      {{ 'Dashboard.ACTIONS.SAVE_PREVIEW' | translate }}
+    </button>
+  </div>
+  }
+  }
+</section>
+
+<!-- add new widget-->
+
+<p-dialog (onHide)="getDashboardConfig(current_dashboard_id) " [dismissableMask]="false" styleClass="attach_dailog w-[70rem]"
+  [(visible)]="show_add_dailog" [modal]="true" [draggable]="false"  [position]="'center'">
+
+  <ng-template pTemplate="header"></ng-template>
+
+  <ng-template pTemplate="content">
+    <div class="categories mb-5">
+      <h2 class="font-semibold text-gray-800 text-xl mb-3">{{ 'Dashboard.CATEGORIES.TITLE' | translate }}</h2>
+
+      <div class="cards_cat_container flex gap-4">
+        @for(cat of categories_widgets ; track cat){
+        <button (click)="selected_cat = cat" [ngClass]="{'active':cat.id === selected_cat.id}"
+          class="cat_card flex flex-col items-center justify-center gap-4">
+          <div class="icon">
+            <i [class]="cat.icon"></i>
+          </div>
+          <p class="font-medium text-sm text-gray-800">{{cat.name}}</p>
+        </button>
+        }
+      </div>
+    </div>
+
+    <div class="widgets">
+      <div class="head flex items-center justify-between mb-6">
+        <div class="content">
+          <h2 class="font-semibold text-gray-800 text-xl mb-2">{{ 'Dashboard.WIDGETS.TITLE' | translate }}</h2>
+          <p class="text-gray-500 text-[11px] font-medium">{{ 'Dashboard.WIDGETS.SUBTITLE' | translate }}</p>
+        </div>
+
+        <div>
+          <lib-input-search></lib-input-search>
+        </div>
+      </div>
+
+      <div class="widgets_container grid grid-cols-12 gap-4 items-stretch">
+        @for(widget of selected_cat?.widgets ; track $index){
+        <button (click)="handleToggleSelectedWidget(widget)"
+          class="{{selected_cat?.widgets?.length >2 ? 'col-span-6' : 'col-span-6'}} flex gap-2 p-4 items-center justify-between rounded-lg border-2 flex-wrap"
+          [ngClass]="widget.selected ? 'border-primaryColor-500' : 'border-gray-300'">
+
+          <div class="flex gap-2 items-center flex-wrap">
+            <div class="img flex items-center justify-center w-[76px] h-[73px] bg-gray-100 rounded-lg">
+              @switch(widget.type) {
+              @case('bar') { <img src="images/widget1.svg" alt="" class="w-full h-full object-contain"> }
+              @case('dounghnut') { <img src="images/widget2.svg" alt="" class="w-full h-full object-contain"> }
+              @case('line') { <img src="images/widget3.svg" alt="" class="w-full h-full object-contain"> }
+              @case('table') { <img src="images/widget4.svg" alt="" class="w-full h-full object-contain"> }
+              @case('list') { <img src="images/widget5.svg" alt="" class="w-full h-full object-contain"> }
+              @case('text') { <img src="images/line_widget.svg" alt="" class="w-full h-full object-contain"> }
+              @case('tabs_cards') { <img src="images/widget1.svg" alt="" class="w-full h-full object-contain"> }
+              @case('customComplianceSummaryStatus') { <img src="images/line_widget.svg" alt="" class="w-full h-full object-contain"> }
+              @case('customComplianceAssessmentSummaryReport') { <img src="images/widget3.svg" alt="" class="w-full h-full object-contain"> }
+              }
+
+            </div>
+
+            <div class="content text-start flex-1 text-wrap">
+              <h2 class="text-lg font-semibold text-gray-700 mb-1">{{widget.desc}}</h2>
+              <p class="font-normal text-gray-600 text-sm">{{widget.name}}</p>
+            </div>
+          </div>
+
+
+          <p-checkbox [binary]="true" [(ngModel)]="widget.selected" (click)="$event.stopPropagation()">
+          </p-checkbox>
+
+
+
+        </button>
+        }
+      </div>
+
+
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-4">
+      <div class="cancel_btn">
+        <button (click)="show_add_dailog = false">{{ 'BUTTONS.CANCEL' | translate }}</button>
+      </div>
+      <div class="action_btn">
+        <p-button [loading]="loadingSave" (onClick)="saveDashboardWidgets()" [label]="'BUTTONS.SAVE' | translate" />
+      </div>
+    </div>
+  </ng-template>
+
+</p-dialog>

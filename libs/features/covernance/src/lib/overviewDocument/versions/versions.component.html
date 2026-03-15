@@ -1,0 +1,196 @@
+
+<section>
+  <lib-new-table
+    [loading]="loading"
+    [table_data]="dataList"
+    [table_title]="'VERSION_LIST.TITLE' | translate"
+    [badge_title]="'VERSION_LIST.BADGE' | translate"
+    [dataViewId]="97"
+    [entityID_Name]="'govDocumentVersionID'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="action_items"
+    (currentActionRow)="setSelectedRow($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{
+      module: 'GOVERNANCE',
+      feature: 'VERSION',
+      action: 'VIEW'
+    }"
+  >
+    @if(_PermissionSystemService.can('GOVERNANCE' , 'VERSION' , 'ADD')){
+
+  <button
+    (click)="newVersion()"
+    addition_action
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+  >
+    <i class="fi fi-br-plus w-5 h-5"></i>
+    <span>{{ 'VERSION_LIST.ADD_NEW_VERSION' | translate }}</span>
+  </button>
+    }
+  </lib-new-table>
+</section>
+
+<lib-delete-confirm-popup
+  [titleDelete]="'VERSION_LIST.DELETE_VERSION_DESC'"
+  [descriptionDelete]="'VERSION_LIST.DELETE_VERSION_TITLE'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteVersion()"
+        [loading]="loadDeleted"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+<p-dialog
+  [(visible)]="quickAddVisible"
+  [modal]="true"
+  [dismissableMask]="true"
+  [draggable]="false"
+  styleClass="w-[50rem]"
+  [position]="'center'"
+  (onHide)="closeQuickAddModal()"
+>
+  <h3 class="text-gray-800 font-bold text-1xl">
+    {{
+      editVersion
+        ? ('VERSION_LIST.Edit_NEW_VERSION' | translate)
+        : ('VERSION_LIST.ADD_NEW_VERSION' | translate)
+    }}
+  </h3>
+
+  <h6>{{ 'RISK_VIEW.UPDATE_PHOTO' | translate }}</h6>
+
+  <div class="border-b border-gray_light my-4"></div>
+
+  <ng-template pTemplate="content">
+    <div class="p-fluid" [formGroup]="formVersion">
+      <!-- Code -->
+      <div
+        class="field flex flex-wrap items-center border-b border-gray_light py-4"
+      >
+        <label class="font-bold w-1/4" for="code">{{
+          'VERSIONS.CODE' | translate
+        }}</label>
+        <div class="w-3/4">
+          <lib-input-text
+            [placeholder]="'PLACEHOLDERS.enter_code'"
+            [control]="formVersion.get('code')!"
+            [controlNameInput]="'code'"
+          >
+          </lib-input-text>
+        </div>
+      </div>
+
+      <!-- Name -->
+      <div
+        class="field flex flex-wrap items-center border-b border-gray_light py-4"
+      >
+        <label class="font-bold w-1/4" for="name">{{
+          'VERSIONS.NAME' | translate
+        }}</label>
+        <div class="w-3/4">
+          <lib-input-text
+            [placeholder]="'PLACEHOLDERS.enter_name'"
+            [control]="formVersion.get('name')!"
+            [controlNameInput]="'name'"
+            [validations]="validationsRequired"
+          >
+          </lib-input-text>
+        </div>
+      </div>
+
+      <!-- Content Type -->
+      <div
+        class="field flex flex-wrap items-center border-b border-gray_light py-4"
+      >
+        <label class="font-bold w-1/4" for="govDocumentVersionTypeId">{{
+          'VERSIONS.CONTENT_TYPE' | translate
+        }}</label>
+        <div class="w-3/4 form_group">
+          <!-- <lib-ui-dropdown [placeholder]="'PLACEHOLDERS.select_type'" [control]="formVersion.get('govDocumentVersionTypeId')!"
+            [formControlNameInput]="'govDocumentVersionTypeId'" [options]="contentTypeOptions" [optionLabel]="'label'"
+            [optionValue]="'id'">
+          </lib-ui-dropdown> -->
+          <p-multiSelect
+            [appendTo]="'body'"
+            [showClear]="false"
+            [options]="contentTypeOptions"
+            formControlName="govDocumentVersionContentTypeIds"
+            [optionValue]="'id'"
+            [optionLabel]="'label'"
+            placeholder="Select Content Type"
+          />
+        </div>
+      </div>
+
+      <!-- Effective Date From -->
+      <div
+        class="field flex flex-wrap items-center border-b border-gray_light py-4"
+      >
+        <label class="font-bold w-1/4" for="effectiveDateFrom">{{
+          'VERSIONS.EFFECTIVE_DATE_FROM' | translate
+        }}</label>
+        <div class="w-3/4">
+          <lib-date-packer
+            [placeholder]="'PLACEHOLDERS.select_date'"
+            [control]="formVersion.get('effectiveDateFrom')!"
+            [controlNameInput]="'effectiveDateFrom'"
+          >
+          </lib-date-packer>
+        </div>
+      </div>
+
+      <!-- Effective Date To -->
+      <div
+        class="field flex flex-wrap items-center border-b border-gray_light py-4"
+      >
+        <label class="font-bold w-1/4" for="effectiveDateTo">{{
+          'VERSIONS.EFFECTIVE_DATE_TO' | translate
+        }}</label>
+        <div class="w-3/4">
+          <lib-date-packer
+            [placeholder]="'PLACEHOLDERS.select_date'"
+            [control]="formVersion.get('effectiveDateTo')!"
+            [controlNameInput]="'effectiveDateTo'"
+          >
+          </lib-date-packer>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <div class="flex flex-wrap justify-end gap-2">
+      <p-button
+        pButton
+        class="bg-white_color text-[#344054] text-sm border border-gray_light rounded-lg"
+        [label]="'BUTTONS.CANCEL' | translate"
+        icon="pi pi-times"
+        (click)="closeQuickAddModal()"
+      />
+
+      <p-button
+        pButton
+        class="bg-primary text-white text-sm rounded-lg"
+        [label]="'BUTTONS.SAVE' | translate"
+        [loading]="loadingBtn"
+        icon="pi pi-check"
+        (click)="submit()"
+      />
+    </div>
+  </ng-template>
+</p-dialog>

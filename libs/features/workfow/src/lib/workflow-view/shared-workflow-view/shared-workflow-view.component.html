@@ -1,0 +1,85 @@
+<p-dialog
+  header="Header"
+  [(visible)]="isViewing"
+  (visibleChange)="isViewingChange.emit($event)"
+  [modal]="true"
+  [dismissableMask]="true"
+  [draggable]="false"
+  styleClass="view_dialog w-[888px]"
+  (onHide)="view_data = []"
+>
+  <ng-template pTemplate="header">
+    <div class="flex justify-between items-center w-full">
+      <div class="flex flex-col gap-2">
+        <h2 class="step_name">{{ title }}</h2>
+        @if(desc){
+        <h3 class="step_desc">
+          {{ selectedLang === 'en' ? '└' : '┘' }}{{ desc }}
+        </h3>
+        }
+      </div>
+      <!-- <div class="ms-auto">
+        <button class="default_btn flex gap-2 items-center">
+          {{ 'RISK_MANAGMENT.ACTIONS' | translate }}
+          <i class="fi fi-rr-angle-small-down"></i>
+        </button>
+      </div> -->
+    </div>
+  </ng-template>
+
+  <div class="grid grid-cols-12 gap-3">
+    @for (item of view_data; track $index) {
+    <div
+      class="col-span-12 flex flex-col view_data_container"
+      [ngClass]="
+        !item?.isDescription && spanCols ? 'lg:col-span-' + spanCols : ''
+      "
+    >
+      <h2 class="label">{{ item?.label | translate }}</h2>
+      <div class="flex gap-2 items-start justify-start">
+        @if(item?.img){
+        <div class="view_data_container__img rounded-full">
+          <img [src]="item?.img" alt="" />
+        </div>
+        } @if(item?.icon){
+        <div class="view_data_container__icon">
+          <i [class]="item?.icon"></i>
+        </div>
+        }
+        <div class="flex flex-col gap-2 justify-center">
+          @if(!item?.isDescription){
+          <h3 class="main_value">{{ item?.value || item?.position }}</h3>
+          } @else {
+          <div class="flex flex-col gap-2">
+            <p
+              class="description_value"
+              [innerHTML]="
+                item.isDescExpanded ? item?.value : updateTruncatedValue(item) |safeHtml
+              "
+            ></p>
+
+            @if (item?.value?.length > 100) {
+            <button
+              class="btn expandBtn self-start"
+              (click)="toggleReadMore(item)"
+            >
+              {{
+                (item.isDescExpanded
+                  ? 'WORKFLOW_STEPS.TEXTS.READ_LESS'
+                  : 'WORKFLOW_STEPS.TEXTS.READ_MORE'
+                ) | translate
+              }}
+            </button>
+            }
+          </div>
+          } @if(item?.value && item?.position){
+          <h4 class="second_value">{{ item?.position }}</h4>
+          }
+        </div>
+      </div>
+    </div>
+    @if ((($index + 1) % (12 / +spanCols)) === 0 && !item?.isDescription) {
+    <div class="col-span-12 border-b border-gray_light my-2"></div>
+    } }
+  </div>
+</p-dialog>

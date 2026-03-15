@@ -1,0 +1,165 @@
+<!-- Handle New Table in Dashboard-->
+<lib-new-table [loading]="loadingState" [table_data]="dataList" [table_title]="'Dashboard.TABLES.ITEMS' | translate"
+  [badge_title]="'Dashboard.TABLES.DASHBOARD_LIST' | translate" [dataViewId]="22" [entityID_Name]="'reportDefinitionID'"
+  [isShownAction]="true" (payload_emiter)="handleDataTable($event)" [action_items]="action_items"
+  (currentActionRow)="setSelectedRow($event)" [columnControl]="columnControl"
+  [table_actions_permissions]="{ module: 'DASHBOURD', feature: 'DASHBOURD', action: 'VIEW' }"
+  >
+    @if(_PermissionSystemService.can('DASHBOURD' , 'DASHBOURD' , 'ADD')){
+  <button addition_action (click)="quickAddVisible = true"
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+    <i class="fi fi-br-plus w-5 h-5 "></i>
+    <span>{{'Dashboard.LIB_SHARED_UI.ADD_DASHBOARD' | translate}}
+    </span>
+  </button>
+}
+</lib-new-table>
+
+<!-- Popup Quick Add -->
+
+<p-dialog header="'RISK_VIEW.MAIN_INFORMATION'" [(visible)]="quickAddVisible" [modal]="true" [dismissableMask]="true"
+  [draggable]="false" styleClass="w-[50rem]" [position]="'center'" (onHide)="closeQuickAddModal()">
+  <ng-template pTemplate="header">
+    <h3 class="text-gray-800 font-bold text-1xl ">{{'RISK_VIEW.MAIN_INFORMATION' | translate}}</h3>
+  </ng-template>
+
+  <div class="border-b border-gray_light mb-2"></div>
+
+  <ng-template pTemplate="content">
+   <div class="p-fluid" [formGroup]="dashboard_form">
+  <div class="field flex flex-wrap items-center border-b border-gray_light py-2">
+    <label class="font-bold w-1/4" for="title">{{ 'Dashboard.DIALOG.DASHBOARD_NAME_EN' | translate }}</label>
+    <div class="w-3/4">
+      <lib-input-text
+        [placeholder]="'Dashboard.PLACEHOLDERS.ENTER_NAME_EN' | translate"
+        [validations]="[]"
+        [control]="dashboard_form.get('name')!"
+        [controlNameInput]="'name'">
+      </lib-input-text>
+    </div>
+  </div>
+
+  <div class="field flex flex-wrap items-center border-b border-gray_light py-2">
+    <label class="font-bold w-1/4" for="title">{{ 'Dashboard.DIALOG.DASHBOARD_NAME_AR' | translate }}</label>
+    <div class="w-3/4">
+      <lib-input-text
+        [placeholder]="'Dashboard.PLACEHOLDERS.ENTER_NAME_AR' | translate"
+        [validations]="[]"
+        [control]="dashboard_form.get('nameAr')!"
+        [controlNameInput]="'nameAr'">
+      </lib-input-text>
+    </div>
+  </div>
+
+  <div class="field flex flex-wrap border-b border-gray_light py-2">
+    <div class="w-1/4">
+      <label for="" class="font-bold block mb-1">{{ 'Dashboard.DIALOG.DESCRIPTION' | translate }}</label>
+      <p class="text-xs text-gray_color">{{ 'Dashboard.DIALOG.DESCRIPTION_HINT' | translate }}</p>
+    </div>
+    <div class="w-3/4">
+      <lib-textarea-ui
+        [placeholder]="'Dashboard.PLACEHOLDERS.ENTER_DESCRIPTION' | translate"
+        [control]="dashboard_form.get('description')!"
+        [controlNameInput]="'description'">
+      </lib-textarea-ui>
+    </div>
+  </div>
+
+  <div class="field flex flex-wrap border-b border-gray_light py-2">
+    <div class="w-1/4">
+      <label for="" class="font-bold block mb-1">{{ 'Dashboard.DIALOG.DESCRIPTION_AR' | translate }}</label>
+      <p class="text-xs text-gray_color">{{ 'Dashboard.DIALOG.DESCRIPTION_HINT' | translate }}</p>
+    </div>
+    <div class="w-3/4">
+      <lib-textarea-ui
+        [placeholder]="'Dashboard.PLACEHOLDERS.ENTER_DESCRIPTION' | translate"
+        [control]="dashboard_form.get('descriptionAr')!"
+        [controlNameInput]="'descriptionAr'">
+      </lib-textarea-ui>
+    </div>
+  </div>
+
+  <div class="field flex border-b border-gray_light py-2">
+    <div class="w-1/4 flex gap-2 items-start">
+      <p class="font-bold block mb-1">{{ 'Dashboard.DIALOG.STATUS' | translate }}</p>
+    </div>
+    <div class="w-3/4">
+      <lib-ui-dropdown
+        [placeholder]="'Dashboard.DIALOG.SELECT_STATUS' | translate"
+        [control]="dashboard_form.get('isActive')!"
+        [options]="status"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+        [formControlNameInput]="'isActive'">
+      </lib-ui-dropdown>
+    </div>
+  </div>
+
+  <div class="field flex border-b border-gray_light py-2">
+    <div class="w-1/4 flex gap-2 items-start">
+      <p class="font-bold block mb-1">{{ 'Dashboard.DIALOG.ALLOW_PERMISSION' | translate }}</p>
+    </div>
+    <div class="w-3/4">
+      <lib-ui-dropdown
+        [placeholder]="'Dashboard.DIALOG.SELECT_STATUS' | translate"
+        [control]="dashboard_form.get('permissionID')!"
+        [options]="permissions"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+        [formControlNameInput]="'permissionID'">
+      </lib-ui-dropdown>
+    </div>
+  </div>
+</div>
+
+  </ng-template>
+
+
+
+  <ng-template pTemplate="footer">
+<div class="col-span-12 flex items-center gap-4 justify-end py-6 border-t border-gray_light">
+  <div class="cancel_btn">
+    <button (click)="quickAddVisible = false">
+      {{ 'Dashboard.DIALOG.CANCEL' | translate }}
+    </button>
+  </div>
+  <div class="action_btn">
+    <p-button
+      [label]="'Dashboard.DIALOG.SAVE_CHANGES' | translate"
+      [disabled]="dashboard_form.invalid"
+      [loading]="loadingBtn"
+      (onClick)="dashboardAction()">
+    </p-button>
+  </div>
+</div>
+
+
+  </ng-template>
+</p-dialog>
+
+
+
+<!--Delete Confirm Popup -->
+<lib-delete-confirm-popup
+  [titleDelete]="'Dashboard.DELETE_POPUP.TITLE' | translate"
+  [descriptionDelete]="'Dashboard.DELETE_POPUP.DESCRIPTION' | translate"
+  (hideEmiter)="handleClosedDelete()"
+  [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="handleClosedDelete()">
+        {{ 'Dashboard.DELETE_POPUP.BUTTON_CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteDashboard()"
+        [loading]="loadDelted"
+        [label]="'Dashboard.DELETE_POPUP.BUTTON_DELETE' | translate">
+      </p-button>
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+

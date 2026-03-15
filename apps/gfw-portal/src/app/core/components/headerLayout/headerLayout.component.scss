@@ -1,0 +1,81 @@
+.pulse {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  height: 20px;
+  width: 20px;
+  z-index: 10;
+  @apply border-danger_color;
+  border-radius: 70px;
+  animation: pulse 1s ease-out infinite;
+}
+
+.lang {
+  @apply text-gray-500;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.marker {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  height: 10px;
+  width: 10px;
+  border-radius: 70px;
+  @apply bg-danger_color;
+}
+
+.username {
+  @apply text-black_color;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.position_bill {
+  top: 4px;
+  right: 4px;
+}
+
+@keyframes pulse {
+  0% {
+    -webkit-transform: scale(0);
+    opacity: 0.0;
+  }
+
+  25% {
+    -webkit-transform: scale(0.1);
+    opacity: 0.1;
+  }
+
+  50% {
+    -webkit-transform: scale(0.5);
+    opacity: 0.3;
+  }
+
+  75% {
+    -webkit-transform: scale(0.8);
+    opacity: 0.5;
+  }
+
+  100% {
+    -webkit-transform: scale(1);
+    opacity: 0.0;
+  }
+}
+
+.notification_item {
+  .avatar img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+
+  .content:hover button {
+    opacity: 1;
+  }
+}
+
+header {
+  @apply border-gray-200;
+}

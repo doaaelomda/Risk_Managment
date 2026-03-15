@@ -1,0 +1,88 @@
+.col_container {
+  cursor: move;
+}
+
+.col_container.dis_curs {
+  cursor: not-allowed !important;
+}
+
+.header {
+  box-shadow: 0px 1px 3px 0px #1018281A;
+  border-color: theme('colors.gray.100');
+}
+
+.table_container {
+  box-shadow: 0px 1px 3px 0px #1018281A;
+}
+
+.apply_btn:disabled {
+  cursor: auto;
+  pointer-events: none;
+}
+
+.avatar img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.table_title_header {
+  color: theme('colors.gray.900');
+  font-size: 18px;
+  font-weight: 500;
+}
+
+::ng-deep .action_btn_filter {
+  @apply border border-primaryColor-500;
+  background-color: transparent;
+  padding: 10px;
+}
+
+.action_btn_filter_icon {
+  margin-left: -6px;
+}
+
+.progress_outer {
+  @apply bg-success_color/25 rounded-md h-2;
+  .inner {
+    @apply bg-success_color rounded-md h-2;
+  }
+}
+
+.custom_height {
+  max-height: 500px;
+  overflow: hidden;
+}
+
+.custom_filter_btn {
+  .my_filter {
+    padding: 10px;
+    @apply border border-primaryColor-500 rounded-lg;
+    box-shadow: 0px 1px 2px 0px #1018280D;
+
+    &.btn_filter_flex {
+      @apply flex items-center gap-3;
+    }
+  }
+}
+
+::ng-deep .update-menu > div {
+  width: auto !important;
+  white-space: nowrap;
+}
+
+::ng-deep .check-native .p-checkbox-box.p-highlight {
+  @apply border-primaryColor-500 bg-primaryColor-500;
+}
+
+::ng-deep .check-native .p-checkbox-icon {
+  @apply bg-primaryColor-500 text-white_color;
+  font-size: 16px;
+  font-weight: 600;
+  
+}
+
+::ng-deep .p-frozen-column.th_left,
+::ng-deep .p-frozen-column.td_left {
+  left: 0 !important;
+}

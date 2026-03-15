@@ -1,0 +1,21 @@
+<section>
+     @for(not of notifications; track not ;let idx = $index ) {
+        <div class="notification_item flex  items-center gap-4 px-2 py-4">
+          <div class="avatar">
+            <img [src]="not.avatar" alt="" srcset="">
+          </div>
+          <div class="  relative content">
+
+            <div class="flex gap-2 items-center">
+              <p class="text-sm font-semibold">{{not.title}}</p>
+              <p class="header_cards">{{not.time}}</p>
+            </div>
+            <p class="header_cards">{{not.description}}</p>
+            <p class="font-bold forget">{{not.user}}</p>
+            <button (click)="notifications.splice(idx , 1)" class="absolute top-0 right-0  transition-all opacity-0">
+              <i class="fi fi-br-cross-small"></i>
+            </button>
+          </div>
+        </div>
+      }
+</section>

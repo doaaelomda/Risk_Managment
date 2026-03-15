@@ -1,0 +1,55 @@
+
+
+<section>
+  <lib-new-table
+    [loading]="loadingState"
+    [table_data]="dataList"
+    [table_title]="'SETTING.PERMISSIONS' | translate"
+    [badge_title]="'SETTING.PERMISSIONS' | translate"
+    [dataViewId]="16"
+    [entityID_Name]="'permissionID'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="action_items"
+    (currentActionRow)="setSelectedRow($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{ module: 'ACCESSMANAGEMNET', feature: 'PERMISSIONS', action: 'VIEW' }"
+  >
+   @if(_PermissionSystemService.can('ACCESSMANAGEMNET' , 'PERMISSIONS' , 'ADD')){
+    <button (click)="add_permission()"  addition_action
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+      <i class="fi fi-br-plus w-5 h-5 "></i>
+      <span>{{'SETTING.ADD_NEW_PERRMISIION' |translate}}</span>
+      <!-- <i class="fi fi-rr-angle-small-down"></i> -->
+    </button>
+  }
+
+  </lib-new-table>
+</section>
+
+
+
+
+
+
+<p-menu #menu [model]="itemsMenu" [appendTo]="'body'" [popup]="true" />
+<lib-delete-confirm-popup
+  [titleDelete]="'SETTING.DELETE_PERMISSION_TITLE'"
+  [descriptionDelete]="'SETTING.DELETE_PERMISSION_DESC'"
+  [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="actionDeleteVisible = false">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button (click)="DeletePermission()"
+        [loading]="loadDelted"
+        [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+

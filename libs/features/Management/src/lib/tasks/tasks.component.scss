@@ -1,0 +1,265 @@
+.header {
+  h1 {
+    color: #475467;
+  }
+
+  .custom_filters {
+    @apply p-1 border rounded-lg;
+    border-color: #7a5af8;
+    background-color: #f4f3ff;
+
+    button {
+      @apply py-2 px-3 rounded-md text-sm font-medium;
+      color: #6938ef;
+
+      &.active {
+        @apply bg-white_color;
+        box-shadow: 0px 1px 2px 0px #1018280f;
+        box-shadow: 0px 1px 3px 0px #1018281a;
+      }
+    }
+  }
+}
+
+::ng-deep .taskViewDialog {
+  .p-dialog-header-icon {
+    display: none;
+  }
+  .p-dialog-header {
+    padding: 32px;
+  }
+  .p-dialog-content {
+    padding: 32px;
+  }
+}
+
+::ng-deep .custom_accor {
+  .p-accordion
+    .p-accordion-header
+    .p-accordion-header-link
+    .p-accordion-toggle-icon {
+    display: none !important;
+  }
+  @apply py-4 px-4 rounded-xl border;
+  border-color: #eaecf0;
+
+  .p-accordion {
+    .p-accordion-header {
+      .p-accordion-header-link {
+        @apply py-4 px-4 w-full block;
+        background-color: white;
+      }
+
+      &.p-highlight {
+        .p-accordion-header-link {
+          color: #5925dc;
+          background-color: #f4f3ff;
+          @apply border-l-2 rounded-md;
+          border-color: #6938ef;
+        }
+      }
+    }
+  }
+}
+
+.state_container {
+  @apply p-3 rounded-xl border;
+  border-color: #eaecf0;
+ color: #1d2939;
+  .state_single {
+       border-radius: 8px;
+      padding: 4px 8px;
+    &.active_cat {
+      border: 1px solid #EAECF0;
+
+    }
+    .icon {
+      @apply text-xl flex items-center justify-center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+    }
+
+    &.gray {
+      .icon {
+        background-color: #f2f4f7;
+        color: #475467;
+      }
+
+      .value {
+        color: #475467;
+      }
+    }
+    &.orange {
+      .icon {
+        background-color: #fef0c7;
+        color: #f79009;
+      }
+
+      .value {
+        color: #dc6803;
+      }
+    }
+    &.blue {
+      .icon {
+        background-color: #d1e9ff;
+        color: #1570ef;
+      }
+
+      .value {
+        color: #1570ef;
+      }
+    }
+    &.red {
+      .icon {
+        background-color: #fee4e2;
+        color: #f04438;
+      }
+
+      .value {
+        color: #f04438;
+      }
+    }
+    &.green {
+      .icon {
+        background-color: #ecfdf3;
+        color: #039855;
+      }
+
+      .value {
+        color: #039855;
+      }
+    }
+  }
+}
+h1.dialog-header {
+  color: #101828;
+  font-size: 20px;
+  font-weight: 600;
+}
+span.dialog-label,
+span.value {
+  color: #667085;
+  font-size: 16px;
+  font-weight: 500;
+}
+span.value {
+  color: #101828;
+}
+
+::ng-deep .actionsBtn {
+  border: 1px solid #7a5af8;
+  background-color: #7a5af8;
+  color: #fff;
+  box-shadow: 0px 1px 2px 0px #1018280d;
+  padding: 10px 16px;
+  .p-button-label {
+    font-size: 14px;
+    font-weight: 500 !important;
+  }
+  .p-button-icon {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.active_tab {
+  @apply border-b-2 border-primary;
+  @apply bg-primary/10 text-primary font-medium;
+}
+
+.description {
+  font-weight: 400;
+  font-size: 16px;
+}
+.card_task{
+  color: #667085;
+  font-size: 18px;
+  font-weight: 500;
+}
+.user__card_title {
+  color: #667085;
+  font-size: 14px;
+  font-weight: 500;
+}
+.user__card_position {
+  color: #344054;
+  font-size: 16px;
+  font-weight: 500;
+  &.dark {
+    color: #101828;
+  }
+}
+.expandBtn {
+  color: #5925dc;
+  font-weight: 500;
+  font-size: 14px;
+}
+.user__card {
+  .user__card_name {
+    color: #667085;
+    font-size: 11px;
+    font-weight: 400;
+  }
+  .img {
+    width: 28px;
+    height: 28px;
+    overflow: hidden;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}
+.card {
+  border: 1px solid #eaecf0;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 12px;
+  h2 {
+    color: #101828;
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .description {
+    color: #4A1FB8;
+    font-size: 14px;
+    font-weight: 400 ;
+    &.success {
+      color: #12B76A;
+    }
+  }
+  &.action_card {
+    box-shadow: 0px 1px 2px 0px #1018280f;
+
+    box-shadow: 0px 1px 3px 0px #1018281a;
+  }
+  &.status_card {
+    box-shadow: 0px 1px 2px 0px #1018280d;
+  }
+}
+.status_value_wrapper{
+  border-radius: 12px;
+
+}
+.progress_bar {
+    height: 8px;
+    border-radius: 8px;
+}
+.actionBtn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  box-shadow: 0px 1px 2px 0px #1018280D;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+&.danger {
+  border: 1px solid #F04438;
+  background-color: #F04438;
+}
+&.success {
+  border: 1px solid #12B76A;
+  background-color: #12B76A;
+}
+}

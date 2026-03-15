@@ -1,0 +1,35 @@
+::ng-deep {
+  .p-accordion-toggle-icon {
+    @apply hidden;
+  }
+  .p-accordion-tab {
+    // accordion header + content
+    .p-accordion-header-link,
+    .p-accordion-content {
+      @apply px-6 bg-[#fff];
+    }
+    // accordion header
+    .p-accordion-header-link {
+      &.active {
+        @apply border-b-[1px] border-[#7A5AF8];
+      }
+      @apply pt-6 pb-4 rounded-tl-[19px] rounded-tr-[19px];
+    }
+
+    // accordion content
+    .p-accordion-content {
+      @apply pb-2.5 pt-4 rounded-bl-[19px] rounded-br-[19px];
+    }
+    // accordion-tab style
+    @apply rounded-[19px] border-[#7A5AF8] border-[1px] overflow-hidden mb-4;
+  }
+}
+
+.item-sm {
+  @apply text-[#475467] text-base font-normal;
+}
+.actions {
+    button {
+        @apply bg-[#fff] rounded-md p-[9px] 
+    }
+}

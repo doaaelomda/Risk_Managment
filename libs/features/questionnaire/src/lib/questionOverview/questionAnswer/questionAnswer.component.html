@@ -1,0 +1,208 @@
+<lib-cards-list
+  (selected_item_emiter)="setSelected($event)"
+  [items_actions]="item_actions"
+  [data_list]="data_list"
+  [badge_title]="'QUESTION_ANSWER.TITLE' | translate"
+  [list_title]="'QUESTION_ANSWER.LIST_TITLE' | translate"
+  [total_items]="data_list?.length"
+  [loadingState]="loadingList"
+  [card_sub_selector]="'questionText'"
+  [card_title_selector]="'answerText'"
+    (openModal)="onViewModal($event)"
+  [view_entityRouter]="'openModal=true'"
+  [table_actions_permissions]="{ module: 'QUESTIONNAIRES', feature: 'QUESTIONSQUESTIONNAIREANSWER', action: 'VIEW' }"
+
+>
+  @if(_PermissionSystemService.can('QUESTIONNAIRES' , 'QUESTIONSQUESTIONNAIREANSWER' , 'ADD')
+){
+      <button
+    actions
+    (click)="handleAddAnswerClick()"
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+  >
+    <i class="fi fi-br-plus w-5 h-5"></i>
+    <span>{{ 'QUESTION_ANSWER.ADD_ANSWER' | translate }}</span>
+  </button>
+  }
+</lib-cards-list>
+
+<p-dialog
+  (onHide)="initForm(); answerId = ''"
+  [(visible)]="addingAnswer"
+  [modal]="true"
+  [dismissableMask]="true"
+  [draggable]="false"
+  styleClass="w-[50rem]"
+  [position]="'center'"
+>
+  <ng-template pTemplate="header">
+    <h3 class="text-gray-800 font-bold text-1xl">
+      {{
+        answerId
+          ? ('QUESTION_ANSWER.UPDATE_ANSWER' | translate)
+          : ('QUESTION_ANSWER.ADD_ANSWER' | translate)
+      }}
+    </h3>
+  </ng-template>
+
+  <div class="border-b border-gray_light my-4"></div>
+
+  <ng-template pTemplate="content">
+    @if(answerForm){
+    <form
+  [formGroup]="answerForm"
+  class="grid grid-cols-12 gap-6 mb-6"
+  (ngSubmit)="submit()"
+>
+  <!-- Answer Text EN -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-input-text
+      [placeholder]="'QUESTION_ANSWER.ANSWER_TEXT' | translate"
+      [inputLabel]="'QUESTION_ANSWER.ANSWER_TEXT' | translate"
+      [control]="answerForm.get('answerText')!"
+      [controlNameInput]="'answerText'" [validations]="validationsRequired"
+    >
+    </lib-input-text>
+  </div>
+
+  <!-- Answer Text AR -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-input-text
+      [placeholder]="'QUESTION_ANSWER.ANSWER_TEXT_AR' | translate"
+      [inputLabel]="'QUESTION_ANSWER.ANSWER_TEXT_AR' | translate"
+      [control]="answerForm.get('answerTextAr')!"
+      [controlNameInput]="'answerTextAr'"
+    >
+    </lib-input-text>
+  </div>
+
+  <!-- Score -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-input-number
+      [placeholder]="'QUESTION_ANSWER.SCORE' | translate"
+      [inputLabel]="'QUESTION_ANSWER.SCORE' | translate"
+      [control]="answerForm.get('score')!"
+      [controlNameInput]="'score'"
+      type="number"
+    >
+    </lib-input-number>
+  </div>
+
+  <!-- Display Order -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-input-number
+      [placeholder]="'QUESTION_ANSWER.DISPLAY_ORDER' | translate"
+      [inputLabel]="'QUESTION_ANSWER.DISPLAY_ORDER' | translate"
+      [control]="answerForm.get('displayOrder')!"
+      [controlNameInput]="'displayOrder'"
+      type="number" [validations]="validationsRequired"
+    >
+    </lib-input-number>
+  </div>
+</form>
+
+    }
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <div class="flex flex-wrap justify-end gap-2">
+      <p-button
+        (onClick)="addingAnswer = false"
+        styleClass="default_btn cancel"
+        [label]="'BUTTONS.CANCEL' | translate"
+        icon="pi pi-times"
+      />
+      <p-button
+        styleClass="default_btn"
+        [label]="'BUTTONS.SAVE' | translate"
+        [loading]="loadingBtn"
+        [disabled]="answerForm.invalid"
+        icon="pi pi-check"
+        (click)="submit()"
+      />
+    </div>
+  </ng-template>
+</p-dialog>
+
+<lib-delete-confirm-popup
+  [titleDelete]="'QUESTION_ANSWER.DELETE_TITLE'"
+  [descriptionDelete]="'QUESTION_ANSWER.DELETE_DESC'"
+  (hideEmiter)="closeDeleteModal()"
+  [visibleInput]="deleteQuestion"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteAnswer()"
+        [loading]="loadDeleted"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+<p-dialog
+  header="{{ 'QUESTION_ANSWER.TITLE' | translate }}"
+  [(visible)]="viewingAnswer"
+  (onHide)="viewingAnswer = false"
+  [modal]="true"
+  [dismissableMask]="true"
+  [draggable]="false"
+  styleClass="w-[45rem]"
+>
+  <div class="container space-y-6">
+    <h2 class="font-medium text-gray-800 text-lg mb-2">
+      {{ viewed_data?.questionText || '-' }}
+    </h2>
+
+    <div class="grid grid-cols-12 gap-4 py-3 border-b border-gray_light">
+      <div class="col-span-12 lg:col-span-6">
+        <h3 class="header-item mb-1">{{ 'QUESTION_ANSWER.ANSWER_TEXT' | translate }}</h3>
+        <p class="text-gray-800 whitespace-pre-line">
+          @if (!loadingViewedData) {
+          {{ viewed_data?.answerText || '-' }} } @else {
+          <p-skeleton width="2rem" styleClass="mb-2" />
+          }
+        </p>
+      </div>
+
+      <div class="col-span-12 lg:col-span-6">
+        <h3 class="header-item mb-1">{{ 'QUESTION_ANSWER.ANSWER_TEXT_AR' | translate }}</h3>
+        <p class="text-gray-800 whitespace-pre-line">
+          @if (!loadingViewedData) {
+          {{ viewed_data?.answerTextAr || '-' }} } @else {
+          <p-skeleton width="2rem" styleClass="mb-2" />
+          }
+        </p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-12 gap-4 py-3">
+      <div class="col-span-12 lg:col-span-6">
+        <h3 class="header-item mb-1">{{ 'QUESTION_ANSWER.DISPLAY_ORDER' | translate }}</h3>
+        <p class="text-gray-800 whitespace-pre-line">
+          @if (!loadingViewedData) {
+          {{ viewed_data?.displayOrder || '-' }} } @else {
+          <p-skeleton width="2rem" styleClass="mb-2" />
+          }
+        </p>
+      </div>
+
+      <div class="col-span-12 lg:col-span-6">
+        <h3 class="header-item mb-1">{{ 'QUESTION_ANSWER.SCORE' | translate }}</h3>
+        <p class="text-gray-800 whitespace-pre-line">
+          @if (!loadingViewedData) {
+          {{ viewed_data?.score}} } @else {
+          <p-skeleton width="2rem" styleClass="mb-2" />
+          }
+        </p>
+      </div>
+    </div>
+  </div>
+</p-dialog>

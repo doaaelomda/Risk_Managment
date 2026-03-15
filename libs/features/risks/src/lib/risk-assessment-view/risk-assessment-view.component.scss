@@ -1,0 +1,26 @@
+
+::ng-deep .risk_rating{
+  height: fit-content !important;
+}
+
+
+.label {
+  @apply font-medium text-sm;
+  color: var(--gray-500);
+}
+.value{
+  @apply  font-medium text-base;
+  color:var(--gray-700)
+}
+
+.title {
+  &.title-sm {
+    @apply text-base
+  }
+  @apply  text-lg font-medium;
+  color: var(--gray-900);
+}
+
+::ng-deep .p-paginator-page.p-highlight {
+    color: var(--blue-900);
+}

@@ -1,0 +1,38 @@
+<div class="flex mb-8 justify-between items-center">
+  @for (step of steps; track $index) {
+    @if(step?.visible()){
+  <div class="flex flex-col gap-3 items-center flex-1 stepContainer">
+    <div
+      class="stepIcoContainer relative w-full flex justify-center items-center"
+    >
+      <div
+        class="step_line absolute"
+        [ngClass]="{
+          full_width: $index !== 0 && $index !== steps.length - 1,
+          last_step: $index === steps.length - 1
+        }"
+      ></div>
+      <button
+        class="stepIco z-50"
+        (click)="step?.command()"
+        [ngClass]="{ active_step: step?.id === currentStep }"
+      >
+        <i [class]="step?.icon"></i>
+      </button>
+    </div>
+
+    <div class="stepTxt flex flex-col gap-2 items-center">
+      <h3 [ngClass]="{ active_step: step?.id === currentStep }">
+        {{ step?.name }}
+      </h3>
+      <span> {{ step?.description }} </span>
+    </div>
+  </div>
+    }
+
+  }
+</div>
+
+
+
+<router-outlet></router-outlet>

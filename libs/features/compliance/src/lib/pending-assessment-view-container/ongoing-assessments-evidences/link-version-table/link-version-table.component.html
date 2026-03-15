@@ -1,0 +1,49 @@
+<div class="action_dailog">
+  <p-dialog
+    [header]="'ON_GOING_ASSESSMENTS.LINK_EVIDENCE' | translate"
+    [modal]="true"
+    [dismissableMask]="true"
+    [draggable]="false"
+    (onHide)="isLinkingVersion = false; hideDialogEmitter.emit(false)"
+    [(visible)]="isLinkingVersion"
+    styleClass="w-[85%] h-[95%]"
+  >
+    <ng-template pTemplate="header"> </ng-template>
+
+    @if(isLinkingVersion){
+    <div class="container">
+      <lib-new-table
+        (selectionEmitter)="handleSelectedEvidanceVersion($event)"
+        [table_config]="{ type: 'singleSelect' }"
+        [selections_input]="current_selected_evidance_version_data"
+        [table_actions_permissions]="{
+          module: 'COMPLIANCE',
+          feature: 'EVIDENCECOMPLIANCEVERSION',
+          action: 'VIEW'
+        }"
+        [loading]="loadingVersionsTable"
+        [table_data]="versionsData"
+        [table_title]="'BREAD_CRUMB_TITLES.EVIDENCE_VERSION_LIST' | translate"
+        [badge_title]="'HEARDE_TABLE.EVIDENCE_VERSION' | translate"
+        [dataViewId]="146"
+        [entityID_Name]="'evidenceTypeVersionID'"
+        [isShownAction]="false"
+        (payload_emiter)="getVersionsData($event)"
+        [columnControl]="columnControl"
+      >
+        <p-button
+          [loading]="savingVersionLinked"
+          class="bg-primary text-white text-sm rounded-lg default_btn"
+          addition_action
+          pButton
+          icon="pi pi-check"
+          (onClick)="linkEvidanceVersion()"
+          [label]="'Save Changes'"
+        >
+        </p-button>
+      </lib-new-table>
+    </div>
+    }
+  </p-dialog>
+</div>
+

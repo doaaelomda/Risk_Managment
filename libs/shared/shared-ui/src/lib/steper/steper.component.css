@@ -1,0 +1,128 @@
+.stepper {
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 1;
+}
+
+.circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 234, 240, 0.5);
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #999;
+  box-sizing: border-box;
+  z-index: 1;
+  position: relative;
+  top: 7px;
+  right: 4px;
+}
+
+.circle.active {
+  border-color: rgba(242, 244, 247, 1);
+  background-color: rgba(105, 56, 239, 1);
+}
+
+.circle.complete {
+  width: 24px;
+  height: 24px;
+  border-color: rgba(105, 56, 239, 1);
+  background-color: rgba(105, 56, 239, 1);
+}
+
+.circle.inactive {
+  border-color: rgba(242, 244, 247, 1);
+  background-color: rgba(242, 244, 247, 1);
+}
+
+.circle-inner {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: white;
+}
+
+.correct {
+  color: white;
+}
+
+.step-label {
+  margin-top: 23px;
+  text-align: center;
+  font-size: 14px;
+  color: rgba(52, 64, 84, 1);
+  white-space: nowrap;
+  font-weight: 600;
+  margin-left: -5px;
+}
+
+.step-label.active {
+  color: rgba(105, 56, 239, 1);
+  font-weight: 600;
+}
+
+.step-label.completed {
+  margin-top: 23px;
+}
+
+.step-parg {
+  font-size: 14px;
+  color: rgba(102, 112, 133, 1);
+  margin-top: 2px;
+  font-weight: 400;
+  text-align: center;
+}
+
+.step-parg.active {
+  color: rgba(105, 56, 239, 1);
+}
+
+.line {
+  position: absolute;
+  height: 2px;
+  background-color: #ccc;
+  top: 20px;
+  left: 50%;
+  width: 93%;
+  transform: translateX(8px);
+  z-index: 0;
+}
+
+.line-ar {
+  position: absolute;
+  height: 2px;
+  background-color: #ccc;
+  top: 20px;
+  right: 50%;
+  width: 98%;
+  transform: translateX(-20px);
+  z-index: 0;
+}
+
+.line-ar.line-ar-complete { background-color: rgba(105,56,239,1); }
+.line-ar.line-ar-active   { background-color: rgba(105,56,239,1); }
+.line-ar.line-ar-inactive { background-color: #e0e0e0; }
+
+.line.line-complete  {
+  background-color: rgba(105, 56, 239, 1);
+}
+
+.line.line-active{
+  background-color: rgba(105, 56, 239, 1);
+}
+
+.line.line-inactive {
+  background-color: #e0e0e0;
+}

@@ -1,0 +1,28 @@
+
+
+
+
+::ng-deep .attach_dailog .p-dialog-header{
+  padding: 1rem 0;
+
+  .p-dialog-header-icon{
+    display: none;
+  }
+}
+
+
+
+
+input[type="radio"] {
+  width: 24px;
+  height: 24px;
+  accent-color: var(--primary-500);
+}
+
+
+
+
+.active_tab{
+  @apply border-b-2 border-primary;
+  @apply bg-primary/10 text-primary font-medium;
+}

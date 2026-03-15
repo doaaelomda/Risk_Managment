@@ -1,0 +1,101 @@
+<section class="form_sec">
+  <div class="header border-b border-gray_light pb-6 mb-6">
+    <h2 class="text-lg font-medium text-[#101828]">
+      {{ updateFlagId ? ('INITIATIVE.UPDATE_INIT' | translate) : ('INITIATIVE.ADD_NEW' | translate) }}
+    </h2>
+  </div>
+  <form [formGroup]="initiativeForm" class="grid grid-cols-12 gap-6 mb-6">
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text [inputLabel]="'INITIATIVE.NAME' | translate"
+        [placeholder]="'INITIATIVE.NAME_PLACEHOLDER' | translate" [control]="initiativeForm.get('name')!"
+        [controlNameInput]="'name'" [validations]="validationsRequired">
+      </lib-input-text>
+    </div>
+
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text [inputLabel]="'INITIATIVE.NAME_AR' | translate"
+        [placeholder]="'INITIATIVE.NAME_AR_PLACEHOLDER' | translate" [control]="initiativeForm.get('nameAr')!"
+        [controlNameInput]="'nameAr'">
+      </lib-input-text>
+    </div>
+
+    <div class="md:col-span-6 col-span-12">
+      <lib-date-packer [inputLabel]="'INITIATIVE.START_DATE' | translate"
+        [placeholder]="'INITIATIVE.START_DATE_PLACEHOLDER' | translate" [control]="initiativeForm.get('startDate')!"
+        [controlNameInput]="'startDate'">
+      </lib-date-packer>
+    </div>
+
+    <div class="md:col-span-6 col-span-12">
+      <lib-date-packer [inputLabel]="'INITIATIVE.END_DATE' | translate"
+        [placeholder]="'INITIATIVE.END_DATE_PLACEHOLDER' | translate" [control]="initiativeForm.get('endDate')!"
+        [controlNameInput]="'endDate'">
+      </lib-date-packer>
+    </div>
+
+    <!-- <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown [label]="'INITIATIVE.STRATEGIC_OBJECTIVE' | translate"
+        [placeholder]="'INITIATIVE.STRATEGIC_OBJECTIVE_PLACEHOLDER' | translate"
+        [control]="initiativeForm.get('strategicObjectiveID')!" [formControlNameInput]="'strategicObjectiveID'"
+        [options]="strategicObjectives" [optionLabel]="'label'" [optionValue]="'id'">
+      </lib-ui-dropdown>
+    </div> -->
+
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown [label]="'INITIATIVE.MANAGER_ROLE' | translate"
+        [placeholder]="'INITIATIVE.MANAGER_ROLE_PLACEHOLDER' | translate"
+        [control]="initiativeForm.get('initiativeManagerRoleID')!" [formControlNameInput]="'initiativeManagerRoleID'"
+        [options]="managerRoles" [optionLabel]="'label'" [optionValue]="'id'" [validations]="validationsRequired">
+      </lib-ui-dropdown>
+    </div>
+
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown [label]="'INITIATIVE.STATUS' | translate"
+        [placeholder]="'INITIATIVE.STATUS_PLACEHOLDER' | translate"
+        [control]="initiativeForm.get('initiativeStatusTypeID')!" [formControlNameInput]="'initiativeStatusTypeID'"
+        [options]="statusTypes" [optionLabel]="'label'" [optionValue]="'id'">
+      </lib-ui-dropdown>
+    </div>
+
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown [label]="'INITIATIVE.PRIORITY_LEVEL' | translate"
+        [placeholder]="'INITIATIVE.PRIORITY_LEVEL_PLACEHOLDER' | translate"
+        [control]="initiativeForm.get('initiativePriorityLevelTypeID')!"
+        [formControlNameInput]="'initiativePriorityLevelTypeID'" [options]="priorityLevels" [optionLabel]="'label'"
+        [optionValue]="'id'">
+      </lib-ui-dropdown>
+    </div>
+        <div class="md:col-span-6 col-span-12">
+      <lib-input-number [inputLabel]="'INITIATIVE.PROGRESS' | translate"
+        [placeholder]="'INITIATIVE.PROGRESS_PLACEHOLDER' | translate"
+        [control]="initiativeForm.get('progressPercentage')!" [controlNameInput]="'progressPercentage'">
+      </lib-input-number>
+    </div>
+
+    <div class="md:col-span-6 col-span-12">
+      <lib-textarea-ui [inputLabel]="'INITIATIVE.DESCRIPTION' | translate"
+        [placeholder]="'INITIATIVE.DESCRIPTION_PLACEHOLDER' | translate" [control]="initiativeForm.get('description')!"
+        [controlNameInput]="'description'">
+      </lib-textarea-ui>
+    </div>
+
+    <div class="md:col-span-6 col-span-12">
+      <lib-textarea-ui [inputLabel]="'INITIATIVE.DESCRIPTION_AR' | translate"
+        [placeholder]="'INITIATIVE.DESCRIPTION_AR_PLACEHOLDER' | translate"
+        [control]="initiativeForm.get('descriptionAr')!" [controlNameInput]="'descriptionAr'">
+      </lib-textarea-ui>
+    </div>
+
+  </form>
+
+  <div class="col-span-12 flex items-center gap-4 justify-end py-6 border-t border-gray_light">
+    <div class="cancel_btn">
+      <button [routerLink]="['/gfw-portal/management']"
+        routerLinkActive="router-link-active">{{"RISK_MANAGMENT.Cancel"|translate}}</button>
+    </div>
+    <div class="action_btn">
+      <p-button [label]="'RISK_MANAGMENT.SaveChanges' | translate " [loading]="isLoading" (onClick)="submit()">
+      </p-button>
+    </div>
+  </div>
+</section>

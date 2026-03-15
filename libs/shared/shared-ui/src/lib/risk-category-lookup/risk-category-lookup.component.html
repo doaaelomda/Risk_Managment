@@ -1,0 +1,301 @@
+<div class="table_container">
+  <div
+    class="header border lg:flex sm:block rounded-t-lg border-b-0 items-center justify-between py-5 px-6"
+  >
+    <div class="table_title flex flex-wrap items-start gap-4">
+      <h3 class="table_title_header">
+        {{
+              _translateS.currentLang === 'ar'
+                ? `قائمة  فئة `
+                : `Category List`
+        }}
+      </h3>
+
+      <span class="badge_small_table">
+        {{  _translateS.currentLang === 'ar'
+                ? `${dataList.length}  فئة `
+                : ` Category   ${dataList.length}`}}
+      </span>
+    </div>
+
+    <div class="search_action-container flex items-center gap-3 flex-wrap">
+      <div>
+        <lib-input-search
+          (searchTermEmiter)="handleSearch($event)"
+        ></lib-input-search>
+      </div>
+      <div class="action_btn">
+        <button
+          (click)="action_visible = true; current_selected_row = null"
+          class="btn"
+        >
+          {{  _translateS.currentLang === 'ar'
+                ? `اضافة فئة`
+                : `Add new Category `}}
+        </button>
+      </div>
+    </div>
+  </div>
+  <p-table
+    [value]="dataList"
+    class="m-2 lg:m-0"
+    styleClass="custom_table"
+    [scrollable]="true"
+    [tableStyle]="{ 'min-width': '50' }"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>{{ 'LOOKUP.NAME' | translate }}</th>
+        <th>{{ 'LOOKUP.NAME_AR' | translate }}</th>
+        <th>{{ 'LOOKUP.DESCRIPTION' | translate }}</th>
+        <th>{{ 'LOOKUP.DESCRIPTION_AR' | translate }}</th>
+        <th>{{ 'LOOKUP.COLOR' | translate }}</th>
+        <th>{{ 'LOOKUP.ACTIONS' | translate }}</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td (click)="current_selected_row = row; handleViewClick()">
+          {{ row?.name || '-' }}
+        </td>
+        <td>{{ row?.nameAr || '-' }}</td>
+        <td>{{ row?.description || '-' }}</td>
+        <td>{{ row?.descriptionAr || '-' }}</td>
+        <td>{{ row?.color || '-' }}</td>
+        <td>
+          <button
+            (click)="menu.toggle($event); current_selected_row = row"
+            class="icon"
+          >
+            <i class="fi fi-rr-menu-dots-vertical text-gray_color"></i>
+          </button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td [attr.colspan]="10">
+          <lib-empty-state [loading]="loading"></lib-empty-state>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+<lib-pagination (paginationChanged)="handleChangePage($event)"></lib-pagination>
+
+<lib-delete-confirm-popup
+  [titleDelete]="'LOOKUP.DELETE_LOOKUP_TITLE' | translate"
+  [descriptionDelete]="'LOOKUP.DELETE_LOOKUP_DESC' | translate"
+  [visibleInput]="deleteModalVisible"
+  (hideEmiter)="closeDeleteModal()"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <!-- Cancel Button -->
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <!-- Delete Button -->
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="delete()"
+        [loading]="loadingDelete"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+<p-dialog
+  header="'RISK_VIEW.MAIN_INFORMATION'"
+  [(visible)]="action_visible"
+  [modal]="true"
+  [dismissableMask]="true"
+  [draggable]="false"
+  styleClass="w-[50rem]"
+  [position]="'center'"
+  (onHide)="lookupForm.reset()"
+>
+  <ng-template pTemplate="header">
+    <h3 class="text-gray-800 font-bold text-1xl">
+      {{ 'RISK_VIEW.MAIN_INFORMATION' | translate }}
+    </h3>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <form [formGroup]="lookupForm" class="grid grid-cols-12 gap-6 mb-6">
+      <!-- English Name -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-text
+          [placeholder]="'LOOKUP.NAME_PLACEHOLDER' | translate"
+          [inputLabel]="'LOOKUP.NAME' | translate"
+          [control]="lookupForm.get('name')!"
+          [controlNameInput]="'name'"
+        >
+        </lib-input-text>
+      </div>
+
+      <!-- Arabic Name -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-text
+          [placeholder]="'LOOKUP.NAME_AR_PLACEHOLDER' | translate"
+          [inputLabel]="'LOOKUP.NAME_AR' | translate"
+          [control]="lookupForm.get('nameAr')!"
+          [controlNameInput]="'nameAr'"
+        >
+        </lib-input-text>
+      </div>
+
+      <!-- Description -->
+      <div class="col-span-12 lg:col-span-6">
+        <lib-textarea-ui
+          [placeholder]="'LOOKUP.DESCRIPTION_PLACEHOLDER' | translate"
+          [inputLabel]="'LOOKUP.DESCRIPTION' | translate"
+          [control]="lookupForm.get('description')!"
+          [controlNameInput]="'description'"
+        >
+        </lib-textarea-ui>
+      </div>
+
+      <!-- Arabic Description -->
+      <div class="col-span-12 lg:col-span-6">
+        <lib-textarea-ui
+          [placeholder]="'LOOKUP.DESCRIPTION_AR_PLACEHOLDER' | translate"
+          [inputLabel]="'LOOKUP.DESCRIPTION_AR' | translate"
+          [control]="lookupForm.get('descriptionAr')!"
+          [controlNameInput]="'descriptionAr'"
+        >
+        </lib-textarea-ui>
+      </div>
+      <div class="md:col-span-6 col-span-12">
+        <lib-color-dropdown
+          [control]="lookupForm.get('color')!"
+          [controlNameInput]="'color'"
+          [placeholder]="'orginazation.color_PLACEHOLDER' | translate"
+          [inputLabel]="'STRATEGY_PLAN.COLOR' | translate"
+        ></lib-color-dropdown>
+      </div>
+
+      <div class="md:col-span-6 col-span-12">
+        <lib-ui-dropdown
+
+          [control]="lookupForm.get('riskMethodologyID')!"
+          [formControlNameInput]="'riskMethodologyID'"
+          [placeholder]="'METHODOLOGY.METHODOLOGY_PLACEHOLDER' | translate"
+          [label]="'METHODOLOGY.METHODOLOGY' | translate"
+          [options]="methodologies"
+          [optionLabel]="'label'"
+          [optionValue]="'id'"
+        ></lib-ui-dropdown>
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <div class="flex flex-wrap justify-end gap-2 pt-2">
+      <p-button
+        (onClick)="closeActionDialog()"
+        pButton
+        class="bg-white_color text-gray-700 text-sm border border-gray_light rounded-lg default_btn cancel"
+        [label]="'BUTTONS.CANCEL' | translate"
+      />
+
+      <p-button
+        (onClick)="save()"
+        pButton
+        class="bg-primary text-white text-sm rounded-lg default_btn"
+        [label]="
+          (current_selected_row ? 'BUTTONS.UPDATE' : 'BUTTONS.SAVE') | translate
+        "
+        [loading]="loadingActionBtn"
+        [disabled]="lookupForm.invalid"
+      />
+    </div>
+  </ng-template>
+</p-dialog>
+
+
+<p-dialog
+  header="{{ 'LOOKUP.VIEW_ITEM' | translate }}"
+  [(visible)]="view_visible"
+  [modal]="true"
+  [draggable]="false"
+  [dismissableMask]="true"
+  styleClass="w-[50rem]"
+  [position]="'center'"
+>
+  <ng-template pTemplate="header">
+    <h3 class="text-gray-800 font-bold text-lg">
+      {{ 'LOOKUP.VIEW_ITEM' | translate }}
+    </h3>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    @if (selectedLookup) {
+    <div class="grid grid-cols-12 gap-6 text-gray_color">
+      <!-- 🔹 Name -->
+      <div class="col-span-6">
+        <p class="font-medium text-gray-800">
+          {{ 'LOOKUP.NAME' | translate }}
+        </p>
+        <p>{{ selectedLookup?.name || '-' }}</p>
+      </div>
+
+      <div class="col-span-6">
+        <p class="font-medium text-gray-800">
+          {{ 'LOOKUP.NAME_AR' | translate }}
+        </p>
+        <p>{{ selectedLookup?.nameAr || '-' }}</p>
+      </div>
+
+      <!-- 🔹 Description -->
+      <div class="col-span-12 lg:col-span-6">
+        <p class="font-medium text-gray-800">
+          {{ 'LOOKUP.DESCRIPTION' | translate }}
+        </p>
+        <p class="whitespace-break-spaces">
+          {{ selectedLookup?.description || '-' }}
+        </p>
+      </div>
+
+      <div class="col-span-6 lg:col-span-6">
+        <p class="font-medium text-gray-800">
+          {{ 'LOOKUP.DESCRIPTION_AR' | translate }}
+        </p>
+        <p class="whitespace-break-spaces">
+          {{ selectedLookup?.descriptionAr || '-' }}
+        </p>
+      </div>
+
+      <!-- 🔹 Color -->
+      <div class="col-span-12 lg:col-span-6">
+        <p class="font-medium text-gray-800">
+          {{ 'LOOKUP.COLOR' | translate }}
+        </p>
+        @if (selectedLookup?.color) {
+        <div
+          class="flex items-center gap-2 rounded-xl  justify-center badge"
+          [ngClass]="selectedLookup?.color"
+        >
+          <span class="small_doted"></span>
+          <span>{{ selectedLookup?.color }}</span>
+        </div>
+
+        }@else {
+        <p class="font-medium text-gray-800">
+          {{ 'LOOKUP.NO_COLOR' | translate }}
+        </p>
+        }
+      </div>
+    </div>
+    } @else {
+    <p class="text-center text-gray-500 py-6">
+      {{ 'LOOKUP.NO_DATA' | translate }}
+    </p>
+    }
+  </ng-template>
+</p-dialog>
+
+<p-menu #menu [model]="items" [popup]="true"></p-menu>

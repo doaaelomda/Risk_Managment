@@ -1,0 +1,110 @@
+@if(_PermissionSystemService.can('LIBRARY' , 'SYSTEMDOCUMENTS' , 'VIEW')
+){
+  <section [formGroup]="form">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-gray-700 font-semibold text-2xl">{{'BREAD_CRUMB_TITLES.Library' | translate}}</h1>
+    <div class="p-1 flex items-center gap-2 border border-1 border-primaryColor-500 bg-primaryColor-50 rounded-lg">
+      <button class="text-primaryColor-600 text-sm font-medium px-3 py-2"
+        [ngClass]="{ 'active-item': activeTab === 'all' }" (click)="setActive('all')">
+        {{'systemDocument.AllAttachment' | translate}}
+      </button>
+
+      <button class="text-primaryColor-600 text-sm font-medium px-3 py-2"
+        [ngClass]="{ 'active-item': activeTab === 'files' }" (click)="setActive('files')">
+        {{'systemDocument.Files' | translate}}
+      </button>
+
+      <button class="text-primaryColor-600 text-sm font-medium px-3 py-2"
+        [ngClass]="{ 'active-item': activeTab === 'links' }" (click)="setActive('links')">
+        {{'systemDocument.Links' | translate}}
+      </button>
+    </div>
+
+  </div>
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-3 mb-4 ">
+    <lib-input-search></lib-input-search>
+    <div class="">
+      <lib-ui-dropdown [placeholder]="'systemDocument.ByUser' | translate" [options]="users" [optionLabel]="'name'"
+        [optionValue]="'id'" formControlNameInput="byUser" [control]="form.get('byUser')!">
+      </lib-ui-dropdown>
+    </div>
+    <div class="">
+      <lib-ui-dropdown [options]="classfications" [optionLabel]="'label'" [optionValue]="'id'"
+        [placeholder]="'ATTACHMENT.SELECT_CLASSIFICATION' | translate" [control]="form.get('dataClassificationID')!"
+        formControlNameInput="'dataClassificationID'">
+      </lib-ui-dropdown>
+    </div>
+    <div class="">
+      <lib-ui-dropdown [placeholder]="'AWARENESS.CONTENT_TYPE_PLACEHOLDER' | translate"
+        [control]="form.get('awarenessContentTypeID')!" formControlNameInput="'awarenessContentTypeID'"
+        [options]="contentTypes" [optionLabel]="'label'" [optionValue]="'id'">
+      </lib-ui-dropdown>
+    </div>
+  </div>
+  <div class="grid grid-cols-12 gap-6 ">
+    <div class="col-span-12 lg:col-span-3">
+      <div class="p-4 flex flex-col gap-4 bg-white rounded-lg border border-primary-500">
+        @for (menu of menuList; track menu.name) {
+        <div class="flex flex-col">
+          <button (click)="menu.expanded = !menu.expanded; setActiveButtons(menu)"
+            class="flex items-center justify-between w-full py-3 px-4 rounded-lg font-semibold text-lg transition-all"
+            [ngClass]="{
+        'bg-primaryColor-50 text-primaryColor-700': activeMenu === menu,
+        'text-gray-500': activeMenu !== menu
+      }">
+            <div class="flex items-center gap-3">
+              <i [class]="menu?.icon"></i>
+              {{ currentLang === 'ar' ? menu.nameAR : menu.name }}
+            </div>
+            <svg class="w-5 h-5 transition-transform duration-200" [class.rotate-180]="menu.expanded" fill="none"
+              stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          <!-- children -->
+          @if (menu.expanded && menu.children?.length > 0) {
+          <div class="mt-2 flex flex-col gap-3 pl-10">
+            @for (child of menu.children; track child.name) {
+            <button (click)="setActiveButtons(child)" class="py-2 px-4 rounded-md font-medium text-left" [ngClass]="{
+              'bg-primaryColor-50 text-primaryColor-700': activeMenu === child || activeMenu === menu,
+              'text-gray-500': activeMenu !== child && activeMenu !== menu
+            }">
+              {{ currentLang === 'ar' ? child.nameAR : child.name }}
+            </button>
+            }
+          </div>
+          }
+        </div>
+        }
+
+      </div>
+
+    </div>
+    <div class="col-span-12 lg:col-span-9">
+      <div>
+        @if(files && files.length > 0) {
+        <lib-new-attach-list [loadingSatate]="loadingState" (action_emiter)="handleActionSingleFile($event)"
+          [files]="files" [showSearch]="false" [showIconDelete]="false" [showIconEdit]="false"
+          [showIconDownLoad]="false" [dataClassicBadge]="true">
+        </lib-new-attach-list>
+        }
+        @else {
+        <div class="flex justify-center items-center flex-col gap-2 py-4">
+          <div class="flex flex-col gap-2 items-center empty_state_wrapper">
+            <img src="images/no-document.svg" alt="empty-state" />
+                <p class="text-gray-900 font-semibold text-[18px] mb-1">{{'ATTACHMENT.NOTUPLOADED' |translate}}</p>
+    <p class="text-gray-500 font-normal text-[16px] mb-1">{{'ATTACHMENT.UPLOADFILES' |translate}}</p>
+          </div>
+        </div>
+        }
+      </div>
+
+
+      <lib-view-attachement (modelVisibleEmiter)="handleHideView($event)" [modelVisible]="displayModal"
+        [selected_file_Input$]="selected_file_show"></lib-view-attachement>
+
+    </div>
+  </div>
+</section>
+}

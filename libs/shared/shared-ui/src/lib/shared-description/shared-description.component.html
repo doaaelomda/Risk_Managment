@@ -1,0 +1,25 @@
+<div>
+  <p
+    class="value whitespace-break-spaces text-[#667085]"
+    [style.color]="textColorHex"
+  >
+    {{
+      description
+        ? expanded
+          ? description
+          : (description | truncate : 300)
+        : '-'
+    }}
+  </p>
+
+  @if (description && description.length > 300) {
+  <button class="btn expandBtn self-start" (click)="toggleExpanded()">
+    {{
+      (expanded
+        ? 'WORKFLOW_STEPS.TEXTS.READ_LESS'
+        : 'WORKFLOW_STEPS.TEXTS.READ_MORE'
+      ) | translate
+    }}
+  </button>
+  }
+</div>

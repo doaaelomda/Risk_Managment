@@ -1,0 +1,119 @@
+<div class="w-full h-screen flex  gap-4   flex-col bg-white-color">
+
+  <div class=" flex flex-col items-center justify-center py-4">
+    <div class="rounded-2xl max-w-md flex flex-col card-forget">
+
+      <img src="/images/icons/message.png" alt="" class="mx-auto">
+
+      <h1 class="text-gray-700 text-3xl font-semibold text-center">Check your email</h1>
+
+      <div class="text-gray-500 text-sm font-normal text-center my-4">
+        We sent a password reset link to
+        <p class="font-semibold">{{maskEmail(current_user_email)}}</p>
+      </div>
+
+      <div class="flex gap-1 justify-center items-center mb-5">
+        <span    class="text-gray-600 font-medium text-[16px]">Resend </span>
+        <p class=" text-primaryColor-500 text-[16px] font-medium ">{{ minutes }}:{{ seconds < 10 ? '0' + seconds : seconds }}</p>
+      </div>
+
+      <div class="form_group otp_group">
+        <p-inputOtp [(ngModel)]="OTPCode" [length]="4" [integerOnly]="true"
+          styleClass="otp-custom"></p-inputOtp>
+      </div>
+      @if(canResend){
+
+        <div class="flex items-center gap-1 justify-center">
+          <p class="text-gray-500 text-sm font-medium">Didn’t receive the email?</p>
+          <button (click)="resendCode()" [disabled]="!canResend" class="text-primaryColor-700 font-semibold">
+            Click To Resend
+          </button>
+        </div>
+      }
+
+
+
+      <a routerLink="/auth/login"
+        class="text-sm  text-gray-500 font-normal my-4  gap-2 flex m-auto items-center  hover:cursor-pointer ">
+        <i class="fi fi-rr-arrow-small-left text-2xl"></i>
+
+        Back to log in
+      </a>
+      <h1 class="text-gray-700 text-3xl font-semibold text-center my-4">Set new password</h1>
+
+      <h5 class="text-gray-500 text-sm font-normal text-center mb-4">
+        Your new password must be different to previously used passwords.
+      </h5>
+
+      <form [formGroup]="loginForm" class="login_form w-full">
+
+        <div class="form_group mb-3">
+          <label class="mb-1 text-sm" for="">Password</label>
+          <p-password [toggleMask]="true" [feedback]="false" formControlName="Password"
+            placeholder="........."></p-password>
+          <p class="text-xs text-gray_color mt-1">Must be at least 8 characters.</p>
+          @if (loginForm.get('Password')?.errors && loginForm.get('Password')?.touched) {
+          <div class="text-xs font-medium text-danger_color"
+            *ngIf="loginForm.get('Password')?.errors?.['passwordErrors']?.includes('missing_uppercase')">
+            • Must include at least one uppercase letter
+          </div>
+
+          <div class="text-xs font-medium text-danger_color"
+            *ngIf="loginForm.get('Password')?.errors?.['passwordErrors']?.includes('missing_lowercase')">
+            • Must include at least one lowercase letter
+          </div>
+
+          <div class="text-xs font-medium text-danger_color"
+            *ngIf="loginForm.get('Password')?.errors?.['passwordErrors']?.includes('missing_number')">
+            • Must include at least one number
+          </div>
+
+          <div class="text-xs font-medium text-danger_color"
+            *ngIf="loginForm.get('Password')?.errors?.['passwordErrors']?.includes('missing_special')">
+            • Must include at least one special character
+          </div>
+
+          <div class="text-xs font-medium text-danger_color"
+            *ngIf="loginForm.get('Password')?.errors?.['passwordErrors']?.includes('min_length')">
+            • Must be at least 8 characters
+          </div>
+
+          }
+        </div>
+
+        <div class="form_group mb-3">
+          <label class="mb-1 text-sm" for="">Confirm Password</label>
+          <p-password [toggleMask]="true" [feedback]="false" formControlName="ConfirmPassword"
+            placeholder="........."></p-password>
+          @if (
+          (loginForm.get('ConfirmPassword')?.errors && loginForm.get('ConfirmPassword')?.touched) ||
+          (loginForm.errors?.['passwordsMismatch'] && loginForm.touched)
+          ) {
+          <div>
+            @if (loginForm.get('ConfirmPassword')?.getError('required')) {
+            <p class="p-2 text-sm text-danger_color m-0">Confirm Password is required</p>
+            }
+            @if (loginForm.errors?.['passwordsMismatch'] ) {
+            <p class="p-2 text-sm text-danger_color m-0">Passwords do not match</p>
+            }
+          </div>
+          }
+        </div>
+
+        <div class="routing_button m-auto">
+          <p-button [disabled]="loginForm.invalid || !OTPCode.length" [loading]="loadReset" (onClick)="handleResetPassword()"
+            label="Reset Password"></p-button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <div class="w-3/4 mx-auto">
+    <lib-steper [currentStepIndex]="1"></lib-steper>
+  </div>
+
+  <p class=" text-sm  text-gray-500 font-normal my-5 p-5">
+    © GRC ORBITE 2077
+  </p>
+</div>

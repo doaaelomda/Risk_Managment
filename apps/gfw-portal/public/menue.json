@@ -1,0 +1,330 @@
+[
+  {
+    "name": "Governance",
+    "nameAR": "الحوكمة",
+    "icon": "fi fi-rr-bank",
+    "link": "",
+    "visible": true,
+    "expand": false,
+    "childCount": 7,
+    "children": [
+      {
+        "name": "Governance Documents",
+        "nameAR": "المعايير الخارجية",
+        "link": "/gfw-portal/governance/documents",
+        "visible": true,
+        "expand": false
+      },
+      {
+        "name": "Control Management",
+        "nameAR": "التحكم",
+        "link": "/gfw-portal/governance/control-management",
+        "visible": true,
+        "expand": false
+      }
+    ]
+  },
+  {
+    "name": "Risks",
+    "nameAR": "المخاطر",
+    "icon": "fi fi-rr-shield-check",
+    "link": "",
+    "visible": true,
+    "expand": false,
+    "childCount": 5,
+    "children": [
+      {
+        "name": "Risk Dashboard",
+        "nameAR": "إطار المخاطر",
+        "link": "/gfw-portal/risks-management/risk-dashboard",
+        "visible": true,
+        "expand": false,
+        "childCount": 12,
+        "children": []
+      },
+      {
+        "name": "Risk Framework",
+        "nameAR": "إطار المخاطر",
+        "link": "/gfw-portal/risks-management/risk-frameworks",
+        "visible": true,
+        "expand": false
+      },
+      {
+        "name": "Risk List",
+        "nameAR": "قائمة المخاطر",
+        "link": "/gfw-portal/risks-management/risks-list",
+        "visible": true,
+        "expand": false
+      }
+    ]
+  },
+  {
+    "name": "Management",
+    "nameAR": "الاداره",
+    "icon": "fi fi-rr-memo-circle-check",
+    "link": "",
+    "visible": true,
+    "expand": false,
+    "childCount": 3,
+    "children": [
+      {
+        "name": "Tasks",
+        "nameAR": "المهام",
+        "link": "/gfw-portal/management/tasks",
+        "visible": true,
+        "expand": false
+      },
+      {
+        "name":"Organizational Units",
+        "nameAR":"الوحدات التنظيمية",
+        "link":"/gfw-portal/management/org-units",
+        "visible":true,
+        "expand": false
+      },
+      {
+        "name":"Projects",
+        "nameAR":"المشاريع",
+        "link":"/gfw-portal/management/projects",
+        "visible":true,
+        "expand": false
+      },
+      {
+        "name":"Initiatives",
+        "nameAR":"المبادرات",
+        "link":"/gfw-portal/management/initiatives",
+        "visible":true,
+        "expand": false
+      }
+    ]
+  },
+  {
+    "name":"Business Process ",
+    "nameAR": "الاداره",
+    "icon": "fi fi-rr-memo-circle-check",
+    "link": "",
+    "visible": true,
+    "expand": false,
+    "children":[
+      {
+        "name": "Process List",
+        "nameAR": " وثائق الالتزام",
+        "link": "/gfw-portal/BPM",
+        "visible": true,
+        "expand": false
+      }
+    ]
+  },
+  {
+    "name": "Compliance",
+    "nameAR": "الامتثال",
+    "icon": "fi fi-rr-compliance-document",
+    "link": "pgGovernance",
+    "visible": true,
+    "expand": false,
+    "childCount": 3,
+    "children": [
+      {
+        "name": "Compliance Documents",
+        "nameAR": " وثائق الالتزام",
+        "link": "/gfw-portal/compliance/complianceDocuments",
+        "visible": true,
+        "expand": false
+      },
+      {
+        "name": "Assessments",
+        "nameAR": "قائمة التدقيق",
+        "link": "/gfw-portal/compliance/assessments",
+        "visible": true,
+        "expand": false
+      },
+      {
+        "name": "Ongoing Assessments",
+        "nameAR": "التقييمات الجارية",
+        "link": "/gfw-portal/compliance/pending-assessments",
+        "visible": true,
+        "expand": false
+      }
+    ]
+  },
+  {
+    "name": "Assets",
+    "nameAR": "الاصول",
+    "icon": "fi fi-rr-database",
+    "link": "",
+    "visible": true,
+    "expand": false,
+    "children": [
+      {
+        "name": "Assets List",
+        "nameAr": "قائمه الاصول",
+        "icon": "",
+        "link": "/gfw-portal/assets",
+        "visible": true,
+        "expand": false
+      }
+    ]
+  },
+  {
+    "name": "Indicators",
+    "nameAR": "المؤشرات",
+    "icon": "fi fi-rr-chart-line-up",
+    "link": "",
+    "visible": true,
+    "expand": false,
+    "children": [
+      {
+        "name":"Indicators Definition",
+        "nameAR":"التعريف",
+        "icon":"",
+        "link":"/gfw-portal/indicators/KPI",
+        "visible":true,
+        "expand": false
+      }
+    ]
+  },
+
+  {
+    "name": "Setting",
+    "nameAR": "الإعدادات",
+    "icon": "fi fi-rr-settings",
+    "link": "/gfw-portal/setting",
+    "visible": true,
+    "expand": false,
+    "childCount": 12,
+    "children": [
+      {
+        "name": "Access Management",
+        "nameAR": "إدارة الوصول",
+        "icon": "ti ti-id",
+        "link": "/gfw-portal/setting/Access-management",
+        "visible": true,
+        "expand": false,
+        "childCount": 3,
+        "children": [
+          {
+            "name": "Roles & Permissions",
+            "nameAR": "التصريحات والادوار",
+            "link": "/gfw-portal/setting/access-management/roles&permssions",
+            "visible": true,
+            "icon": ""
+          },
+          {
+            "name": "Permissions",
+            "nameAR": "التصريحات",
+            "link": "/gfw-portal/setting/access-management/permssions-list",
+            "visible": true,
+            "icon": ""
+          },
+          {
+            "name": "Users",
+            "nameAR": "المستخدمين",
+            "link": "/gfw-portal/setting/access-management/users",
+            "visible": true,
+            "icon": ""
+          }
+        ]
+      },
+      {
+        "name":"Notification Settings",
+
+        "nameAR":"إعدادات الإشعارات",
+        "icon":"",
+        "visible":true,
+        "link":"/gfw-portal/setting/notification-settings"
+      },
+      {
+        "name": "Dashboard Builder",
+        "nameAR": "تخصيص التقارير",
+        "visible": true,
+        "link": "/gfw-portal/setting/dashboard-builder"
+      },
+      {
+        "name": "Custom Dashboards",
+        "nameAR": "تقارير ",
+        "visible": true,
+        "link": "",
+        "children": []
+      },
+      {
+        "name": "WorkFlow",
+        "nameAR": " خطوات سير العمل",
+        "icon": "",
+        "visible": true,
+        "link": "/gfw-portal/setting/workflow"
+      }
+    ]
+  },
+  {
+    "name":"Incident",
+    "nameAR":"الحوادث",
+    "icon":"fi fi-rr-light-emergency-on",
+    "link":"/gfw-portal/incident",
+    "visible":true,
+    "expand": false,
+    "children":[
+      {
+        "name":"Incident List",
+        "nameAR":"قائمة الحوادث",
+        "icon":"",
+        "visible":true,
+        "link":"/gfw-portal/incident/list"
+      }
+    ]
+  },
+  {
+    "name":"Strategy",
+    "nameAR":"الاستراتيجية",
+    "icon":"fi fi-rr-rocket-lunch",
+    "link":"/gfw-portal/strategy",
+    "visible":true,
+    "expand": false,
+    "children":[
+      {
+        "name":"Strategy Plan",
+        "nameAR": "خطة الاستراتيجية",
+        "icon": "",
+        "visible": true,
+        "link": "/gfw-portal/strategy/plans"
+      }
+    ]
+  },
+  {
+    "name":"Third Parties",
+    "nameAR":" الجهات الخارجية",
+    "icon":"fi fi-rr-refer",
+    "link":"/gfw-portal/third-party",
+    "visible":true,
+    "expand":false,
+    "children":[
+      {
+        "name":"Third Party List",
+        "nameAr":"قائمة الجهات الخارجية",
+        "icon":"",
+        "link":"/gfw-portal/third-party/list",
+        "visible":true
+      },
+      {
+        "name":"Third Party Contracts",
+        "nameAr":"قائمة العقود الخارجية",
+        "icon":"",
+        "link":"/gfw-portal/third-party/contracts",
+        "visible":true
+      },
+      {
+        "name":"Third Party SLA",
+        "nameAr":"Third Party SLA",
+        "icon":"",
+        "link":"/gfw-portal/third-party/slas",
+        "visible":true
+      }
+    ]
+  },
+  {
+    "name": "Esclation",
+    "nameAR": "التصعيد",
+    "icon": "",
+    "link": "/gfw-portal/esclation",
+    "visible": true,
+    "expand": false
+  }
+]

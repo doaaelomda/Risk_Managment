@@ -1,0 +1,172 @@
+<div  class="action_section mb-6">
+  <p-accordion class="w-full"  [activeIndex]="0" >
+ <p-accordionTab>
+  <ng-template pTemplate="header">
+    <div class="flex items-center gap-4">
+     <h2>
+  {{ current_row_selected
+      ? ('USERINFO.Update_Permission' | translate)
+      : ('USERINFO.Add_Permission' | translate) }}
+</h2>
+
+      @if(showErrorResponsbility){
+        <i
+          pTooltip="Please complete all required fields."
+          tooltipPosition="top"
+          class="fi text-danger_color fi-rr-info"
+        ></i>
+      }
+    </div>
+  </ng-template>
+
+  <form  [formGroup]="permissionForm" class="grid grid-cols-12 gap-6">
+    <!-- English Name -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-input-text
+        [placeholder]="'PERMISSIONS.EnterNameEnglish' | translate"
+        [control]="permissionForm.get('name')!"
+        [inputLabel]="'PERMISSIONS.NameEnglish' | translate"
+        [controlNameInput]="'name'"
+        [validations]="nameVaildation"
+      >
+      </lib-input-text>
+    </div>
+
+    <!-- Arabic Name -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-input-text
+        [placeholder]="'PERMISSIONS.EnterNameArabic' | translate"
+        [control]="permissionForm.get('nameAr')!"
+        [inputLabel]="'PERMISSIONS.NameArabic' | translate"
+        [controlNameInput]="'nameAr'"
+      >
+      </lib-input-text>
+    </div>
+
+    <!-- English Description -->
+    <div class="col-span-12 ">
+      <lib-textarea-ui
+        [placeholder]="'PERMISSIONS.EnterDescriptionEnglish' | translate"
+        [control]="permissionForm.get('description')!"
+        [inputLabel]="'PERMISSIONS.DescriptionEnglish' | translate"
+        [controlNameInput]="'description'"
+      >
+      </lib-textarea-ui>
+    </div>
+
+    <!-- Arabic Description -->
+    <div class="col-span-12">
+      <lib-textarea-ui
+        [placeholder]="'PERMISSIONS.EnterDescriptionArabic' | translate"
+        [control]="permissionForm.get('descriptionAr')!"
+        [inputLabel]="'PERMISSIONS.DescriptionArabic' | translate"
+        [controlNameInput]="'descriptionAr'"
+      >
+      </lib-textarea-ui>
+    </div>
+
+    <!-- Category -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-ui-dropdown
+        [options]="permissionCategories"
+        [placeholder]="'PERMISSIONS.SelectCategory' | translate"
+        [label]="'PERMISSIONS.Category' | translate"
+        [control]="permissionForm.get('permissionCategoryID')!"
+        [formControlNameInput]="'permissionCategoryID'"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      >
+      </lib-ui-dropdown>
+    </div>
+
+    <!-- Level -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-ui-dropdown
+        [options]="permissionLevels"
+        [placeholder]="'PERMISSIONS.SelectLevel' | translate"
+        [label]="'PERMISSIONS.Level' | translate"
+        [control]="permissionForm.get('permissionLevelID')!"
+        [formControlNameInput]="'permissionLevelID'"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      >
+      </lib-ui-dropdown>
+    </div>
+
+        <!-- Technical Name -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-input-text
+        [placeholder]="'PERMISSIONS.EnterTechnicalName' | translate"
+        [control]="permissionForm.get('technicalName')!"
+        [inputLabel]="'PERMISSIONS.TechnicalName' | translate"
+        [controlNameInput]="'technicalName'" [validations]="nameVaildation"
+      >
+      </lib-input-text>
+    </div>
+
+
+    <!-- Module -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-input-text
+        [placeholder]="'PERMISSIONS.EnterModuleName' | translate"
+        [control]="permissionForm.get('moduleName')!"
+        [inputLabel]="'PERMISSIONS.ModuleName' | translate"
+        [controlNameInput]="'moduleName'"
+      >
+      </lib-input-text>
+    </div>
+
+        <!-- Type -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-ui-dropdown
+        [options]="permissionTypes"
+        [placeholder]="'PERMISSIONS.SelectType' | translate"
+        [label]="'PERMISSIONS.Type' | translate"
+        [control]="permissionForm.get('permissionTypeID')!"
+        [formControlNameInput]="'permissionTypeID'"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      >
+      </lib-ui-dropdown>
+    </div>
+
+
+    <!-- Active Status -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-ui-dropdown
+        [options]="statusList"
+        [placeholder]="'PERMISSIONS.SelectStatus' | translate"
+        [label]="'PERMISSIONS.Status' | translate"
+        [control]="permissionForm.get('isActive')!"
+        [formControlNameInput]="'isActive'"
+        [optionLabel]="'label'"
+        [validations]="statusVaildation"
+        [optionValue]="'value'"
+      >
+      </lib-ui-dropdown>
+    </div>
+  </form>
+
+  <!-- Actions -->
+  <div  class="flex justify-end gap-4 py-4">
+    <div class="cancel_btn">
+      <button [routerLink]="['/gfw-portal/setting/access-management/permssions-list']">
+  {{ 'BUTTONS.CANCEL' | translate }}
+</button>
+    </div>
+    <div class="action_btn">
+      <p-button
+        [label]='current_row_selected ? ("BUTTONS.UPDATE" | translate) : ("BUTTONS.SAVE" | translate)'
+        [outlined]="true"
+        [loading]="loadDelted"
+        severity="secondary"
+        (onClick)="submit()"
+      >
+      </p-button>
+    </div>
+  </div>
+</p-accordionTab>
+
+  </p-accordion>
+
+</div>

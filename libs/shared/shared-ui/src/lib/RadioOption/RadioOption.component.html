@@ -1,0 +1,22 @@
+<div
+  class="flex align-items-center justify-between radio_selectors"
+  [class.opacity-50]="disabled"
+>
+  <div class="flex gap-1 items-center">
+    <img [src]="image" alt="" width="30px" height="30px" />
+
+    <label class="text-base font-medium text-gray-800" [for]="inputId">
+      {{ label | translate }}
+    </label>
+  </div>
+
+  <p-radioButton
+    [name]="name"
+    [value]="value"
+    [(ngModel)]="model"
+    [inputId]="inputId"
+    [disabled]="disabled"
+    (onClick)="!disabled && handleClick()"
+  >
+  </p-radioButton>
+</div>

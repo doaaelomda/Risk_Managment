@@ -1,0 +1,43 @@
+<div class="flex my-6">
+  <div class="card_response px-4" [style.width]="cardWidth" [style.max-height]="'200px'">
+    <div class="flex justify-between items-center content_cards py-4">
+      <div class="flex text-center gap-2 ">
+        <!-- <img [src]="avatar" class="w-10 h-10" alt="avatar" /> -->
+        <lib-img-system [userId]="avatar"></lib-img-system>
+      <div class="text-left">
+        <p class="text-progress">{{ name }}</p>
+        <p class="text-progress">{{ role }}</p>
+      </div>
+      </div>
+      <div class="flex gap-2">
+        @if(canDelete){
+                         <button
+      (click)="emitAction('Delete')"
+      class="text-danger_text text-lg font-medium">
+      <i class="fi fi-rr-trash text-[15px]"></i>
+    </button>
+        }
+
+        @if(canEdit){
+              <button
+      (click)="emitAction('Edit')"
+      class="text-gray_color text-lg font-semibold">
+      <i class="fi fi-rr-pencil text-[15px]"></i>
+    </button>
+        }
+
+     </div>
+    </div>
+    <div class="px-2 py-2">
+      @if(scope){
+      <p class="forget font-medium">{{'Selectors.Scope' | translate }}:</p>
+      <p class="welcome mt-2.5">
+        {{ scope }}
+      </p>
+      }
+      @else {
+      <p class="forget font-medium text-end">  {{!NotRequiredData ?  'NotRequired' : 'Required' | translate }}</p>
+      }
+    </div>
+  </div>
+</div>

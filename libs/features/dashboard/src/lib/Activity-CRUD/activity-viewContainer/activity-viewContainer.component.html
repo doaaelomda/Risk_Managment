@@ -1,0 +1,14 @@
+
+  <div class="flex name_process">
+    <p class=" header-para">{{'PROCESS.NAME' | translate}}</p>
+    @if(loadData){
+       <p-skeleton width="150px" height="20px" borderRadius="8px"></p-skeleton>
+    }
+    @else {
+    <span class="badge"> {{dateActivity?.name || '-'}}</span>
+    }
+  </div>
+
+  <lib-shared-tabs [permissionFeature]="{module:'THIRDPARTIES' , feature:'THIRDPARTYACTIVITY'}"
+></lib-shared-tabs>
+  <router-outlet></router-outlet>

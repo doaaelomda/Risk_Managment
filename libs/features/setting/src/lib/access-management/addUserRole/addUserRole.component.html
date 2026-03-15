@@ -1,0 +1,110 @@
+<div class="action_section mb-6">
+  <p-accordion class="w-full" [activeIndex]="0">
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div class="flex items-center gap-4">
+          <h2 *ngIf="!userId">{{ 'SETTING.ADD_NEW_USER' | translate }}</h2>
+          <h2 *ngIf="userId">{{ 'SETTING.UPDATE_USER' | translate }}</h2>
+          @if(showErrorResponsbility){
+          <i
+            pTooltip="Please complete all required fields."
+            tooltipPosition="top"
+            class="fi text-danger_color fi-rr-info"
+          ></i>
+          }
+        </div>
+      </ng-template>
+
+      <form [formGroup]="userInformation" class="grid grid-cols-12 gap-6">
+        <div class="col-span-12 lg:col-span-6">
+          <lib-input-text
+            [placeholder]="'USERINFO.SelectUser' | translate"
+            [control]="userInformation.get('username')!"
+            [inputLabel]="'USERINFO.Username' | translate"
+            [controlNameInput]="'username'"
+          >
+          </lib-input-text>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <lib-input-text
+            [placeholder]="'USERINFO.SelectEmail' | translate"
+            [control]="userInformation.get('email')!"
+            [inputLabel]="'USERINFO.Email' | translate"
+            [controlNameInput]="'email'"
+          >
+          </lib-input-text>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <lib-input-text
+            [placeholder]="'USERINFO.EnterNameEnglish' | translate"
+            [control]="userInformation.get('nameEnglish')!"
+            [inputLabel]="'USERINFO.NameEnglish' | translate"
+            [controlNameInput]="'nameEnglish'"
+          >
+          </lib-input-text>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <lib-input-text
+            [placeholder]="'USERINFO.EnterNameArabic' | translate"
+            [control]="userInformation.get('nameArabic')!"
+            [inputLabel]="'USERINFO.NameArabic' | translate"
+            [controlNameInput]="'nameArabic'"
+          >
+          </lib-input-text>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <lib-tree-select-ui
+            [validations]="[]"
+            [nodes_input]="assigneeOrganizationalUnitID"
+            [placeholder]="'USERINFO.SELECT_DEPARTMENT' | translate"
+            [label]="'USERINFO.DEPARTMENT' | translate"
+            [control]="userInformation.get('organizationalUnitID')!"
+            [formControlNameInput]="'organizationalUnitID'"
+          >
+          </lib-tree-select-ui>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown
+            [options]="statusList"
+            [placeholder]="'USERINFO.SELECT_STATUS' | translate"
+            [label]="'USERINFO.STATUS' | translate"
+            [control]="userInformation.get('Status')!"
+            [formControlNameInput]="'status'"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+          >
+          </lib-ui-dropdown>
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-input-text
+            [placeholder]="'PERMISSIONS.EnterPosition' | translate"
+            [control]="userInformation.get('postion')!"
+            [inputLabel]="'USERINFO.POSITION' | translate"
+            [controlNameInput]="'postion'"
+          >
+          </lib-input-text>
+        </div>
+      </form>
+
+      <div class="flex justify-end gap-4 py-4">
+        <div class="cancel_btn">
+          <button (click)="navigateBack()">
+            {{ 'RISK_ACTION.CANCEL' | translate }}
+          </button>
+        </div>
+        <div class="action_btn">
+          <p-button
+            [disabled]="userInformation.invalid"
+            [loading]="isSaving"
+            [label]="'RISK_MANAGMENT.SAVE_CHANGES' | translate"
+            [outlined]="true"
+            severity="secondary"
+            (onClick)="submit()"
+          >
+          </p-button>
+        </div>
+      </div>
+    </p-accordionTab>
+  </p-accordion>
+</div>

@@ -1,0 +1,173 @@
+<p-overlayPanel styleClass="w-[60rem]" #op>
+  <div class="p-4 flex items-center justify-between mb-6">
+    <h3 class="text-lg font-semibold mb-2">{{'Filters.Filters' | translate}}</h3>
+
+    <div class="flex items-center gap-4">
+      <button (click)="cancelAllFilters(op)">{{'Filters.ClearAll' | translate}}</button>
+
+      <div class="form_group w-72">
+        <p-dropdown [showClear]="true" [(ngModel)]="selected_profile_filter" (onChange)="handledselectedFilterProfile()"
+          optionLabel="profileName" [options]="filter_profiles" [placeholder]="'Filters.SavedFilters' | translate" />
+      </div>
+    </div>
+  </div>
+
+  <form [formGroup]="filter_form" class="mb-6">
+    <div formArrayName="filters" class="filters">
+      @for(control of filterForm.controls ; track $index ; let i = $index){
+      <div class="flex items-center justify-between gap-6 bg-gray_light/10 p-4 rounded-lg mb-4">
+        <div [formGroupName]="i" class="single_filter grid grid-cols-12 gap-4">
+          <div class="form_group col-span-3">
+            <p-dropdown [options]="current_data_filter_entity" formControlName="filter_type" optionLabel="displayName"
+              [filter]="true" filterBy="displayName" (onChange)="handleSelectFilter(i, $event)"
+              [placeholder]="'Filters.SavedFilters' | translate" />
+          </div>
+
+          @if(control.get('operator')){
+
+          <div class="form_group col-span-3">
+            <p-dropdown [options]="current_operator_map.get(i)" formControlName="operator" optionLabel="OperatorName"
+              [filter]="true" filterBy="OperatorName" [placeholder]="'Filters.SelectOperator' | translate" />
+          </div>
+          } @if(control.get('firstValue')){ @switch
+          (control.get('filter_type')?.value?.filterType) {
+             @case ('Text') {
+          <div class="form_group col-span-3">
+            <input type="text" pInputText formControlName="firstValue"
+              [placeholder]="'Filters.SearchText' | translate" />
+          </div>
+          }
+             @case ('Integer Number') {
+          <div class="form_group col-span-3">
+            <!-- <input type="text" pInputText
+              [placeholder]="'Filters.SearchText' | translate" /> -->
+              <p-inputNumber
+    inputId="integeronly"
+    formControlName="firstValue" />
+          </div>
+          }
+          @case('List'){
+          <div class="form_group col-span-3">
+            <p-dropdown [options]="filters_list_map.get(i)" optionValue="id" formControlName="firstValue"
+              optionLabel="label" />
+          </div>
+          }
+          @case('Date'){
+          <div class="form_group col-span-2">
+            <p-dropdown [options]="filters_list_map.get(i)" optionValue="DataEntityTypeFilterDateOptionID"
+              formControlName="firstValue" optionLabel="NameEn" />
+          </div>
+          @if(control.get('firstValue')?.value === 18){
+          <div class="form_group col-span-4">
+            <p-calendar formControlName="secondValue" [iconDisplay]="'input'"
+              [placeholder]="'RISK_ACTION.SELECT_DATE' | translate" [showIcon]="true" selectionMode="range"
+              inputId="icondisplay" />
+          </div>
+          }@else if(control.get('firstValue')?.value === 19){
+          <div class="form_group col-span-4">
+            <p-calendar formControlName="secondValue" [iconDisplay]="'input'"
+              [placeholder]="'RISK_ACTION.SELECT_DATE' | translate" [showIcon]="true" inputId="icondisplay" />
+          </div>
+          }
+          @else if(control.get('firstValue')?.value === 20 || control.get('firstValue')?.value === 21 || control.get('firstValue')?.value === 22){
+          <div class="form_group col-span-4">
+                         <p-inputNumber
+                         [placeholder]="
+                          control.get('firstValue')?.value === 20 ? 'Enter Number of Bussiness Day':
+                          control.get('firstValue')?.value === 21 ? 'Enter Number Of Days':control.get('firstValue')?.value === 22 ? 'Enter Number Of Hours' :''
+                         "
+    inputId="integeronly"
+    formControlName="secondValue" />
+
+            <!-- <p-calendar formControlName="secondValue" [iconDisplay]="'input'"
+              [placeholder]="'RISK_ACTION.SELECT_DATE' | translate" [showIcon]="true" inputId="icondisplay" /> -->
+          </div>
+          }
+        }
+          @case('User'){
+          <div class="form_group col-span-4">
+            <lib-user-dropdown [placeholder]="'MEETINGS.USER_PLACEHOLDER' | translate"
+              [formControlNameInput]="'firstValue'" [options]="filters_list_map.get(i)" optionLabel="name"
+              optionValue="id" [control]="control.get('firstValue')!"></lib-user-dropdown>
+          </div>
+          }
+          @case('Role'){
+          <div class="form_group col-span-4">
+            <lib-role-dropdown [placeholder]="'MEETINGS.ROLE_PLACEHOLDER' | translate"
+              [formControlNameInput]="'firstValue'" [options]="filters_list_map.get(i)" optionLabel="label"
+              optionValue="id" [control]="control.get('firstValue')!"></lib-role-dropdown>
+          </div>
+          } } }
+        </div>
+        <button (click)="removeFromArray(i)"
+          class="btn_icon p-3 rounded-lg bg-danger_color col-span-1 text-white_color">
+          <i class="fi fi-rr-trash"></i>
+        </button>
+      </div>
+
+      }
+    </div>
+  </form>
+
+  <button (click)="addNewFilter()"
+    class="flex items-center gap-2 px-3 mb-6 py-2 font-medium rounded-lg bg-primary/20 text-primary">
+    <span>{{'Filters.AddFilter' | translate}}</span>
+    <i class="fi fi-rr-plus-small"></i>
+  </button>
+
+  <div class="flex items-center justify-between">
+    <div>
+      <button (click)="cancelAllFilters(op)" class="px-3 py-2 rounded-lg border border-gray_light font-medium">
+        {{'BUTTONS.CANCEL' | translate}}
+      </button>
+    </div>
+    <div class="flex items-center gap-4">
+      @if(selected_profile_filter){
+      <div class="action_btn flex">
+        <p-button [label]="'BUTTONS.Apply_update' | translate" icon="" [disabled]="filter_form.invalid || !filterForm.controls.length"
+          (onClick)="handleApplyUpdateFilter(op)" />
+      </div>
+      }@else{
+      <div class="action_btn flex">
+        <p-button [label]="'BUTTONS.Apply_Save' | translate" icon="" [disabled]="filter_form.invalid || !filterForm.controls.length"
+          (onClick)="handleApplySaveFilter(op)" />
+      </div>
+      }
+
+
+
+      <button [disabled]="filter_form.invalid || !filterForm.controls.length" (click)="handleApplyFilter(op)"
+        class="apply_btn px-3 py-2 font-medium rounded-lg border border-primary text-primary">
+        {{'BUTTONS.Apply' | translate}}
+      </button>
+
+      @if(selected_profile_filter){
+      <button (click)="op.toggle(0); handledDeleteFilterProfile()"
+        class="px-3 py-2 rounded-lg border border-danger_color text-danger_color">
+        {{'BUTTONS.DELETE' | translate}}
+      </button>
+      }
+    </div>
+  </div>
+</p-overlayPanel>
+
+
+
+<p-dialog (onHide)="profile_name_filter = ''" [header]="'Filters.CreateFilterProfile' | translate" [modal]="true"
+  [(visible)]="showProfileNameFilter" styleClass="w-[25rem]">
+  <div class="form_group">
+    <label for="profile_name" class="font-semibold w-6rem">{{'Filters.EnterProfileFilterName' | translate}}</label>
+    <input pInputText id="profile_name" class="flex-auto" [(ngModel)]="profile_name_filter" autocomplete="off" />
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex items-center gap-6">
+      <div class="action_btn w-28">
+        <p-button [label]="(update_filter_flag ? 'BUTTONS.UPDATE' : 'BUTTONS.SAVE') | translate"
+          [loading]="load_save_filter" [outlined]="true" severity="secondary" (onClick)="handleSaveProfileFilter()" />
+      </div>
+      <p-button [label]="'BUTTONS.CANCEL'|translate" [text]="true" severity="secondary"
+        (onClick)="showProfileNameFilter = false" />
+    </div>
+  </ng-template>
+</p-dialog>

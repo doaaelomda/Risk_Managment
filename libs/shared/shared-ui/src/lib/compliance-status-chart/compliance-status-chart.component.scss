@@ -1,0 +1,29 @@
+
+  .chart_widget{
+    @apply w-full h-full py-7 px-6 border border-gray_light rounded-2xl
+  }
+
+
+  .icon{
+    &.error{
+      @apply bg-error-50 text-error-500;
+    }
+    &.success{
+      @apply bg-success-50 text-success-500;
+    }
+    &.warning{
+      @apply bg-warning-50 text-warning-500;
+    }
+  }
+
+
+  .control {
+    &.active {
+      @apply border-[#5925dc]
+    }
+    @apply p-3 border-[1px] border-gray_light rounded-md
+  }
+
+  .filter_dashboard_action-btn {
+    @apply w-[45px] h-[45px]
+  }

@@ -1,0 +1,71 @@
+<section class="action_sec mb-8">
+  <div class="head mb-6 border-b border-gray_light ">
+    @if (!roleId) {
+      <h2 class="text-lg font-medium pb-5" >{{"SETTING.ADD_NEW_ROLE"|translate}}</h2>
+    }@else {
+          <h2 class="text-lg font-medium pb-5">{{"SETTING.UPDATE_ROLE"|translate}}</h2>
+    }
+    
+  </div>
+
+
+
+
+  <form [formGroup]="role_from" action="" class="grid grid-cols-12 gap-6">
+    <div class=" col-span-12 md:col-span-6">
+      <lib-input-text [controlNameInput]="'nameAr'" [placeholder]="'SETTING.ENTER_ARABIC_NAME'"
+        [control]="role_from.get('nameAr')!" [inputLabel]="'SETTING.NAME_ARABIC'"></lib-input-text>
+    </div>
+    <div class=" col-span-12 md:col-span-6">
+      <lib-input-text [controlNameInput]="'nameEn'" [placeholder]="'SETTING.ENTER_ENGLISH_NAME'"
+        [control]="role_from.get('nameEn')!" [inputLabel]="'SETTING.Name_English'"></lib-input-text>
+    </div>
+    <div class=" col-span-12 md:col-span-6">
+      <lib-ui-dropdown [formControlNameInput]="'role_type'" [placeholder]="'SETTING.SELECT_ROLE_TYPE'" [options]="role_types"
+        [optionLabel]="'label'" [optionValue]="'id'" [control]="role_from.get('role_type')!"
+        [label]="'SETTING.ROLE_TYPE'"></lib-ui-dropdown>
+    </div>
+    <div class=" col-span-12 md:col-span-6">
+      <lib-ui-dropdown [formControlNameInput]="'status'" [placeholder]="'SETTING.SELECT_STATUS'" [options]="statusList"
+        [optionLabel]="'name'" [optionValue]="'value'" [control]="role_from.get('status')!"
+        [label]="'SETTING.STATUS'"></lib-ui-dropdown>
+    </div>
+
+
+    <div class="col-span-12">
+      <lib-textarea-ui [placeholder]="'SETTING.WRITE_DESCRIPTION_HERE'" [controlNameInput]="'description'"
+        [inputLabel]="'SETTING.DESCRIPTION'" [control]="role_from.get('description')!"></lib-textarea-ui>
+    </div>
+    <div class="col-span-12 md:col-span-6">
+      <lib-role-dropdown [placeholder]="'SETTING.Select_Report_To' " [label]="'SETTING.REPORT_TO' "
+        [control]="role_from.get('report_to')!" [options]="role_types_admin" optionLabel="label" optionValue="id"
+        [formControlNameInput]="'report_to'">
+      </lib-role-dropdown>
+    </div>
+        <div class=" col-span-12 md:col-span-6">
+      <lib-user-dropdown [formControlNameInput]="'role_admin'" [placeholder]="'SETTING.SELECT_USER_OWNER'" [options]="usersLookUpData"
+        [optionLabel]="'name'" [optionValue]="'id'" [control]="role_from.get('role_admin')!"
+        [label]="'SETTING.USER_OWNER'"></lib-user-dropdown>
+    </div>
+        <div class=" col-span-12 md:col-span-6">
+      <lib-tree-select-ui [nodes_input]="OrganizationalUnit" [placeholder]="'PLACEHOLDERS.Select_Organizational_Unit' "
+        [label]="'RISK_MANAGMENT.ORG_UNIT' "  [validations]="[]"
+        [control]="role_from.get('organizationalUnit')!" [formControlNameInput]="'organizationalUnit'">
+      </lib-tree-select-ui>
+    </div>
+  </form>
+</section>
+
+
+
+<div class="col-span-12 flex items-center gap-4 justify-end py-6 border-t border-gray_light">
+  <div class="cancel_btn">
+    <button
+      (click)="navgivateToList()"
+      routerLinkActive="router-link-active">{{"RISK_MANAGMENT.Cancel"|translate}}</button>
+  </div>
+  <div class="action_btn">
+    <p-button (onClick)="saveRole()" [disabled]="role_from.invalid" [loading]="isModifyingRole" [label]="'RISK_MANAGMENT.SaveChanges' | translate " >
+    </p-button>
+  </div>
+</div>

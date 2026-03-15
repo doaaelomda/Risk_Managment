@@ -1,0 +1,66 @@
+<section class="grid grid-cols-12 gap-[48px]">
+  <div class="col-span-12 lg:col-span-6">
+    <div class="container_card">
+      <div class="flex flex-col gap-[48px]">
+        <h1 class="text-[#101828] text-[36px] font-semibold">
+          {{ 'AUTH.TITLE' | translate }}
+        </h1>
+        <form [formGroup]="loginForm">
+          <div class="flex flex-col gap-6">
+            <div class="input-wrapper">
+              <label for=""> {{ 'AUTH.EMAIL' | translate }}</label>
+              <input
+                pInputText
+                type="text"
+                formControlName="userEmail"
+                [placeholder]="'AUTH.ENTER_EMAIL' | translate"
+              />
+            </div>
+
+            <div class="input-wrapper">
+              <label for=""> {{ 'AUTH.PASSWORD' | translate }}</label>
+              <p-password
+                placeholder="••••••••"
+                styleClass="w-full"
+                formControlName="password"
+                [feedback]="false"
+                [toggleMask]="true"
+              />
+            </div>
+
+            <div class="flex justify-between items-center">
+              <div class="flex gap-2 items-center">
+                <p-checkbox
+                  formControlName="rememberMe"
+                  [binary]="true"
+                  inputId="remember-me"
+                />
+                <label for="remember-me">
+                  {{ 'AUTH.REMEMBER_30_DAYS' | translate }}
+                </label>
+              </div>
+              <!-- <button
+                (click)="forgotPassword()"
+                class="text-sm font-medium text-[#5925DC]"
+              >
+                {{ 'AUTH.FORGOT_PASSWORD' | translate }}
+              </button> -->
+            </div>
+
+            <p-button
+              styleClass="btn "
+              (onClick)="login()"
+              [loading]="isLogging"
+              [disabled]="loginForm.invalid"
+            >
+              {{ 'AUTH.SIGN_IN' | translate }}
+            </p-button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-span-12 lg:col-span-6">
+    <img src="images/login-img.svg" alt="login__img" />
+  </div>
+</section>

@@ -1,0 +1,28 @@
+<div class="flex flex-col gap-2">
+  <p class="text-sm font-medium text-gray-700">
+    {{ label }}
+  </p>
+
+  <p-dropdown appendTo="body" [showClear]="true" [options]="colors" optionLabel="name"
+    [placeholder]="
+      currentPlaceholder || ('orginazation.color_PLACEHOLDER' | translate)
+    " [formControl]="currentControl" (onChange)="handleSelect($event)" styleClass="w-[100%]">
+    <ng-template pTemplate="item" let-color>
+
+      <span [class]="color" class="badge">
+        <div class="small_doted"></div>
+
+        <span>{{ color }}</span>
+      </span>
+    </ng-template>
+
+    <ng-template pTemplate="selectedItem" let-color>
+
+      <span [class]="color" class="badge">
+        <div class="small_doted"></div>
+
+        <span>{{ color }}</span>
+      </span>
+    </ng-template>
+  </p-dropdown>
+</div>

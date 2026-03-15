@@ -1,0 +1,95 @@
+<lib-new-table [loading]="loadingTable" [table_data]="dataTable" [table_title]="'LessonLearn.LIST_TITLE' | translate"
+  [badge_title]="'LessonLearn.LESSON' | translate" [dataViewId]="109" [entityID_Name]="'lessonsLearnedID'"
+  [isShownAction]="true" (payload_emiter)="handleDataTable($event)" [action_items]="items"
+  (currentActionRow)="setSelected($event)" [columnControl]="columnControl"
+  [table_actions_permissions]="{ module: 'INCIDENT', feature: 'INCIDENTLESSONS', action: 'VIEW' }">
+  @if(_PermissionSystemService.can('INCIDENT' , 'INCIDENTLESSONS' , 'ADD')){
+  <button addition_action (click)="addLessonLearn()"
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+    <i class="fi fi-br-plus w-5 h-5"></i>
+    <span>{{ 'LessonLearn.ADD_BUTTON' | translate }}</span>
+  </button>
+  }
+</lib-new-table>
+<lib-delete-confirm-popup [titleDelete]="'LessonLearn.DELETE_TITLE' | translate"
+  [descriptionDelete]="'LessonLearn.DELETE_DESC' | translate" (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button (onClick)="deleteLessonLearn()" [loading]="loadDeleted" [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+
+
+<div class="action_dailog">
+  <p-dialog [(visible)]="showViewOptionPopup" [modal]="true" [dismissableMask]="true" [draggable]="false"
+    styleClass="w-[50%] action_dailog">
+
+    <div class="container p-4">
+      <div class="grid grid-cols-12 gap-4">
+
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-title header-para mb-3">{{ 'LessonLearn.NAME' | translate }}</h3>
+          @if (!loading) {
+          <p class="welcome">{{ LessonsData?.name || '-' }}</p>
+          } @else {
+          <p-skeleton width="12rem"></p-skeleton>
+          }
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-title header-para mb-3">{{ 'LessonLearn.CATEGORY' | translate }}</h3>
+          @if (!loading) {
+          <span class="badge">{{ LessonsData?.lessonsLearnedCategoryName || '-' }}</span>
+          } @else {
+          <p-skeleton width="12rem"></p-skeleton>
+          }
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-title header-para mb-3">{{ 'LessonLearn.TYPE' | translate }}</h3>
+          @if (!loading) {
+          <p class="welcome">{{ LessonsData?.lessonsLearnedTypeName || '-' }}</p>
+          } @else {
+          <p-skeleton width="12rem"></p-skeleton>
+          }
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-title header-para mb-3">{{ 'LessonLearn.DOCUMENTED_BY' | translate }}</h3>
+          @if (!loading) {
+          <p class="welcome">{{ LessonsData?.documentedByUserName || '-' }}</p>
+          } @else {
+          <p-skeleton width="12rem"></p-skeleton>
+          }
+        </div>
+
+
+        <div class="col-span-12 ">
+          <h3 class="header-title header-para mb-3">{{ 'LessonLearn.DESCRIPTION' | translate }}</h3>
+          @if (!loading) {
+          <p class="welcome">{{ LessonsData?.description || '-' }}</p>
+          } @else {
+          <p-skeleton width="12rem"></p-skeleton>
+          }
+        </div>
+     </div>
+            <div class="flex flex-col gap-3">
+          <div class="cancel_btn  w-fit ms-auto">
+            <button (click)="showViewOptionPopup = false">{{ 'WORKFLOW_STEPS.BUTTONS.BACK_TO_LIST' |
+              translate }}</button>
+          </div>
+        </div>
+    </div>
+
+  </p-dialog>
+</div>

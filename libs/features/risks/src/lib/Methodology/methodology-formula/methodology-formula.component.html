@@ -1,0 +1,51 @@
+<section>
+  
+<lib-cards-list
+  (selected_item_emiter)="setSelected($event)"
+  [items_actions]="actionItems"
+  [data_list]="tableData"
+  [badge_title]="labels.badge | translate"
+  [list_title]="labels.table | translate"
+  [total_items]="tableData.length"
+  [loadingState]="loading"
+  [entityID_Name]="'riskMethodologyFormulaID'"
+      [view_entityRouter]='viewRoute'
+>
+  <!-- ➕ Add Button -->
+  @if(_PermissionSystemService.can('RISKS' , 'RISKASSESSMENTFORMULA' , 'ADD')){
+      <button
+    (click)="handleAddClick()"
+    actions
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+  >
+    <i class="fi fi-br-plus w-5 h-5"></i>
+    <span>{{ labels.add | translate }}</span>
+  </button>
+  }
+</lib-cards-list>
+
+
+  <lib-delete-confirm-popup
+    [titleDelete]="labels.titleDelete | translate"
+    [descriptionDelete]="labels.descDelete | translate"
+    [visibleInput]="deleteModalVisible"
+    (hideEmiter)="toggleDeleteModal(false)"
+  >
+    <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+      <div class="cancel_btn">
+        <button class="w-40" (click)="toggleDeleteModal(false)">
+          {{ 'BUTTONS.CANCEL' | translate }}
+        </button>
+      </div>
+      <div class="delete_btn w-40">
+        <p-button
+          (onClick)="delete()"
+          [loading]="loadingDelete"
+          [label]="'BUTTONS.DELETE' | translate"
+        />
+      </div>
+    </div>
+  </lib-delete-confirm-popup>
+
+
+</section>

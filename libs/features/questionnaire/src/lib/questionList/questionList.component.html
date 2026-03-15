@@ -1,0 +1,40 @@
+<!-- Handle  List in New Table -->
+
+<lib-new-table
+  [table_actions_permissions]="{ module: 'QUESTIONNAIRES', feature: 'QUESTIONS', action: 'VIEW' }"
+[loading]="loadingTable" [table_data]="dataTable"     [badge_title]="'HEARDE_TABLE.QUESTIONS' | translate"
+    [table_title]="'BREAD_CRUMB_TITLES.QUESTION_LIST' | translate" [dataViewId]="75" [entityID_Name]="'questionnaireQuestionID'"
+  [isShownAction]="true" (payload_emiter)="handleDataTable($event)" [action_items]="items"
+  (currentActionRow)="setSelected($event)" [columnControl]="columnControl">
+  @if(_PermissionSystemService.can('QUESTIONNAIRES' , 'QUESTIONS' , 'ADD')){
+     <button addition_action [routerLink]="'/gfw-portal/questionnaire/addQuestion'"
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+    <i class="fi fi-br-plus w-5 h-5 "></i>
+    <span>{{'HEARDE_TABLE.ADD_NEW_QUESTION' | translate}}
+    </span>
+  </button>
+  }
+</lib-new-table>
+
+<!-- Handle delete Popup  -->
+<lib-delete-confirm-popup
+  [titleDelete]="'QUESTION.DELETE_TITLE'"
+  [descriptionDelete]="'QUESTION.DELETE_DESC'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteQuestion()"
+        [loading]="loadDeleted"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

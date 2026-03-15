@@ -1,0 +1,48 @@
+<div class="header flex items-center justify-between flex-wrap">
+
+    <!-- Document title -->
+  <div class="title flex items-center gap-4 flex-wrap">
+    @if(loading){
+      <p-skeleton width="15rem" styleClass="mb-2"></p-skeleton>
+    }@else{
+      <h2 class="text-2xl font-semibold text-gray-800">{{ data?.shortName ?? '-' }}</h2>
+    }
+  </div>
+
+    <!-- Compliance state -->
+  <div class="content flex flex-wrap items-center gap-4">
+    @if(data?.complianceStateTypeName){
+    <div class="flex items-center gap-2">
+      <p class="m-0 font-medium text-gray_color">{{ 'MAIN_INFO.complianceStateTypeID' | translate }}</p>
+      @if(loading){
+        <p-skeleton width="6rem" height="1.5rem"></p-skeleton>
+      }@else{
+        <span class="badge"
+          [ngStyle]="{
+            'background-color': data?.complianceStateTypeColor || 'transparent',
+            'color': 'white'
+          }">
+          {{ data?.complianceStateTypeName}}
+        </span>
+      }
+    </div>
+  }
+@if(data?.toEffectiveDate){
+<div class="flex items-center gap-2">
+  <p class="m-0 font-medium text-gray_color">{{ 'MAIN_INFO.effectiveDate' | translate }}:</p>
+  @if(loading){
+  <p-skeleton width="3rem" height="1.5rem"></p-skeleton>
+  }@else{
+  <div class="text-gray-800 font-medium text[16px] gap-2 flex"> <img src="images/icons/calendar.svg" alt="">
+    <span class="paraggarpStauts">{{data?.toEffectiveDate | date: 'MMM d, y' }}</span>
+
+  </div>
+  }
+</div>
+}
+  </div>
+</div>
+<!-- Tabs -->
+<lib-shared-tabs [tabs]="tabs" [permissionFeature]="{module:'COMPLIANCE' , feature:'COMPLIANCEDOCUMENT'}"></lib-shared-tabs>
+<!-- Router content -->
+<router-outlet></router-outlet>

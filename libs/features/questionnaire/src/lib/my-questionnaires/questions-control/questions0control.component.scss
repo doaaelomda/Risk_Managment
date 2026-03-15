@@ -1,0 +1,127 @@
+.action_btn_question {
+  width: 160px;
+  background-color: #6938ef;
+  box-shadow: 0px 1px 2px 0px #1018280d;
+  justify-content: center;
+  .btn {
+    @apply text-base font-medium;
+  }
+  @apply rounded-lg py-3 px-5 text-center text-[#FFFFFF];
+}
+
+.cancel_btn button {
+  padding: 10px 16px;
+
+  box-shadow: 0px 1px 2px 0px #1018280d;
+  border: 1px solid #d0d5dd;
+  @apply rounded-lg text-[#344054] font-medium text-sm;
+}
+
+.action_btn {
+  border-radius: 8px;
+
+  .p-button {
+    @apply flex w-full items-center bg-primary text-white_color px-4 py-2;
+
+    .p-button-icon {
+      @apply flex items-center justify-center;
+    }
+  }
+
+  .btn {
+    @apply flex w-full items-center bg-primary font-medium rounded-lg text-white_color px-4 py-2;
+  }
+
+  .btn_filter {
+    @apply flex gap-4 w-full items-center rounded-lg font-medium bg-white_color border border-primary text-primary px-4 h-[40px];
+  }
+}
+
+.Q_num {
+  @apply flex items-center justify-center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background-color: #f2f4f7;
+  color: #344054;
+  &.active {
+    background-color: #ecfdf3;
+    color: #027a48;
+  }
+}
+
+.icon_question {
+  width: 2.5rem;
+  height: 2.5rem;
+  @apply rounded-lg;
+  background-color: #f2f4f7;
+  color: #7a5af8;
+}
+
+.weight_badge {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #98a2b3;
+  color: white;
+}
+.action_btn_question {
+  padding: 10px 16px;
+  &.skip {
+    background-color: #f4f3ff;
+    color: #5925dc;
+  }
+}
+.stepIco {
+  background-color: #f2f4f7;
+  border-radius: 7px;
+  padding: 7px;
+  color: #bdb4fe;
+  width: 38px;
+  height: 38px;
+  &.active_step {
+    color: #6938ef;
+  }
+
+  font-size: 24px;
+}
+.stepTxt {
+  h3 {
+    font-weight: 600;
+    font-size: 18px;
+    color: #475467;
+    &.active_step {
+      color: #5925dc;
+    }
+  }
+  span {
+    color: #667085;
+
+    font-size: 16px;
+    font-weight: 400;
+  }
+}
+.step_line {
+  background-color: #bdb4fe;
+  height: 3px;
+  width: 50%;
+  inset-inline-end: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  content: '';
+
+  &.full_width {
+    width: 100%;
+  }
+
+  &.last_step {
+    inset-inline-start: 0;
+    inset-inline-end: unset;
+  }
+}
+
+.answer_muilti_card {
+  @apply flex items-center rounded-lg gap-4;
+  padding: 20px;
+  border: 1px solid #eaecf0;
+}

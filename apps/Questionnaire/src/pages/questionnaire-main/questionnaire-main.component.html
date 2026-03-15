@@ -1,0 +1,26 @@
+<div class="main_layout">
+  <div class="main_layout-header fixed top-0 left-0 right-0 bg-white_color">
+    <app-header></app-header>
+  </div>
+
+  <div class="main_layout-content px-12 py-6 mt-14">
+    <div class="main_layout-breadcrumb mb-6">
+      <app-bread-crumb></app-bread-crumb>
+    </div>
+
+
+
+    <div class="main_layout-content-inner grid grid-cols-12 gap-8">
+      <div class="col-span-12 lg:col-span-4">
+        <app-side-sections-list (Selection_Emitter$)="setCurrentSection($event)" [progressInput]="progress"></app-side-sections-list>
+      </div>
+      <div class="col-span-12 lg:col-span-8">
+        <app-questions0control [current_section_input]="current_section" (progress)="handleProgressChange($event)"></app-questions0control>
+      </div>
+    </div>
+
+
+
+  </div>
+
+</div>

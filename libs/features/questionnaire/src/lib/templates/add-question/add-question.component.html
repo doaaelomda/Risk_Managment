@@ -1,0 +1,106 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<section class="form_sec">
+  <div class="header border-b border-gray_light pb-6 mb-6">
+    <h2 class="text-lg font-medium text-gray-900">
+      {{
+        questionId
+          ? ('TEMPLATES.UPDATE_QUESTION' | translate)
+          : ('TEMPLATES.ADD_NEW_QUESTION' | translate)
+      }}
+    </h2>
+  </div>
+  <div class="grid grid-cols-12 gap-6 mb-6">
+    <div class="md:col-span-6 col-span-12">
+      <lib-questions-table-ui
+        [dataList]="questionsList"
+        [table_name]="'TEMPLATES.QUESTIONS_LIST' | translate"
+        [badge_name]="'TEMPLATES.QUESTION' | translate"
+        [total_items_input]="pageginationObj.totalItems"
+        [loadingState]="isLoadingData"
+        [inComingQuestions]="selected_questions"
+        (paginationEvent)="getQuestionsList($event)"
+        (selected_questions)="handleQuestionsSelect($event)"
+        (searched)="handleSearch($event)"
+      ></lib-questions-table-ui>
+    </div>
+
+    <div class="md:col-span-6">
+      @if(selected_questions.length){
+      <div
+        class="questions-container"
+        cdkDropList
+        (cdkDropListDropped)="drop($event)"
+      >
+        @for (question of selected_questions; track $index) {
+
+        <div
+          cdkDrag
+          class="question-card flex flex-col lg:flex-row items-start lg:items-center gap-2 my-2"
+        >
+          <button class="btn">
+            <i class="fi fi-sr-grip-dots-vertical"></i>
+          </button>
+          <div class="txt-info flex flex-col gap-2 flex-1">
+            <span>{{ question.questionText }}</span>
+          </div>
+
+          <div class="flex gap-2 items-center">
+            <p-inputNumber
+              mode="decimal"
+              [showButtons]="true"
+              inputId="minmax-buttons"
+              [min]="0"
+              [max]="100"
+              styleClass="number_inputs"
+              [placeholder]="'TEMPLATES.WEIGHT' | translate"
+              [(ngModel)]="question.weight"
+            >
+            </p-inputNumber>
+
+            <button
+              (click)="removeQuestion($index)"
+              class="btn text-danger_color_text"
+            >
+              <i class="fi fi-rs-trash"></i>
+            </button>
+          </div>
+        </div>
+
+        }
+      </div>
+      }@else {
+        <div class="text-center">
+            <img src="images/no-document.svg" alt="empty-state" />
+      <h2>{{ 'CONTENT.NO_QUESTIONS_YET' | translate }}</h2>
+      <p>{{ 'CONTENT.NO_QUESTIONS_FOUND' | translate }}</p>
+        </div>
+
+      }
+    </div>
+
+    <div class="col-span-12 flex justify-end gap-4 py-4">
+      <div class="default_btn cancel">
+        <a
+          [routerLink]="`/gfw-portal/questionnaire/templates/${templateId}/sections/${sectionId}/questions`"
+        >
+          {{ 'BUTTONS.CANCEL' | translate }}
+        </a>
+      </div>
+      <div class="action_btn">
+        <p-button
+          [label]="
+            questionId
+              ? ('BUTTONS.UPDATE' | translate)
+              : ('BUTTONS.SAVE' | translate)
+          "
+          [outlined]="true"
+          [disabled]="!selected_questions.length"
+          [loading]="isSavingTemplate"
+          severity="secondary"
+          (onClick)="save()"
+        >
+        </p-button>
+      </div>
+    </div>
+  </div>
+</section>

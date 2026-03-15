@@ -1,0 +1,25 @@
+<div class="stepper hidden lg:flex">
+  @for (step of steps; track step; let i = $index) {
+    <div class="step-item">
+      <div [ngClass]="getStepClass(i)" class="circle">
+        @if (!getStepClass(i).includes('complete')) {
+          <div class="circle-inner"></div>
+        } @else {
+          <span class="correct">✓</span>
+        }
+      </div>
+
+      <div [ngClass]="getLabelClass(i)" class="step-label">
+        {{ stepLabels[i] || '' }}
+      </div>
+
+      <p [ngClass]="getLabelPar(i)" class="step-parg">
+        {{ stepslabelspara[i] || '' }}
+      </p>
+
+      @if (i < steps.length - 1) {
+        <div [ngClass]="getLineClass(i)" class="line"></div>
+      }
+    </div>
+  }
+</div>

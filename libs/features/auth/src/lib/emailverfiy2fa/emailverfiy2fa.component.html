@@ -1,0 +1,27 @@
+<div class="w-full h-screen flex flex-col bg-white-color">
+
+  <div class="flex-1 flex flex-col items-center justify-center py-8">
+    <div class="rounded-2xl max-w-md flex flex-col card-forget">
+
+      <img src="/images/icons/correct.svg" alt="" class="mx-auto">
+
+      <h1 class="text-gray-700 text-center mt-4 font-medium text-3xl">Email verified</h1>
+      <p class="text-gray-500 font-normal text-sm  text-center  mt-[18px]">
+        Your email has been successfully verified.
+      </p>
+
+      <div class="routing_button m-auto mt-4">
+        <p-button routerLink="/gfw-portal" label="Continue" />
+      </div>
+    </div>
+  </div>
+
+<div class="w-3/4 mb-24 mx-auto">
+    <lib-steper [currentStepIndex]="2"
+    [stepLabels]=stepsLabels [stepslabelspara]="stepslabelspara"
+    ></lib-steper>
+  </div>
+  <p class="absolute bottom-4 left-6 text-sm  text-gray-500 font-normal">
+    © GRC ORBITE 2077
+  </p>
+</div>

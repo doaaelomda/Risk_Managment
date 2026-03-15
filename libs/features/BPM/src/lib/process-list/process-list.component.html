@@ -1,0 +1,49 @@
+<section>
+ <lib-new-table
+    [loading]="loadingTable"
+    [table_data]="dataTable"
+    [table_title]="'PROCESS.TABLE_NAME' | translate"
+    [badge_title]="'PROCESS.BADGE_NAME' | translate"
+    [dataViewId]="59"
+    [entityID_Name]="'businessProcessID'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="items"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{ module: 'BUSINESSPROCESS', feature: 'PROCESS', action: 'VIEW' }"
+  >
+  @if(_PermissionSystemService.can('BUSINESSPROCESS' , 'PROCESS' , 'ADD')){
+    <button addition_action [routerLink]="'/gfw-portal/BPM/add-process'"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+      <i class="fi fi-br-plus w-5 h-5 "></i>
+      <span>{{'BREAD_CRUMB_TITLES.ADD_PROCESS_LIST' | translate}}</span>
+    </button>
+  }
+  </lib-new-table>
+
+</section>
+
+
+
+<lib-delete-confirm-popup
+  [titleDelete]="'PROCESS.DELETE_PROCESS_TITLE'"
+  [descriptionDelete]="'PROCESS.DELETE_PROCESS_DESC'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="handleClosedDelete()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button (onClick)="deleteProcess()" [loading]="loadDelted" [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+
+

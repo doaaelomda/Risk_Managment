@@ -1,0 +1,115 @@
+<div  class="w-full h-full py-7 px-6 border border-gray_light  rounded-2xl ">
+  <div class="title mb-6 flex justify-between items-center flex-wrap">
+    <p class="text-xl font-medium">{{current_lang === 'en' ? current_setting_data?.title : (current_setting_data?.titleAr ?? current_setting_data?.settings?.titleAr)}}</p>
+
+    @if(mode() === 'edit') {
+
+    <div class="filters cursor-auto flex items-center flex-wrap gap-4">
+
+
+
+
+      <div class="flex items-center gap-4 flex-row-reverse">
+        <button (click)="filter_visible = true" class="filter_dashboard_action-btn">
+          <i class="fi fi-rr-filter"></i>
+        </button>
+        <button (click)="settingEmitter.emit({visible:true , data:current_setting_data , reportDefinitionId:this.current_report_id , reportPartId:this.chart_config_input()?.data?.id })"  class="filter_dashboard_action-btn">
+          <i class="fi fi-rr-settings"></i>
+        </button>
+                    <button (click)="actionEmitter.emit({widget:chart_config_input()?.data , event:'delete' , value:chart_config_input()?.data})" class="filter_dashboard_action-btn danger">
+            <i class="fi fi-rr-trash"></i>
+          </button>
+      </div>
+
+      <div class="form_group flex-1">
+        <p-dropdown [options]="widthOptions" [(ngModel)]="selectedWidth" optionLabel="label" optionValue="value"
+          [placeholder]="'Select Width'"
+          (onChange)="actionEmitter.emit({widget:chart_config_input()?.data , event:'resize' , value:selectedWidth})">
+        </p-dropdown>
+      </div>
+
+    </div>
+    }
+
+  </div>
+
+  <div [innerHTML]="current_lang === 'en' ? current_setting_data?.content : (current_setting_data?.contentAr ?? current_setting_data?.settings?.contentAr) | safeHtml" class="content cursor-text text-wrap">
+
+  </div>
+
+</div>
+
+
+
+
+@if(filter_visible){
+
+<div class="action_dailog">
+  <p-dialog [draggable]="false" [position]="current_lang === 'en' ? 'right':'left'" header="Edit Profile" [modal]="false" [(visible)]="filter_visible"
+  styleClass="min-w-[25rem] min-h-[20rem]"
+    >
+
+    <ng-template pTemplate="header">
+    </ng-template>
+
+
+
+    <lib-filter-dashboard></lib-filter-dashboard>
+  </p-dialog>
+
+</div>
+
+}
+
+
+
+<div class="action_dailog cursor-auto">
+  <p-dialog [draggable]="false" [position]="'right'" header="Edit Profile" [modal]="false" [(visible)]="setting_visible"
+     styleClass="max-w-[35rem] min-h-[20rem]">
+
+    <ng-template pTemplate="header">
+    </ng-template>
+
+    <div class="content">
+      <form [formGroup]="textForm" action="
+      ">
+
+        <div class="mb-6">
+          <lib-input-text [inputLabel]="'Title'" [control]="textForm.get('title')!" [placeholder]="'Enter Title'  "
+            [controlNameInput]="'title' "></lib-input-text>
+        </div>
+
+
+        <div class="mb-6">
+          <lib-editor [height]="'250px'" [controlNameInput]="'content' " [control]="textForm.get('content')!"></lib-editor>
+          <!-- <div class="varaibls p-4 flex items-center gap-4">
+            @for(variable of varaibles ; track $index){
+              <button (click)="handleAddVar(variable)" class="px-4 py-2 rounded-md bg-primary/10 text-primary font-semibold">{{'#'+variable}}</button>
+            }
+          </div> -->
+        </div>
+
+
+
+
+        <div class="flex items-center justify-end gap-4">
+          <div>
+            <button (click)="setting_visible = false" class="px-3 py-2 rounded-lg border border-gray_light font-medium">
+              Cancel
+            </button>
+          </div>
+          <div class="action_btn">
+
+            <button (click)="saveSetting()" class="btn ">
+              Save
+            </button>
+          </div>
+        </div>
+
+
+
+      </form>
+    </div>
+
+  </p-dialog>
+</div>

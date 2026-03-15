@@ -1,0 +1,29 @@
+<p-dialog
+  [closable]="false"
+  [header]="'ATTACHMENT.EDIT_FILE_TITLE' | translate"
+  (onHide)="onCancel()"
+  [modal]="true"
+  [(visible)]="visible"
+styleClass="w-[25rem]"
+>
+  <div class="form_group">
+    <label for="" class="font-semibold w-6rem">{{ 'Title' | translate }}</label>
+    <input type="text" pInputText [(ngModel)]="internalTitle" />
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex items-center gap-6">
+      <div class="action_btn w-28">
+        <p-button
+          [label]="'BUTTONS.UPDATE' | translate"
+          [loading]="loading"
+          (onClick)="onSave()"
+        ></p-button>
+      </div>
+
+      <div class="cancel_btn">
+        <button (click)="onCancel()">{{ 'BUTTONS.CANCEL' | translate }}</button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>

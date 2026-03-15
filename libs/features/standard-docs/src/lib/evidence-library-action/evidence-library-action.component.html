@@ -1,0 +1,128 @@
+<section class="form_sec">
+  <div class="header border-b border-gray_light pb-6 mb-6">
+    <h2 class="text-lg font-medium text-[#101828]">
+      {{ current_update_id ? ('EVIDENCE_LIBRARY.UPDATE' | translate) :
+      ('EVIDENCE_LIBRARY.ADD_NEW' | translate) }}
+    </h2>
+  </div>
+
+  <form [formGroup]="form" class="grid grid-cols-12 gap-6 mb-6">
+    <!-- Name -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text [placeholder]="'EVIDENCE_COMPLIANCE.NAME' | translate"
+        [inputLabel]="'EVIDENCE_COMPLIANCE.NAME' | translate" [control]="form.get('name')!" [controlNameInput]="'name'"
+        [validations]="validationsRequired">
+      </lib-input-text>
+    </div>
+    <!-- Task Title -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text [placeholder]="'EVIDENCE_COMPLIANCE.TASK_TITLE' | translate"
+        [inputLabel]="'EVIDENCE_COMPLIANCE.TASK_TITLE' | translate" [control]="form.get('taskTitle')!"
+        [controlNameInput]="'taskTitle'">
+      </lib-input-text>
+    </div>
+    <!-- Description -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-textarea-ui [placeholder]="'EVIDENCE_COMPLIANCE.DESCRIPTION' | translate"
+        [inputLabel]="'EVIDENCE_COMPLIANCE.DESCRIPTION' | translate" [control]="form.get('description')!"
+        [controlNameInput]="'description'">
+      </lib-textarea-ui>
+    </div>
+    <!-- Task Description -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-textarea-ui [placeholder]="'EVIDENCE_COMPLIANCE.TASK_DESCRIPTION' | translate"
+        [inputLabel]="'EVIDENCE_COMPLIANCE.TASK_DESCRIPTION' | translate" [control]="form.get('taskDescription')!"
+        [controlNameInput]="'taskDescription'">
+      </lib-textarea-ui>
+    </div>
+    <!-- Evidence Description -->
+    <div class="col-span-12">
+      <lib-textarea-ui [placeholder]="'EVIDENCE_COMPLIANCE.EVIDENCE_DESCRIPTION' | translate"
+        [inputLabel]="'EVIDENCE_COMPLIANCE.EVIDENCE_DESCRIPTION' | translate"
+        [control]="form.get('evidenceDescription')!" [controlNameInput]="'evidenceDescription'">
+      </lib-textarea-ui>
+    </div>
+
+    <!-- Next Update Date -->
+    <!-- <div class="md:col-span-6 col-span-12">
+      <lib-date-packer [placeholder]="'EVIDENCE_COMPLIANCE.NEXT_UPDATE_DATE' | translate"
+        [inputLabel]="'EVIDENCE_COMPLIANCE.NEXT_UPDATE_DATE' | translate" [control]="form.get('nextUpdateDate')!"
+        [controlNameInput]="'nextUpdateDate'">
+      </lib-date-packer>
+    </div> -->
+
+    <!-- Evidence Type Status -->
+    <!-- <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown [placeholder]="'EVIDENCE_COMPLIANCE.STATUS' | translate"
+        [label]="'EVIDENCE_COMPLIANCE.STATUS' | translate" [control]="form.get('evidenceTypeStatusTypeID')!"
+        [formControlNameInput]="'evidenceTypeStatusTypeID'" [options]="statuses" [optionLabel]="'label'"
+        [optionValue]="'id'" [validations]="validationsRequired">
+      </lib-ui-dropdown>
+    </div> -->
+
+
+    <!-- Assignee User -->
+    <!-- <div class="md:col-span-6 col-span-12">
+      <lib-user-dropdown [placeholder]="'EVIDENCE_COMPLIANCE.ASSIGNEE_USER' | translate"
+        [label]="'EVIDENCE_COMPLIANCE.ASSIGNEE_USER' | translate" [control]="form.get('assigneeUserID')!"
+        [formControlNameInput]="'assigneeUserID'" [options]="users" [optionLabel]="'name'" [optionValue]="'id'"
+        [validations]="validationsRequired">
+      </lib-user-dropdown>
+    </div> -->
+
+    <!-- Verification User -->
+    <!-- <div class="md:col-span-6 col-span-12">
+      <lib-user-dropdown [placeholder]="'EVIDENCE_COMPLIANCE.VERIFICATION_USER' | translate"
+        [label]="'EVIDENCE_COMPLIANCE.VERIFICATION_USER' | translate" [control]="form.get('verificationUserID')!"
+        [formControlNameInput]="'verificationUserID'" [options]="verificationusers" [optionLabel]="'name'"
+        [optionValue]="'id'">
+      </lib-user-dropdown>
+    </div> -->
+
+    <!-- Approval Required -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown [placeholder]="'EVIDENCE_COMPLIANCE.APPROVAL_REQUIRED' | translate"
+        [label]="'EVIDENCE_COMPLIANCE.APPROVAL_REQUIRED' | translate" [control]="form.get('approvalRequired')!"
+        [formControlNameInput]="'approvalRequired'" [options]="approvalRequiredOptions"
+        [validations]="validationsRequired" [optionLabel]="'label'" [optionValue]="'id'">
+      </lib-ui-dropdown>
+    </div>
+
+
+    <!-- <div class="md:col-span-6 col-span-12">
+      <lib-tree-select-ui [nodes_input]="organizationalUnits"
+      [validations]="[]"
+        [placeholder]="'INDICATORS.ORGANIZATIONAL_UNIT_ID_PLACEHOLDER' | translate"
+        [label]="'INDICATORS.ORGANIZATIONAL_UNIT_ID' | translate" [control]="form.get('organizationalUnitID')!"
+        [formControlNameInput]="'organizationalUnitID'">
+      </lib-tree-select-ui>
+    </div> -->
+
+    <!-- Verification Role -->
+    <!-- <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown [placeholder]="'EVIDENCE_COMPLIANCE.VERIFICATION_ROLE' | translate"
+        [label]="'EVIDENCE_COMPLIANCE.VERIFICATION_ROLE' | translate" [control]="form.get('verificationRoleID')!"
+        [formControlNameInput]="'verificationRoleID'" [options]="roles" [optionLabel]="'label'" [optionValue]="'id'">
+      </lib-ui-dropdown>
+    </div> -->
+
+    <!-- Assignee Role -->
+    <!-- <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown [placeholder]="'EVIDENCE_COMPLIANCE.ASSIGNEE_ROLE' | translate"
+        [label]="'EVIDENCE_COMPLIANCE.ASSIGNEE_ROLE' | translate" [control]="form.get('assigneeRoleID')!"
+        [formControlNameInput]="'assigneeRoleID'" [options]="Asseignroles" [optionLabel]="'label'" [optionValue]="'id'"
+        [validations]="validationsRequired">
+      </lib-ui-dropdown>
+    </div> -->
+  </form>
+</section>
+<div class="col-span-12 flex items-center gap-4 justify-end py-6 border-t border-gray_light">
+  <div class="cancel_btn">
+    <button [routerLink]="'/gfw-portal/library/evidence-library'">
+      {{ 'RISK_MANAGMENT.Cancel' | translate }}
+    </button>
+  </div>
+  <div class="action_btn">
+    <p-button [label]="'RISK_MANAGMENT.SaveChanges' | translate" [loading]="isLoading" (onClick)="submit()"></p-button>
+  </div>
+</div>

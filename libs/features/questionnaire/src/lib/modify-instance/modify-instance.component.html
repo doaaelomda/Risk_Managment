@@ -1,0 +1,117 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<section class="form_sec">
+  <div class="header border-b border-gray_light pb-6 mb-6">
+    <h2 class="text-lg font-medium text-gray-900">
+      {{
+      instanceId
+      ? ('INSTANCES.UPDATE_INSTANCE' | translate)
+      : ('INSTANCE.ADD_NEW_INSTANCE' | translate)
+      }}
+    </h2>
+  </div>
+
+  <form [formGroup]="form" class="grid grid-cols-12 gap-6 mb-6">
+    <!-- Name (EN) -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text [placeholder]="'LOOKUP.NAME_PLACEHOLDER' | translate" [inputLabel]="'LOOKUP.NAME' | translate"
+        [control]="form.get('name')!" [controlNameInput]="'name'">
+      </lib-input-text>
+    </div>
+
+    <!-- Name (AR) -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text [placeholder]="'LOOKUP.NAME_AR_PLACEHOLDER' | translate"
+        [inputLabel]="'LOOKUP.NAME_AR' | translate" [control]="form.get('nameAr')!" [controlNameInput]="'nameAr'">
+      </lib-input-text>
+    </div>
+
+    <!-- Description (EN) -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-textarea-ui [placeholder]="'LOOKUP.DESCRIPTION_PLACEHOLDER' | translate"
+        [inputLabel]="'LOOKUP.DESCRIPTION' | translate" [control]="form.get('description')!"
+        [controlNameInput]="'description'">
+      </lib-textarea-ui>
+    </div>
+
+    <!-- Description (AR) -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-textarea-ui [placeholder]="'LOOKUP.DESCRIPTION_AR_PLACEHOLDER' | translate"
+        [inputLabel]="'LOOKUP.DESCRIPTION_AR' | translate" [control]="form.get('descriptionAr')!"
+        [controlNameInput]="'descriptionAr'">
+      </lib-textarea-ui>
+    </div>
+
+
+    <!-- Final Score -->
+    <!-- <div class="md:col-span-6 col-span-12">
+      <lib-input-text [placeholder]="'INSTANCE.FINAL_SCORE_PLACEHOLDER' | translate"
+        [inputLabel]="'INSTANCE.FINAL_SCORE' | translate" [control]="form.get('finalScore')!"
+        [controlNameInput]="'finalScore'" type="number">
+      </lib-input-text>
+    </div> -->
+
+
+
+    <!-- Expiration Date -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-date-packer [placeholder]="'INSTANCE.EXPIRATION_DATE_PLACEHOLDER' | translate"
+        [inputLabel]="'INSTANCE.EXPIRATION_DATE' | translate" [control]="form.get('expirationDate')!"
+        [controlNameInput]="'expirationDate'">
+      </lib-date-packer>
+    </div>
+    @if(!form.get('isExternal')?.value){
+    <!-- Assignee User -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-user-dropdown [placeholder]="'INSTANCE.ASSIGNEE_USER_PLACEHOLDER' | translate"
+        [label]="'INSTANCE.ASSIGNEE_USER' | translate" [control]="form.get('assigneeUserID')!"
+        [formControlNameInput]="'assigneeUserID'" [options]="userList" [optionLabel]="'name'" [optionValue]="'id'">
+      </lib-user-dropdown>
+    </div>
+
+    <!-- Assignee Role -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown [placeholder]="'INSTANCE.ASSIGNEE_ROLE_PLACEHOLDER' | translate"
+        [label]="'INSTANCE.ASSIGNEE_ROLE' | translate" [control]="form.get('assigneeRoleID')!"
+        [formControlNameInput]="'assigneeRoleID'" [options]="rolesList" [optionLabel]="'label'" [optionValue]="'id'">
+      </lib-ui-dropdown>
+    </div>
+    }
+    @if(form.get('isExternal')?.value){
+    <!-- External Link Expiration Date -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-date-packer [placeholder]="
+          'INSTANCE.EXTERNAL_LINK_EXPIRATION_DATE_PLACEHOLDER' | translate
+        " [inputLabel]="'INSTANCE.EXTERNAL_LINK_EXPIRATION_DATE' | translate"
+        [control]="form.get('externalLinkExpirationDate')!" [controlNameInput]="'externalLinkExpirationDate'">
+      </lib-date-packer>
+    </div>
+    }
+    <!-- Is External -->
+     @if(moduleName !== 'THIRDPARTIES'){
+    <div class="md:col-span-6 col-span-12 flex items-center gap-3">
+      <label class="text-sm font-medium text-gray_color">
+        {{ 'INSTANCE.IS_EXTERNAL' | translate }}
+      </label>
+      <p-inputSwitch  formControlName="isExternal"></p-inputSwitch>
+    </div>
+    }
+
+    <!-- Buttons -->
+    <div class="col-span-12 flex justify-end gap-4 py-4">
+      <div class="default_btn cancel">
+        <button (click)="navigateBack()">
+          {{ 'BUTTONS.CANCEL' | translate }}
+        </button>
+      </div>
+      <div class="action_btn">
+        <p-button [label]="
+            instanceId
+              ? ('BUTTONS.UPDATE' | translate)
+              : ('BUTTONS.SAVE' | translate)
+          " [outlined]="true" [disabled]="form.invalid" [loading]="isSavingInstance" severity="secondary"
+          (onClick)="save()">
+        </p-button>
+      </div>
+    </div>
+  </form>
+</section>

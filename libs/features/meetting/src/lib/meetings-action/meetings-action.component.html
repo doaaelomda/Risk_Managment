@@ -1,0 +1,242 @@
+<section class="form_sec">
+  <div class="header border-b border-gray_light pb-6 mb-6">
+    <h2 class="text-lg font-medium text-[#101828]">
+      {{
+        current_update_id
+          ? ('MEETINGS.UPDATE_MEETING' | translate)
+          : ('HEARDE_TABLE.ADD_NEW_MEETING' | translate)
+      }}
+    </h2>
+  </div>
+  @if(meeting_form){
+
+  <form [formGroup]="meeting_form" class="grid grid-cols-12 gap-6 mb-6">
+    <!-- Meeting Name -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'MEETINGS.NAME_PLACEHOLDER' | translate"
+        [inputLabel]="'MEETINGS.NAME' | translate"
+        [control]="meeting_form.get('name')!"
+        [controlNameInput]="'name'"
+        [validations]="validationsRequired"
+      >
+      </lib-input-text>
+    </div>
+
+    <!-- Meeting Status -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'MEETINGS.MEETING_STATUS_PLACEHOLDER' | translate"
+        [label]="'MEETINGS.MEETING_STATUS' | translate"
+        [control]="meeting_form.get('meetingStatusTypeID')!"
+        [formControlNameInput]="'meetingStatusTypeID'"
+        [options]="meetingStatuses"
+        [validations]="validationsRequired"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      >
+      </lib-ui-dropdown>
+    </div>
+
+    <!-- Organizer User -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-user-dropdown
+        [placeholder]="'MEETINGS.ORGANIZER_USER_PLACEHOLDER' | translate"
+        [label]="'MEETINGS.ORGANIZER_USER' | translate"
+        [control]="meeting_form.get('organizerUserID')!"
+        [formControlNameInput]="'organizerUserID'"
+        [options]="organizerUsers"
+        [optionLabel]="'name'"
+        [validations]="validationsRequired"
+        [optionValue]="'id'"
+      >
+      </lib-user-dropdown>
+    </div>
+
+    <!-- Organizational Unit -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-tree-select-ui
+        [nodes_input]="organizationalUnits"
+        [placeholder]="'MEETINGS.ORGANIZATIONAL_UNIT_PLACEHOLDER' | translate"
+        [label]="'MEETINGS.ORGANIZATIONAL_UNIT' | translate"
+        [control]="meeting_form.get('organizationalUnitID')!"
+        [validations]="[]"
+        [formControlNameInput]="'organizationalUnitID'"
+        [validations]="validationsRequired"
+      >
+      </lib-tree-select-ui>
+    </div>
+
+    <!-- Start Time -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-time-packer
+        type="time"
+        [placeholder]="'MEETINGS.START_TIME_PLACEHOLDER' | translate"
+        [inputLabel]="'MEETINGS.START_TIME' | translate"
+        [control]="meeting_form.get('startTime')!"
+        [controlNameInput]="'startTime'"
+        [validations]="validationsRequired"
+      >
+      </lib-time-packer>
+    </div>
+
+    <!-- End Time -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-time-packer
+        type="time"
+        [placeholder]="'MEETINGS.END_TIME_PLACEHOLDER' | translate"
+        [inputLabel]="'MEETINGS.END_TIME' | translate"
+        [control]="meeting_form.get('endTime')!"
+        [controlNameInput]="'endTime'"
+        [validations]="validationsRequired"
+      >
+      </lib-time-packer>
+    </div>
+
+    <!-- Meeting Date -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-date-packer
+        [placeholder]="'MEETINGS.MEETING_DATE_PLACEHOLDER' | translate"
+        [inputLabel]="'MEETINGS.MEETING_DATE' | translate"
+        [control]="meeting_form.get('meetingDate')!"
+        [controlNameInput]="'meetingDate'"
+        [validations]="validationsRequired"
+      >
+      </lib-date-packer>
+    </div>
+
+    <!-- Next Meeting Date -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-date-packer
+        [placeholder]="'MEETINGS.NEXT_MEETING_DATE_PLACEHOLDER' | translate"
+        [inputLabel]="'MEETINGS.NEXT_MEETING_DATE' | translate"
+        [control]="meeting_form.get('nextMeetingDate')!"
+        [controlNameInput]="'nextMeetingDate'"
+        [validations]="validationsRequired"
+      >
+      </lib-date-packer>
+    </div>
+
+    <!-- Meeting Link -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'MEETINGS.LINK_PLACEHOLDER' | translate"
+        [inputLabel]="'MEETINGS.LINK' | translate"
+        [control]="meeting_form.get('meetingLink')!"
+        [controlNameInput]="'meetingLink'"
+      >
+      </lib-input-text>
+      @if(meeting_form.get('meetingLink')?.hasError('pattern')){
+      <span class="text-danger_text">
+        {{ 'MEETINGS.LINK_ERROR_MSG' | translate }}
+      </span>
+      }
+    </div>
+
+    <!-- Meeting Duration -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-number
+        [placeholder]="'MEETINGS.DURATION_PLACEHOLDER' | translate"
+        [inputLabel]="'MEETINGS.DURATION' | translate"
+        [control]="meeting_form.get('duration')!"
+        [controlNameInput]="'duration'"
+        [maxLength]="3"
+        [toolTip]="'MEETINGS.DURATION_TOOLTIP' | translate"
+      >
+      </lib-input-number>
+    </div>
+
+    <!-- Location -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'MEETINGS.LOCATION_PLACEHOLDER' | translate"
+        [inputLabel]="'MEETINGS.LOCATION' | translate"
+        [control]="meeting_form.get('location')!"
+        [controlNameInput]="'location'"
+      >
+      </lib-input-text>
+    </div>
+
+    <!-- Objective -->
+    <div class="col-span-12">
+      <lib-textarea-ui
+        [placeholder]="'MEETINGS.DESCRIPTION_PLACEHOLDER' | translate"
+        [inputLabel]="'MEETINGS.DESCRIPTION' | translate"
+        [control]="meeting_form.get('description')!"
+        [controlNameInput]="'description'"
+        [validations]="validationsRequired"
+      >
+      </lib-textarea-ui>
+    </div>
+
+    <!-- Objective -->
+    <div class="col-span-12">
+      <lib-textarea-ui
+        [placeholder]="'MEETINGS.OBJECTIVE_PLACEHOLDER' | translate"
+        [inputLabel]="'MEETINGS.OBJECTIVE' | translate"
+        [control]="meeting_form.get('objective')!"
+        [controlNameInput]="'objective'"
+        [validations]="validationsRequired"
+      >
+      </lib-textarea-ui>
+    </div>
+  </form>
+  }@else {
+  <div class="grid grid-cols-12 gap-6 mb-6">
+    <div class="col-span-12 lg:col-span-6">
+      <p-skeleton height="3rem"></p-skeleton>
+    </div>
+    <div class="col-span-12 lg:col-span-6">
+      <p-skeleton height="3rem"></p-skeleton>
+    </div>
+    <div class="col-span-12 lg:col-span-6">
+      <p-skeleton height="3rem"></p-skeleton>
+    </div>
+    <div class="col-span-12 lg:col-span-6">
+      <p-skeleton height="3rem"></p-skeleton>
+    </div>
+    <div class="col-span-12 lg:col-span-6">
+      <p-skeleton height="3rem"></p-skeleton>
+    </div>
+    <div class="col-span-12 lg:col-span-6">
+      <p-skeleton height="3rem"></p-skeleton>
+    </div>
+    <div class="col-span-12 lg:col-span-6">
+      <p-skeleton height="3rem"></p-skeleton>
+    </div>
+    <div class="col-span-12 lg:col-span-6">
+      <p-skeleton height="3rem"></p-skeleton>
+    </div>
+    <div class="col-span-12 lg:col-span-6">
+      <p-skeleton height="3rem"></p-skeleton>
+    </div>
+    <div class="col-span-12 lg:col-span-6">
+      <p-skeleton height="3rem"></p-skeleton>
+    </div>
+    <div class="col-span-12">
+      <p-skeleton height="10rem"></p-skeleton>
+    </div>
+    <div class="col-span-12">
+      <p-skeleton height="10rem"></p-skeleton>
+    </div>
+  </div>
+  }
+
+  <!-- Buttons -->
+  <div
+    class="col-span-12 flex items-center gap-4 justify-end py-6 border-t border-gray_light"
+  >
+    <div class="cancel_btn">
+      <button [routerLink]="['/gfw-portal/meetings/list']">
+        {{ 'RISK_MANAGMENT.Cancel' | translate }}
+      </button>
+    </div>
+    <div class="action_btn">
+      <p-button
+        [label]="'RISK_MANAGMENT.SaveChanges' | translate"
+        [loading]="isLoading"
+        (onClick)="submit()"
+      ></p-button>
+    </div>
+  </div>
+</section>

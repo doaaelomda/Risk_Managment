@@ -1,0 +1,50 @@
+<section>
+    <!-- <lib-shared-ui  [view_entityRouter]="'/gfw-portal/management/project/'"
+    [entityID_Name]="'projectID'" [dataViewId]="42" [selected_profile_column]="selected_profile_column"
+    (filter_emitter)="handleFilter($event)" [filter_id_input]="42" [action_items]="items"
+    (sortEmiter)="handleSort($event)" [total_items_input]="pageginationObj.totalItems"
+    (selected_emiter)="setSelected($event)" [badge_name]="'project'"
+    [table_name]="'Projects List'" [loadingState]="loadingTable"
+    (paginationEvent)="gatProjectsData($event)" (showDeleteEvent)="handleShowDelete($event)" [dataList]="dataTable"
+    [defultprofile]="defultProfile" [profilesList]="projectsProfiles"> -->
+ <lib-new-table
+    [loading]="loadingTable"
+    [table_data]="dataTable"
+    [table_title]="'BREAD_CRUMB_TITLES.ProjectsList' | translate"
+    [badge_title]="'BREAD_CRUMB_TITLES.Projects' | translate"
+    [dataViewId]="42"
+    [entityID_Name]="'projectID'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="items"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{ module: 'MANAGEMENT', feature: 'PROJECTS', action: 'VIEW' }"
+  >
+   @if(_PermissionSystemService.can('MANAGEMENT' , 'PROJECTS' , 'ADD')){
+    <button addition_action [routerLink]="'/gfw-portal/management/add-project'"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+      <i class="fi fi-br-plus w-5 h-5 "></i>
+      <span>{{'PROJECT.ADD_TITLE' |translate}}</span>
+    </button>
+  }
+ </lib-new-table>
+</section>
+
+
+
+<lib-delete-confirm-popup [titleDelete]="'PROJECT.DELETE_PROJECT_TITLE'" [descriptionDelete]="'PROJECT.DELETE_PROJECT_DESC'"
+  (hideEmiter)="handleClosedDelete($event)" [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button (onClick)="deleteProject()" [loading]="loadDelted" [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

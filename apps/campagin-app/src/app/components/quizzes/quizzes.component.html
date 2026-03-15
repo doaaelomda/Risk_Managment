@@ -1,0 +1,76 @@
+<div class="container_card flex flex-col gap-8 min-h-full">
+  @if(!gettingCampaigns ){ @if(quizzes.length){
+  <input
+    class="search-input max-w-[420px]"
+    [placeholder]="'QUIZ.SEARCH' | translate"
+    pInputText
+    type="text"
+    [(ngModel)]="searchTerm"
+    (ngModelChange)="searchQuiz()"
+  />
+
+  <div class="grid grid-cols-12 gap-[44px]">
+    @for (quiz of quizzes; track $index) {
+
+    <button
+      (click)="goToQuiz(quiz.awarenessCampaignID)"
+      class="quiz_card col-span-12 lg:col-span-4 md:col-span-6 flex flex-col items-center justify-start text-start gap-8"
+    >
+      <img
+        class="img"
+        [src]="quiz.image || 'images/quiz-dummy-image.jpg'"
+        [alt]="`${quiz.name}__img`"
+      />
+      <div class="flex flex-col gap-3 justify-start">
+        <span class="subtitle"> {{ quiz.campaignTypeName }} </span>
+        <div class="title flex justify-between items-center">
+          <h2>{{ quiz.name }}</h2>
+          <button
+            (click)="goToQuiz(quiz.awarenessCampaignID)"
+            [title]="'QUIZ.GO_TO_QUIZ' | translate"
+          >
+            <img
+              class="{{ language }} arrow flex-1"
+              src="images/arrow-up-right.svg"
+              alt="arrow-up-right__icon"
+            />
+          </button>
+        </div>
+        <p class="description">{{ quiz.description }}</p>
+        <div class="date flex gap-2 items-center">
+          <i class="fi fi-rr-calendar"></i> {{ quiz.dueDate | date }}
+        </div>
+      </div>
+    </button>
+
+    }
+  </div>
+  }@else {
+
+    <div class="flex flex-col gap-2 justify-center items-center">
+      <img  src="/images/no-data.png" alt="no-data__img">
+      <h1 class="text-center">{{ 'QUIZ.NO_CAMPAIGNS_FOUND' | translate }}</h1>
+    </div>
+  } }@else {
+  <div class="grid grid-cols-12 gap-[44px]">
+    <div class="col-span-12 lg:col-span-4 md:col-span-6">
+      <p-skeleton width="310px" height="470px" />
+    </div>
+    <div class="col-span-12 lg:col-span-4 md:col-span-6">
+      <p-skeleton width="310px" height="470px" />
+    </div>
+    <div class="col-span-12 lg:col-span-4 md:col-span-6">
+      <p-skeleton width="310px" height="470px" />
+    </div>
+    <div class="col-span-12 lg:col-span-4 md:col-span-6">
+      <p-skeleton width="310px" height="470px" />
+    </div>
+    <div class="col-span-12 lg:col-span-4 md:col-span-6">
+      <p-skeleton width="310px" height="470px" />
+    </div>
+    <div class="col-span-12 lg:col-span-4 md:col-span-6">
+      <p-skeleton width="310px" height="470px" />
+    </div>
+  </div>
+  }
+</div>

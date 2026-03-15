@@ -1,0 +1,281 @@
+<lib-cards-list
+  (selected_item_emiter)="setSelected($event)"
+  [items_actions]="item_actions"
+  [data_list]="data_list"
+  [badge_title]="'WORKFLOW_STEPS.TITLES.STEPS' | translate"
+  [list_title]="'WORKFLOW_STEPS.TITLES.STEPS' | translate"
+  [total_items]="listLength"
+  [loadingState]="loadingList"
+  (openModal)="onViewModal($event)"
+  [view_entityRouter]="'openModal=true'"
+  [externalAction]=" { toolTip:'WORKFLOW_STEPS.BUTTONS.VIEW_DECISION'|translate , label:'WORKFLOW_STEPS.TITLES.DECISIONS' |translate} "
+  (externalActionEmitter)="viewDecision($event)"
+  [table_actions_permissions]="{ module: 'WORKFLOW', feature: 'STEPS', action: 'VIEW' }"
+>
+@if(_PermissionSystemService.can('WORKFLOW','STEPS','ADD')){
+  <button
+    actions
+    (click)="handleAddStepClick()"
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+  >
+    <i class="fi fi-br-plus w-5 h-5"></i>
+    <span> {{ 'WORKFLOW_STEPS.BUTTONS.ADD_NEW_STEP' | translate }} </span>
+  </button>
+}
+</lib-cards-list>
+<lib-delete-confirm-popup
+  [titleDelete]="titleDelete"
+  [descriptionDelete]="descriptionDelete"
+  [visibleInput]="deletingStepDialog"
+  (hideEmiter)="handleCloseDelete($event)"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <!-- Cancel Button -->
+    <div class="cancel_btn">
+      <button class="w-40" (click)="handleCloseDelete(false)">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <!-- Delete Button -->
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteStep()"
+        [loading]="isDeletingStep"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+<div class="view_dialog">
+  <lib-shared-workflow-view
+    [title]="current_WF_data?.name"
+    [desc]="current_step_selected?.name"
+    [view_data]="view_data"
+    [(isViewing)]="isViewingStep"
+    [spanCols]="'3'"
+  ></lib-shared-workflow-view>
+</div>
+<div class="action_dailog">
+  <p-dialog
+    header="Header"
+    [(visible)]="show_action"
+    (onHide)="initStepForm(); isEditingStep = false"
+    [modal]="true"
+    [dismissableMask]="true"
+    styleClass="w-[888px]"
+  >
+    <ng-template pTemplate="header"> </ng-template>
+
+    <div class="container">
+      <!-- Header -->
+      <div class="head pb-4 border-b border-gray_light">
+        <h2 class="font-medium text-gray-800 text-lg mb-2">
+          {{ isEditingStep ? 'Edit Step' : 'Define New Step' }}
+        </h2>
+
+        <p class="text-gray_color">
+          {{ 'RISK_ACTION.HEADER_DESC' | translate }}
+        </p>
+      </div>
+
+      <!-- content Form-->
+
+      @if(step_form){
+      <form [formGroup]="step_form" class="grid grid-cols-12 gap-6 py-3">
+        <div class="col-span-12 grid grid-cols-12 gap-6 custom_border_bottom">
+          <div class="col-span-12 lg:col-span-6">
+            <lib-input-text
+              [placeholder]="'WORKFLOW_STEPS.PLACEHOLDERS.NAME_EN' | translate"
+              [control]="step_form.get('name')!"
+              [inputLabel]="
+                ('WORKFLOW_STEPS.FIELDS.NAME_EN' | translate) + ' * '
+              "
+              [controlNameInput]="'name'"
+            >
+            </lib-input-text>
+          </div>
+
+          <div class="col-span-12 lg:col-span-6">
+            <lib-input-text
+              [placeholder]="'WORKFLOW_STEPS.PLACEHOLDERS.NAME_AR' | translate"
+              [control]="step_form.get('nameAr')!"
+              [inputLabel]="'WORKFLOW_STEPS.FIELDS.NAME_AR' | translate"
+              [controlNameInput]="'nameAr'"
+            >
+            </lib-input-text>
+          </div>
+        </div>
+
+        <div class="col-span-12 grid grid-cols-12 gap-6">
+          <div class="col-span-12 lg:col-span-6">
+            <h3 class="title pt-2">{{'WORKFLOW_STEPS.TITLES.Assignee_Role_Data_Source_Type'| translate}} *</h3>
+
+            <div class="flex flex-col gap-2 py-2">
+              @for (type of dataSourceTypes; track $index) {
+              <div class="field-checkbox">
+                <p-radioButton
+                  [inputId]="type.id + '_role'"
+                  [value]="type.value"
+                  formControlName="assigneeRoleDataSourceTypeID"
+                  (onClick)="handleAssgineRoleSourceType()"
+                />
+                <label [for]="type.id + '_role'" class="ml-2">
+                  {{ type.name }}
+                </label>
+              </div>
+
+              }
+            </div>
+            @if(step_form.get('assigneeRoleDataSourceTypeID')?.value === 1){
+              <lib-ui-dropdown [formControlNameInput]="'assigneeRoleEntityTypeAttributeID'" [control]="step_form.get('assigneeRoleEntityTypeAttributeID')!" [label]="'Role Data Entity'" [placeholder]="'WORKFLOW_STEPS.PLACEHOLDERS.Select_Role_Data_Entity'|translate" [options]="entity_list" [optionLabel]="'name'" [optionValue]="'id'" ></lib-ui-dropdown>
+            }
+            @if(step_form.get('assigneeRoleDataSourceTypeID')?.value === 2){
+            <lib-role-dropdown
+              [options]="rolesLookUpData"
+              [placeholder]="
+                'WORKFLOW_STEPS.PLACEHOLDERS.ASSIGNEE_ROLE' | translate
+              "
+              [label]="'WORKFLOW_STEPS.FIELDS.ASSIGNEE_ROLE' | translate"
+              [control]="step_form.get('assigneeRoleID')!"
+              [formControlNameInput]="'assigneeRoleID'"
+              [optionLabel]="'label'"
+              [optionValue]="'id'"
+            >
+            </lib-role-dropdown>
+            }
+          </div>
+
+          <div class="col-span-12 lg:col-span-6">
+            <h3 class="title pt-2">{{'WORKFLOW_STEPS.TITLES.Assignee_User_Data_Source_Type'| translate}} *</h3>
+
+            <div class="flex flex-col gap-2 py-2">
+              @for (type of dataSourceTypes; track $index) {
+              <div class="field-checkbox">
+                <p-radioButton
+                  [inputId]="type.id + '_user'"
+                  [value]="type.value"
+                  formControlName="assigneeUserDataSourceTypeID"
+                  (onClick)="resetDataSourceTypeValues()"
+                ></p-radioButton>
+
+                <label [for]="type.id + '_user'" class="ml-2">
+                  {{ type.name }}
+                </label>
+              </div>
+
+              }
+            </div>
+
+                @if(step_form.get('assigneeUserDataSourceTypeID')?.value === 1){
+              <lib-ui-dropdown [formControlNameInput]="'assigneeUserEntityTypeAttributeID'" [control]="step_form.get('assigneeUserEntityTypeAttributeID')!" [label]="'User Data Entity'" [placeholder]="'WORKFLOW_STEPS.PLACEHOLDERS.Select_User_Data_Entity'|translate" [options]="entity_list" [optionLabel]="'name'" [optionValue]="'id'" ></lib-ui-dropdown>
+            }
+            @if(step_form.get('assigneeUserDataSourceTypeID')?.value === 2){
+            <lib-user-dropdown
+              [options]="usersLookUpData"
+              [placeholder]="
+                'WORKFLOW_STEPS.PLACEHOLDERS.ASSIGNEE_USER' | translate
+              "
+              [label]="'WORKFLOW_STEPS.FIELDS.ASSIGNEE_USER' | translate"
+              [control]="step_form.get('assigneeUserID')!"
+              [formControlNameInput]="'assigneeUserID'"
+              [optionLabel]="'userName'"
+              [optionValue]="'id'"
+            >
+            </lib-user-dropdown>
+            }
+          </div>
+        </div>
+
+        <div class="col-span-12 grid grid-cols-12 gap-6 custom_border_bottom">
+          <div class="col-span-12 lg:col-span-6">
+            <lib-input-text
+              [placeholder]="
+                'WORKFLOW_STEPS.PLACEHOLDERS.TASK_TITLE_EN' | translate
+              "
+              [control]="step_form.get('taskTitle')!"
+              [inputLabel]="
+                ('WORKFLOW_STEPS.FIELDS.TASK_TITLE_EN' | translate) + ' * '
+              "
+              [controlNameInput]="'taskTitle'"
+            >
+            </lib-input-text>
+          </div>
+
+          <div class="col-span-12 lg:col-span-6">
+            <lib-input-text
+              [placeholder]="
+                'WORKFLOW_STEPS.PLACEHOLDERS.TASK_TITLE_AR' | translate
+              "
+              [control]="step_form.get('taskTitleAr')!"
+              [inputLabel]="
+                ('WORKFLOW_STEPS.FIELDS.TASK_TITLE_AR' | translate) + ' * '
+              "
+              [controlNameInput]="'taskTitleAr'"
+            >
+            </lib-input-text>
+          </div>
+        </div>
+
+        <div class="col-span-12 custom_border_bottom">
+          <lib-textarea-ui
+            [inputLabel]="
+              ('WORKFLOW_STEPS.FIELDS.TASK_DESC_EN' | translate) + ' * '
+            "
+            [placeholder]="
+              'WORKFLOW_STEPS.PLACEHOLDERS.TASK_DESC_EN' | translate
+            "
+            [controlNameInput]="'taskDescription'"
+            [control]="step_form.get('taskDescription')!"
+          ></lib-textarea-ui>
+        </div>
+
+        <div class="col-span-12 custom_border_bottom">
+          <lib-textarea-ui
+            [inputLabel]="
+              ('WORKFLOW_STEPS.FIELDS.TASK_DESC_AR' | translate)
+            "
+            [placeholder]="
+              'WORKFLOW_STEPS.PLACEHOLDERS.TASK_DESC_AR' | translate
+            "
+            [controlNameInput]="'taskDescriptionAr'"
+            [control]="step_form.get('taskDescriptionAr')!"
+          ></lib-textarea-ui>
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-input-number
+            [placeholder]="'WORKFLOW_STEPS.PLACEHOLDERS.TIMELINE' | translate"
+            [control]="step_form.get('timeline')!"
+            [inputLabel]="('WORKFLOW_STEPS.FIELDS.TIMELINE' | translate) + ' *'"
+            [controlNameInput]="'timeline'"
+          >
+          </lib-input-number>
+        </div>
+      </form>
+
+      }
+    </div>
+
+    <ng-template pTemplate="footer">
+      <div class="flex justify-end gap-4">
+        <div class="cancel_btn">
+          <button (click)="closeForm()">
+            {{ 'RISK_ACTION.CANCEL' | translate }}
+          </button>
+        </div>
+        <div class="action_btn">
+          <p-button
+            [disabled]="step_form.invalid"
+            [label]="'RISK_ACTION.SAVE' | translate"
+            [outlined]="true"
+            severity="secondary"
+            (onClick)="handleSubmitActionStep()"
+            [loading]="loadSave"
+          >
+          </p-button>
+        </div>
+      </div>
+    </ng-template>
+  </p-dialog>
+</div>

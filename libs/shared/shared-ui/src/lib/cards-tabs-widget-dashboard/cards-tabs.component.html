@@ -1,0 +1,81 @@
+<div class="tabs flex flex-wrap  items-center gap-4 border-b border-gray_light mb-6">
+  <div class="flex-1 flex items-center gap-4">
+    @for(tab of data_tabs ; track tab){
+    <button (click)="current_active_tab = tab" [ngClass]="{'active_tab':current_active_tab.id === tab.id}"
+      class="flex justify-center items-center gap-3 font-medium px-4 py-3 min-w-40">
+      <span>{{tab.name}}</span>
+    </button>
+    }
+  </div>
+  @if(mode() === 'edit'){
+
+    <div class="filters cursor-auto flex items-center gap-4">
+
+
+
+
+        <div class="flex items-center gap-4 flex-row-reverse">
+            <button (click)="filter_visible = true" class="filter_dashboard_action-btn">
+            <i class="fi fi-rr-filter"></i>
+          </button>
+            <button class="filter_dashboard_action-btn">
+            <i class="fi fi-rr-settings"></i>
+          </button>
+            <button (click)="actionEmitter.emit({widget:chart_config_input()?.data , event:'delete' , value:chart_config_input()?.data})" class="filter_dashboard_action-btn danger">
+            <i class="fi fi-rr-trash"></i>
+          </button>
+        </div>
+
+           <div class="form_group flex-1">
+                <p-dropdown
+                  [options]="widthOptions"
+                  [(ngModel)]="selectedWidth"
+                  optionLabel="value"
+                  optionValue="value"
+                  [placeholder]="'Select Width'"
+                  (onChange)="actionEmitter.emit({widget:chart_config_input()?.data , event:'resize' , value:selectedWidth})"
+                >
+                </p-dropdown>
+              </div>
+
+    </div>
+  }
+</div>
+
+
+<div class="cards_container grid grid-cols-12 gap-4 items-stretch">
+
+  @for (card of current_active_tab.cards; track $index) {
+  <div class="col-span-2">
+    <lib-card-dashboard [current_card_data]="card"></lib-card-dashboard>
+  </div>
+  }
+
+</div>
+
+
+
+@if(filter_visible){
+
+  <div class="action_dailog">
+  <p-dialog
+
+  [draggable]="false"
+  [position]="'right'"
+  header="Edit Profile"
+  [modal]="false"
+  [(visible)]="filter_visible"
+  styleClass="min-w-[25rem] min-h-[20rem]"
+>
+
+   <ng-template pTemplate="header">
+    </ng-template>
+
+
+
+    <lib-filter-dashboard  ></lib-filter-dashboard>
+</p-dialog>
+
+</div>
+
+}

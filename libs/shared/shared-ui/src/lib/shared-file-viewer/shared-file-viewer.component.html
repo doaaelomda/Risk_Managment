@@ -1,0 +1,37 @@
+@if(file && file.fileExtension){
+  <div
+  class="add_attach p-[26px] max-h-screen overflow-auto col-span-12 lg:col-span-4 md:col-span-6 gap-4 rounded-lg border border-gray_light justify-center my-3"
+>
+  @if(file.fileExtension.toLowerCase().includes('pdf')) {
+<lib-pdf-preview
+  [pdfSrc]="env + file.fileUrl.substring(1) | secureResource | async">
+</lib-pdf-preview>
+  } @else if(file.fileExtension.toLowerCase().includes('docx') ||
+  file.fileExtension.toLowerCase().includes('doc')) {
+<lib-docs-preview
+  [wordSrc]="env + file.fileUrl.substring(1) | secureResource | async">
+</lib-docs-preview>  } @else if(
+  ['png','jpg','jpeg','gif','svg'].includes(file.fileExtension.replace('.','')!.toLowerCase()))
+  {
+  <div class="image_preview mt-2 text-center">
+    <img
+      [secureSrc]="env + file.fileUrl"
+      alt="{{ file.fileTitle }}"
+      class="rounded-lg border border-gray-300 w-[75%]"
+    />
+  </div>
+  } @else {
+  <div class="action_btn flex items-center justify-center mb-6 w-fit mx-auto">
+    <button class="btn">
+      <a
+        target="_blank"
+        [href]="file.fileExtension ? env + file.fileUrl : file.fileUrl"
+      >
+        {{ file.fileExtension ? 'Show File' : 'Show Link' }}
+      </a>
+    </button>
+  </div>
+  }
+</div>
+
+}

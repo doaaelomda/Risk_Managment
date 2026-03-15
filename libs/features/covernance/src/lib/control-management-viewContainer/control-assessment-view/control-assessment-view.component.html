@@ -1,0 +1,39 @@
+<div class="flex justify-between gap-2">
+  @if(data){
+  <h1 class="font-semibold text-3xl">{{ data.govControlName || '-' }}</h1>
+  <div class="flex flex-wrap gap-3 items-center">
+    @if(data?.controlComplianceStatusTypeName){
+    <div class="flex gap-1 items-center">
+      <span class="text-gray-500 font-medium text-[16px]">
+        {{
+        'CONTROL_ASSESSMENT.CONTROL_COMPLIANCE_STATUS_TYPE_NAME' | translate
+        }}:
+      </span>
+      <span class="badge  {{ data?.controlComplianceStatusTypeColor || '-' }}">
+        {{ data?.controlComplianceStatusTypeName || '-' }}
+      </span>
+    </div>
+    }
+
+    <div class="flex gap-1 items-center">
+      <span class="text-gray-500 font-medium text-[16px]"> {{ 'CONTROL_ASSESSMENT.ASSESSMENT_DATE' | translate }}:
+      </span>
+      <span class="text-gray-800 font-medium text-[16px]">
+        {{ data.assessmentDate ?? data.assessmentDate | date }}
+      </span>
+    </div>
+  </div>
+  }@else {
+  <p-skeleton width="15rem" height="2rem" />
+  <div class="flex flex-wrap gap-3 items-center">
+    <div class="flex gap-1 items-center">
+      <p-skeleton width="5rem" height="1rem"></p-skeleton>
+    </div>
+    <div class="flex gap-1 items-center">
+      <p-skeleton width="5rem" height="1rem"></p-skeleton>
+    </div>
+  </div>
+  }
+</div>
+<lib-shared-tabs [permissionFeature]="{module:'GOVERNANCE' , feature:'CONTROLASSESSMENT'}"></lib-shared-tabs>
+<router-outlet></router-outlet>

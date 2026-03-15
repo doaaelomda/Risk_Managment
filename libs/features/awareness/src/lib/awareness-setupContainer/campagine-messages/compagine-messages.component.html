@@ -1,0 +1,29 @@
+
+    <!-- Delivery Subject -->
+     <form [formGroup]="campaign_form" action="">
+
+       <div class="md:col-span-6 col-span-12 mb-6">
+         <lib-input-text
+           [placeholder]="'AWARENESS.DELIVERY_SUBJECT_PLACEHOLDER' | translate"
+           [inputLabel]="'AWARENESS.DELIVERY_SUBJECT' | translate"
+           [control]="campaign_form.get('deliverySubject')!"
+           [controlNameInput]="'deliverySubject'"
+           [validations]="validationRequired"
+           >
+         </lib-input-text>
+       </div>
+
+       <!-- Delivery Message -->
+       <div class="col-span-12">
+        <label for=""> {{ 'AWARENESS.DELIVERY_MESSAGE' | translate }}</label>
+         <lib-editor [height]="'250px'"
+           [control]="campaign_form.get('deliveryMessage')!"
+           [controlNameInput]="'deliveryMessage'" [validations]="validationRequired">
+         </lib-editor>
+       </div>
+
+
+        <div class="action_btn flex justify-end my-3">
+      <p-button [label]="'BUTTONS.SAVE' | translate" [loading]="isLoading" (onClick)="submit()"></p-button>
+    </div>
+     </form>

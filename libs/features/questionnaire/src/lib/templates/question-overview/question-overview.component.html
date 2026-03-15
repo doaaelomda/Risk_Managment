@@ -1,0 +1,53 @@
+<section class="info p-8 rounded-lg bg-primary/5">
+  <div class="content grid grid-cols-12 gap-6">
+    <!-- 🔹 Template Name -->
+    <div class="col-span-12 lg:col-span-6 lg:border-r border-gray_light">
+      <p class="text-sm font-medium text-gray-500">
+        {{ 'TEMPLATES.INSTANCE_NAME' | translate }}
+      </p>
+      <p class="text-base font-semibold text-gray-900 mt-1">
+        {{ data?.questionnaireInstanceName || '-' }}
+      </p>
+    </div>
+
+    <!-- 🔹 Section Name -->
+    <div class="col-span-12 lg:col-span-6">
+      <p class="text-sm font-medium text-gray-500">
+        {{ 'TEMPLATES.SECTION_NAME' | translate }}
+      </p>
+      <p class="text-base font-semibold text-gray-900 mt-1">
+        {{ data?.questionnaireInstanceSectionName || '-' }}
+      </p>
+    </div>
+
+    <!-- 🔹 Question Text -->
+    <div class="col-span-12 lg:col-span-6 lg:border-r border-gray_light">
+      <p class="text-sm font-medium text-gray-500">
+        {{ 'TEMPLATES.QUESTION_TEXT' | translate }}
+      </p>
+      <p class="text-base font-semibold text-gray-900 mt-1">
+        {{ data?.questionnaireQuestionText || '-' }}
+      </p>
+    </div>
+
+    <!-- 🔹 Weight -->
+    <div class="col-span-12 lg:col-span-6">
+      <p class="text-sm font-medium text-gray-500">
+        {{ 'TEMPLATES.WEIGHT' | translate }}
+      </p>
+      <p class="text-base font-semibold text-gray-900 mt-1">
+        {{ data?.weight || '-' }}
+      </p>
+    </div>
+
+    <!-- 🔹 Display Order -->
+    <div class="col-span-12">
+      <p class="text-sm font-medium text-gray-500">
+        {{ 'TEMPLATES.DISPLAY_ORDER' | translate }}
+      </p>
+      <p class="text-base font-semibold text-gray-900 mt-1">
+        {{ data?.displayOrder || '-' }}
+      </p>
+    </div>
+  </div>
+</section>

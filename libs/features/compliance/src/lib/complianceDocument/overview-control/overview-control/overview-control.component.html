@@ -1,0 +1,61 @@
+<section class="space-y-6 grid grid-cols-12">
+  <div [ngClass]="hasActions ? 'col-span-8' : 'col-span-12'">
+    <lib-shared-overview [entries]="overviewEntries" [data]="Data" [dataLoading]="loadingData"></lib-shared-overview>
+  </div>
+  <div [hidden]="!hasActions" class="lg:col-span-4 col-span-12">
+    <lib-system-actions (foundActionEmitter)="onFoundAction($event)" [dataEntityTypeId]="10"
+      [entityId]="id"></lib-system-actions>
+  </div>
+</section>
+
+
+
+<!-- <div class="status pt-4 px-4">
+      <div class="flex justify-between">
+        <p class="text-progress">{{'Control_view.MY_STATUS' |translate}}</p>
+        <i class="fi fi-rr-menu-dots-vertical"></i>
+      </div>
+      <div class="grid grid-cols-1 pt-6 pb-3">
+@for (card of statusCards; track $index) {
+  <div class="card-status my-4">
+
+    <div class="paraggarpStauts flex gap-2 items-center">
+      <i class="@if(card.icon) { {{card.icon}} } color_icon"></i>
+      {{ card.title | translate }}
+    </div>
+
+    @if(loadingData) {
+      <p-skeleton width="8rem"></p-skeleton>
+    }
+    @else {
+      <div class="flex items-center justify-between">
+      <span [class]="card.spanClass + ' flex gap-2 p-4 items-center'">
+        {{ Data?.[card.value] && Data?.[card.value] !== '' ? Data[card.value] : '-' }}
+      </span>
+
+
+        <div class="p-2 welcome_par">
+          <p class="flex items-center text-gray-500 text-sm font-medium mb-2">
+            {{ 'Control_view.UPDATED' | translate }} :
+            <span class="text-gray-700 text-sm font-normal">
+              {{ Data?.[card.lastUpdated] ? (Data[card.lastUpdated] | date:'MMM d y') : '-' }}
+            </span>
+          </p>
+
+          <p class="flex items-center text-gray-500 text-sm font-medium">
+            {{ 'Control_view.NEXT_DATE' | translate }} :
+            <span class="text-gray-700 text-sm font-normal">
+              {{ Data?.[card.nextDate] ? (Data[card.nextDate] | date:'MMM d y') : '-' }}
+            </span>
+          </p>
+        </div>
+      </div>
+    }
+
+  </div>
+}
+
+      </div>
+
+
+    </div> -->

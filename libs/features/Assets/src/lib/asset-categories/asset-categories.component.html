@@ -1,0 +1,292 @@
+<section>
+  <div class="header flex items-center justify-between mb-8">
+    <div>
+      <h2 class="text-2xl font-medium mb-3">
+        {{ 'ASSETS_CATRGORIES.ASSETS_CATRGORIES' | translate }}
+      </h2>
+      <p class="text-gray_light">{{ 'ASSETS_CATRGORIES.SUB_TITLE' | translate }}</p>
+    </div>
+    @if(_PermissionSystemService.can('ORGINAIZATION' , 'ORGINAIZATION' , 'ADD')){
+    <button
+      (click)="addNewOrgNotParent()"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+    >
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'ASSETS_CATRGORIES.ADD_NEW_BTN' | translate }}</span>
+    </button>
+  }
+  </div>
+
+  <div class="grid grid-cols-12 gap-12">
+    <div class="col-span-12 lg:col-span-5">
+      <p-tree
+        [value]="orgUnitsTree"
+        styleClass="node_wrapper p-0"
+        class="w-full"
+      >
+        <ng-template let-node pTemplate="default">
+          <button
+            class="flex justify-between items-start w-full link"
+            [ngClass]="{
+              selected_node: node?.id === selectedNode?.id || node.active
+            }"
+            (click)="toggleNode($event, node)"
+          >
+            <p class="nodeName flex-1 text-start" [title]="node?.label">
+              <i class="fi fi-rr-layers layers-ico"></i>
+              {{ node?.label }}
+            </p>
+            <div class="flex items-center gap-2">
+              <button
+                class="iconActionWrapper"
+                (click)="handleUnitSelect($event,node)"
+              >
+                <i class="fi fi-br-menu-dots"></i>
+              </button>
+              @if(node?.children?.length){
+              <button
+                (click)="toggleNode($event, node)"
+                class="iconActionWrapper"
+              >
+                <i
+                  class="fi fi-rr-angle-small-{{
+                    node.expanded ? 'up' : 'down'
+                  }}"
+                ></i>
+              </button>
+              }
+            </div>
+          </button>
+        </ng-template>
+      </p-tree>
+
+
+      <p-menu #menu [model]="actions" [popup]="true">
+        <ng-template pTemplate="item" let-item>
+          @if(item?.visible()){
+          <button (click)="item.command()"
+            class="p-menuitem-link w-full flex items-center gap-3 px-4 py-2 hover:bg-gray_color-100">
+            <i [class]="item.icon"></i>
+            <span class="p-menuitem-text">{{ item.label | translate }}</span>
+          </button>
+          }
+        </ng-template>
+      </p-menu>
+    </div>
+    <div
+      class="col-span-12 mb-4 lg:col-span-7 flex flex-col gap-3 view_data_container"
+    >
+      @if(selectedNode){
+
+      <div class="tabs flex flex-wrap items-center gap-4 border-b border-gray_light">
+        @for(tab of tabs ; track tab){
+        @if(tab?.visible()){
+        <button [ngClass]="{ active_tab: selected_tab_id === tab.id }" (click)="this.selected_tab_id = tab.id"
+          class="flex justify-center items-center gap-3 font-medium px-4 py-3 min-w-40">
+          <i [class]="tab.icon" class="fi"></i>
+          <span>{{ tab.name }}</span>
+        </button>
+        }
+        }
+      </div>
+
+      <div class="view_container">
+        @switch (this.selected_tab_id) { @case (1) {
+        <div class="container space-y-6">
+          <h2
+            class="font-medium text-gray-800 text-lg mb-2 break-words whitespace-normal"
+          >
+            {{ orgaizationData?.name || '-' }}
+          </h2>
+
+          <div class="grid grid-cols-12 gap-4 border-b border-gray_light py-3">
+            <div class="col-span-12 lg:col-span-4">
+              <h3 class="header-item mb-1">
+                {{ 'orginazation.NAME' | translate }}
+              </h3>
+              <p class="header-para break-words whitespace-normal">
+                @if(loadOrgainzationData) {
+                <p-skeleton width="2rem" styleClass="mb-2" />
+                } @else {
+                {{ orgaizationData?.name || '-' }}
+                }
+              </p>
+            </div>
+
+            <div class="col-span-12 lg:col-span-4">
+              <h3 class="header-item mb-1">
+                {{ 'orginazation.NAME_AR' | translate }}
+              </h3>
+              <p class="header-para">
+                @if(loadOrgainzationData) {
+                <p-skeleton width="2rem" styleClass="mb-2" />
+                } @else {
+                {{ orgaizationData?.nameAr || '-' }}
+                }
+              </p>
+            </div>
+
+            <div class="col-span-12 lg:col-span-4">
+              <h3 class="header-item mb-1">
+                {{ 'orginazation.description' | translate }}
+              </h3>
+              <p class="header-para">
+                @if(loadOrgainzationData) {
+                <p-skeleton width="2rem" styleClass="mb-2" />
+                } @else {
+                {{ orgaizationData?.description || '-' }}
+                }
+              </p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-12 gap-4 border-b border-gray_light py-3">
+            <div class="col-span-12 lg:col-span-4">
+              <h3 class="header-item mb-1">
+                {{ 'orginazation.descriptionAr' | translate }}
+              </h3>
+              <p class="header-para">
+                @if(loadOrgainzationData) {
+                <p-skeleton width="2rem" styleClass="mb-2" />
+                } @else {
+                {{ orgaizationData?.descriptionAr || '-' }}
+                }
+              </p>
+            </div>
+
+            <div class="col-span-12 lg:col-span-6">
+              <h3 class="header-item mb-1">
+                {{ 'ASSETS_CATRGORIES.COLOR' | translate }}
+              </h3>
+              <p class="header-para">
+                @if(loadOrgainzationData) {
+                <p-skeleton width="2rem" styleClass="mb-2" />
+                } @else {
+                    <div class="flex items-center gap-2 rounded-xl  justify-center badge" [ngClass]="orgaizationData?.color">
+          <span class="small_doted"></span>
+          <span>{{ orgaizationData?.color }}</span>
+        </div>
+                }
+              </p>
+            </div>
+          </div>
+        </div>
+
+        } }
+      </div>
+
+      }@else {
+      <div class="text-gray-500 text-center py-6">
+        <div class="flex flex-col gap-2 items-center empty_state_wrapper">
+          <img src="images/no-document.svg" alt="empty-state" />
+          <h2>{{ 'EMPTY_STATE.TITLE' | translate }}</h2>
+          <p>{{ 'EMPTY_STATE.MESSAGE' | translate }}</p>
+        </div>
+      </div>
+
+      }
+    </div>
+  </div>
+</section>
+
+<lib-delete-confirm-popup
+  [titleDelete]="'ASSETS_CATRGORIES.DELETE_CATEGORY'"
+  [descriptionDelete]="'ASSETS_CATRGORIES.DELETE_DESC'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="handleClosedDelete()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteOrganaization()"
+        [loading]="loadDelted"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+<p-dialog
+  [header]="
+    EditOrg
+      ? ('ASSETS_CATRGORIES.UPDATE_Category' | translate)
+      : ('ASSETS_CATRGORIES.ADD_NEW_BTN' | translate)
+  "
+  [(visible)]="addUnitModal"
+  (onHide)="addUnitModal = false; orgin_form.reset(); EditOrg = false "
+  [modal]="true"
+  [dismissableMask]="true"
+  [draggable]="false"
+  styleClass="w-[45rem]"
+>
+  <form [formGroup]="orgin_form" class="space-y-4">
+    <div class="grid grid-cols-12 gap-4">
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-text
+          [placeholder]="'orginazation.NAME_PLACEHOLDER' | translate"
+          [inputLabel]="'orginazation.NAME' | translate"
+          [control]="orgin_form.get('name')!"
+          [controlNameInput]="'name'"
+          [validations]="validationsRequired"
+        >
+        </lib-input-text>
+      </div>
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-text
+          [placeholder]="'orginazation.NAME_AR_PLACEHOLDER' | translate"
+          [inputLabel]="'orginazation.NAME_AR' | translate"
+          [control]="orgin_form.get('nameAr')!"
+          [controlNameInput]="'nameAr'"
+        >
+        </lib-input-text>
+      </div>
+      <div class="col-span-12">
+        <lib-textarea-ui
+          [placeholder]="'orginazation.description' | translate"
+          [inputLabel]="'orginazation.description' | translate"
+          [control]="orgin_form.get('description')!"
+          [controlNameInput]="'description'"
+        >
+        </lib-textarea-ui>
+             <div class="md:col-span-6 col-span-12">
+        <lib-color-dropdown [control]="orgin_form.get('color')!" [controlNameInput]="'color'"
+          [placeholder]="'orginazation.color_PLACEHOLDER' | translate"
+          [inputLabel]="'STRATEGY_PLAN.COLOR' | translate"></lib-color-dropdown>
+      </div>
+      </div>
+      <div class="col-span-12">
+        <lib-textarea-ui
+          [placeholder]="'orginazation.descriptionAr' | translate"
+          [inputLabel]="'orginazation.descriptionAr' | translate"
+          [control]="orgin_form.get('descriptionAr')!"
+          [controlNameInput]="'descriptionAr'"
+        >
+        </lib-textarea-ui>
+      </div>
+
+      <div
+        class="col-span-12 flex items-center gap-4 justify-end py-3 border-t border-gray_light"
+      >
+        <div class="cancel_btn">
+          <button (click)="addUnitModal = false">
+            {{ 'RISK_MANAGMENT.Cancel' | translate }}
+          </button>
+        </div>
+        <div class="action_btn">
+          <p-button
+            [label]="'RISK_MANAGMENT.SaveChanges' | translate"
+            [loading]="loadDelted"
+            (onClick)="EditOrg ? editUnit() : addSubUnit()"
+          >
+          </p-button>
+        </div>
+      </div>
+    </div>
+  </form>
+</p-dialog>

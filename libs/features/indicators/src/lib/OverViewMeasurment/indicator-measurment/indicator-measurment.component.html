@@ -1,0 +1,385 @@
+<!-- handle new table Measurmnet -->
+<section>
+    <lib-new-table
+    [loading]="loadingTable"
+    [table_data]="dataTable"
+    [table_title]="'BREAD_CRUMB_TITLES.measurment_LIST' | translate"
+    [badge_title]="'BREAD_CRUMB_TITLES.measurment' | translate"
+    [dataViewId]="39"
+    [entityID_Name]="'indicatorMeasurementID'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="items"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{ module: 'COMPLIANCE', feature: 'KEYCOMPLIANCEINDICATORSMEASURMENTLIST', action: 'VIEW' }"
+
+  >
+  @if(_PermissionSystemService.can('COMPLIANCE' , 'KEYCOMPLIANCEINDICATORSMEASURMENTLIST' , 'ADD')){
+        <button
+      addition_action
+      (click)="show_action = true"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+    >
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'BREAD_CRUMB_TITLES.ADD_NEW_measurment' | translate }}</span>
+    </button>
+  }
+  </lib-new-table>
+</section>
+
+<!-- Delete Popup -->
+<lib-delete-confirm-popup
+  [titleDelete]="'measurment.DELETE_measurment_TITLE'"
+  [descriptionDelete]="'measurment.DELETE_measurment_DESC'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteMeasurment()"
+        [loading]="loadDelted"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+<!-- add quick popup -->
+<div class="action_dailog">
+  <p-dialog
+    [(visible)]="show_action"
+    (onHide)="onModalClose()"
+    [modal]="true"
+    [dismissableMask]="true"
+    [draggable]="false"
+    styleClass="w-[50rem]"
+    header="{{
+      updateMeasurment
+        ? ('measurment.UPDATE_TITLE' | translate)
+        : ('measurment.ADD_TITLE' | translate)
+    }}"
+  >
+    <div class="container">
+      <div class="STEPER_MEASURMENT">
+        <div class="flex mb-8 justify-between items-center">
+          @for (step of steps; track $index) {
+          <div class="flex flex-col gap-3 items-center flex-1 stepContainer">
+            <div
+              class="stepIcoContainer relative w-full flex justify-center items-center"
+            >
+              <div
+                class="step_line absolute"
+                [ngClass]="{
+                  full_width: $index !== 0 && $index !== steps.length - 1,
+                  last_step: $index === steps.length - 1
+                }"
+              ></div>
+              <button
+                class="stepIco z-50"
+                (click)="step?.command()"
+                [ngClass]="{ active_step: step?.id === currentStep }"
+              >
+                <i [class]="step?.icon"></i>
+              </button>
+            </div>
+
+            <div class="stepTxt flex flex-col gap-2 items-center">
+              <h3 [ngClass]="{ active_step: step?.id === currentStep }">
+                {{ step?.name }}
+              </h3>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+
+      @if(currentStep === 1){
+      <div>
+        <div class="head pb-4 border-b border-gray_light">
+          <p class="text-gray_color">
+            {{ 'measurment.HEADER_DESC' | translate }}
+          </p>
+        </div>
+
+        <form [formGroup]="measurementForm">
+          <div
+            class="form_control grid grid-cols-12 gap-6 items-start py-4 border-b border-gray_light"
+          >
+            <div class="col-span-12 lg:col-span-6">
+              <lib-date-packer
+                [placeholder]="'measurment.SELECT_START_DATE' | translate"
+                [inputLabel]="'measurment.PERIOD_START_DATE' | translate"
+                [control]="measurementForm.get('periodStartDate')!"
+                [controlNameInput]="'periodStartDate'"
+                [validations]="validationsRequired"
+              >
+              </lib-date-packer>
+            </div>
+            <div class="col-span-12 lg:col-span-6">
+              <lib-date-packer
+                [placeholder]="'measurment.SELECT_END_DATE' | translate"
+                [inputLabel]="'measurment.PERIOD_END_DATE' | translate"
+                [control]="measurementForm.get('periodEndDate')!"
+                [controlNameInput]="'periodEndDate'"
+                [validations]="validationsRequired"
+              >
+              </lib-date-packer>
+            </div>
+          </div>
+
+          <div
+            class="form_control grid grid-cols-12 gap-6 items-start py-4 border-b border-gray_light"
+          >
+            <div class="col-span-12 lg:col-span-6">
+              <lib-input-text
+                placeholder="{{ 'measurment.DATA_SOURCE_NAME' | translate }}"
+                inputLabel="{{ 'measurment.DATA_SOURCE_NAME' | translate }}"
+                controlNameInput="dataSourceName"
+                [control]="measurementForm.get('dataSourceName')!"
+                [validations]="validationsRequired"
+              >
+              </lib-input-text>
+            </div>
+            <div class="col-span-12 lg:col-span-6">
+              <lib-ui-dropdown
+                placeholder="{{ 'measurment.AGGREGATION_PERIOD' | translate }}"
+                label="{{ 'measurment.AGGREGATION_PERIOD' | translate }}"
+                [options]="indicatorAggregationPeriodTypeArray"
+                optionLabel="label"
+                optionValue="id"
+                formControlNameInput="indicatorAggregationPeriodTypeID"
+                [control]="
+                  measurementForm.get('indicatorAggregationPeriodTypeID')!
+                "
+                [validations]="validationsRequired"
+              >
+              </lib-ui-dropdown>
+            </div>
+          </div>
+
+          <!-- <div class="form_control grid grid-cols-12 gap-6 items-start py-4 border-b border-gray_light">
+            <div class="col-span-12 ">
+              <lib-ui-dropdown placeholder="{{ 'measurment.SELECT_STATUS' | translate }}"
+                label="{{ 'measurment.STATUS' | translate }}" [options]="indicatorMeasurementStatusTypeArray"
+                optionLabel="label" optionValue="id" [validations]="validationsRequired"
+                formControlNameInput="indicatorMeasurementStatusTypeID"
+                [control]="measurementForm.get('indicatorMeasurementStatusTypeID')!">
+              </lib-ui-dropdown>
+            </div>
+          </div> -->
+        </form>
+      </div>
+      } @if(currentStep === 2){
+      <div>
+        <h2 class="text-lg font-semibold text-primary mb-4">
+          {{ 'measurment.INDICATOR_INPUTS' | translate }}
+        </h2>
+
+        <form [formGroup]="dynamicForm" class="space-y-4">
+          @for (input of indicatorInputs; track input; let i = $index) {
+          <div
+            class="grid grid-cols-12 gap-6 items-start border-b border-gray_light pb-3"
+          >
+            <div class="col-span-12 lg:col-span-12">
+              <lib-input-text
+                [inputLabel]="indicatorInputs[i].name"
+                [placeholder]="indicatorInputs[i].name"
+                [controlNameInput]="'Value' + i"
+                [control]="dynamicForm.get('Value' + i)!"
+                type="number"
+                (keypress)="allowNumbersOnly($event)"
+                [validations]="validationsRequired"
+              >
+              </lib-input-text>
+            </div>
+          </div>
+
+          }
+        </form>
+
+        @if(evaluationValue){
+        <div class="evaluationResult ">
+          <div class="flex flex-col gap-1 py-2 border-b border-gray_light">
+            <span class="label">{{ 'INDICATORS.USED_EXPRESSION' | translate }}</span>
+            <span class="text-gray-800">{{ usedExpression }}</span>
+          </div>
+          <div class="flex flex-col gap-1 py-2 border-b border-gray_light">
+            <span class="label">{{ 'INDICATORS.FINAL_RESULT' | translate }}</span>
+            <span class="text-gray-800">{{ evaluationValue }}</span>
+          </div>
+        </div>
+        }
+
+        <form [formGroup]="measurementForm">
+          <div
+            class="form_control grid grid-cols-12 gap-6 items-start py-4 border-b border-gray_light"
+          >
+            <div class="col-span-12">
+              <lib-textarea-ui
+                [inputLabel]="'measurment.NOTE' | translate"
+                [controlNameInput]="'note'"
+                [placeholder]="'measurment.NOTE_PLACEHOLDER' | translate"
+                [control]="measurementForm.get('note')!"
+              >
+              </lib-textarea-ui>
+            </div>
+          </div>
+        </form>
+      </div>
+      }
+
+      <div class="flex justify-end gap-4 mt-4">
+        <div class="cancel_btn">
+          <button (click)="show_action = false; onModalClose()">
+            {{ 'measurment.CANCEL' | translate }}
+          </button>
+        </div>
+
+        <div class="action_btn flex gap-3">
+          @if(currentStep === 1){
+          <p-button
+            [label]="'RISK_MANAGMENT.Next' | translate"
+            (onClick)="goToStep2()"
+          ></p-button>
+          } @if(currentStep === 2){
+
+          <p-button
+            [label]="'RISK_MANAGMENT.Pervious' | translate"
+            (onClick)="goToStep1()"
+          ></p-button>
+
+          <p-button
+            [label]="'measurment.SAVE' | translate"
+            [disabled]="
+              this.measurementForm.invalid || this.dynamicForm.invalid
+            "
+            [loading]="isLoading"
+            (onClick)="submit()"
+          ></p-button>
+          }
+        </div>
+      </div>
+    </div>
+  </p-dialog>
+</div>
+
+<!-- View popup -->
+<p-dialog
+  [(visible)]="ViewIndicatorModal"
+  (onHide)="ViewIndicatorModal = false"
+  [modal]="true"
+  [dismissableMask]="true"
+  [draggable]="false"
+  styleClass="w-[45rem]"
+  class="action_dailog-view"
+>
+    <div class="container ">
+      <h2 class="font-medium text-gray-800 text-lg mb-2">
+        {{ IndicatorMeasurmentData?.dataSourceName || '-' }}
+      </h2>
+
+      <div class="grid grid-cols-12 gap-4 border-b border-gray_light py-3">
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-item mb-1">
+            {{ 'measurment.MEASURED_VALUE' | translate }}
+          </h3>
+          <p class="header-para">
+            @if (!loadDataIndicator) {
+            {{ IndicatorMeasurmentData?.measuredValue || '-' }}
+            } @else {
+            <p-skeleton width="4rem" styleClass="mb-2" />
+            }
+          </p>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-item mb-1">
+            {{ 'measurment.DATA_SOURCE' | translate }}
+          </h3>
+          <p class="header-para">
+            @if (!loadDataIndicator) {
+            {{ IndicatorMeasurmentData?.dataSourceName || '-' }}
+            } @else {
+            <p-skeleton width="4rem" styleClass="mb-2" />
+            }
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-12 gap-4 border-b border-gray_light py-3">
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-item mb-1">
+            {{ 'measurment.PERIOD_START' | translate }}
+          </h3>
+          <p class="header-para flex gap-2">
+            <img src="images/icons/calendar.svg" alt="" />
+            @if (!loadDataIndicator) {
+            {{ IndicatorMeasurmentData?.periodStartDate | date : 'MMM d, y' }}
+            } @else {
+            <p-skeleton width="4rem" styleClass="mb-2" />
+            }
+          </p>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-item mb-1">
+            {{ 'measurment.PERIOD_END' | translate }}
+          </h3>
+          <p class="header-para flex gap-2">
+            <img src="images/icons/calendar.svg" alt="" />
+            @if (!loadDataIndicator) {
+            {{ IndicatorMeasurmentData?.periodEndDate | date : 'MMM d, y' }}
+            } @else {
+            <p-skeleton width="4rem" styleClass="mb-2" />
+            }
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-12 gap-4 border-b border-gray_light py-3">
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-item mb-1">
+            {{ 'measurment.AGGREGATION_TYPE' | translate }}
+          </h3>
+          <p class="header-para">
+            @if (!loadDataIndicator) {
+            {{ IndicatorMeasurmentData?.aggregationPeriodTypeName || '-' }}
+            } @else {
+            <p-skeleton width="4rem" styleClass="mb-2" />
+            }
+          </p>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-item mb-1">
+            {{ 'measurment.STATUS' | translate }}
+          </h3>
+          <p class="badge">
+            @if (!loadDataIndicator) {
+            {{ IndicatorMeasurmentData?.statusTypeName || '-' }}
+            } @else {
+            <p-skeleton width="4rem" styleClass="mb-2" />
+            }
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-12 gap-4 py-3">
+        <div class="col-span-12">
+          <h3 class="header-item mb-1">{{ 'measurment.NOTE' | translate }}</h3>
+          <p class="header-para whitespace-pre-line">
+            @if (!loadDataIndicator) {
+            {{ IndicatorMeasurmentData?.note || '-' }}
+            } @else {
+            <p-skeleton width="8rem" styleClass="mb-2" />
+            }
+          </p>
+        </div>
+      </div>
+    </div>
+</p-dialog>

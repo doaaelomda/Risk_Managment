@@ -1,0 +1,18 @@
+
+
+<div class="name_process">
+
+  <h4 class="header-para"> {{riskTitle}}</h4>
+  <h6 class="text-primary font-bold text-2xl mt-4">
+    @if(riskTitle){
+    └─
+    }
+    {{ data?.questionnaireQuestionText }}
+  </h6>
+  <h6 class="text-primary font-bold text-2xl mt-4 mb-2 mx-4">
+    └─{{ data?.questionnaireInstanceSectionName }}
+  </h6>
+</div>
+  <lib-shared-tabs [permissionFeature]="{module:moduleName , feature:featureName}" [hasComments]="false" [hasAttachments]="false"></lib-shared-tabs>
+
+  <router-outlet></router-outlet>

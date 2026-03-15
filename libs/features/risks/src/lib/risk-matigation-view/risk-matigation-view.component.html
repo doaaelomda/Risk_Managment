@@ -1,0 +1,310 @@
+<section class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+  <div [ngClass]="hasActions ? 'lg:col-span-3' : 'lg:col-span-4'" class="space-y-6">
+    <div class="flex items-center gap-2 pt-4">
+      <h2 class="text-lg font-semibold">{{ 'RISK_VIEW.MAIN_INFORMATION' | translate}}</h2>
+      @if (!loadingData) {
+      <p-button [label]="Data?.name" class="risk-button"></p-button>
+      }
+      @else{
+      <p-skeleton width="2rem" styleClass="mb-2" />
+      }
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-card-body p-4 rounded-xl shadow-sm">
+
+      <div class="header-item">
+        <span>{{ 'RISK_MANAGMENT.TYPE' | translate }}</span>
+        <div class="flex items-center gap-x-1 mt-3">
+          @if (!loadingData) {
+          <p class="font-bold text-sm">
+            {{ Data?.riskResponseTypeName || '-'}}
+          </p>
+          } @else {
+          <p-skeleton width="2rem" styleClass="mb-2" />
+          }
+        </div>
+      </div>
+
+      <div class="header-item">
+        <span>{{ 'RISK_MANAGMENT.EXECUTION_STATUS' | translate }}</span>
+        <div class="flex items-center gap-x-1 mt-3">
+          @if (!loadingData) {
+          <p class="font-bold text-sm">
+            {{ Data?.riskMitigationPlanStatusName || '-' }}
+          </p>
+          } @else {
+          <p-skeleton width="2rem" styleClass="mb-2" />
+          }
+        </div>
+      </div>
+
+      <div class="header-item">
+        <span>{{ 'RISK_MANAGMENT.PLAN_STATUS_TYPE' | translate }}</span>
+        <div class="flex">
+          <div>
+            @if (!loadingData) {
+            <p class="font-bold text-sm risk-button mt-3">
+              {{ Data?.riskResponseTypeName || '-'}}
+            </p>
+            } @else {
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="header-item">
+        <span>{{ 'RISK_MANAGMENT.BUDGET' | translate }}</span>
+        <div class="flex items-center gap-x-1 mt-3">
+          @if (!loadingData) {
+          <p class="font-bold text-sm">
+            {{ Data?.budget }}
+          </p>
+          } @else {
+          <p-skeleton width="2rem" styleClass="mb-2" />
+          }
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="desc">
+      <h2 class="text-lg font-semibold">{{ 'RISK_MANAGMENT.DESCRIPTION' | translate }}</h2>
+      <div class="space-y-4 py-4">
+        @if (!loadingData) {
+        <p style="white-space: pre-line;">{{ Data?.description || '-' }}</p>
+        } @else {
+        <p-skeleton width="2rem" styleClass="mb-2" />
+        }
+      </div>
+    </div>
+
+    <div class="respon">
+      <h2 class="text-lg font-semibold my-3">{{ 'RISK_MANAGMENT.TARGET' | translate }}</h2>
+      <div class="grid md:grid-cols-2 gap-4 p-2 p-card-body">
+
+        <div>
+          <div class="flex items-center gap-3 div_body">
+            <div>
+              <p class="text-sm font-semibold text-primary">{{ 'RISK_MANAGMENT.RISK_IMPACT' | translate }}</p>
+              <h6 class="text-xs text-primary mb-3 badge mt-2">
+                {{ Data?.targetRiskImpactName || '-' }}
+                @if(loadingData) {
+                <p-skeleton width="4rem" styleClass="mb-2" />
+
+                }
+              </h6>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-center gap-3 div_body">
+            <div>
+              <p class="text-sm font-semibold text-primary mt-2">{{ 'RISK_MANAGMENT.RISK_LIKELIHOOD' | translate
+                }}</p>
+              <h6 class="text-xs text-primary badge mb-3">
+                {{ Data?.targetRiskLikelihoodName || '-' }}
+                @if(loadingData){
+                <p-skeleton width="4rem" styleClass="mb-2" />
+
+                }
+              </h6>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="desc">
+      <h2 class="text-lg font-semibold">{{ 'RISK_MANAGMENT.JUSTIFICATION_TARGET_RISK_IMPACT' | translate }}</h2>
+      <div class="space-y-4 py-4">
+        @if (!loadingData) {
+        <p style="white-space: pre-line;">{{ Data?.justificationTargetRiskImpact || '-' }}</p>
+        } @else {
+        <p-skeleton width="2rem" styleClass="mb-2" />
+        }
+      </div>
+    </div>
+
+    <div class="desc">
+      <h2 class="text-lg font-semibold">{{ 'RISK_MANAGMENT.JUSTIFICATION_TARGET_RISK_LIKELIHOOD' | translate }}</h2>
+      <div class="space-y-4 py-4">
+        @if (!loadingData) {
+        <p style="white-space: pre-line;">{{ Data?.justificationTargetRiskLikelihood || '-' }}</p>
+        } @else {
+        <p-skeleton width="2rem" styleClass="mb-2" />
+        }
+      </div>
+    </div>
+
+
+    <div class="respon">
+      <h2 class="text-lg font-semibold my-3">{{ 'RISK_MANAGMENT.RESPONSIBILITY' | translate }}</h2>
+      <div class="grid md:grid-cols-4 gap-4 p-2 p-card-body">
+
+        <lib-owner-user [title]="'RISK_MANAGMENT.MANAGER_ROLE'" [roleOrUser]="'role'" [postionOwner]="Data?.managerRoleName"
+          [loading]="loadingData" [userId]="Data?.managerRoleID">
+        </lib-owner-user>
+        <lib-owner-user [title]="'RISK_MANAGMENT.MANAGER_USER'" [roleOrUser]="'user'"
+          [postionOwner]="Data?.managerUserName" [loading]="loadingData" [userId]="Data?.managerUserID">
+        </lib-owner-user>
+        <lib-owner-user [title]="'RISK_MANAGMENT.REVIEWER'" [roleOrUser]="'user'"
+          [postionOwner]="Data?.reviewedByUserName" [loading]="loadingData" [userId]="Data?.approvedByUserID">
+        </lib-owner-user>
+
+      </div>
+    </div>
+
+    <div class="respon">
+      <h2 class="text-lg font-semibold my-3">{{ 'RISK_MANAGMENT.TIMELINES' | translate }}</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4 p-2 p-card-body">
+
+        <div class="div_body">
+          <h6 class="text-xs text-primary">{{ 'RISK_MANAGMENT.START_DATE' | translate }}</h6>
+          <p class="flex items-center gap-2 text-sm font-medium text-gray-500 text-primary mt-4">
+            {{ Data?.expectedStartDate ? (Data?.expectedStartDate | date:'MMM d y') : ('-' | translate) }}
+            @if(loadingData){
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+
+          </p>
+        </div>
+
+        <div class="div_body">
+          <h6 class="text-xs text-primary">{{ 'RISK_MANAGMENT.END_DATE' | translate }}</h6>
+          <p class="flex items-center gap-2 text-sm font-medium text-gray-500 text-primary mt-4">
+            {{ Data?.expectedEndDate ? (Data?.expectedEndDate | date:'MMM d y') : ('-' | translate) }}
+            @if(loadingData) {
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+
+          </p>
+        </div>
+
+        <div class="div_body">
+          <h6 class="text-xs text-primary">{{ 'RISK_MANAGMENT.APPROVAL_DATE' | translate }}</h6>
+          <p class="flex items-center gap-2 text-sm font-medium text-gray-500 text-primary mt-4">
+            {{ Data?.approveDate ? (Data?.approveDate | date:'MMM d y') : ('-' | translate) }}
+            @if(loadingData){
+            <p-skeleton width="2rem" styleClass="mb-2" />
+
+            }
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <div>
+      <h2 class="text-lg font-semibold my-3">{{ 'RISK_MANAGMENT.OTHER_DATA' | translate }}</h2>
+      <div class="space-y-4 py-5">
+        <div class="p-2 p-card-body">
+          <h6 class="text-sm text-primary font-semibold">{{ 'RISK_MANAGMENT.WORKFLOW' | translate }}</h6>
+          <h6 class="text-xl text-primary font-semibold">{{ Data?.wfName || '-' }}</h6>
+        </div>
+
+        <!-- <div class="desc">
+      <h2 class="text-lg font-semibold">{{ 'RISK_MANAGMENT.DESCRIPTION' | translate }}</h2>
+      <div class="space-y-4 py-4">
+        @if (!loadingData) {
+          <p style="white-space: pre-line;">{{ Data?.notes || '-' }}</p>
+        } @else {
+          <p-skeleton width="2rem" styleClass="mb-2" />
+        }
+      </div>
+    </div> -->
+
+      </div>
+    </div>
+
+
+  </div>
+
+
+  <div [hidden]="!hasActions" class="lg:col-span-1">
+       <div class="mb-4">
+          <lib-system-actions (foundActionEmitter)="onFoundAction($event)" [dataEntityTypeId]="3" [entityId]="planId"></lib-system-actions>
+         </div>
+    <!-- <div class="risk_rating_short p-4 space-y-4 mt-5">
+      <div class="card w-full max-w-md">
+        <h2 class="text-xl font-semibold mb-4">{{ 'RISK_MANAGMENT.RECENT_ACTIVITY' | translate }}</h2>
+
+        <div class="flex gap-3 mb-6">
+          <div class="relative z-50">
+            <p-avatar image="https://i.pravatar.cc/100?img=1" shape="circle" size="normal"></p-avatar>
+            <span class="absolute right-0 w-3 h-3 rounded-full border border-white bg-green-500"></span>
+          </div>
+          @if(!isArabic){
+          <div class="border border-l-2 relative top-6 right-6 text-gray_light"></div>
+          }
+
+          <div>
+            <div class="">
+              Olivia Rhye
+              <span class="text-gray_color ml-2">2 mins ago</span>
+            </div>
+
+            <div class="text-gray_color">
+              Commented in
+              <a href="#" class="text-primary font-semibold text-sm">Marketing site redesign</a>
+              <div class="italic text-gray_color mt-1">
+                “Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tincidunt nunc ipsum tempor purus vitae id.”
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-3 mb-6">
+          <div class="relative">
+            <p-avatar image="https://i.pravatar.cc/100?img=1" shape="circle" size="normal"></p-avatar>
+            <span class="absolute right-0 w-3 h-3 rounded-full border border-white bg-green-500"></span>
+          </div>
+
+          <div>
+            <div class="">
+              Olivia Rhye
+              <span class="text-gray_color ml-2">2 mins ago</span>
+            </div>
+
+            <div class="text-gray_color">
+              Commented in
+              <a href="#" class="text-primary font-semibold text-sm">Marketing site redesign</a>
+              <div class="italic text-gray_color mt-1">
+                “Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tincidunt nunc ipsum tempor purus vitae id.”
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="risk_rating_short p-4 space-y-4 mt-5">
+      <div class="card w-full max-w-md">
+        <h2 class="text-xl font-semibold mb-4">{{ 'RISK_MANAGMENT.MY_STATICS' | translate }}</h2>
+        <p-card class="mb-3 shadow-sm bg-none">
+          <div class="flex items-center gap-4">
+            <div class="flex-1">
+              <div class="p-3 rounded-full flex mx-5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" fill="currentColor"
+                  viewBox="0 0 24 24">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                </svg>
+                <h4 class="text-sm font-medium text-gray-500">{{ 'RISK_MANAGMENT.TOTAL_CUSTOMERS' | translate }}</h4>
+              </div>
+
+              <div class="text-sm mt-1 flex items-center gap-1">
+                <div class="text-2xl font-bold text-gray-800 my-3">2,420</div>
+                <i class="fi fi-arrow-up text-green"></i>
+                <span class="text-green font-medium">100%</span>
+                <span class="text-gray_color">{{'RISK_MANAGMENT.last' |translate}}</span>
+              </div>
+            </div>
+          </div>
+        </p-card>
+      </div>
+    </div> -->
+  </div>
+
+</section>

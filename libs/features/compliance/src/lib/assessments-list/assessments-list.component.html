@@ -1,0 +1,44 @@
+<!-- Handle assessment List in New Table -->
+
+<lib-new-table [loading]="isLoading" [table_data]="assessmentList" [table_title]="'SETTING.ASSESSMENT' | translate"
+  [badge_title]="'SETTING.ASSESSMENT' | translate" [dataViewId]="33" [entityID_Name]="'complianceAssessmentID'"
+  [isShownAction]="true" (payload_emiter)="handleDataTable($event)" [action_items]="action_items"
+  (currentActionRow)="setSelectedRow($event)" [columnControl]="columnControl"
+  [table_actions_permissions]="{ module: 'COMPLIANCE', feature: 'ASSESSMENT', action: 'VIEW' }"
+  >
+  @if(_PermissionSystemService.can('COMPLIANCE' , 'ASSESSMENT' , 'ADD')
+
+){
+      <button addition_action (click)="addNewassessment()"
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+    <i class="fi fi-br-plus w-5 h-5 "></i>
+    <span>{{'HEARDE_TABLE.ADD_NEW_RISK_ASSESS' | translate}}
+    </span>
+  </button>
+  }
+</lib-new-table>
+
+
+<!-- Delete assessment-->
+
+<lib-delete-confirm-popup
+  [titleDelete]="'RISK_MANAGMENT.ASSESSMENT_DELETE_TITLE'"
+  [descriptionDelete]="'RISK_MANAGMENT.DELETE_ASSESSMENT_DESC'"
+  (hideEmiter)="handleClosedDelete()"
+  [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="handleClosedDelete()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteAssessment()"
+        [loading]="isDeleting"
+        [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

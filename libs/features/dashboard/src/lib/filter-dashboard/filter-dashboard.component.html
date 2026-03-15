@@ -1,0 +1,140 @@
+  <div class="p-4 flex items-center justify-between mb-6">
+    <h3 class="text-lg font-semibold mb-2">Filters</h3>
+
+    <div class="flex items-center gap-4">
+      <button (click)="filter_emiter.emit([]); selected_profile_filter = null;initFilterForm()" >Clear All</button>
+
+      <div class="form_group w-72">
+        <p-dropdown [showClear]="true"  [(ngModel)]="selected_profile_filter" (onChange)="handledselectedFilterProfile()"
+          optionLabel="profileName" [options]="filter_profiles" placeholder="Saved Filters" />
+      </div>
+    </div>
+  </div>
+
+  <form [formGroup]="filter_form" class="mb-6">
+    <div formArrayName="filters" class="filters">
+      @for(control of filterForm.controls ; track $index ; let i = $index){
+      <div class="flex items-center justify-between gap-6 bg-gray_light/10 p-4 rounded-lg mb-4">
+        <div [formGroupName]="i" class="single_filter grid grid-cols-12 gap-4">
+          <div class="form_group col-span-3">
+            <p-dropdown [appendTo]="'body'" [options]="current_data_filter_entity" formControlName="filter_type" optionLabel="displayName"
+              [filter]="true" filterBy="displayName" (onChange)="handleSelectFilter(i, $event)"
+              placeholder="Select Filter" />
+          </div>
+
+          @if(control.get('operator')){
+
+          <div class="form_group col-span-3">
+            <p-dropdown [appendTo]="'body'" [options]="current_operator_map.get(i)" formControlName="operator" optionLabel="OperatorName"
+              [filter]="true" filterBy="OperatorName" placeholder="Select Operator" />
+          </div>
+          } @if(control.get('firstValue')){ @switch
+          (control.get('filter_type')?.value.filterType) { @case ('Text') {
+          <div class="form_group col-span-3">
+            <input type="text" pInputText formControlName="firstValue" placeholder="Search Text" />
+          </div>
+          }@case('List'){
+          <div class="form_group col-span-3">
+            <p-dropdown [appendTo]="'body'" [options]="filters_list_map.get(i)" optionValue="id" formControlName="firstValue"
+              optionLabel="label" />
+          </div>
+          }@case('Date'){
+          <div class="form_group col-span-2">
+            <p-dropdown [appendTo]="'body'" [options]="filters_list_map.get(i)" optionValue="DataEntityTypeFilterDateOptionID"
+              formControlName="firstValue" optionLabel="NameEn" />
+          </div>
+          @if(control.get('firstValue')?.value === 18){
+          <div class="form_group col-span-4">
+            <p-calendar formControlName="secondValue" [iconDisplay]="'input'" placeholder="Select Date"
+              [showIcon]="true" selectionMode="range" inputId="icondisplay" />
+          </div>
+          }@else if(control.get('firstValue')?.value === 19){
+          <div class="form_group col-span-4">
+            <p-calendar formControlName="secondValue" [iconDisplay]="'input'" placeholder="Select Date"
+              [showIcon]="true" inputId="icondisplay" />
+          </div>
+          } }@case('User'){
+          <div class="form_group col-span-4">
+            <lib-user-dropdown placeholder="Select User" [formControlNameInput]="'firstValue'"
+              [options]="filters_list_map.get(i)" optionLabel="name" optionValue="id"
+              [control]="control.get('firstValue')!"></lib-user-dropdown>
+          </div>
+          }@case('Role'){
+          <div class="form_group col-span-4">
+            <lib-role-dropdown placeholder="Select Role" [formControlNameInput]="'firstValue'"
+              [options]="filters_list_map.get(i)" optionLabel="label" optionValue="id"
+              [control]="control.get('firstValue')!"></lib-role-dropdown>
+          </div>
+          } } }
+        </div>
+        <button (click)="removeFromArray(i)"
+          class="btn_icon p-3 rounded-lg bg-danger_color col-span-1 text-white_color">
+          <i class="fi fi-rr-trash"></i>
+        </button>
+      </div>
+
+      }
+    </div>
+  </form>
+
+  <button (click)="addNewFilter()"
+    class="flex items-center gap-2 px-3 mb-6 py-2 font-medium rounded-lg bg-primary/20 text-primary">
+    <span>Add Filter</span>
+    <i class="fi fi-rr-plus-small"></i>
+  </button>
+
+  <div class="flex items-center justify-between">
+    <div>
+      <button (click)="closeFilter() " class="px-3 py-2 rounded-lg border border-gray_light font-medium">
+        Cancel
+      </button>
+    </div>
+    <div class="flex items-center gap-4">
+      @if(selected_profile_filter){
+      <div class="action_btn flex">
+        <p-button label="Apply & Update" (onClick)="handleUpdateFilterProfile()" icon="" [disabled]="filter_form.invalid || !filterForm.controls.length"
+           />
+      </div>
+      }@else{
+      <div  class="action_btn flex">
+        <p-button (click)="showProfileNameFilter = true" label="Apply & Save" icon="" [disabled]="filter_form.invalid || !filterForm.controls.length"
+           />
+      </div>
+      }
+
+
+
+      <button (click)="handleApplyFilter()" [disabled]="filter_form.invalid || !filterForm.controls.length"
+        class="apply_btn px-3 py-2 font-medium rounded-lg border border-primary text-primary">
+        Apply
+      </button>
+
+      @if(selected_profile_filter){
+      <button
+      (click)="handleDeleteFilter()"
+        class="px-3 py-2 rounded-lg border border-danger_color text-danger_color">
+        Delete
+      </button>
+      }
+    </div>
+  </div>
+
+
+
+<p-dialog (onHide)="profile_name_filter = ''" [header]="update_filter_flag ? 'Update Filter Profile':'Create Filter Profile'" [appendTo]="'body'" [modal]="true" [(visible)]="showProfileNameFilter"
+    styleClass="w-[25rem]">
+  <div class="form_group">
+    <label for="profile_name" class="font-semibold w-6rem">Enter Profile Filter Name</label>
+    <input pInputText id="profile_name" class="flex-auto" [(ngModel)]="profile_name_filter" autocomplete="off" />
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex items-center gap-6">
+      <div class="action_btn w-28">
+        <p-button [label]="update_filter_flag ? 'Update' : 'Save'" [loading]="load_save_filter" [outlined]="true"
+          severity="secondary" (onClick)="handleSaveProfileFilter()" />
+      </div>
+      <p-button label="Cancel" [text]="true" severity="secondary" (onClick)="showProfileNameFilter = false" />
+    </div>
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,178 @@
+/* You can add global styles to this file, and also import other style files */
+@use '../../gfw-portal/src/variable.scss';
+@use '../../gfw-portal//src/styles.scss';
+@use '@flaticon/flaticon-uicons/css/all/all';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap');
+@import '~perfect-scrollbar/css/perfect-scrollbar.css';
+body {
+  font-family: 'IBM Plex Sans Arabic';
+  font-weight: 500;
+  
+}
+i {
+  @apply flex items-center justify-center;
+}
+
+.action_btn_question {
+  width: 160px;
+  background-color: #6938ef;
+  box-shadow: 0px 1px 2px 0px #1018280d;
+  justify-content: center;
+  .btn {
+    @apply text-base font-medium;
+  }
+  @apply rounded-lg py-3 px-5 text-center text-[#FFFFFF];
+}
+
+.hero {
+  background-color: #ebe9fe;
+}
+
+.p-checkbox-box {
+  @apply border border-gray_light;
+}
+
+.cancel_btn button {
+  padding: 10px 16px;
+
+  box-shadow: 0px 1px 2px 0px #1018280d;
+  border: 1px solid #d0d5dd;
+  @apply rounded-lg text-[#344054] font-medium text-sm;
+}
+
+.action_btn {
+  border-radius: 8px;
+
+  .p-button {
+    @apply flex w-full items-center bg-primary text-white_color px-4 py-2;
+
+    .p-button-icon {
+      @apply flex items-center justify-center;
+    }
+  }
+
+
+  .btn {
+    @apply flex w-full items-center bg-primary font-medium rounded-lg text-white_color px-4 py-2;
+  }
+
+  .btn_filter {
+    @apply flex gap-4 w-full items-center rounded-lg font-medium bg-white_color border border-primary text-primary px-4 h-[40px];
+  }
+}
+
+.p-radiobutton {
+  box-shadow: none;
+}
+
+.p-radiobutton .p-radiobutton-box.p-highlight {
+  background-color: transparent !important;
+  border-color: #7a5af8;
+
+  .p-radiobutton-icon {
+    background-color: #7a5af8;
+  }
+}
+
+.p-radiobutton .p-radiobutton-box {
+  @apply border border-gray_light;
+}
+
+textarea {
+  &:focus-visible {
+    outline: none;
+  }
+
+  @apply w-full border p-4 border-gray_light rounded-lg;
+  resize: none;
+
+  &.ng-invalid.ng-touched {
+    border: 1px solid red;
+  }
+}
+.p-inputtext {
+  @apply bg-white_color rounded-lg text-base;
+  width: 100%;
+  padding: .5rem .75rem;
+
+  @apply border border-gray_light;
+
+  &:focus {
+    box-shadow: none;
+  }
+
+  &.ng-touched.ng-invalid {
+    border: 1px solid red;
+    width: 100%;
+  }
+}
+
+p-inputnumber {
+  @apply w-full;
+
+  .p-inputnumber {
+    @apply w-full;
+  }
+}
+
+.p-toast {
+  width: 489px;
+  height: 64px;
+  z-index: 99999 !important;
+}
+
+.p-toast-message-success {
+  border: 1px solid #12B76A;
+  box-shadow: 3px 2px 9px 0px rgba(46, 204, 113, 0.25);
+  background: var(--white-100, rgba(255, 255, 255, 1));
+  border-radius: 8px;
+}
+
+
+.p-toast-message-error {
+  border: 1px solid rgba(240, 68, 56, 1);
+  box-shadow: 3px 2px 9px 0px rgba(235, 77, 43, 0.25);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 1);
+
+}
+
+.p-toast .p-toast-message-success .p-toast-message-content checkicon,
+.p-toast .p-toast-message-error .p-toast-message-content timescircleicon {
+  display: none !important;
+}
+
+.p-toast .p-toast-message-success .p-toast-message-content::before {
+  content: '';
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-image: url('/images/correct_icon.svg');
+}
+
+.p-toast .p-toast-message-error .p-toast-message-content::before {
+  content: '';
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-image: url('/images/error.svg');
+}
+
+.p-toast .p-toast-message-content {
+  color: #101828;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 25px;
+}
+
+.p-toast .p-toast-detail {
+  color: rgba(102, 112, 133, 1);
+  font-size: 14px;
+  font-weight: 400;
+  margin-top: 0;
+  line-height: 20px;
+}

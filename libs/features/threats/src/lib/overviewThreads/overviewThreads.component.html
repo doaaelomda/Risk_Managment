@@ -1,0 +1,17 @@
+
+  <div class="flex name_threats gap-3">
+    @if(loadDatathreats){
+       <p-skeleton width="150px" height="20px" borderRadius="8px"></p-skeleton>
+    }
+    @else {
+    <span class=" header-para">{{threatsData?.name}}</span>
+    }
+      @if (!loadDatathreats) {
+      <p class="badge">{{ threatsData?.threatStatusTypeName || '-' }}</p>
+      } @else {
+      <p-skeleton width="8rem"></p-skeleton>
+      }
+  </div>
+<lib-shared-tabs [permissionFeature]="{module:'THREATS' , feature:'THREATS'}"></lib-shared-tabs>
+
+  <router-outlet></router-outlet>

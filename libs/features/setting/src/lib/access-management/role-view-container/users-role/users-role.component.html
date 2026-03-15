@@ -1,0 +1,179 @@
+<!-- <lib-shared-ui
+  [entityID_Name]="'id'"
+  [dataList]="dataList"
+  [profilesList]="usersProfiles"
+  [loadingState]="loadingState"
+  [table_name]="table_name"
+  [badge_name]="badge_name"
+  [total_items_input]="total_items_input"
+  [defultprofile]="defultprofile"
+  [action_items]="action_items"
+  [selected_profile_column]="selected_profile_column"
+  [filter_id_input]="17"
+  (selected_emiter)="setSelectedRow($event)"
+  (paginationEvent)="getUsersData($event)"
+  (filter_emitter)="handleFilter($event)"
+  (sortEmiter)="handleSort($event)"
+  [dataViewId]="9"
+> -->
+  <lib-new-table
+    [loading]="loadingState"
+    [table_data]="dataList"
+    [table_title]="table_name"
+    [badge_title]="badge_name"
+    [dataViewId]="17"
+    [entityID_Name]="'id'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="action_items"
+    (currentActionRow)="setSelectedRow($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{ module: 'ACCESSMANAGEMNET', feature: 'ROLESUSERS', action: 'VIEW' }"
+  >
+   @if(_PermissionSystemService.can('ACCESSMANAGEMNET' , 'ROLESUSERS' , 'ADD')){
+  <button
+    (click)="openModle()"
+    addition_action
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+  >
+    <i class="fi fi-br-plus w-5 h-5"></i>
+    <span>{{ 'SETTING.ADD_NEW_USER' | translate }}</span>
+    <!-- <i class="fi fi-rr-angle-small-down"></i> -->
+  </button>
+}
+  </lib-new-table>
+
+<lib-delete-confirm-popup
+  [titleDelete]="'SETTING.UNASSIGN_USER_DESC'"
+  [descriptionDelete]="'SETTING.UNASSIGN_USER_TITLE'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        [loading]="isDeleting"
+        (onClick)="deleteUser()"
+        [loading]="loadDelted"
+        [label]="'BUTTONS.UNASSIGN' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+<div class="action_dailog">
+  <p-dialog
+    header="Header"
+    [closable]="false"
+    [(visible)]="openModal"
+    (onHide)="onModalClose()"
+    [modal]="true"
+    [dismissableMask]="true"
+    [draggable]="false"
+    styleClass="w-[50rem]"
+  >
+    <ng-template pTemplate="header"> </ng-template>
+
+    <div class="container">
+      <!-- Header -->
+      <div class="head pb-4 border-b border-gray-200">
+        <h2 class="font-medium text-gray-800 text-lg mb-2">
+          @if (!isEditing) {
+          <span>{{ 'SETTING.ADD_NEW_USER' | translate }}</span>
+          }@else {
+          <span>{{ 'SETTING.UPDATE_USER' | translate }}</span>
+
+          }
+        </h2>
+        <p class="text-gray_color">
+          {{ 'RISK_ACTION.HEADER_DESC' | translate }}
+        </p>
+      </div>
+
+      <!-- Form -->
+      <form [formGroup]="responseActionForm">
+        <div
+          class="form_control grid grid-cols-12 gap-6 items-center py-4"
+        >
+          @if(!isEditing){
+          <div class="col-span-12 grid grid-cols-12 gap-4 items-center border-b border-gray-200 pb-4">
+            <label for="" class="col-span-4">
+              {{ 'SETTING.USER' | translate }}
+            </label>
+            <lib-user-dropdown
+              class="col-span-8"
+              [placeholder]="'ASSESSMENT_RISK.REVIEWR' | translate"
+              [control]="responseActionForm.get('user')!"
+              [formControlNameInput]="'user'"
+              [options]="user"
+              [optionLabel]="'name'"
+              [optionValue]="'id'"
+            >
+            </lib-user-dropdown>
+          </div>
+          }
+
+          <div class="col-span-12 grid grid-cols-12 gap-4 items-center border-b border-gray-200 pb-4">
+            <label for="" class="col-span-4">
+              {{ 'SETTING.USERTYPE' | translate }}
+            </label>
+            <lib-ui-dropdown
+              class="col-span-8"
+              [placeholder]="'ASSESSMENT_RISK.REVIEWR' | translate"
+              [control]="responseActionForm.get('userType')!"
+              [formControlNameInput]="'userType'"
+              [options]="userTypes"
+              [optionLabel]="'name'"
+              [optionValue]="'value'"
+            >
+            </lib-ui-dropdown>
+          </div>
+
+          @if(responseActionForm.get('userType')?.value === 2){
+            <div class="col-span-12 grid grid-cols-12 gap-4 items-center border-b border-gray-200 pb-4">
+              <label for="" class="col-span-4">
+                {{ 'ASSESSMENT_RISK.DATE' | translate }}
+              </label>
+              <lib-date-packer
+                class="col-span-8"
+                [placeholder]="'PLACEHOLDERS.Select_Date' | translate"
+                [control]="responseActionForm.get('date')!"
+                [controlNameInput]="'date'"
+              >
+              </lib-date-packer>
+
+              @if(responseActionForm.get('date')?.errors?.['notFutureDate']){
+              <span class="text-danger_text col-span-12 text-end"> Date must be in the future </span>
+              }
+            </div>
+          }
+        </div>
+      </form>
+
+      <div class="flex justify-end gap-4 py-4">
+        <div class="cancel_btn">
+          <button (click)="openModal = false">
+            {{ 'RISK_ACTION.CANCEL' | translate }}
+          </button>
+        </div>
+        <div class="action_btn">
+          <p-button
+            [disabled]="responseActionForm.invalid"
+            [label]="'RISK_ACTION.SAVE' | translate"
+            [outlined]="true"
+            severity="secondary"
+            [loading]="isSaving"
+            (onClick)="submit()"
+          >
+          </p-button>
+        </div>
+      </div>
+    </div>
+  </p-dialog>
+</div>

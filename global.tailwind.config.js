@@ -1,0 +1,128 @@
+const { join } = require('path');
+
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    // scan apps and libs
+    join(__dirname, 'apps/**/!(*.stories|*.spec).{ts,html,scss}'),
+    join(__dirname, 'libs/**/!(*.stories|*.spec).{ts,html,scss}'),
+  ],
+  theme: {
+    extend: {},
+    colors: {
+      primary: 'rgb(var(--primaryColor) / <alpha-value>)',
+      custom_white: 'rgb(var(--primaryWhite) / <alpha-value>)',
+      white_color: 'rgb(var(--whiteColor) / <alpha-value>)',
+      gray_light: 'rgb(var(--gray_light) / <alpha-value>)',
+      red_light: 'rgb(var(--red_light) / <alpha-value>)',
+      danger_color: 'rgb(var(--danger_color) / <alpha-value>)',
+      success_color: 'rgb(var(--success_color) / <alpha-value>)',
+      black_color: 'rgb(var(--black_color) / <alpha-value>)',
+      blue_color: 'rgb(var(--blue_color) / <alpha-value>)',
+      gold_color: 'rgb(var(--gold_color) / <alpha-value>)',
+      warning_color: 'rgb(var(--warning_color) / <alpha-value>)',
+      light_white: 'rgb(var(--light_white) / <alpha-value>)',
+      gray_color: 'rgb(var(--gray_color) / <alpha-value>)',
+      sec_color: 'rgb(var(--sec_color) / <alpha-value>)',
+      success_bg: '#ECFDF3',
+      success_text: '#027A48',
+      warning_bg: '#FFFAEB',
+      warning_text: 'rgba(181, 71, 8, 1)',
+      info_bg: '#C9EAF0',
+      info_text: '#19515B',
+      danger_bg: '#FEF3F2',
+      danger_text: '#B42318',
+      green: '#22c55e',
+      success_custom: 'rgba(2, 122, 72, 1)',
+      primary_custom:'rgba(89, 37, 220, 1)',
+      danger_color_text:'rgba(180, 35, 24, 1)',
+         gray: {
+          25:  'var(--gray-25)',
+          50:  'var(--gray-50)',
+          100: 'var(--gray-100)',
+          200: 'var(--gray-200)',
+          300: 'var(--gray-300)',
+          400: 'var(--gray-400)',
+          500: 'var(--gray-500)',
+          600: 'var(--gray-600)',
+          700: 'var(--gray-700)',
+          800: 'var(--gray-800)',
+          900: 'var(--gray-900)',
+        },
+
+        /* Primary scale */
+        primaryColor: {
+          25:  'var(--primary-25)',
+          50:  'var(--primary-50)',
+          100: 'var(--primary-100)',
+          200: 'var(--primary-200)',
+          300: 'var(--primary-300)',
+          400: 'var(--primary-400)',
+          500: 'var(--primary-500)',
+          600: 'var(--primary-600)',
+          700: 'var(--primary-700)',
+          800: 'var(--primary-800)',
+          900: 'var(--primary-900)',
+        },
+
+        /* Error scale */
+        error: {
+          25:  'var(--error-25)',
+          50:  'var(--error-50)',
+          100: 'var(--error-100)',
+          200: 'var(--error-200)',
+          300: 'var(--error-300)',
+          400: 'var(--error-400)',
+          500: 'var(--error-500)',
+          600: 'var(--error-600)',
+          700: 'var(--error-700)',
+          800: 'var(--error-800)',
+          900: 'var(--error-900)',
+        },
+
+        /* Warning scale */
+        warning: {
+          25:  'var(--warning-25)',
+          50:  'var(--warning-50)',
+          100: 'var(--warning-100)',
+          200: 'var(--warning-200)',
+          300: 'var(--warning-300)',
+          400: 'var(--warning-400)',
+          500: 'var(--warning-500)',
+          600: 'var(--warning-600)',
+          700: 'var(--warning-700)',
+          800: 'var(--warning-800)',
+          900: 'var(--warning-900)',
+        },
+
+        /* Success scale */
+        success: {
+          25:  'var(--success-25)',
+          50:  'var(--success-50)',
+          100: 'var(--success-100)',
+          200: 'var(--success-200)',
+          300: 'var(--success-300)',
+          400: 'var(--success-400)',
+          500: 'var(--success-500)',
+          600: 'var(--success-600)',
+          700: 'var(--success-700)',
+          800: 'var(--success-800)',
+          900: 'var(--success-900)',
+        },
+          blue: {
+          25:  'var(--blue-25)',
+          50:  'var(--blue-50)',
+          100: 'var(--blue-100)',
+          200: 'var(--blue-200)',
+          300: 'var(--blue-300)',
+          400: 'var(--blue-400)',
+          500: 'var(--blue-500)',
+          600: 'var(--blue-600)',
+          700: 'var(--blue-700)',
+          800: 'var(--blue-800)',
+          900: 'var(--blue-900)',
+        }
+    },
+  },
+  plugins: [],
+};

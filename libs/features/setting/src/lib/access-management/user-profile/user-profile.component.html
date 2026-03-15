@@ -1,0 +1,180 @@
+<div class="h-[115px] overflow-hidden">
+  <img
+    class="h-full w-full object-cover"
+    src="images/profile-background.jpg"
+    alt="profile-background"
+  />
+</div>
+
+<div class="flex flex-col gap-12 -mt-12">
+  <div class="flex items-center gap-4">
+    <div
+      class="w-[160px] h-[160px] rounded-full flex justify-center items-center border-4 border-[#ffffff] img-wrap relative"
+    >
+      @if(!loadingImage){
+      <img
+        class="w-full h-full rounded-full"
+        [secureSrc]="current_user_img"
+        [alt]="`${data?.name}__image`"
+      />
+      <button
+        (click)="handleFileUpload()"
+        class="z-50 absolute -bottom-5 left-1/2 -translate-x-1/2 text-3xl text-white_color w-[40px] h-[40px] rounded-full bg-[#6938ef] flex justify-center items-center"
+      >
+        <i class="fi fi-rr-plus-small"></i>
+      </button>
+
+      }@else {
+      <p-skeleton styleClass="rounded-full" width="10rem" height="10rem" />
+      }
+    </div>
+
+    <div class="flex flex-col mt-8">
+      <div class="flex items-start gap-2">
+        @if(!loadingData){
+        <h1 class="text-3xl font-medium text-[#101828]">{{ data.name }}</h1>
+        <div class="badge  {{ data.isActive ? 'green' : 'red' }}">
+          <span class="small_doted"></span
+          >{{
+            (data.isActive ? 'SETTING.ACTIVE' : 'SETTING.INACTIVE') | translate
+          }}
+        </div>
+        }@else {
+        <p-skeleton width="15rem" height="2rem" styleClass="mb-2" />
+        <p-skeleton width="4rem" height="1.5rem" borderRadius="16px" />
+        }
+      </div>
+    </div>
+
+    <p-button
+      (onClick)="handleUploadImage()"
+      [loading]="uploadingImage"
+      [disabled]="!selectedFile"
+      class="default_btn ms-auto"
+    >
+      {{ 'BUTTONS.SAVE' | translate }}
+    </p-button>
+  </div>
+
+  <div class="grid grid-cols-12 gap-6 border-b-[1px] border-[#EAECF0]">
+    <div class="col-span-12 lg:col-span-4">
+      <div class="info-wrap has-border">
+        <span class="label"> {{ 'SETTING.NAME' | translate }} </span>
+        @if(!loadingData){
+        <span class="value"> {{ data.name }} </span>
+        }@else {
+        <p-skeleton width="10rem" />
+        }
+      </div>
+    </div>
+    <div class="col-span-12 lg:col-span-4">
+      <div class="info-wrap has-border">
+        <span class="label"> {{ 'SETTING.NAME_ARABIC' | translate }} </span>
+        @if(!loadingData){
+        <span class="value"> {{ data.nameAr }} </span>
+        }@else {
+        <p-skeleton width="10rem" />
+        }
+      </div>
+    </div>
+    <div class="col-span-12 lg:col-span-4">
+      <div class="info-wrap has-border">
+        <span class="label"> {{ 'SETTING.POSITION' | translate }} </span>
+
+        @if(!loadingData){
+        <span class="value"> {{ data.position }} </span>
+        }@else {
+        <p-skeleton width="10rem" />
+        }
+      </div>
+    </div>
+
+    <div class="col-span-12 lg:col-span-4">
+      <div class="info-wrap">
+        <span class="label"> {{ 'SETTING.POSITION_AR' | translate }} </span>
+
+        @if(!loadingData){
+        <span class="value"> {{ data.positionAr }} </span>
+        }@else {
+        <p-skeleton width="10rem" />
+        }
+      </div>
+    </div>
+    <div class="col-span-12 lg:col-span-4">
+      <div class="info-wrap">
+        <span class="label"> {{ 'SETTING.DESCRIPTION' | translate }} </span>
+        @if(!loadingData){
+        <span class="value">
+          {{ data.discraption || '-' }}
+        </span>
+        }@else {
+        <p-skeleton width="10rem" />
+        }
+      </div>
+    </div>
+    <div class="col-span-12 lg:col-span-4">
+      <div class="info-wrap">
+        <span class="label"> {{ 'SETTING.ORG_UNIT_NAME' | translate }} </span>
+        @if(!loadingData){
+        <span class="value"> {{ data.organizationalUnitName }} </span>
+        }@else {
+        <p-skeleton width="10rem" />
+        }
+      </div>
+    </div>
+  </div>
+</div>
+<input
+  #fileInput
+  type="file"
+  class="hidden"
+  accept="image/*"
+  (change)="onFileSelected($event)"
+/>
+<!-- @if(!loadingData){
+<div class="w-full">
+  <div class="flex gap-5 items-start mt-4 w-full">
+    <div class="w-[64px] h-[64px] rounded-full overflow-hidden">
+      @if(previewUrl){
+      <img
+        class="w-full h-full"
+        [src]="previewUrl"
+        [alt]="`${data.name}__image`"
+      />
+      }
+    </div>
+    <div
+      class="px-6 py-4 border-[1px] border-[#EAECF0] rounded-lg flex flex-col items-center justify-center gap-3 flex-1"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)"
+    >
+      <img src="images/upload-icon.svg" alt="upload-file" />
+      <div>
+        <button
+          (click)="handleFileUpload()"
+          class="text-sm font-medium text-[#5925DC]"
+        >
+          {{ 'UPLOAD.CLICK_TO_UPLOAD' | translate }}
+        </button>
+        <input
+          #fileInput
+          type="file"
+          class="hidden"
+          accept="image/*"
+          (change)="onFileSelected($event)"
+        />
+        <span class="font-normal text-sm text-[#667085]">
+          {{ 'UPLOAD.OR_DRAG_AND_DROP' | translate }}
+        </span>
+      </div>
+      <span class="font-normal text-xs text-[#667085]">
+        {{ 'UPLOAD.SUPPORTED_FORMATS' | translate }}
+      </span>
+    </div>
+  </div>
+  @if(fileError){
+  <p class="text-danger_text text-center py-2">{{ fileError }}</p>
+  }
+</div>
+} -->

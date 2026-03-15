@@ -1,0 +1,130 @@
+<!-- Load Data controlList  -->
+<lib-new-table [loading]="isLoading" [table_data]="controlList" [table_title]="'TABS.Controlassessment' | translate"
+  [badge_title]="'HEARDE_TABLE.CONTROL' | translate" [dataViewId]="37" [entityID_Name]="'controlAssessmentID'"
+  [isShownAction]="true" (payload_emiter)="handleDataTable($event)" [action_items]="action_items"
+  (currentActionRow)="setSelectedRow($event)" [columnControl]="columnControl"
+  [table_actions_permissions]="{ module: 'COMPLIANCE', feature: 'ASSSESSMENT_CONTROLS', action: 'VIEW' }"
+  >
+  @if(_PermissionSystemService.can('COMPLIANCE' , 'ASSSESSMENT_CONTROLS' , 'ADD')){
+      <button addition_action (click)="quickAdd()"
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+    <i class="fi fi-br-plus w-5 h-5 "></i>
+    <span>{{'SETTING.ADD_CONTROL' | translate}}
+    </span>
+  </button>
+  }
+</lib-new-table>
+
+<!-- Delete Control-->
+<lib-delete-confirm-popup [titleDelete]="'SETTING.DELETE_CONTROL_TITLE'"
+  [descriptionDelete]="'SETTING.DELETE_CONTROL_DESC'" (hideEmiter)="handleClosedDelete()"
+  [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="handleClosedDelete()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button (onClick)="deleteAssessment()" [loading]="isLoaderDeleting" [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+<!-- popup to add Control and load table -->
+<div class="action_dailog">
+  <p-dialog header="Header" [(visible)]="addModal" (onShow)="getSelectedControlsIDS()" (onHide)="onModalClose(); selected_control_assessment = []"
+    [modal]="true" [dismissableMask]="true" [draggable]="false" styleClass="w-[85%] h-[95%]">
+    <ng-template pTemplate="header">
+    </ng-template>
+    <div class="container">
+      @if(addModal){
+      <lib-new-table (selectionEmitter)="handleSetSelection($event)" [selections_input]="selected_control_assessment" [loading]="isloadingGov"
+        [table_data]="covControlList" [table_title]="'SETTING.CONTROL_MANAGEMENT_LIST'|translate"
+        [badge_title]="'SETTING.CONTROL_MANAGEMENT_BADGE'|translate" [dataViewId]="18" [entityID_Name]="'govControlID'"
+        [isShownAction]="false" (payload_emiter)="handleDataTableGov($event)" [columnControl]="columnControl"
+        [table_config]="{type:'multiSelect'}">
+        <p-button addition_action pButton class="bg-primary text-white text-sm rounded-lg" [label]="'Save Changes'"
+          [loading]="loadingSaveControl" icon="pi pi-check" (click)="saveControlAssessment()" />
+      </lib-new-table>
+      }
+
+    </div>
+
+  </p-dialog>
+</div>
+
+<!-- popup View Control  -->
+<div class="action_dailog">
+  <p-dialog header="Header" [(visible)]="viewModal" (onHide)="viewModal=false" [modal]="true"
+    [dismissableMask]="true" [draggable]="false" [closable]="true" styleClass="w-[45rem]">
+
+    <ng-template pTemplate="header">
+    </ng-template>
+
+    <div class="container space-y-6">
+      <h2 class="font-medium text-gray-800 text-lg mb-2">
+        {{Data?.name }}
+      </h2>
+      <div class="grid grid-cols-12 gap-4 border-b border-gray_light py-3">
+        <div class="col-span-6">
+          <h3 class="text-gray_color text-sm mb-1">
+            {{ 'PERMISSIONS.NameArabic' | translate }}
+          </h3>
+          <p class="text-gray-800">
+            {{ Data?.nameAr || '-' }}
+          </p>
+        </div>
+
+        <div class="col-span-6">
+          <h3 class="text-gray_color text-sm mb-1">
+            {{ 'PERMISSIONS.fullControlText' | translate }}
+          </h3>
+          <p class="text-gray-800">
+            {{ Data?.fullControlText || '-' }}
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-12 gap-4 border-b border-gray_light py-3">
+        <div class="col-span-6">
+          <h3 class="text-gray_color text-sm mb-1">
+            {{ 'MAIN_INFO.GovRegulatorID' | translate }}
+          </h3>
+          <p class="text-gray-800">
+            {{ Data?.govRegulatorName || '-' }}
+          </p>
+        </div>
+
+        <div class="col-span-6">
+          <h3 class="text-gray_color text-sm mb-1">
+            {{ 'RISK_MANAGMENT.ResponsibleRole' | translate }}
+          </h3>
+          <p class="text-gray-800">
+            {{ Data?.responsibleRoleName || '-' }}
+          </p>
+        </div>
+      </div>
+
+      <div class="py-3">
+        <h3 class="text-gray_color text-sm mb-1">
+          {{ 'CONTROL.NOTES' | translate }}
+        </h3>
+        <p class="text-gray-800 whitespace-pre-line">
+          {{ Data?.notes || '-' }}
+        </p>
+      </div>
+
+      <div class="py-3">
+        <h3 class="text-gray_color text-sm mb-1">
+          {{ 'MAIN_INFO.OrganizationUnit' | translate }}
+        </h3>
+        <p class="text-gray-800 whitespace-pre-line">
+          {{ Data?.organizationUnitName || '-' }}
+        </p>
+      </div>
+    </div>
+  </p-dialog>
+</div>

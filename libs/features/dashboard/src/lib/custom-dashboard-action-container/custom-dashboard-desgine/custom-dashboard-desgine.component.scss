@@ -1,0 +1,48 @@
+::ng-deep .attach_dailog .p-dialog-header{
+  padding: 1rem 0;
+
+  .p-dialog-header-icon{
+    display: none;
+  }
+}
+
+
+
+.cat_card{
+  @apply rounded-lg;
+  width: 7.5rem;
+  height: 7.5rem;
+  border: 1px solid;
+
+  border-color: #EAECF0;
+
+
+  &.active{
+    background-color: #F4F3FF;
+    border-color: #9B8AFB;
+    .icon{
+      color: #7A5AF8;
+      background-color: white;
+    }
+  }
+
+
+  .icon{
+    @apply flex items-center justify-center;
+    font-size:1.5rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #F2F4F7;
+    color: #98A2B3;
+  }
+
+}
+
+
+
+  .side{
+    @apply p-3;
+    border-right: 1px solid #D0D5DD;
+  }
+

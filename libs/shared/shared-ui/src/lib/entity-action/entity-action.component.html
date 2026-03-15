@@ -1,0 +1,176 @@
+<!-- Handle Entities List in New Table -->
+<section class="py-5">
+  <lib-new-table [loading]="loadingStateTable" [table_data]="dataList" [table_title]="'BREAD_CRUMB_TITLES.RESPONSE_ACTIONS' | translate"
+  [badge_title]="'BREAD_CRUMB_TITLES.ACTION' | translate" [dataViewId]="4" [entityID_Name]="'businessTaskID'"
+  [isShownAction]="!readOnly" (payload_emiter)="handleDataTable($event)" [action_items]="items"
+  (currentActionRow)="setSelected($event)" [columnControl]="columnControl">
+  @if(!readOnly && canAdd){
+      <button addition_action (click)="showAction()"
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+    <i class="fi fi-br-plus w-5 h-5 "></i>
+    <span>{{'BREAD_CRUMB_TITLES.ADD_RESPONSE_ACTION' | translate}}
+    </span>
+  </button>
+  }
+</lib-new-table>
+</section>
+
+
+<!-- Add or Update Entity -->
+<div class="action_dailog">
+  <p-dialog header="Header" [(visible)]="show_action" (onHide)="onModalClose()" [modal]="true" [dismissableMask]="true"
+    [draggable]="false" [closable]="false" styleClass="w-[50rem]">
+    <ng-template pTemplate="header">
+    </ng-template>
+
+
+    <div class="container">
+      <!-- Header -->
+      <div class="head pb-4 border-b border-gray_light">
+        <h2 class="font-medium text-gray-800 text-lg mb-2">
+          {{ updateEntity ? UPDATE_TITLE() : HEADER_TITLE() }}
+        </h2>
+
+        <p class="text-gray_color">
+          {{ HEADER_DESC()}}
+        </p>
+      </div>
+
+      <!-- Form -->
+      <form [formGroup]="form">
+        <!-- Title -->
+        <div class="form_control justify-between items-start py-4 border-b border-gray_light">
+          <lib-input-text [placeholder]="'RISK_ACTION.TITLE' | translate" [inputLabel]="'RISK_ACTION.TITLE' | translate"
+            [controlNameInput]="'name'" [control]="form.get('name')!"
+            [validations]="FileTitleValidations">
+          </lib-input-text>
+        </div>
+
+        <!-- Assignee Role & User -->
+        <div class="form_control grid grid-cols-12 gap-6 items-start py-4 border-b border-gray_light">
+          <div class="col-span-12 lg:col-span-6">
+            <lib-ui-dropdown [placeholder]="'RISK_ACTION.SELECT_ASSIGNEE_ROLE' | translate"
+              [label]="'RISK_ACTION.ASSIGNEE_ROLE' | translate" [control]="form.get('assigneeRoleID')!"
+              [formControlNameInput]="'assigneeRoleID'" [options]="assigneeRoleID" [optionLabel]="'label'"
+              [optionValue]="'id'">
+            </lib-ui-dropdown>
+          </div>
+
+          <div class="col-span-12 lg:col-span-6">
+            <lib-user-dropdown [placeholder]="'RISK_ACTION.SELECT_ASSIGNEE_USER' | translate"
+              [label]="'RISK_ACTION.ASSIGNEE_USER' | translate" [control]="form.get('assigneeUserID')!"
+              [formControlNameInput]="'assigneeUserID'" [options]="assigneeUserID" [optionLabel]="'userName'"
+              [optionValue]="'id'">
+            </lib-user-dropdown>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="form_control items-start py-4 border-b border-gray_light">
+          <lib-textarea-ui [inputLabel]="'RISK_ACTION.DESCRIPTION' | translate" [controlNameInput]="'description'"
+            [placeholder]="'RISK_ACTION.DESCRIPTION_PLACEHOLDER' | translate"
+            [control]="form.get('description')!">
+          </lib-textarea-ui>
+          <p class="text-xs text-gray_color">
+            {{ 'RISK_ACTION.CHARACTERS_LEFT' | translate:{ count: 275-
+            form.get('description')?.value?.length } }}
+          </p>
+        </div>
+
+        <!-- Priority & Department -->
+        <div class="form_control grid grid-cols-12 gap-6 items-start py-4 border-b border-gray_light">
+          <div class="col-span-12 lg:col-span-6">
+            <lib-ui-dropdown [placeholder]="'RISK_ACTION.SELECT_PRIORITY' | translate"
+              [label]="'RISK_ACTION.PRIORITY' | translate"
+              [control]="form.get('businessTaskPriorityLevelID')!"
+              [formControlNameInput]="'businessTaskPriorityLevelID'" [options]="taskEntityPriorityLevelID"
+              [optionLabel]="'label'" [optionValue]="'id'">
+            </lib-ui-dropdown>
+          </div>
+
+          <div class="col-span-12 lg:col-span-6">
+            <lib-tree-select-ui [nodes_input]="assigneeOrganizationalUnitID"
+              [placeholder]="'RISK_ACTION.SELECT_DEPARTMENT' | translate" [label]="'RISK_ACTION.DEPARTMENT' | translate"
+              [control]="form.get('organizationalUnitID')!"
+              [formControlNameInput]="'organizationalUnitID'">
+            </lib-tree-select-ui>
+          </div>
+
+          <div class="col-span-12 lg:col-span-6">
+            <lib-user-dropdown [placeholder]="'RISK_ACTION.SELECT_FOLLOW_UP_USER' | translate"
+              [label]="'RISK_ACTION.FOLLOW_UP_USER' | translate" [control]="form.get('followUpUserID')!"
+              [formControlNameInput]="'followUpUserID'" [options]="followUpUserID" [optionLabel]="'userName'"
+              [optionValue]="'id'">
+            </lib-user-dropdown>
+          </div>
+
+          <div class="col-span-12 lg:col-span-6">
+            <lib-user-dropdown [placeholder]="'RISK_ACTION.SELECT_VERIFICATION_USER' | translate"
+              [label]="'RISK_ACTION.VERIFICATION_USER' | translate"
+              [control]="form.get('verificationUserID')!" [formControlNameInput]="'verificationUserID'"
+              [options]="verificationUserID" [optionLabel]="'userName'" [optionValue]="'id'">
+            </lib-user-dropdown>
+          </div>
+        </div>
+
+        <!-- Due Date -->
+        <div class="form_control grid grid-cols-12 gap-6 items-start py-4 border-b border-gray_light">
+          <div class="col-span-12 lg:col-span-6">
+            <lib-date-packer [placeholder]="'RISK_ACTION.SELECT_DATE' | translate"
+              [inputLabel]="'RISK_ACTION.DUE_DATE' | translate" [control]="form.get('dueDate')!"
+              [controlNameInput]="'dueDate'">
+            </lib-date-packer>
+          </div>
+        </div>
+
+        <!-- Success Criteria -->
+        <div class="form_control items-start py-4">
+          <lib-textarea-ui [inputLabel]="'RISK_ACTION.SUCCESS_CRITERIA' | translate"
+            [controlNameInput]="'successCriteria'" [placeholder]="'RISK_ACTION.SUCCESS_CRITERIA' | translate"
+            [control]="form.get('successCriteria')!">
+          </lib-textarea-ui>
+          <p class="text-xs text-gray_color">
+            {{ 'RISK_ACTION.CHARACTERS_LEFT' | translate:{ count: 275-
+            form.get('successCriteria')?.value?.length } }}
+          </p>
+        </div>
+      </form>
+
+      <div class="flex justify-end gap-4">
+        <div class="cancel_btn">
+          <button (click)="show_action = false ; onModalClose()">{{ 'RISK_ACTION.CANCEL' | translate }}</button>
+        </div>
+        <div class="action_btn">
+          <p-button [loading]="saving" [label]="'RISK_ACTION.SAVE' | translate" [outlined]="true" severity="secondary"
+            (onClick)="submit()">
+          </p-button>
+        </div>
+      </div>
+    </div>
+
+  </p-dialog>
+</div>
+
+<!-- View Popup Entity -->
+@if(showViewModal){
+<lib-view-modal [relatedEntityId]="dataEntityTypeID()" (hide_emitter)="showViewModal=false" [authId]="1"
+  [singleTaskData]="singleTaskData" [fileUsageTypeId]="fileUsageTypeId" [show_view]="showViewModal" [BusinessTaskTypeID]="5"></lib-view-modal>
+}
+
+<!-- Delete Popup Entity -->
+<lib-delete-confirm-popup [titleDelete]="'RISK_MANAGMENT.DELETE_ENTITY_TITLE'"
+  [descriptionDelete]="'RISK_MANAGMENT.DELETE_ENTITY_DESC'" (hideEmiter)="handleClosedDelete()"
+  [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="handleClosedDelete()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button (onClick)="deleteEntity()" [loading]="loadDeleted " [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

@@ -1,0 +1,20 @@
+*{
+    
+    font-size: 16px;
+    font-weight: 500;
+    @apply text-gray-700
+}
+// :host {
+//   display: block;
+//   height: 100%;
+// }
+
+ul {
+  height: 700px;
+  max-height: 700px;
+}
+
+
+.side{
+  @apply border-gray-200
+}

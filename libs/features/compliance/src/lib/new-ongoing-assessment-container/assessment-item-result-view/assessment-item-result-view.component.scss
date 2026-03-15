@@ -1,0 +1,10 @@
+.tab {
+  &.small-text {
+    @apply text-sm;
+  }
+  &.active_tab {
+    @apply bg-[#f4f3ff] border-b-[2px] border-[#5925dc] text-[#5925dc]
+  }
+
+  @apply text-base font-medium text-[#667085] flex justify-center items-center gap-2 font-medium px-2 py-3 flex-1 text-nowrap
+}

@@ -1,0 +1,126 @@
+<section>
+  <div class="grid grid-cols-12 gap-5"      [ngClass]="{
+        disabled: !_PermissionSystemService.can(
+          'ESCLATIONS',
+          'ESCLATIONTARGET',
+          'EDIT'
+        )
+      }">
+    @for (selection of selections; track $index) {
+    <div class="col-span-12 lg:col-span-6">
+      <button
+        (click)="handleSelectChange(selection?.id)"
+        class="selection_card flex flex-col gap-3 w-full"
+        [ngClass]="{ selected: selectedItem === selection?.id }"
+      >
+        <div
+          class="selection_icon flex justify-center items-center rounded-full"
+        >
+          <i [class]="selection?.icon"></i>
+        </div>
+        <div class="selection_txt flex flex-col gap-2 flex-wrap text-start">
+          <h3 class="selection_title">{{ selection?.title }}</h3>
+          <span class="selection_desc"> {{ selection?.desc }} </span>
+        </div>
+        @if(_PermissionSystemService.can('ESCLATIONS' , 'ESCLATIONTARGET' ,
+        'EDIT') ){
+        <button
+          class="default_btn ms-auto"
+          (click)="handleSelectChange(selection?.id)"
+        >
+          {{ 'BUTTONS.SELECT' | translate }}
+        </button>
+        }
+      </button>
+    </div>
+    }
+    <form
+      [formGroup]="targetForm"
+      class="col-span-12 grid grid-cols-12 gap-5"
+      [ngClass]="{
+        disabled: !_PermissionSystemService.can(
+          'ESCLATIONS',
+          'ESCLATIONTARGET',
+          'EDIT'
+        )
+      }"
+    >
+      @if(targetForm && selectedItem === '1'){
+
+      <div class="col-span-12 lg:col-span-6">
+        <lib-user-dropdown
+          [placeholder]="'ASSETS.RESPONSIBLE_USER_ID_PLACEHOLDER' | translate"
+          [label]="'ASSETS.RESPONSIBLE_USER_ID' | translate"
+          [control]="targetForm.get('notifyUserID')!"
+          [formControlNameInput]="'notifyUserID'"
+          [options]="usersLookUpData"
+          [optionLabel]="'name'"
+          [optionValue]="'id'"
+        >
+        </lib-user-dropdown>
+      </div>
+      <div class="col-span-12 lg:col-span-6">
+        <lib-role-dropdown
+          [options]="rolesLookUpData"
+          [placeholder]="'RISK_ACTION.RESPONSIBLE_ROLE' | translate"
+          [label]="'RISK_ACTION.RESPONSIBLE_ROLE' | translate"
+          [control]="targetForm.get('notifyRoleID')!"
+          [formControlNameInput]="'notifyRoleID'"
+          [optionLabel]="'label'"
+          [optionValue]="'id'"
+        >
+        </lib-role-dropdown>
+      </div>
+
+      }@else {
+      <div class="col-span-12 lg:col-span-6">
+        <lib-ui-dropdown
+          [placeholder]="'ESCLATION.SELECT_LEVEL' | translate"
+          [label]="'ESCLATION.LEVELS' | translate"
+          [control]="targetForm.get('targetOrganizationLevel')!"
+          [formControlNameInput]="'targetOrganizationLevel'"
+          [options]="levels"
+          [optionLabel]="'label'"
+          [optionValue]="'id'"
+        >
+        </lib-ui-dropdown>
+      </div>
+
+      <div class="col-span-12 lg:col-span-6">
+        <lib-ui-dropdown
+          [placeholder]="'ESCLATION.SELECT_ATTRIBUTE' | translate"
+          [label]="'ESCLATION.ATTRIBUTE' | translate"
+          [control]="targetForm.get('dataEntityTypeAttributeID')!"
+          [formControlNameInput]="'dataEntityTypeAttributeID'"
+          [options]="entityTypeAttributes"
+          [optionLabel]="'name'"
+          [optionValue]="'id'"
+        >
+        </lib-ui-dropdown>
+      </div>
+
+      }
+
+      <div class="col-span-12 flex justify-end items-center gap-3">
+        <!-- <p-button
+          (onClick)="handleCancel()"
+          styleClass="default_btn cancel"
+          [label]="'BUTTONS.CANCEL' | translate"
+        >
+        </p-button> -->
+        @if(_PermissionSystemService.can('ESCLATIONS' , 'ESCLATIONTARGET' ,
+        'EDIT')){
+      <p-button
+          [disabled]="checkSaveBtnValidation()"
+          [loading]="isLoadingTarget"
+          (onClick)="saveTarget()"
+          styleClass="default_btn"
+          [label]="'BUTTONS.SAVE' | translate"
+        >
+        </p-button>
+        }
+  
+      </div>
+    </form>
+  </div>
+</section>

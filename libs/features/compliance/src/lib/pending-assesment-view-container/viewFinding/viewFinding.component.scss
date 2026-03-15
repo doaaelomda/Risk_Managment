@@ -1,0 +1,21 @@
+::ng-deep .action_dailog {
+  .p-dialog-header {
+    padding: 1rem;
+  }
+  .p-dialog-header .p-dialog-header-icons {
+    display: none;
+  }
+}
+
+.title {
+  @apply text-[#101828] font-medium text-lg;
+}
+.label {
+  &.dark {
+    @apply text-[#667085] text-sm font-medium;
+  }
+  @apply text-[#667085] text-sm font-medium;
+}
+.value {
+  @apply text-[#344054] text-base font-medium;
+}

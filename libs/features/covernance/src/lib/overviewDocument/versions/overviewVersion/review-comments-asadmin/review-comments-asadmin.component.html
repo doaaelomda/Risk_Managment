@@ -1,0 +1,205 @@
+<section class="py-4">
+
+  <div class="content_types-container grid grid-cols-12 gap-5 mb-6">
+    @for(type of content_types ; track $index){
+    <button (click)="selected_type = type?.id" [ngClass]="{'active': type?.id === selected_type}"
+      class="content_type lg:col-span-4 md:cols-span-6 col-span-12">
+      <div class="flex items-center gap-3">
+        <div
+          class="type-ico w-[50px] h-[50px] rounded-full flex items-center justify-center bg-[#F2F4F7] text-[#7A5AF8] text-[24px]">
+          @if(type.icon){
+          <i [class]="type.icon"></i>
+          }@else if(type.image){
+          <img [src]="type.image" alt="{{ type.name }}__img" />
+          }
+        </div>
+        <p class="text-[#344054] font-medium ">{{type?.name}}</p>
+      </div>
+    </button>
+    }
+  </div>
+
+
+
+
+
+
+
+
+  <div class="content_note_container grid grid-cols-12 gap-4 bg-[#F9FAFB] p-4 rounded-lg">
+    <div class="col-span-7 p-4 rounded-lg bg-white_color">
+      @if(content_types){
+      @switch (selected_type) {
+      @case(1){
+      <!-- <lib-pdf-preview [pdfSrc]="env + current_file_version?.fileUrl?.substring(1) "></lib-pdf-preview>
+        -->
+      <lib-shared-file-viewer [file]="current_file_version"></lib-shared-file-viewer>
+      }
+      @case(2){
+      <div class="status  p-4">
+        <div #isolatedHtml [innerHTML]="content_form | safeHtml">
+        </div>
+      </div>
+      }
+      @case (3) {
+      <lib-content-tree></lib-content-tree>
+      }
+      }
+      }
+
+
+
+
+      @if(content_types.length ===0) {
+      <div class="translate-y-[100px]">
+        <lib-empty-state-files></lib-empty-state-files>
+      </div>
+      }
+
+    </div>
+
+
+
+    <div class="col-span-5">
+
+      <div class="notes bg-white_color border border-[#EAECF0] h-full rounded-lg">
+        <div class="header p-4 border-b border-gray_light mb-4">
+          <h2 class="text-[#000000] font-semibold text-xl">{{ 'NOTES.Notes' | translate }}</h2>
+        </div>
+
+
+        <div class="notes_content p-4">
+          @if(loading_notes){
+          <p-skeleton styleClass="mb-4" width="100%" height="15rem" />
+          <p-skeleton styleClass="mb-4" width="100%" height="15rem" />
+          }
+          @if(current_notes_comments && current_notes_comments.length){
+          @for (note of current_notes_comments; track $index) {
+          <div class="single_note mb-4 p-4 border border-gray_light rounded-xl">
+            <div [ngClass]="{ 'justify-end': note?.govDocumentElementName }" class="head flex items-center gap-3 mb-3">
+              @if(note?.govDocumentElementName){
+              <div class="element border flex-1 border-[#BDB4FE] bg-[#F4F3FF] p-2 rounded-md text-[#6938EF]">
+                <p>{{ note?.govDocumentElementName }}</p>
+              </div>
+              }
+              <button class="iconActionWrapper" (click)="addModule(note?.govDocumentReviewCommentID)">
+                <i class="fi fi-br-menu-dots"></i>
+              </button>
+            </div>
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-1">
+                <p class="text-[#667085]">{{ 'NOTES.Status' | translate }}:</p>
+                <div class="badge " [class]="note?.statusTypeColor">
+                  <div class="small_doted"></div>
+                  <span>{{ note?.statusTypeName }}</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-1">
+                <p class="text-[#667085]">{{ 'NOTES.Severity' | translate }}:</p>
+                <div class="badge " [class]="note?.severityLevelColor">
+                  <span>{{ note?.severityLevelName }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="content mb-3">
+              <p style="white-space: pre-line" class="text-[#667085]">
+                {{ note?.commentText }}
+              </p>
+            </div>
+
+            <div class="sbmit_info flex items-center justify-between">
+              <!-- <lib-owner-user [subtitle]="note?.reviewerUserName || '-'"></lib-owner-user> -->
+              <div class="flex items-center gap-2">
+                <lib-img-system [userId]="note?.reviewCommentUserId"></lib-img-system>
+                <div>
+                  <p class="text-gray-700 font-medium text-[16px]">{{ note?.reviewCommentUserName || '-' }}</p>
+                  <p class="text-gray-600 font-normal text-[14px]">{{ note?.reviewCommentUserPosition || '-' }}
+                  </p>
+                </div>
+              </div>
+              <p class="text-[#475467]">
+                {{ note?.resolvedDate | date : 'EEEE HH:MM a' }}
+              </p>
+            </div>
+          </div>
+          }}
+          @else {
+          <lib-note-empty></lib-note-empty>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<p-menu #menu [model]="actions" [popup]="true" />
+<div class="action_dailog">
+  <p-dialog (onHide)="current_note = null" [(visible)]="showViewOptionPopup" [modal]="true" [dismissableMask]="true"
+    [draggable]="false" styleClass="w-[60%]">
+    <div class="py-5 flex justify-between items-center gap-2 flex-wrap">
+      <div class="flex-1">
+        <h1 class="headers_view">{{ 'NOTES.VIEW' | translate }}</h1>
+      </div>
+      <div class="flex-1">
+        @if(current_note){
+        <lib-system-actions [dataEntityTypeId]="85" [entityId]="current_note?.govDocumentReviewCommentID">
+        </lib-system-actions>
+        }
+      </div>
+    </div>
+
+    <section>
+      <div class="single_note mb-4 p-4 border-t border-gray_light">
+        <div [ngClass]="{'justify-end':current_note?.govDocumentElementName}" class="head flex items-center gap-3 mb-3">
+          @if(current_note?.govDocumentElementName || true){
+          <div class="element border flex-1 border-[#BDB4FE] bg-[#F4F3FF] p-2 rounded-md text-[#6938EF]">
+            <p>{{current_note?.govDocumentElementName || 'No Gov Document Element'}}</p>
+          </div>
+          }
+        </div>
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-1">
+            <p class="text-[#667085]">{{ 'NOTES.Status' | translate }}:</p>
+            <div class="badge " [class]="current_note?.statusTypeColor">
+              <div class="small_doted"></div>
+              <span>{{current_note?.statusTypeName}}</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-1">
+            <p class="text-[#667085]">{{ 'NOTES.Severity' | translate }}:</p>
+            <div class="badge " [class]="current_note?.severityLevelColor">
+              <span>{{current_note?.severityLevelName}}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="content mb-3">
+          <p style="white-space: pre-line;" class="text-[#667085]">
+            {{current_note?.commentText}}
+          </p>
+        </div>
+
+        <div class="sbmit_info flex items-center justify-between ">
+
+          <!-- <lib-owner-user [title]="'Selectors.UserReviewer'" [subtitle]="current_note?.reviewerUserName || '-'"></lib-owner-user> -->
+          <div class="flex items-center gap-2">
+            <lib-img-system [userId]="current_note?.reviewCommentUserId"></lib-img-system>
+            <div>
+              <p class="text-gray-700 font-medium text-[16px]">{{ current_note?.reviewCommentUserName || '-' }}</p>
+              <p class="text-gray-600 font-normal text-[14px]">{{ current_note?.reviewCommentUserPosition || '-' }}</p>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <p class="label text-black_color font-medium">{{"USER_REVIEWS.RESOLVED_DATE"|translate}} </p>
+            <p class="text-[#475467]"> {{current_note?.resolvedDate|date : 'dd , MMM yy h:m a'}}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </p-dialog>
+
+
+</div>

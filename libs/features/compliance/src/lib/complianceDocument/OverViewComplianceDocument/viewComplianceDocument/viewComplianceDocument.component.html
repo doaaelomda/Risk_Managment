@@ -1,0 +1,45 @@
+<section class="grid grid-cols-12 gap-4">
+
+  <div [ngClass]="hasActions ? 'col-span-8' : 'col-span-12'" class="p-4">
+
+  <lib-shared-overview
+  [data]="data"
+  [entries]="mainInfoEntries"
+  [dataLoading]="loading">
+</lib-shared-overview>
+
+
+  </div>
+
+  <!-- Right Panel -->
+  <div [hidden]="!hasActions" class="col-span-12 lg:col-span-4 mt-5">
+    <div class="my-3">
+      <lib-system-actions (foundActionEmitter)="onFoundAction($event)" [dataEntityTypeId]="17" [entityId]="id"></lib-system-actions>
+    </div>
+
+    <!-- Risk Statistics Card
+    <div class="risk_rating_short p-4">
+      <div class="card w-full max-w-md">
+        <h2 class="text-xl font-semibold mb-4">{{ 'RISK_MANAGMENT.MY_STATICS' | translate }}</h2>
+        <p-card class="mb-3 shadow-sm bg-none">
+          <div class="flex items-center gap-4">
+            <div class="flex-1">
+              <div class="p-3 rounded-full flex">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                </svg>
+                <h4 class="text-sm font-medium text-gray-500">{{ 'RISK_MANAGMENT.TOTAL_CUSTOMERS' | translate }}</h4>
+              </div>
+              <div class="text-sm mt-1 flex items-center gap-1">
+                <div class="text-2xl font-bold text-gray-800 my-3">2,420</div>
+                <i class="fi fi-arrow-up text-success_custom"></i>
+                <span class="text-success_custom font-medium">100%</span>
+                <span class="text-gray-500 text-base font-normal whitespace-pre-line text-gray_color">{{ 'RISK_MANAGMENT.last' | translate }}</span>
+              </div>
+            </div>
+          </div>
+        </p-card>
+      </div>
+    </div> -->
+  </div>
+</section>

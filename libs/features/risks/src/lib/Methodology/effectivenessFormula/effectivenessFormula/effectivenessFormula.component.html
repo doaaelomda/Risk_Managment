@@ -1,0 +1,48 @@
+<lib-new-table
+  [loading]="isLoading"
+  [table_data]="effectivenessFormulaList"
+  [table_title]="'EFFECTIVENESS_FORMULA.TABLE_TITLE' | translate"
+  [badge_title]="'EFFECTIVENESS_FORMULA.BADGE_TITLE' | translate"
+  [dataViewId]="132"
+  [entityID_Name]="'riskMethodologyControlEffectivenessFormulaID'"
+  [isShownAction]="true"
+  (payload_emiter)="handleDataTable($event)"
+  [action_items]="action_items"
+  (currentActionRow)="setSelectedRow($event)"
+  [columnControl]="columnControl"
+  [table_actions_permissions]="{ module: 'RISKS', feature: 'METHODOLOGYEFFECTIVEFORMULA', action: 'VIEW' }"
+
+>
+  @if(_PermissionSystemService.can('RISKS' , 'METHODOLOGYEFFECTIVEFORMULA' , 'ADD')){
+      <button
+    addition_action
+    (click)="addNewEffectivenessFormula()"
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+  >
+    <i class="fi fi-br-plus w-5 h-5"></i>
+    <span>{{ 'EFFECTIVENESS_FORMULA.ADD_BUTTON' | translate }}</span>
+  </button>
+  }
+</lib-new-table>
+<lib-delete-confirm-popup
+  [titleDelete]="'EFFECTIVENESS_FORMULA.DELETE_TITLE' | translate"
+  [descriptionDelete]="'EFFECTIVENESS_FORMULA.DELETE_DESC' | translate"
+  (hideEmiter)="closeDeletePopup()"
+  [visibleInput]="deletePopupVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeletePopup()">
+        {{ 'EFFECTIVENESS_FORMULA.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteEffectivenessFormula()"
+        [loading]="isDeleting"
+        [label]="'EFFECTIVENESS_FORMULA.CONFIRM_DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

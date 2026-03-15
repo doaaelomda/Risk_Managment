@@ -1,0 +1,166 @@
+::ng-deep {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+}
+
+::ng-deep .permissionsAccordion .p-accordion-header-link {
+  flex-direction: row-reverse;
+  border-radius: 8.74px;
+  padding: 17.48px;
+  border: 0.87px solid #9b8afb;
+}
+
+::ng-deep .permissionsAccordion .p-accordion-header-link .expand-icon-wrapper {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 7px;
+  background-color: #f4f3ff;
+  color: #7a5af8;
+  font-size: 18px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+::ng-deep .permissionsAccordion .p-accordion-header-link .p-accordion-toggle-icon {
+  display: none;
+}
+
+.permissionDiv {
+  flex-direction: row-reverse;
+  border-radius: 8.74px;
+  padding: 17.48px;
+  border: 0.87px solid #9b8afb;
+}
+.cdk-drag-preview {
+ overflow: hidden;
+}
+.roles_wrapper {
+  max-height: 600px;
+  overflow-y: auto;
+}
+.cdk-drop-list {
+  height: 100%;
+}
+::ng-deep .actionBtn,
+.actionBtn {
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+::ng-deep .actionBtn.saveBtn,
+.actionBtn.saveBtn {
+  background-color: #f4f3ff;
+  border: 1px solid #f4f3ff;
+  box-shadow: 0px 1px 2px 0px #1018280d;
+  color: #5925dc;
+}
+
+::ng-deep .actionBtn.duplicateBtn,
+.actionBtn.duplicateBtn {
+  color: #ffffff;
+  background-color: #7a5af8;
+}
+
+.input-wrapper {
+  width: 100%;
+  max-width: 327px;
+}
+
+.arrow_right {
+  color: #98a2b3;
+  font-size: 18px;
+}
+
+.perm-container span {
+  font-size: 16px;
+  font-weight: 500;
+ color: #475467;
+}
+
+.perm-container.not_accordion {
+  border-radius: 8.74px;
+  padding: 17.48px;
+  cursor: pointer;
+  border: 0.87px solid #9b8afb;
+}
+
+.perm-icon {
+  color: #7a5af8;
+  font-size: 20px;
+}
+
+.selected_permissions_container {
+  border: 1px solid #d0d5dd;
+  padding: 24px;
+  border-radius: 12px;
+}
+
+.selected_permissions_container .header {
+  color: #101828;
+  font-size: 24px;
+  font-weight: 600;
+  border-bottom: 1px solid #eaecf0;
+  padding-bottom: 8px;
+}
+
+.selected_permissions_container .icon-wrapper {
+  width: 40px;
+  height: 40px;
+  background-color: #ebe9fe;
+  border-radius: 50%;
+}
+
+.selected_permissions_container .icon-wrapper .perm-icon {
+  color: #6938ef;
+}
+
+.selected_permissions_container .selected_permission {
+  padding: 20px 16px;
+  border-radius: 8px;
+  border: 1px solid #eaecf0;
+  box-shadow: 0px 1px 2px 0px #1018280f, 0px 1px 3px 0px #1018281a;
+}
+
+.selected_permissions_container .selected_permission .text {
+  color: #344054;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.selected_permissions_container .selected_permission .tag {
+  padding: 2px 8px;
+  border-radius: 16px;
+  background-color: #f4f3ff;
+  color: #5925dc;
+  font-size: 12px;
+  font-weight: 500;
+}
+h1.roles_header{
+    padding-bottom: 8px;
+    border-bottom: 1px solid #EAECF0;
+    margin-bottom: 24px;
+}
+
+::ng-deep .actionBtn,
+.actionBtn {
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+::ng-deep .actionBtn.saveBtn,
+.actionBtn.saveBtn {
+  background-color: #f4f3ff;
+  border: 1px solid #f4f3ff;
+  box-shadow: 0px 1px 2px 0px #1018280d;
+  color: #5925dc;
+}
+
+::ng-deep .actionBtn.duplicateBtn,
+.actionBtn.duplicateBtn {
+  color: #ffffff;
+  background-color: #7a5af8;
+}

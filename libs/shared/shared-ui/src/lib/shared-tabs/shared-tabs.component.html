@@ -1,0 +1,15 @@
+<div class="tabs flex flex-wrap items-center border-b border-gray_light my-4">
+  @for(tab of totalTabs ; track tab){
+    @if(tab?.visible()){
+      <button
+        [routerLink]="[tab.router]"
+        routerLinkActive="active_tab"
+        class="tab"
+        [ngClass]="{ 'small-text': tabs.length > 6 }"
+      >
+        <i [class]="tab.icon" class="fi"></i>
+        <span>{{ tab.name | translate }}</span>
+      </button>
+    }
+  }
+</div>

@@ -1,0 +1,188 @@
+<div class="criteria_card">
+  <div class="header flex justify-between border-b border-gray_light">
+    <div class="flex gap-2 items-center">
+      <h3 class="title">{{ 'ESCLATION.CRITERIA' | translate }}</h3>
+      <span class="count">
+        {{ filterForm.controls.length }} {{ 'ESCLATION.CRITERIA' | translate }}
+      </span>
+    </div>
+    @if(_PermissionSystemService.can('ESCLATIONS' , 'ESCLATIONCRITERIA' , 'ADD')
+    ){
+    <button
+      class="default_btn flex gap-2 items-center"
+      (click)="addNewFilter()"
+    >
+      <i class="fi fi-rr-plus"></i> {{ 'ESCLATION.ADD_CRITERIA' | translate }}
+    </button>
+    }
+  </div>
+  @if(loading){
+  <div class="flex justify-center items-center w-full h-[400px]">
+    <lib-loader></lib-loader>
+  </div>
+  }@else{ @if(filterForm.controls.length){
+  <form [formGroup]="filter_form" class="mb-6 pt-4">
+    <div
+      formArrayName="filters"
+      class="filters"
+      [ngClass]="{
+        disabled: !_PermissionSystemService.can(
+          'ESCLATIONS',
+          'ESCLATIONCRITERIA',
+          'EDIT'
+        )
+      }"
+    >
+      @for(control of filterForm.controls ; track $index ; let i = $index){
+      <div
+        class="flex items-center justify-between gap-6 bg-gray_light/10 p-4 rounded-lg mb-4"
+      >
+        <div [formGroupName]="i" class="single_filter grid grid-cols-12 gap-4">
+          <div class="form_group col-span-3">
+            <p-dropdown
+              [appendTo]="'body'"
+              [options]="current_data_filter_entity"
+              formControlName="filter_type"
+              optionLabel="displayName"
+              [filter]="true"
+              filterBy="displayName"
+              (onChange)="handleSelectFilter(i, $event)"
+              placeholder="Select Filter"
+            />
+          </div>
+
+          @if(control.get('operator')){
+
+          <div class="form_group col-span-3">
+            <p-dropdown
+              [appendTo]="'body'"
+              [options]="current_operator_map.get(i)"
+              formControlName="operator"
+              optionLabel="OperatorName"
+              [filter]="true"
+              filterBy="OperatorName"
+              placeholder="Select Operator"
+            />
+          </div>
+          } @if(control?.get('firstValue')){ @switch
+          (control.get('filter_type')?.value?.filterType) { @case ('Text') {
+          <div class="form_group col-span-3">
+            <input
+              type="text"
+              pInputText
+              formControlName="firstValue"
+              placeholder="Search Text"
+            />
+          </div>
+          } @case ('Integer Number') {
+          <div class="form_group col-span-3">
+            <!-- <input type="text" pInputText
+              [placeholder]="'Filters.SearchText' | translate" /> -->
+            <p-inputNumber inputId="integeronly" formControlName="firstValue" />
+          </div>
+          } @case('List'){
+          <div class="form_group col-span-3">
+            <p-dropdown
+              [appendTo]="'body'"
+              [options]="filters_list_map.get(i)"
+              optionValue="id"
+              formControlName="firstValue"
+              optionLabel="label"
+            />
+          </div>
+          } @case('Date'){
+          <div class="form_group col-span-2">
+            <p-dropdown
+              [appendTo]="'body'"
+              [options]="filters_list_map.get(i)"
+              optionValue="DataEntityTypeFilterDateOptionID"
+              formControlName="firstValue"
+              optionLabel="NameEn"
+            />
+          </div>
+          @if(control.get('firstValue')?.value === 18){
+          <div class="form_group col-span-4">
+            <p-calendar
+              formControlName="secondValue"
+              [iconDisplay]="'input'"
+              placeholder="Select Date"
+              [showIcon]="true"
+              selectionMode="range"
+              inputId="icondisplay"
+            />
+          </div>
+          }@else if(control.get('firstValue')?.value === 19){
+          <div class="form_group col-span-4">
+            <p-calendar
+              formControlName="secondValue"
+              [iconDisplay]="'input'"
+              placeholder="Select Date"
+              [showIcon]="true"
+              inputId="icondisplay"
+            />
+          </div>
+          } } @case('User'){
+          <div class="form_group col-span-4">
+            <lib-user-dropdown
+              placeholder="Select User"
+              [formControlNameInput]="'firstValue'"
+              [options]="filters_list_map.get(i)"
+              optionLabel="name"
+              optionValue="id"
+              [control]="control.get('firstValue')!"
+            ></lib-user-dropdown>
+          </div>
+          } @case('Role'){
+          <div class="form_group col-span-4">
+            <lib-role-dropdown
+              placeholder="Select Role"
+              [formControlNameInput]="'firstValue'"
+              [options]="filters_list_map.get(i)"
+              optionLabel="label"
+              optionValue="id"
+              [control]="control.get('firstValue')!"
+            ></lib-role-dropdown>
+          </div>
+          } } }
+        </div>
+        @if(_PermissionSystemService.can('ESCLATIONS' , 'ESCLATIONCRITERIA' ,
+        'DELETE') ){
+        <button
+          (click)="removeFromArray(i)"
+          class="btn_icon p-3 rounded-lg bg-danger_color col-span-1 text-white_color"
+        >
+          <i class="fi fi-rr-trash"></i>
+        </button>
+        }
+      </div>
+
+      }
+    </div>
+  </form>
+  <div class="flex-1 mt-2 flex justify-end items-center gap-3">
+    <!-- <p-button
+        (onClick)="handleCancel()"
+        styleClass="default_btn cancel"
+        [label]="'BUTTONS.CANCEL' | translate"
+      >
+      </p-button> -->
+    @if(_PermissionSystemService.can('ESCLATIONS' , 'ESCLATIONCRITERIA' , 'ADD')
+    || _PermissionSystemService.can('ESCLATIONS' , 'ESCLATIONCRITERIA' ,
+    'EDIT')){
+    <p-button
+      [loading]="isSavingCriteria"
+      (onClick)="save()"
+      styleClass="default_btn"
+      [label]="'BUTTONS.SAVE' | translate"
+    >
+    </p-button>
+    }
+  </div>
+  }@else {
+  <div class="flex flex-col gap-2 items-center empty_state_wrapper">
+    <img src="images/no-document.png" alt="empty-state" />
+    <h2>{{ 'WORKFLOW_STEPS.TEXTS.NO_CONTENT_YET' | translate }}</h2>
+    <p>{{ 'WORKFLOW_STEPS.TEXTS.NO_CONTENT_FOUND' | translate }}</p>
+  </div>
+  } }
+</div>

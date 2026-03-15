@@ -1,0 +1,274 @@
+<div
+  class="container_card flex flex-col items-center justify-center gap-[48px]"
+>
+  <div class="flex items-center w-full">
+    @for (step of steps; track $index) {
+    <div class="flex flex-col gap-4 items-center justify-center flex-1">
+      <div
+        class="step-wrapper w-full flex justify-center items-center relative"
+      >
+        <div
+          class="step-status z-50"
+          [ngClass]="{
+            active: activeStep === step.id,
+            completed: activeStep > step.id
+          }"
+        >
+          <div class="status-ico">
+            @if(activeStep > step.id){
+            <i class="fi fi-br-check"></i>
+            }@else {
+            <div class="dot"></div>
+
+            }
+          </div>
+        </div>
+        @if($index !== steps.length - 1){
+        <div
+          class="progress-line {{ language === 'ar' ? 'rtl' : 'ltr' }}"
+          [ngClass]="{ completed: activeStep > step.id }"
+        ></div>
+        }
+      </div>
+      <div class="step-content text-center text-base text-[#5925DC]">
+        <h2>{{ step.title }}</h2>
+        <!-- <p class="font-normal">{{ step.description }}</p> -->
+      </div>
+    </div>
+    }
+  </div>
+  @if(!activeStep){
+  <div class="w-full">
+    <p-skeleton height="3rem" styleClass="mb-3" />
+    <p-skeleton height="25rem" />
+  </div>
+
+  } @switch (activeStep) { @case (1) { @if(files){ @if(files.length > 1){
+
+  <div class="grid grid-cols-12 w-full gap-4">
+    @for (file of files; track $index) {
+    <div class="col-span-12 " [ngClass]="{'lg:col-span-4 md:col-span-6':files.length > 2}">
+      <div class="w-full">
+        <lib-shared-file-viewer [file]="file"></lib-shared-file-viewer>
+      </div>
+    </div>
+    }
+  </div>
+
+  }@else {
+  <div class="w-full">
+    <lib-shared-file-viewer [file]="files[0]"></lib-shared-file-viewer>
+  </div>
+  } }
+  <button
+    class="btn"
+    (click)="hasQuizzes ? setActiveStep(2) : setActiveStep(3)"
+  >
+    {{ 'QUIZ.NEXT' | translate }}
+  </button>
+
+  } @case (2) { @if(totalQuestions.length){
+  <div class="container_card">
+    <div
+      class="container_card quiz_container flex flex-col gap-5 items-center justify-center"
+    >
+      <header class="flex flex-col justify-center items-center gap-2">
+        <img src="/images/passed-icon.svg" alt="knowledge-check-icon" />
+        <h2 class="header-txt">{{ 'QUIZ.KNOWLEDGE_CHECK' | translate }}</h2>
+        <p class="note-txt">
+          {{ 'QUIZ.ANSWER_QUESTIONS' | translate }}
+        </p>
+      </header>
+      <div class="progress-container w-full">
+        <div
+          class="flex items-center justify-between gap-2 w-full mb-[9px] font-medium text-base"
+        >
+          <p class="text-[#344054]">{{ 'QUIZ.PROGRESS' | translate }}</p>
+          <p class="text-[#667085]">
+            {{ answeredQuestions.length }} {{ 'QUIZ.OF' | translate }}
+            {{ totalQuestions.length }} {{ 'QUIZ.ANSWERED' | translate }}
+          </p>
+        </div>
+        <div class="progress-outer rounded-full">
+          <p-progressBar [value]="progress" />
+        </div>
+      </div>
+      <main class="questions w-full">
+        @for (question of questions; track $index) {
+        <div class="question mb-5">
+          <div class="flex justify-between items-center w-full gap-2.5 mb-2">
+            <div class="question-icon">
+              <img src="/images/question-icon.svg" alt="" />
+            </div>
+            <div class="question-title flex-1">
+              <p class="text-[#344054] font-semibold text-lg">
+                {{ question.questionText }}
+              </p>
+            </div>
+            <div class="question-number">
+              <span>{{ $index + 1 }}</span>
+            </div>
+          </div>
+
+          @if (multiTypes.includes(question.type)) { @for (answer of
+          question.options; track $index; let i = $index) {
+
+          <div class="answer_muilti_card mb-3">
+            <p-checkbox
+              [(ngModel)]="answer.checked"
+              [binary]="true"
+              [inputId]="'answer-' + question.awarenessQuizQuestionID"
+            ></p-checkbox>
+
+            <label
+              class="font-normal"
+              [for]="'answer-' + question.awarenessQuizQuestionID"
+            >
+              {{ answer.optionText }}
+            </label>
+          </div>
+
+          } } @else if (singleTypes.includes(question.type)) { @for (answer of
+          question.options; track $index; let i = $index) {
+
+          <div class="answer_muilti_card mb-3">
+            <p-radioButton
+              name="answerRadio-{{ question.awarenessQuizQuestionID }}-{{
+                question.awarenessQuizQuestionID
+              }}"
+              [value]="answer.awarenessQuizOptionID"
+              [(ngModel)]="question.answer"
+              [inputId]="'answer-' + question.awarenessQuizQuestionID"
+            ></p-radioButton>
+
+            <label
+              class="ml-2 font-normal"
+              [for]="'answer-' + question.awarenessQuizQuestionID"
+            >
+              {{ answer.optionText }}
+            </label>
+          </div>
+
+          } } @else if (stringTypes.includes(question.type)) {
+
+          <div class="form_group">
+            <textarea
+              rows="5"
+              [placeholder]="'QUIZ.WRITE_ANSWER' | translate"
+              pInputText
+              [(ngModel)]="question.answer"
+            ></textarea>
+          </div>
+
+          } @else if (numberTypes.includes(question.type)) {
+          <div class="form_group">
+            <p-inputNumber
+              [(ngModel)]="question.answer"
+              mode="decimal"
+              class="w-full"
+              [placeholder]="'QUIZ.WRITE_ANSWER' | translate"
+            />
+          </div>
+          } @else if (dateTypes.includes(question.type)) {
+          <div class="form_group">
+            <p-calendar
+              [appendTo]="'body'"
+              [iconDisplay]="'input'"
+              [showIcon]="true"
+              dateFormat="mm-dd-yy"
+              [placeholder]="'QUIZ.PICK_DATE' | translate"
+              [(ngModel)]="question.answer"
+              inputId="icondisplay"
+              styleClass="w-full"
+            />
+          </div>
+          }@else { @for (answer of question.options; track $index; let i =
+          $index) {
+
+          <div class="answer_muilti_card mb-3">
+            <p-radioButton
+              name="answerRadio-{{ question.awarenessQuizQuestionID }}-{{
+                question.awarenessQuizQuestionID
+              }}"
+              [value]="answer.awarenessQuizOptionID"
+              [(ngModel)]="question.answer"
+              [inputId]="'answer-' + question.awarenessQuizQuestionID + '-' + i"
+            ></p-radioButton>
+
+            <label
+              class="ml-2 font-normal"
+              [for]="'answer-' + question.awarenessQuizQuestionID + '-' + i"
+            >
+              {{ answer.optionText }}
+            </label>
+          </div>
+
+          } }
+        </div>
+        }
+      </main>
+      <footer class="w-full">
+        <p-button
+          [loading]="calculatingQuizPoints"
+          (onClick)="proceedQuiz()"
+          [disabled]="cannotProceed()"
+          class="w-full"
+          styleClass="btn"
+        >
+          {{
+            (currentPage >= totalPages ? 'QUIZ.NEXT' : 'QUIZ.PROCEED_TO_QUIZ')
+              | translate
+          }}
+        </p-button>
+      </footer>
+    </div>
+  </div>
+  }@else {
+  <h1>{{ 'QUIZ.NO_QUESTIONS_FOUND' | translate }}</h1>
+  <button class="btn" (click)="setActiveStep(1)">
+    {{ 'QUIZ.GO_BACK' | translate }}
+  </button>
+  } } @case (3) {
+
+  <div class="container_card w-full flex justify-center items-center">
+    <div
+      class="quiz-result-container max-w-[590px] flex flex-col gap-5 items-center justify-center flex-wrap"
+    >
+      @if(hasQuizzes){
+      <img [src]="getQuizResult().icon" [alt]="getQuizResult().alt" />
+      <h2 class="header-txt">{{ getQuizResult().title }}</h2>
+      <p class="note-txt">{{ getQuizResult().note }}</p>
+      } @if(passed || !hasQuizzes){
+      <div class="confirmation_card w-full">
+        <p-checkbox
+          [(ngModel)]="confirmed"
+          [binary]="true"
+          inputId="quiz-confirmation"
+        ></p-checkbox>
+        <label for="quiz-confirmation">
+          {{ 'QUIZ.CONFIRM_READING' | translate }}
+        </label>
+      </div>
+      <p-button
+        (onClick)="confirm()"
+        [disabled]="!confirmed"
+        styleClass="btn"
+        class="w-full"
+      >
+        {{ 'QUIZ.CONFIRM' | translate }}
+      </p-button>
+      } @if(!passed && hasQuizzes) {
+      <div class="flex justify-center items-center gap-4 w-full">
+        <button (click)="reviewMaterial()" class="btn cancel flex-1">
+          {{ 'QUIZ.REVIEW_MATERIAL' | translate }}
+        </button>
+        <button (click)="tryAgain()" class="btn flex-1">
+          {{ 'QUIZ.TRY_AGAIN' | translate }}
+        </button>
+      </div>
+      }
+    </div>
+  </div>
+
+  } }
+</div>

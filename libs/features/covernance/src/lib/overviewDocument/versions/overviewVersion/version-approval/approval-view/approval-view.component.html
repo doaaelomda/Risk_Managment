@@ -1,0 +1,45 @@
+<section>
+  <div class="header mb-6">
+    <div class="title flex items-center gap-4 justify-between flex-wrap">
+      <div class="flex justify-between items-center">
+        @if(loadingData){
+        <p-skeleton width="15rem" styleClass="mb-2" />
+        }@else {
+        <h2 class="text-2xl font-semibold text-gray-800 ">{{ data?.govDocumentVersionName }}</h2>
+        }
+      </div>
+      <div class="flex justify-between flex-wrap items-center gap-5">
+        @if(data?.govDocumentApprovalStatusTypeName ){
+        <div class="flex items-center gap-2">
+          <p class="m-0 font-medium text-gray_color">
+            {{ 'STATUS.TITLE' | translate }}:
+          </p>
+          <span class="badge" [ngClass]="data?.govDocumentApprovalStatusTypeColor">{{
+            data?.govDocumentApprovalStatusTypeName
+            }}</span>
+        </div>
+        }
+        @if(data?.approvalDate ){
+        <div class="flex items-center gap-2">
+          <span class="m-0 font-medium text-gray_color">
+            {{ 'RISK_MANAGMENT.APPROVAL_DATE' | translate }}:
+          </span>
+          <div class="value flex items-center gap-2">
+            <i class="fi fi-rr-calendar"></i>
+            <span class="text-base font-semibold text-gray-800">
+              {{
+              data?.approvalDate ? (data?.approvalDate | date) : '-'
+              }}</span>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+
+  </div>
+
+  <lib-shared-tabs [permissionFeature]="{module:'GOVERNANCE' , feature:'APPROVAL'}"></lib-shared-tabs>
+
+  <router-outlet></router-outlet>
+
+</section>

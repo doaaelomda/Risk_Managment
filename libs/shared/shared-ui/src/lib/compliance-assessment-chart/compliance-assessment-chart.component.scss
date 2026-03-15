@@ -1,0 +1,47 @@
+
+  .chart_widget{
+    @apply w-full h-full py-7 px-6 border border-gray_light rounded-2xl
+  }
+
+
+  .number_badge{
+    @apply py-1 px-3 rounded-2xl font-medium;
+
+
+   &.error{
+      @apply bg-error-50 text-error-500;
+    }
+    &.success{
+      @apply bg-success-50 text-success-500;
+    }
+    &.warning{
+      @apply bg-warning-50 text-warning-500;
+    }
+
+  }
+
+
+
+
+
+.analysis_widget{
+  @apply border border-gray-200 py-5 px-4 rounded-md;
+
+}
+
+
+
+::ng-deep .progress-outer {
+  height: 24px;
+  .p-progressbar {
+    height: 8px;
+
+  }
+    .p-progressbar-value {
+      background-color: #6938EF;
+      border-radius: 4px;
+    }
+  .p-progressbar-determinate .p-progressbar-label {
+    display: none;
+  }
+}

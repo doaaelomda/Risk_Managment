@@ -1,0 +1,14 @@
+<div class="grid grid-cols-12 gap-3">
+  <div class="col-span-12 lg:col-span-4">
+  <lib-side-sections-list
+    (Selection_Emitter$)="setCurrentSection($event)"
+    [progressInput]="progress"
+  ></lib-side-sections-list>
+</div>
+<div class="col-span-12 lg:col-span-8">
+  <lib-questions0control
+    [current_section_input]="current_section"
+    (progress)="handleProgressChange($event)"
+  ></lib-questions0control>
+</div>
+</div>

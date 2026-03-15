@@ -1,0 +1,520 @@
+@if(!isApproval){
+<p-dialog
+  [header]="'USER_REVIEWS.SEND_REVIEW' | translate"
+  [modal]="true"
+  [draggable]="false"
+  [(visible)]="sendingReview"
+  [dismissableMask]="true"
+  styleClass="w-[40rem]"
+  (onHide)="feedback = ''"
+>
+  <label for="feedback" class="mb-3">
+    {{ 'USER_REVIEWS.OVERALL_FEEDBACK' | translate }}
+  </label>
+  <textarea
+    type="text"
+    class="min-h-[250px]"
+    [(ngModel)]="feedback"
+    pInputText
+    id="feedback"
+    [placeholder]="'USER_REVIEWS.ENTER_FEEDBACK_PLACEHOLDER' | translate"
+  ></textarea>
+
+  <div class="flex justify-end items-center gap-3">
+    <p-button
+      (onClick)="sendingReview = false"
+      styleClass="default_btn cancel"
+      [label]="'BUTTONS.CANCEL' | translate"
+    >
+    </p-button>
+    <p-button
+      [disabled]="!feedback"
+      [loading]="submittingReview"
+      (onClick)="submitReview()"
+      styleClass="default_btn"
+      [label]="'BUTTONS.SAVE' | translate"
+    >
+    </p-button>
+  </div>
+</p-dialog>
+} @if(isApproval){
+<p-dialog
+  [header]="'USER_REVIEWS.SEND_APPROVAL' | translate"
+  [modal]="true"
+  [draggable]="false"
+  [(visible)]="sendingApproval"
+  [dismissableMask]="true"
+  styleClass="w-[40rem]"
+  (onHide)="sendingApproval = false"
+>
+  <form [formGroup]="approvalForm">
+    <div class="grid grid-cols-12 gap-4 mb-3">
+      @for (option of options; track $index) {
+      <button (click)="setStatusType(option.id)" class="col-span-12 lg:col-span-6 flex justify-between option">
+        <div class="flex justify-start items-center gap-2">
+          <div
+            class="flex justify-center items-center w-10 h-10 rounded-full bg-[#F4F3FF] text-[#5925DC] text-lg"
+          >
+            <i [class]="option.icon"></i>
+          </div>
+          <label [for]="option.id" class="ml-2">
+            {{ option.name }}
+          </label>
+        </div>
+        <p-radioButton
+          [inputId]="`${option.id}`"
+          [value]="option.id"
+          formControlName="statusTypeID"
+        />
+      </button>
+      }
+    </div>
+    <lib-textarea-ui
+      [inputLabel]="'USER_REVIEWS.NOTE' | translate"
+      [placeholder]="'INDICATORS.NOTE_PLACEHOLDER' | translate"
+      [control]="approvalForm.get('notes')!"
+      [controlNameInput]="'notes'"
+    >
+    </lib-textarea-ui>
+  </form>
+  <div class="flex justify-end items-center gap-3">
+    <p-button
+      (onClick)="sendingApproval = false"
+      styleClass="default_btn cancel"
+      [label]="'BUTTONS.CANCEL' | translate"
+    >
+    </p-button>
+    <p-button
+      [disabled]="approvalForm.invalid"
+      [loading]="submittingApproval"
+      (onClick)="submitApproval()"
+      styleClass="default_btn"
+      [label]="'BUTTONS.SAVE' | translate"
+    >
+    </p-button>
+  </div>
+</p-dialog>
+}
+<section>
+  <p-overlayPanel #actionMenu>
+    <div class="flex gap-2 flex-col">
+      @for (action of actions; track $index) {
+      <button (click)="action?.command()" class="flex gap-2 items-center">
+        <span> {{ action?.label }}</span>
+      </button>
+      }
+    </div>
+  </p-overlayPanel>
+
+  @if(!loading){ @if(data){
+  <header class="flex flex-col gap-[10px]">
+    <div class="flex justify-between">
+      <div class="flex gap-[10px] items-center">
+        <h1 class="header-title">{{ data.govDocumentVersionName }}</h1>
+        <span
+          [class]="isApproval ? data?.govDocumentApprovalStatusTypeColor : data?.govDocumentReviewStatusTypeColor"
+          class="badge"
+        >
+          {{ isApproval? data?.govDocumentApprovalStatusTypeName : data.govDocumentReviewStatusTypeName }}
+        </span>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="flex items-center font-[500] text-[16px] gap-1">
+          <span class="label text-[#667085]">
+            {{ 'USER_REVIEWS.REVIEW_DUE_DATE' | translate }}:
+          </span>
+          <span class="value text-[#1D2939]">
+            {{ isApproval ? (data.approvalDueDate | date) : (data.reviewDueDate | date) }}
+          </span>
+        </div>
+        @if(!isApproval){
+        <button class="default_btn" (click)="sendReview()">
+          {{ 'USER_REVIEWS.SEND_REVIEW' | translate }}
+        </button>
+        }@else {
+        <button class="default_btn" (click)="sendApproval()">
+          {{ 'USER_REVIEWS.SEND_APPROVAL' | translate }}
+        </button>
+        }
+      </div>
+    </div>
+    <!-- <p class="text-[#667085] text-[18px]">
+      {{ 'USER_REVIEWS.REVIEWS_DESC' | translate }}
+    </p> -->
+  </header>
+  <main class="flex flex-col gap-[10px]">
+    <div class="types grid grid-cols-12 gap-[10px] mt-[10px]">
+      @for (type of types; track $index) {
+      <div class="col-span-12 lg:col-span-4">
+        <button
+          (click)="setActiveType(type.id)"
+          class="flex justify-between type-card"
+          [ngClass]="{ active: selected_type === type.id }"
+        >
+          <div class="flex flex-1 gap-3 items-center">
+            <div
+              class="type-ico w-[50px] h-[50px] rounded-full flex items-center justify-center bg-[#F2F4F7] text-[#7A5AF8] text-[24px]"
+            >
+              @if(type.icon){
+              <i [class]="type.icon"></i>
+              }@else if(type.image){
+              <img [src]="type.image" alt="{{ type.name }}__img" />
+              }
+            </div>
+            <span class="text-[#344054] text-[16px] font-[500]">
+              {{ type.name }}
+            </span>
+          </div>
+          <p-radioButton
+            [inputId]="'type_' + type.id"
+            name="category"
+            [value]="type.id"
+            [(ngModel)]="selected_type"
+          />
+        </button>
+      </div>
+      }
+    </div>
+    <div class="grid grid-cols-12 gap-[32px] rounded-2xl p-[16px] bg-[#F9FAFB]">
+      <div
+        class="col-span-12 lg:col-span-{{
+          isApproval ? '12' : '8'
+        }} bg-[#fff] rounded-xl"
+      >
+        <div class="p-4">
+          <div class="px-6 py-3 border-gray-1 rounded-[8px] min-h-[200px]">
+            @switch (selected_type) { @case(1){ @for(file of files ; track
+            $index){
+            <lib-shared-file-viewer [file]="file"></lib-shared-file-viewer>
+            } } @case(2){ @if(!loadingText){ @if(fullText){
+            <div class="full-text-container">
+              <p class="content-txt" [innerHTML]="fullText | safeHtml"></p>
+            </div>
+            } @else {
+
+            <div class="flex flex-col gap-2 items-center">
+              <img src="images/no-document.svg" alt="empty-state" />
+                 <p class="text-gray-900 font-semibold text-[18px] mb-1">{{'ATTACHMENT.NOTUPLOADED' |translate}}</p>
+    <p class="text-gray-500 font-normal text-[16px] mb-1">{{'ATTACHMENT.UPLOADFILES' |translate}}</p>
+            </div>
+
+            } }@else {
+            <div class="flex flex-col gap-2 w-full">
+              <p-skeleton height="1.5rem" width="10rem"></p-skeleton>
+              <p-skeleton height="1.5rem" width="5rem"></p-skeleton>
+              <p-skeleton height="1.5rem"></p-skeleton>
+              <p-skeleton height="1.5rem"></p-skeleton>
+              <p-skeleton height="1.5rem"></p-skeleton>
+              <p-skeleton height="1.5rem"></p-skeleton>
+              <p-skeleton height="1.5rem"></p-skeleton>
+              <p-skeleton height="1.5rem"></p-skeleton>
+              <p-skeleton height="1.5rem"></p-skeleton>
+              <p-skeleton height="1.5rem"></p-skeleton>
+              <p-skeleton height="1.5rem"></p-skeleton>
+              <p-skeleton height="1.5rem"></p-skeleton>
+              <p-skeleton height="1.5rem"></p-skeleton>
+              <p-skeleton height="1.5rem"></p-skeleton>
+              <p-skeleton height="1.5rem"></p-skeleton>
+            </div>
+            }} @case(3){
+
+            <lib-shared-content-tree
+              [loading]="loadingTree"
+              (nodeSelected)="onNodeSelected($event)"
+              [rawData]="structuredText"
+            ></lib-shared-content-tree>
+
+            } }
+          </div>
+        </div>
+      </div>
+      @if(!isApproval){
+      <div
+        class="col-span-12 lg:col-span-4 pt-[16px] rounded-[9px] border-gray-1 bg-[#fff]"
+      >
+        <div class="flex flex-col gap-6">
+          <header class="py-[10px] px-[28px]">
+            <div class="flex justify-between items-start">
+              <h2 class="header-title mb-[33px]">
+                {{ 'USER_REVIEWS.NOTES' | translate }}
+              </h2>
+              <button
+                (click)="addComment()"
+                title="add a comment"
+                class="default_btn"
+              >
+                +
+              </button>
+            </div>
+            <p-selectButton
+              styleClass="notesOptionsBtns flex items-center p-[4px]"
+              [options]="notesOptions"
+              [(ngModel)]="viewedNotes"
+              optionLabel="label"
+              optionValue="value"
+            />
+          </header>
+          <main
+            class="p-[16px] rounded-[12px] border-t-[1px] border-[#EAECF0] max-h-[800px] overflow-auto"
+          >
+            <div class="flex flex-col gap-6">
+              @for (note of (viewedNotes === 1 ? notes : myNotes); track $index)
+              {
+              <div
+                class="note-card rounded-[11px] py-[24px] px-[14px] border-gray-1 flex flex-col gap-[10px]"
+              >
+                @if(note.govDocumentElementName){
+                <header>
+                  <div class="flex gap-[12px]">
+                    <div
+                      class="flex-1 control-wrapper flex justify-between items-center select-none"
+                    >
+                      <span class="text-[#6938EF] text-[14px] font-[500]">
+                        {{ note.govDocumentElementName }}
+                      </span>
+                      <!-- <button
+                        (click)="
+                          selectedNote = note;
+                          deleteControl(note.control.id, note)
+                        "
+                      >
+                        <i
+                          class="fi fi-rr-cross-small text-[#667085] text-[18px]"
+                        ></i>
+                      </button> -->
+                    </div>
+
+                    <!-- <div class="action-items flex gap-2 items-center ms-auto">
+                      <button
+                        (click)="selectedNote = note; actionMenu.toggle($event)"
+                      >
+                        <i class="fi fi-bs-menu-dots text-[#667085]"></i>
+                      </button>
+                      <button>
+                        <i class="fi fi-rs-comment text-[#7A5AF8]"></i>
+                      </button>
+                    </div> -->
+                  </div>
+                </header>
+                }
+                <main>
+                  <div
+                    class="status-wrapper flex justify-between gap-3 mb-[10px] flex-wrap"
+                  >
+                    <div class="flex items-center gap-1 flex-wrap">
+                      <span class="status-label"
+                        >{{ 'USER_REVIEWS.STATUS' | translate }}:
+                      </span>
+                      <span class="badge {{ note.statusTypeColor }}"
+                        ><span class="small_doted"></span>
+                        {{ note.statusTypeName }}</span
+                      >
+                    </div>
+                    <div class="flex items-center gap-1 flex-wrap">
+                      <span class="status-label"
+                        >{{ 'USER_REVIEWS.TYPE' | translate }}:
+                      </span>
+                      <span class="badge {{ note.severityLevelColor }}">
+                        {{ note.severityLevelName }}</span
+                      >
+                    </div>
+                  </div>
+                  <p
+                    class="content-txt whitespace-break-spaces full-text-container"
+                    [innerHTML]="note?.commentText | nl2br | safeHtml"
+                  >
+                  </p>
+                </main>
+                <footer>
+                  <div class="flex justify-between flex-wrap">
+                  <div class="flex items-center gap-2">
+                <lib-img-system [userId]="note?.reviewCommentUserId"></lib-img-system>
+                <div>
+                  <p class="text-gray-700 font-medium text-[16px]">{{ note?.reviewCommentUserName || '-' }}</p>
+                  <p class="text-gray-600 font-normal text-[14px]">{{ note?.reviewCommentUserPosition || '-' }}
+                  </p>
+                </div>
+              </div>
+                    <span class="date text-[#475467] text-[14px] font-[400]">
+                      {{ note.resolvedDate ? (note.resolvedDate | date) : '-' }}
+                    </span>
+                  </div>
+                </footer>
+              </div>
+              } @switch (viewedNotes) { @case (1) { @if(!notes.length){
+              <div class="flex flex-col gap-2 items-center">
+                <img src="images/no-document.svg" alt="empty-state" />
+                    <p class="text-gray-900 font-semibold text-[18px] mb-1">{{'ATTACHMENT.NOTUPLOADED' |translate}}</p>
+    <p class="text-gray-500 font-normal text-[16px] mb-1">{{'ATTACHMENT.UPLOADFILES' |translate}}</p>
+              </div>
+              } } @case (2) { @if(!myNotes.length){
+              <div class="flex flex-col gap-2 items-center">
+                <img src="images/no-document.svg" alt="empty-state" />
+                   <p class="text-gray-900 font-semibold text-[18px] mb-1">{{'ATTACHMENT.NOTUPLOADED' |translate}}</p>
+    <p class="text-gray-500 font-normal text-[16px] mb-1">{{'ATTACHMENT.UPLOADFILES' |translate}}</p>
+              </div>
+              } } }
+            </div>
+          </main>
+          <!-- <footer class="p-[16px]">
+            <div class="message-box border-gray-1 flex flex-col gap-2">
+              <textarea
+                rows="3"
+                cols="10"
+                pInputTextarea
+                class="border-none p-0 rounded-none"
+                [placeholder]="
+                  'USER_REVIEWS.SEND_MESSAGE_PLACEHOLDER' | translate
+                "
+                [(ngModel)]="noteMsg"
+              >
+              </textarea>
+              <div class="flex gap-5 ms-auto">
+                <div class="flex gap-3 other_action_btns">
+                  <button>
+                    <i class="fi fi-rr-smile text-[#667085]"></i>
+                  </button>
+                  <button>
+                    <i class="fi fi-br-menu-dots-vertical text-[#667085]"></i>
+                  </button>
+                </div>
+                <p-button
+                  [disabled]="!noteMsg"
+                  (onClick)="sendNoteMessage()"
+                  class="default_btn"
+                  [loading]="sendingNoteMessage"
+                  >{{ 'BUTTONS.SEND' | translate }}</p-button
+                >
+              </div>
+            </div>
+          </footer> -->
+        </div>
+      </div>
+      }
+    </div>
+  </main>
+  }@else {
+  <div class="flex flex-col gap-2 items-center">
+    <img src="images/no-document.svg" alt="empty-state" />
+        <p class="text-gray-900 font-semibold text-[18px] mb-1">{{'ATTACHMENT.NOTUPLOADED' |translate}}</p>
+    <p class="text-gray-500 font-normal text-[16px] mb-1">{{'ATTACHMENT.UPLOADFILES' |translate}}</p>
+  </div>
+  } }@else {
+  <header class="flex flex-col gap-[10px]">
+    <div class="flex justify-between">
+      <div class="flex gap-[10px] items-center">
+        <p-skeleton width="10rem" height="2rem"></p-skeleton>
+        <p-skeleton width="6rem" height="2rem"></p-skeleton>
+      </div>
+      <div class="flex items-center font-[500] text-[16px] gap-1">
+        <p-skeleton width="10rem" height="2rem"></p-skeleton>
+        <p-skeleton width="6rem" height="2rem"></p-skeleton>
+      </div>
+    </div>
+  </header>
+  <main class="flex flex-col gap-[10px]">
+    <div class="types grid grid-cols-12 gap-[10px] mt-[10px]">
+      <div class="col-span-12 lg:col-span-4">
+        <p-skeleton height="5rem"></p-skeleton>
+      </div>
+      <div class="col-span-12 lg:col-span-4">
+        <p-skeleton height="5rem"></p-skeleton>
+      </div>
+      <div class="col-span-12 lg:col-span-4">
+        <p-skeleton height="5rem"></p-skeleton>
+      </div>
+    </div>
+    <div class="grid grid-cols-12 gap-[32px] rounded-2xl p-[16px] bg-[#F9FAFB]">
+      <div class="col-span-12 lg:col-span-8">
+        <p-skeleton height="30rem"></p-skeleton>
+      </div>
+      <div class="col-span-12 lg:col-span-4">
+        <p-skeleton height="30rem"></p-skeleton>
+      </div>
+    </div>
+  </main>
+  }
+</section>
+<p-dialog
+  [header]="'USER_REVIEWS.ADD_COMMENT' | translate"
+  [modal]="true"
+  [draggable]="false"
+  [dismissableMask]="true"
+  [(visible)]="addingComment"
+  styleClass="w-[50rem]"
+>
+  @if (commentForm) {
+  <form [formGroup]="commentForm">
+    <div class="grid grid-cols-12 gap-3">
+            <div class="col-span-12">
+        <lib-textarea-ui
+          [inputLabel]="'USER_REVIEWS.COMMENT' | translate"
+          [placeholder]="'USER_REVIEWS.COMMENT_PLACEHOLDER' | translate"
+          [control]="commentForm.get('commentText')!"
+          [controlNameInput]="'commentText'"
+        >
+        </lib-textarea-ui>
+      </div>
+      <div class="col-span-12">
+        <lib-ui-dropdown
+          [placeholder]="'USER_REVIEWS.SEVERITY_LEVEL_PLACEHOLDER' | translate"
+          [label]="'USER_REVIEWS.SEVERITY_LEVEL' | translate"
+          [control]="
+            commentForm.get('govDocumentReviewCommentSeverityLevelID')!
+          "
+          [formControlNameInput]="'govDocumentReviewCommentSeverityLevelID'"
+          [options]="severities"
+          [optionLabel]="'label'"
+          [optionValue]="'id'"
+        >
+        </lib-ui-dropdown>
+      </div>
+      <!-- <div class="col-span-12">
+        <lib-ui-dropdown
+          [placeholder]="'USER_REVIEWS.STATUS_PLACEHOLDER' | translate"
+          [label]="'USER_REVIEWS.STATUS' | translate"
+          [control]="commentForm.get('govDocumentReviewCommentStatusTypeID')!"
+          [formControlNameInput]="'govDocumentReviewCommentStatusTypeID'"
+          [options]="statuses"
+          [optionLabel]="'label'"
+          [optionValue]="'id'"
+        >
+        </lib-ui-dropdown>
+      </div> -->
+
+      <!-- <div class="col-span-12">
+        <lib-date-packer
+          [placeholder]="'USER_REVIEWS.RESOLVED_DATE_PLACEHOLDER' | translate"
+          [inputLabel]="'USER_REVIEWS.RESOLVED_DATE' | translate"
+          [control]="commentForm.get('resolvedDate')!"
+          [controlNameInput]="'resolvedDate'"
+        >
+        </lib-date-packer>
+      </div> -->
+
+
+    </div>
+  </form>
+
+  }
+  <ng-template pTemplate="footer">
+    @if(commentForm){
+    <div class="flex justify-end items-center gap-3">
+      <p-button
+        (onClick)="addingComment = false; commentForm.reset()"
+        styleClass="default_btn cancel"
+        [label]="'BUTTONS.CANCEL' | translate"
+      >
+      </p-button>
+      <p-button
+        [disabled]="commentForm.invalid"
+        [loading]="submittingComment"
+        (onClick)="submitComment()"
+        styleClass="default_btn"
+        [label]="'BUTTONS.SAVE' | translate"
+      >
+      </p-button>
+    </div>
+    }
+  </ng-template>
+</p-dialog>

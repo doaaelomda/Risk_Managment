@@ -1,0 +1,21 @@
+
+<p-toast
+ [showTransformOptions]="'translateY(100%)'"
+     [showTransitionOptions]="'1000ms'"
+     [hideTransitionOptions]="'100ms'"
+     [showTransformOptions]="'translateX(100%)'"
+styleClass="notification_message"
+    key="notification-toast"
+    >
+        <ng-template let-message pTemplate="message">
+          <div class=" flex items-start gap-4 ">
+            <div class="avatar">
+          <img [src]="'images/icons/notify.svg'" alt="" srcset="">
+            </div>
+            <div>
+              <p class="text-gray-700 text-base font-medium mb-2">{{message?.summary }}</p>
+              <p class="text-gray-500 text-sm ">{{message?.detail}}</p>
+            </div>
+          </div>
+        </ng-template>
+</p-toast>

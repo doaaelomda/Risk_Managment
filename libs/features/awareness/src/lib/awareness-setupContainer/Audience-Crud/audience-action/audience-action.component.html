@@ -1,0 +1,94 @@
+<section class="form_sec">
+  <div class="header border-b border-gray_light pb-6 mb-6">
+    <h2 class="text-lg font-medium text-gray-900">
+      {{
+        current_update_id
+          ? ('ADUIANCE.AUDIENCE' | translate)
+          : ('ADUIANCE.ADD_NEW' | translate)
+      }}
+    </h2>
+  </div>
+
+  <form [formGroup]="campaign_form" class="grid grid-cols-12 gap-6 mb-6">
+    <!-- Audience Scope Type -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'ADUIANCE.SCOPE_TYPE_PLACEHOLDER' | translate"
+        [label]="'ADUIANCE.SCOPE_TYPE' | translate"
+        [control]="campaign_form.get('audienceScopeTypeID')!"
+        [formControlNameInput]="'audienceScopeTypeID'"
+        [options]="scopeTypes"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+        [validations]="validationsRequired"
+      >
+      </lib-ui-dropdown>
+    </div>
+
+    <!-- Organizational Unit -->
+    @switch (campaign_form.get('audienceScopeTypeID')?.value) { @case (2) {
+    <div class="md:col-span-6 col-span-12">
+      <lib-tree-select-ui
+        [validations]="validationsRequired"
+        [nodes_input]="orgUnits"
+        [placeholder]="'RISK_ACTION.SELECT_DEPARTMENT' | translate"
+        [label]="'RISK_ACTION.DEPARTMENT' | translate"
+        [control]="campaign_form.get('organizationalUnitID')!"
+        [formControlNameInput]="'organizationalUnitID'"
+      >
+      </lib-tree-select-ui>
+    </div>
+    } @case (3) {
+    <!-- Role -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-role-dropdown
+        [validations]="validationsRequired"
+        [placeholder]="'ADUIANCE.ROLE_PLACEHOLDER' | translate"
+        [label]="'ADUIANCE.ROLE' | translate"
+        [control]="campaign_form.get('roleID')!"
+        [formControlNameInput]="'roleID'"
+        [options]="roles"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      >
+      </lib-role-dropdown>
+    </div>
+    } @case (4) {
+    <!-- User -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-user-dropdown
+        [validations]="validationsRequired"
+        [placeholder]="'ADUIANCE.USER_PLACEHOLDER' | translate"
+        [label]="'ADUIANCE.USER' | translate"
+        [control]="campaign_form.get('userID')!"
+        [formControlNameInput]="'userID'"
+        [options]="users"
+        [optionLabel]="'userName'"
+        [optionValue]="'id'"
+      >
+      </lib-user-dropdown>
+    </div>
+    } }
+  </form>
+
+  <div
+    class="col-span-12 flex items-center gap-4 justify-end py-6 border-t border-gray_light"
+  >
+    <div class="cancel_btn">
+      <button
+        [routerLink]="`/gfw-portal/awareness/compagine-setup/${awarenessId}/aduiance`"
+        routerLinkActive="router-link-active"
+      >
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+    <div class="action_btn">
+      <p-button
+        [disabled]="this.emptyForm() || campaign_form.invalid"
+        [label]="'BUTTONS.SAVE' | translate"
+        [loading]="isLoading"
+        (onClick)="submit()"
+      ></p-button>
+    </div>
+  </div>
+</section>

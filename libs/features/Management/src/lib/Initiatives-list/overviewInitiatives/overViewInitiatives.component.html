@@ -1,0 +1,55 @@
+<section>
+
+  <div class="header flex flex-wrap items-center justify-between">
+    <div class="title flex items-center gap-4">
+      @if(loadDataInitiative){
+      <p-skeleton width="15rem" styleClass="mb-2" />
+      }@else {
+      <h2 class="text-2xl font-semibold text-gray-800">{{ InitiativeData?.name }}</h2>
+      }
+    </div>
+    <div class="content flex items-center gap-4">
+      @if(InitiativeData?.initiativeManagerRoleName){
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">
+          {{ 'INITIATIVE.MANAGER_ROLE' | translate }}:
+        </p>
+        @if(loadDataInitiative){
+        <p-skeleton width="15rem" styleClass="mb-2" />
+        }
+        @else{
+        <span class="font-semibold text-gray-800">{{
+          InitiativeData?.initiativeManagerRoleName
+          }}</span> }
+      </div>
+      }
+      @if(InitiativeData?.initiativeStatusTypeName){
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">
+          {{ 'INITIATIVE.STATUS' | translate }}:
+        </p>
+        <span class="badge">{{
+          InitiativeData?.initiativeStatusTypeName
+          }}</span>
+      </div>
+      }
+      @if(InitiativeData?.initiativePriorityLevelTypeName){
+
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">
+          {{ 'INITIATIVE.PRIORITY_LEVEL' | translate }}:
+        </p>
+        <span class="font-semibold text-gray-800">{{
+          InitiativeData?.initiativePriorityLevelTypeName
+          }}</span>
+      </div>
+      }
+
+
+    </div>
+  </div>
+
+  <lib-shared-tabs [permissionFeature]="{module:'MANAGEMENT' , feature:'INITIATIVE'}"></lib-shared-tabs>
+
+  <router-outlet></router-outlet>
+</section>

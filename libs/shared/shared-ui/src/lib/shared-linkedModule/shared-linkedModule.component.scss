@@ -1,0 +1,20 @@
+::ng-deep .frameworkAccordion {
+    .p-accordion-header-link {
+        height: 52px;
+        padding: 12px 16px;
+        border-radius: 7px;
+        background-color: var(--gray-50);
+          color: var(--primary-600);
+            font-size: 18px;
+            font-weight: 500;
+        .p-accordion-toggle-icon{
+            display: none;
+        }
+    }
+   .p-accordion-tab{
+     border: 1px solid var(--gray-300);
+     border-radius: 8px;
+
+   }
+
+}

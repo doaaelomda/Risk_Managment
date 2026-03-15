@@ -1,0 +1,50 @@
+<!-- Handle answerOption List in New Table -->
+<lib-new-table
+  [loading]="isLoading"
+  [table_data]="answerOptionList"
+  [table_title]="'questionnaireAnswerOption.tableTitle' | translate"
+  [badge_title]="'questionnaireAnswerOption.badgeTitle' | translate"
+  [dataViewId]="126"
+  [entityID_Name]="'questionnaireAnswerOptionID'"
+  [isShownAction]="true"
+  (payload_emiter)="handleDataTable($event)"
+  [action_items]="action_items"
+  (currentActionRow)="setSelectedRow($event)"
+  [columnControl]="columnControl"
+  [table_actions_permissions]="{ module: 'QUESTIONNAIRES', feature: 'QUESTIONSQUESTIONNAIREANSWER', action: 'VIEW' }"
+
+  >
+
+  @if(_PermissionSystemService.can('QUESTIONNAIRES' , 'QUESTIONSQUESTIONNAIREANSWER' , 'ADD')){
+      <button addition_action (click)="addNewanswerOption()"
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+    <i class="fi fi-br-plus w-5 h-5"></i>
+    <span>{{ 'questionnaireAnswerOption.addNewButton' | translate }}</span>
+  </button>
+  }
+
+</lib-new-table>
+
+<!-- Delete answerOption -->
+<lib-delete-confirm-popup
+  [titleDelete]="'questionnaireAnswerOption.deleteTitle' | translate"
+  [descriptionDelete]="'questionnaireAnswerOption.deleteDescription' | translate"
+  (hideEmiter)="handleClosedDelete()"
+  [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="handleClosedDelete()">
+        {{ 'questionnaireAnswerOption.cancel' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteQuestionAnswer()"
+        [loading]="isDeleting"
+        [label]="'CUSTOM_COLUMNS.DELETE' | translate" />
+    </div>
+  </div>
+
+</lib-delete-confirm-popup>

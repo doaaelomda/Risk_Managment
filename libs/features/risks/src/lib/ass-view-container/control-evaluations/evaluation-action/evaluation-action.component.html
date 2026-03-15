@@ -1,0 +1,223 @@
+<section class="form_sec">
+  <div class="header border-b border-gray_light pb-6">
+    <h2 class="text-lg font-semibold text-gray-900">
+      {{
+        (evaluationId
+          ? 'EVALUATION.UPDATE_EVALUATION'
+          : 'EVALUATION.ADD_EVALUATION'
+        ) | translate
+      }}
+    </h2>
+  </div>
+
+  <div class="grid grid-cols-12 gap-4">
+    <div class="col-span-12 border-b-[1px] border-light_gray">
+      <div class="flex items-center justify-start gap-3 py-4">
+        @if(!current_controll_data){
+        <div>
+          <div class="flex gap-1 items-center">
+                <label for="" class="text-lg font-medium">
+            {{ 'EVALUATION.SELECT_CONTROL' | translate }}
+          </label>
+          <span class="text-base text-danger_text">*</span>
+          </div>
+          <p class="text-gray_color text-sm">
+            Please select a control to define the evaluation data.
+          </p>
+        </div>
+        }@else {
+        <label for="" class="text-lg font-medium">
+          {{ current_controll_data.name }}
+        </label>
+        }
+
+        <div class="icon_btn">
+          <button
+            (click)="control_seleceted_visible = true"
+            [pTooltip]="'Select Control'"
+            class="btn"
+          >
+            <i class="fi fi-rr-record-vinyl"></i>
+          </button>
+        </div>
+      </div>
+      @if(current_controll_data){
+      <div class="py-2">
+        <!-- <lib-shared-overview
+          [data]="current_controll_data"
+          [dataLoading]="false"
+          [entries]="overviewEntries"
+        >
+        </lib-shared-overview> -->
+        Control Name : <span class="font-medium">{{current_controll_data?.name}}</span>
+      </div>
+      }
+    </div>
+    <form class="col-span-12 grid grid-cols-12 gap-4" [formGroup]="form">
+      @if(current_assessment_data?.controlEvaluationMeasurementBasisID === 1 || risk_data){
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown
+            [placeholder]="
+              'EVALUATION.CONTROL_EFFECTIVENESS_LEVEL_TYPE_PLACEHOLDER' | translate
+            "
+            [label]="'EVALUATION.CONTROL_EFFECTIVENESS_LEVEL_TYPE' | translate"
+            [control]="
+              form.get('riskMethodologyControlEffectivenessLevelTypeID')!
+            "
+            [formControlNameInput]="
+              'riskMethodologyControlEffectivenessLevelTypeID'
+            "
+            [options]="effectivenessLevelType"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+          >
+          </lib-ui-dropdown>
+        </div>
+      }
+      <div class="col-span-12 lg:col-span-6">
+        <lib-ui-dropdown
+          [placeholder]="'EVALUATION.CONTROL_FUNCTION_TYPE_PLACEHOLDER' | translate"
+          [label]="'EVALUATION.CONTROL_FUNCTION_TYPE' | translate"
+          [control]="form.get('govControlFunctionTypeID')!"
+          [formControlNameInput]="'govControlFunctionTypeID'"
+          [options]="controlFunctionTypes"
+          [optionLabel]="'label'"
+          [optionValue]="'id'"
+        >
+        </lib-ui-dropdown>
+      </div>
+
+      <!-- <div class="col-span-12 lg:col-span-6">
+        <lib-date-packer
+          [placeholder]="'EVALUATION.EVALUATION_DATE' | translate"
+          [inputLabel]="'EVALUATION.EVALUATION_DATE' | translate"
+          [control]="form.get('evaluationDate')!"
+          [controlNameInput]="'evaluationDate'"
+        >
+        </lib-date-packer>
+      </div> -->
+      @if(current_assessment_data?.controlEvaluationMeasurementBasisID === 2){
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-input-number
+            [placeholder]="'EVALUATION.CONTROL_WEIGHT_PLACEHOLDER' | translate"
+            [inputLabel]="'EVALUATION.CONTROL_WEIGHT' | translate"
+            [control]="form.get('controlWeight')!"
+            [controlNameInput]="'controlWeight'"
+          >
+          </lib-input-number>
+        </div>
+      }
+
+      <!-- <div class="col-span-12 lg:col-span-6">
+        <lib-input-number
+          [placeholder]="
+            'EVALUATION.RISK_CONTROL_EFFECTIVENESS_SCORE_PLACEHOLDER' | translate
+          "
+          [inputLabel]="
+            'EVALUATION.RISK_CONTROL_EFFECTIVENESS_SCORE' | translate
+          "
+          [control]="form.get('riskMethodologyControlEffectivenessScore')!"
+          [controlNameInput]="'riskMethodologyControlEffectivenessScore'"
+        >
+        </lib-input-number>
+      </div> -->
+      @if(current_assessment_data?.controlEvaluationMeasurementBasisID === 2){
+        <div class="col-span-12 lg:col-span-6">
+          <lib-input-number
+            [placeholder]="'EVALUATION.CONTROL_EFFECTIVENESS_SCORE_PLACEHOLDER' | translate"
+            [inputLabel]="'EVALUATION.CONTROL_EFFECTIVENESS_SCORE' | translate"
+            [control]="form.get('controlEffectivenessScore')!"
+            [controlNameInput]="'controlEffectivenessScore'"
+          >
+          </lib-input-number>
+        </div>
+      }
+      <div class="col-span-12 lg:col-span-6">
+        <lib-input-number
+          [placeholder]="'EVALUATION.COVERAGE_PERCENTAGE_PLACEHOLDER' | translate"
+          [inputLabel]="'EVALUATION.COVERAGE_PERCENTAGE' | translate"
+          [control]="form.get('coveragePercentage')!"
+          [controlNameInput]="'coveragePercentage'"
+        >
+        </lib-input-number>
+      </div>
+      <!-- <div class="col-span-12 lg:col-span-6">
+        <lib-user-dropdown
+          [placeholder]="'EVALUATION.EVALUATED_BY_USER' | translate"
+          [label]="'EVALUATION.EVALUATED_BY_USER' | translate"
+          [control]="form.get('evaluatedByUserID')!"
+          [formControlNameInput]="'evaluatedByUserID'"
+          [options]="users"
+          [optionLabel]="'name'"
+          [optionValue]="'id'"
+        >
+        </lib-user-dropdown>
+      </div> -->
+
+      <div class="col-span-12">
+        <lib-textarea-ui
+          [inputLabel]="'EVALUATION.EVALUATION_REMARKS' | translate"
+          [placeholder]="'EVALUATION.EVALUATION_REMARKS_PLACEHOLDER' | translate"
+          [control]="form.get('evaluationRemarks')!"
+          [controlNameInput]="'evaluationRemarks'"
+        >
+        </lib-textarea-ui>
+      </div>
+    </form>
+  </div>
+  <div class="flex justify-end items-center gap-3">
+    <button (click)="isRisk() || evaluation_id_risk() ?  this.action_data_emiter.emit({show_list:true}):navigateBack()" class="default_btn cancel">
+      {{ 'BUTTONS.CANCEL' | translate }}
+    </button>
+    <p-button
+      [loading]="adding"
+      [disabled]="form.invalid"
+      (click)="save()"
+      styleClass="default_btn"
+    >
+      {{ 'BUTTONS.SAVE' | translate }}
+    </p-button>
+  </div>
+</section>
+
+<p-dialog
+  [header]="'RISK_VIEW.MAIN_INFORMATION' | translate"
+  [(visible)]="control_seleceted_visible"
+  [modal]="true"
+  [dismissableMask]="true"
+  [draggable]="false"
+  styleClass="w-[80%]"
+  [position]="'center'"
+>
+  <div class="container">
+    <lib-shared-ui
+      [dataList]="dataList"
+      [isActionShow]="false"
+      [isSingleSelect]="true"
+      [isCheckbox]="false"
+      [entityID_Name]="'govControlID'"
+      [view_entityRouter]="''"
+      [profilesList]="profilesList"
+      [loadingState]="loadingState"
+      [table_name]="'SETTING.CONTROL_MANAGEMENT_LIST' | translate"
+      [badge_name]="'SETTING.CONTROL_MANAGEMENT_BADGE' | translate"
+      [total_items_input]="pageginationObj.totalItems"
+      [defultprofile]="defultprofile"
+      [action_items]="action_items"
+      [filter_id_input]="18"
+      (paginationEvent)="getDataList($event)"
+      (filter_emitter)="handleFilter($event)"
+      (sortEmiter)="handleSort($event)"
+      (selected_emiter)="setSelectedRow($event)"
+    >
+      <button
+        (click)="control_seleceted_visible = false"
+        addition_action
+        class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+      >
+        <span>Save Control</span>
+      </button>
+    </lib-shared-ui>
+  </div>
+</p-dialog>

@@ -1,0 +1,47 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { enviroment } from 'apps/gfw-portal/env/dev.env';
+import { BehaviorSubject, Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class MethodologyLevelsService {
+  private readonly searchEndpoint = 'RiskMethodology/SearchRiskLevels';
+  private readonly deleteEndpoint = 'RiskMethodology/RiskLevels';
+  private readonly saveEndpoint = 'RiskMethodology/RiskLevels';
+  private readonly updateEndpoint = 'RiskMethodology/RiskLevels';
+  private readonly getByIdEndpoint = 'RiskMethodology/RiskLevels';
+  private readonly idKey = 'riskLevelID';
+  viewedData = new BehaviorSubject(null);
+
+  constructor(private _http: HttpClient) {}
+
+  findAll(payload: any, extraFields: any = {}): Observable<any> {
+    const req = {
+      ...payload,
+      ...extraFields,
+    };
+    return this._http.post(`${enviroment.API_URL}${this.searchEndpoint}`, req);
+  }
+
+  save(data: any, id?: any): Observable<any> {
+    const method = id ? 'put' : 'post';
+    const endpoint = id ? this.updateEndpoint : this.saveEndpoint;
+    if (id) {
+      data = { ...data, [this.idKey]: id };
+    }
+    return this._http[method](`${enviroment.API_URL}${endpoint}`, data);
+  }
+
+  delete(id: any): Observable<any> {
+    return this._http.delete(
+      `${enviroment.API_URL}${this.deleteEndpoint}/${id}`
+    );
+  }
+
+  getById(id: any): Observable<any> {
+    return this._http.get(`${enviroment.API_URL}${this.getByIdEndpoint}/${id}`);
+  }
+}

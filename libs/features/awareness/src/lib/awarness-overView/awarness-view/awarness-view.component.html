@@ -1,0 +1,15 @@
+<div class="grid grid-cols-12">
+  <div [ngClass]="hasActions ? 'col-span-8' : 'col-span-12'">
+    <lib-shared-overview
+      [data]="dataAwareness"
+      [dataLoading]="loading"
+      [entries]="entries"
+    >
+    </lib-shared-overview>
+  </div>
+
+  <div [hidden]="!hasActions" class="col-span-12 lg:col-span-4">
+    <lib-system-actions (foundActionEmitter)="onFoundAction($event)" [dataEntityTypeId]="34" [entityId]="awarenessId">
+    </lib-system-actions>
+  </div>
+</div>

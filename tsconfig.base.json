@@ -1,0 +1,84 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "esnext",
+    "lib": ["es2020", "dom", "ES2021.String"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@gfw/Assets": ["libs/features/Assets/src/index.ts"],
+      "@gfw/BPM": ["libs/features/BPM/src/index.ts"],
+      "@gfw/Management": ["libs/features/Management/src/index.ts"],
+      "@gfw/PermissionUser": [
+        "libs/features/setting/src/lib/access-management/userViewContainer/PermissionUser/src/index.ts"
+      ],
+      "@gfw/UsersAcessMangment": [
+        "libs/features/setting/src/lib/access-management/UsersAcessMangment/src/index.ts"
+      ],
+      "@gfw/Vulnerability": ["libs/features/Vulnerability/src/index.ts"],
+      "@gfw/addDocument": [
+        "libs/features/covernance/src/lib/addDocument/src/index.ts"
+      ],
+      "@gfw/addPermission": [
+        "libs/features/setting/src/lib/access-management/permssions-list/addPermission/src/index.ts"
+      ],
+      "@gfw/addUserRole": [
+        "libs/features/setting/src/lib/access-management/addUserRole/src/index.ts"
+      ],
+      "@gfw/awareness": ["libs/features/awareness/src/index.ts"],
+      "@gfw/check2FA": ["libs/features/auth/src/lib/check2FA/src/index.ts"],
+      "@gfw/checkMail": ["libs/features/auth/src/lib/checkMail/src/index.ts"],
+      "@gfw/code2FA": ["libs/features/auth/src/lib/code2FA/src/index.ts"],
+      "@gfw/commentsMatigation": [
+        "libs/features/risks/src/lib/commentsMatigation/src/index.ts"
+      ],
+      "@gfw/compliance": ["libs/features/compliance/src/index.ts"],
+      "@gfw/covernance": ["libs/features/covernance/src/index.ts"],
+      "@gfw/dashboard": ["libs/features/dashboard/src/index.ts"],
+      "@gfw/emailverfiy2fa": [
+        "libs/features/auth/src/lib/emailverfiy2fa/src/index.ts"
+      ],
+      "@gfw/esclation": ["libs/features/esclation/src/index.ts"],
+      "@gfw/incident": ["libs/features/incident/src/index.ts"],
+      "@gfw/indicators": ["libs/features/indicators/src/index.ts"],
+      "@gfw/meetting": ["libs/features/meetting/src/index.ts"],
+      "@gfw/passwordreset": [
+        "libs/features/auth/src/lib/passwordreset/src/index.ts"
+      ],
+      "@gfw/primeng": ["libs/shared/primeng/src/index.ts"],
+      "@gfw/questionnaire": ["libs/features/questionnaire/src/index.ts"],
+      "@gfw/risks": ["libs/features/risks/src/index.ts"],
+      "@gfw/rolesUser": [
+        "libs/features/setting/src/lib/access-management/userViewContainer/rolesUser/src/index.ts"
+      ],
+      "@gfw/services": ["apps/gfw-portal/src/app/core/services"],
+      "@gfw/setnewpass": ["libs/features/auth/src/lib/setnewpass/src/index.ts"],
+      "@gfw/setting": ["libs/features/setting/src/index.ts"],
+      "@gfw/shared-ui": ["libs/shared/shared-ui/src/index.ts"],
+      "@gfw/standard-docs": ["libs/features/standard-docs/src/index.ts"],
+      "@gfw/steper": ["libs/shared/shared-ui/src/lib/steper/src/index.ts"],
+      "@gfw/strategy": ["libs/features/strategy/src/index.ts"],
+      "@gfw/third-party": ["libs/features/third-party/src/index.ts"],
+      "@gfw/threats": ["libs/features/threats/src/index.ts"],
+      "@gfw/treeMultiselect": [
+        "libs/shared/shared-ui/src/lib/treeMultiselect/src/index.ts"
+      ],
+      "@gfw/userViewContainer": [
+        "libs/features/setting/src/lib/access-management/userViewContainer/src/index.ts"
+      ],
+      "@gfw/viewModal": ["libs/features/risks/src/lib/viewModal/src/index.ts"],
+      "@gfw/workfow": ["libs/features/workfow/src/index.ts"],
+      "@gwf/auth": ["libs/features/auth/src/index.ts"]
+    },
+  },
+  "exclude": ["node_modules", "tmp"]
+}

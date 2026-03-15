@@ -1,0 +1,297 @@
+<div class="p-6 border-[1px] border-gray-300 rounded-lg">
+  <div class="head flex items-center mb-4 justify-between w-full pb-3 border-b-[1px] border-gray-300">
+    <h2 class=" m-0 text-gray-900 font-bold text-xl">
+     {{currentLanguage === 'en'?
+      setting_form.get('title')?.value:setting_form.get('titleAr')?.value }}
+    </h2>
+
+           @if(mode() === 'edit'){
+
+            <div class="flex items-center gap-4">
+              <button (click)="setting_visible = true" class="filter_dashboard_action-btn">
+                <i class="fi fi-rr-settings"></i>
+              </button>
+              <button
+                (click)="actionEmitter.emit({widget:chart_config_input()?.data , event:'delete' , value:chart_config_input()?.data})"
+                class="filter_dashboard_action-btn danger">
+                <i class="fi fi-rr-trash"></i>
+              </button>
+            </div>
+          }
+
+  </div>
+
+
+
+
+  @if(loadingData || !data.length){
+    <lib-empty-state-dashbourd [loading]="loadingData"></lib-empty-state-dashbourd>
+  }
+  <p-accordion [multiple]="true" styleClass="my-3" headerStyleClass="header-parent-tab">
+
+    @for (item of data; track $index) {
+
+      <lib-node-assessment [node]="item" [level]="0" ></lib-node-assessment>
+    }
+  </p-accordion>
+
+</div>
+
+
+<!--
+    <p-accordionTab tabStyleClass="mb-3" iconPos="end" headerStyleClass="header-parent-tab">
+      <ng-template pTemplate="header">
+        <div class="flex justify-between w-full">
+          <div class="flex gap-3 items-center">
+            <div class="flex justify-center items-center p-2 bg-white_color rounded-lg">
+              <i class="fi fi-rr-layers text-gray-400"></i>
+            </div>
+            <p class="text-gray-500 font-semibold text-xl">{{ item.name }}</p>
+          </div>
+          <div class="flex gap-3 items-center">
+            @if(item.statusName){
+            <div class="flex gap-2 items-center">
+              <span class="badge {{ item.statusColor }}">
+                <span class="small_doted"></span> {{ item.statusName }}
+              </span>
+            </div>
+            }
+
+
+          </div>
+        </div>
+      </ng-template>
+
+      <div class="rounded-lg border-[1px] border-gray-300">
+        @for (child of item.children; track $index) {
+        <p-accordionTab tabStyleClass="subchild-tab" iconPos="end" headerStyleClass="header-child-tab">
+          <ng-template pTemplate="header">
+            <div class="flex justify-between w-full">
+              <div class="flex gap-3 items-center">
+                @if(child?.code){
+                <div
+                  class="flex justify-center items-center p-2 border-[1px] text-gray-500 border-primaryColor-500 rounded-lg">
+                  {{ child.code }}
+                </div>
+                }
+
+                <p class="text-gray-500 font-semibold text-xl">
+                  {{ child.name }}
+                </p>
+              </div>
+              <div class="flex gap-3 items-center">
+                @if(child.statusName){
+                <div class="flex gap-2 items-center">
+                  <span class="badge {{ item.statusColor }}">
+                    <span class="small_doted"></span> {{ child.statusName }}
+                  </span>
+                </div>
+                }
+              </div>
+            </div>
+          </ng-template>
+          @if(child.objective){
+          <div class="flex flex-col gap-2 rounded-xl bg-gray-50 p-3 border-[1px] border-gray_light">
+            <p class="text-gray-700 font-bold text-xl">Objective</p>
+            <p class="text-gray-500 font-normal text-base">
+              {{ child.objective }}
+            </p>
+          </div>
+          }
+          @if(child.notes || child.risks || child.recommendations || child.findings){
+          <div class="grid grid-cols-12 gap-2">
+            @if(child.notes){
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              <div class="rounded-lg border-[1px] border-gray_light bg-gray-50 h-full p-3">
+                <h3 class="text-gray-700 font-bold text-xl">Notes</h3>
+                <p class="text-gray-500 font-normal text-base">
+                  {{ child.notes }}
+                </p>
+              </div>
+            </div>
+
+            } @if(child.risks){
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              <div class="rounded-lg border-[1px] border-gray_light bg-gray-50 h-full p-3">
+                <h3 class="text-gray-700 font-bold text-xl">Risks</h3>
+                <p class="text-gray-500 font-normal text-base">
+                  {{ child.risks }}
+                </p>
+              </div>
+            </div>
+            }
+            @if(child.recommendations){
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              <div class="rounded-lg border-[1px] border-gray_light bg-gray-50 h-full p-3">
+                <h3 class="text-gray-700 font-bold text-xl">Recommendations</h3>
+                <p class="text-gray-500 font-normal text-base">
+                  {{ child.recommendations }}
+                </p>
+              </div>
+            </div>
+            }
+            @if(child.findings){
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              <div class="rounded-lg border-[1px] border-gray_light bg-gray-50 h-full p-3">
+                <h3 class="text-gray-700 font-bold text-xl">Findings</h3>
+                <p class="text-gray-500 font-normal text-base">
+                  {{ child.findings }}
+                </p>
+              </div>
+            </div>
+            }
+          </div>
+          } @if(child.children.length){ @for (subchild of child.children; track
+          $index) {
+          <p-accordionTab tabStyleClass="subchild-tab" iconPos="end" headerStyleClass="header-child-tab">
+            <ng-template pTemplate="header">
+              <div class="flex justify-between w-full">
+                <div class="flex gap-3 items-center">
+                  @if(subchild?.code){
+                  <div
+                    class="flex justify-center items-center p-2 border-[1px] text-gray-500 border-primaryColor-500 rounded-lg">
+                    {{ subchild.code }}
+                  </div>
+                  }
+
+                  <p class="text-gray-500 font-semibold text-xl">
+                    {{ subchild.name }}
+                  </p>
+                </div>
+                <div class="flex gap-3 items-center">
+                  @if(subchild.statusName){
+                  <div class="flex gap-2 items-center">
+                    <span class="badge {{ item.statusColor }}">
+                      <span class="small_doted"></span>
+                      {{ subchild.statusName }}
+                    </span>
+                  </div>
+                  }
+                </div>
+              </div>
+            </ng-template>
+            @if(subchild.objective){
+            <div class="flex flex-col gap-2 rounded-xl bg-gray-50 p-3 border-[1px] border-gray_light">
+              <p class="text-gray-700 font-bold text-xl">Objective</p>
+              <p class="text-gray-500 font-normal text-base">
+                {{ subchild.objective }}
+              </p>
+            </div>
+            } @if(subchild.notes || subchild.risks || subchild.recommendations || subchild.findings){
+            <div class="grid grid-cols-12 gap-2">
+              @if(subchild.notes){
+              <div class="col-span-12 lg:col-span-4 md:col-span-6">
+                <div class="rounded-lg border-[1px] border-gray_light bg-gray-50 h-full p-3">
+                  <h3 class="text-gray-700 font-bold text-xl">Notes</h3>
+                  <p class="text-gray-500 font-normal text-base">
+                    {{ subchild.notes }}
+                  </p>
+                </div>
+              </div>
+
+              } @if(subchild.risks){
+              <div class="col-span-12 lg:col-span-4 md:col-span-6">
+                <div class="rounded-lg border-[1px] border-gray_light bg-gray-50 h-full p-3">
+                  <h3 class="text-gray-700 font-bold text-xl">Risks</h3>
+                  <p class="text-gray-500 font-normal text-base">
+                    {{ subchild.risks }}
+                  </p>
+                </div>
+              </div>
+              }
+              @if(subchild.recommendations){
+              <div class="col-span-12 lg:col-span-4 md:col-span-6">
+                <div class="rounded-lg border-[1px] border-gray_light bg-gray-50 h-full p-3">
+                  <h3 class="text-gray-700 font-bold text-xl">
+                    Recommendations
+                  </h3>
+                  <p class="text-gray-500 font-normal text-base">
+                    {{ subchild.recommendations }}
+                  </p>
+                </div>
+              </div>
+              }
+              @if(subchild.findings){
+              <div class="col-span-12 lg:col-span-4 md:col-span-6">
+                <div class="rounded-lg border-[1px] border-gray_light bg-gray-50 h-full p-3">
+                  <h3 class="text-gray-700 font-bold text-xl">
+                    Findings
+                  </h3>
+                  <p class="text-gray-500 font-normal text-base">
+                    {{ subchild.findings }}
+                  </p>
+                </div>
+              </div>
+              }
+            </div>
+            }
+          </p-accordionTab>
+          } }
+        </p-accordionTab>
+        }
+      </div>
+    </p-accordionTab> -->
+
+<div class="">
+  <p-dialog [draggable]="false" [position]="'right'" header=" Widget Setting " [modal]="false"
+    [(visible)]="setting_visible" styleClass="min-w-[40rem] min-h-[20rem]">
+
+    <ng-template pTemplate="header">
+      <h2>Widget Setting </h2>
+    </ng-template>
+
+
+    <form [formGroup]="setting_form" action="">
+      <div class="field flex flex-wrap items-center border-b border-gray_light py-4">
+        <label class="font-bold w-1/4" for="code">Widget Title</label>
+        <div class="w-3/4">
+          <lib-input-text [placeholder]="'Enter Title'" [control]="setting_form.get('title')!"
+            [controlNameInput]="'title'">
+          </lib-input-text>
+        </div>
+      </div>
+      <div class="field flex flex-wrap items-center border-b border-gray_light py-4">
+        <label class="font-bold w-1/4" for="code">Widget Title Ar</label>
+        <div class="w-3/4">
+          <lib-input-text [placeholder]="'Enter Title Ar'" [control]="setting_form.get('titleAr')!"
+            [controlNameInput]="'titleAr'">
+          </lib-input-text>
+        </div>
+      </div>
+
+
+
+      <div class="field flex flex-wrap items-center border-b border-gray_light py-4">
+        <label class="font-bold w-1/4" for="code"> Assessment Phase</label>
+        <div class="w-3/4">
+          <p-dropdown [options]="assessmentsPhases" optionValue="id" optionLabel="label" [showClear]="true"
+            styleClass="w-full" [formControlName]="'compliancePhaseID'" appendTo="body"
+            placeholder="Select  Assessment Phase"></p-dropdown>
+        </div>
+      </div>
+      <div class="field flex flex-wrap items-center border-b border-gray_light py-4">
+        <label class="font-bold w-1/4" for="code">Widget Assessment</label>
+        <div class="w-3/4">
+          <p-dropdown formControlName="assessmentId" optionLabel="label" [showClear]="true" [options]="assessments"
+            optionValue="id" styleClass="w-full" appendTo="body" placeholder="Select an assessment"></p-dropdown>
+        </div>
+      </div>
+
+
+
+    </form>
+
+
+
+    <ng-template pTemplate="footer">
+      <div class="action_btn">
+        <p-button (onClick)="handleSaveSetting()" [loading]="loading_setting_save" [label]="'Save'" />
+      </div>
+    </ng-template>
+
+
+
+
+
+  </p-dialog>
+</div>

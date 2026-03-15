@@ -1,0 +1,20 @@
+.action_container{
+  box-shadow: 0px 1px 2px 0px #1018280F;
+
+box-shadow: 0px 1px 3px 0px #1018281A;
+
+}
+
+
+
+::ng-deep .btn_custom-actions .p-button{
+  @apply text-sm font-medium  text-ellipsis;
+  padding: .5rem !important;
+
+
+  .p-button-label {
+        white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

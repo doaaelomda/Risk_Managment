@@ -1,0 +1,9 @@
+<section class="pt-4">
+  <lib-comment-section
+    (deleteCommentEvent)="deleteComment($event)"
+    (updateCommentEvent)="updateMessage($event.newContent, $event.message)"
+    [action_items]="items"
+    [relatedColumnId]="DUE_DILIGANCE_ID"
+    [relatedEntityId]="relatedEntityId"
+  ></lib-comment-section>
+</section>

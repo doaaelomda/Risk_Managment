@@ -1,0 +1,13 @@
+::ng-deep .new-attachment-ui .p-dialog-content{
+    padding: 5px 24px !important;
+    overflow: hidden;
+}
+
+::ng-deep .attach_dailog{
+  .p-dialog-header{
+    padding:  8px;
+  }
+  .p-dialog-header .p-dialog-header-icons{
+    display: none;
+  }
+}

@@ -1,0 +1,121 @@
+<section
+  class="table_roles py-4 px-8 grid grid-cols-1 lg:grid-cols-4 gap-6 gap-y-0"
+>
+  <div class="col-span-4 grid grid-cols-2 my-4">
+    <div class="col-span-1">
+      <lib-input-search
+        (searchTermEmiter)="handleSearch($event)"
+      ></lib-input-search>
+    </div>
+  </div>
+  <div class="col-span-4 lg:col-span-2 py-3 border-gray_light">
+    <h1 class="text-gray-900 text-2xl font-semibold roles_header">
+      {{ 'SETTING.ALL_ROLES' | translate }}
+    </h1>
+    <div class="p-2 h-full roles_wrapper">
+      <div
+        cdkDropList
+        #allRolesList="cdkDropList"
+        [cdkDropListData]="allRoles"
+        [cdkDropListConnectedTo]="[myRolesList]"
+        (cdkDropListDropped)="drop($event)"
+      >
+        @if (!allRoles.length) {
+        <div>No roles here...</div>
+        }
+        <p-accordion
+          [activeIndex]="[0]"
+          [multiple]="true"
+          styleClass="permissionsAccordion"
+        >
+          @for (role of allRoles; track $index) {
+          <div cdkDrag>
+            <div class="permissionDiv mb-2 bg-[#FAFAFF]">
+              <div
+                class="flex items-center gap-5 w-full perm-container selected flex-wrap"
+                role="button"
+                tabindex="0"
+              >
+                <button class="btn dragBtn">
+                  <img src="/images/drag-drop-icon.svg" alt="drag-drop__icon" />
+                </button>
+                <div class="flex justify-start items-center gap-2">
+                  <i
+                    class="perm-icon"
+                    [class]="getRoleIcon(role.roleTypeName)"
+                  ></i>
+                  <span
+                    class="font-medium text-[#1D2939] text-lg whitespace-nowrap"
+                    [title]="role?.name"
+                  >
+                    {{ role?.name }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          }
+        </p-accordion>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-span-4 lg:col-span-2 py-3 border-gray_light">
+    <h1 class="text-gray-900 text-2xl font-semibold roles_header">
+      {{ 'SETTING.MY_ROLES' | translate }}
+    </h1>
+    <div class="p-2 h-full roles_wrapper">
+      <div
+        cdkDropList
+        #myRolesList="cdkDropList"
+        [cdkDropListData]="myRoles"
+        [cdkDropListConnectedTo]="[allRolesList]"
+        (cdkDropListDropped)="drop($event)"
+      >
+        @if (!myRoles.length) {
+        <div>No roles added yet...</div>
+        }
+        <p-accordion
+          [activeIndex]="[0]"
+          [multiple]="true"
+          styleClass="permissionsAccordion"
+        >
+          @for (role of myRoles; track $index) {
+          <div cdkDrag>
+            <div class="permissionDiv mb-2 bg-[#FAFAFF]">
+              <div
+                class="flex items-center gap-5 w-full perm-container selected flex-wrap"
+                role="button"
+                tabindex="0"
+              >
+                <button class="btn dragBtn">
+                  <img src="/images/drag-drop-icon.svg" alt="drag-drop__icon" />
+                </button>
+                <div class="flex justify-start items-center gap-2">
+                  <i class="perm-icon" [class]="getRoleIcon(role.type)"></i>
+                  <span
+                    class="font-medium text-[#1D2939] text-lg whitespace-nowrap"
+                    [title]="role?.name"
+                  >
+                    {{ role?.name }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          }
+        </p-accordion>
+      </div>
+    </div>
+  </div>
+</section>
+  <div class="col-span-4 my-4 action_btn flex justify-end">
+    <p-button
+      [loading]="isSaving"
+      [label]="'RISK_MANAGMENT.SAVE_CHANGES' | translate"
+      [outlined]="true"
+      severity="secondary"
+      (click)="saveRoles()"
+    >
+    </p-button>
+  </div>

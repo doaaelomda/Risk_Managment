@@ -1,0 +1,84 @@
+<div class="comment_section p-6 pb-0 table_roles">
+
+  @if (groupedComments?.length > 0) {
+  <div #scrollContainer class="messages py-4 overflow-y-auto">
+    @for (group of groupedComments; track $index) {
+
+    <div class="py-2 flex items-center gap-4 ">
+      <div class="divider h-[1px] bg-gray-200 flex-1"></div>
+      <p class="text-[12px] text-gray_color">{{group.date}}</p>
+      <div class="divider h-[1px] bg-gray-200 flex-1"></div>
+    </div>
+
+    @for(message of group.comments; track message) {
+    @if(+message.userId !== +current_user_id) {
+    <div class="stranger_comment  mb-6 w-2/4">
+      <div class="flex gap-3 container_chat">
+      <div class="avtar">
+        <lib-img-system [userId]="message?.userId"></lib-img-system>
+      </div>
+      <div class=" flex-1 ">
+        <div class="head flex items-center justify-between mb-3">
+          <p class="text-gray-800 font-medium text-sm">{{ message.userName?.split('@')[0] }}
+          </p>
+          <p class="text-[12px] text-gray_color">{{ message.createAt  | date:'EEEE h:mma' }}</p>
+        </div>
+        <div class="comment_container_notUser">
+          <p class="font-medium">{{ message.content }}</p>
+        </div>
+      </div>
+      </div>
+    </div>
+    } @else if (+message.userId === +current_user_id) {
+    <div class="user_comment mb-6 w-2/4 ms-auto">
+      <div class="flex gab-3">
+        <div class="avtar">
+          <!-- <img width="40" [src]="'images/Avatar2.svg'" alt=""> -->
+           <lib-img-system [userId]="message?.userId"></lib-img-system>
+        </div>
+        <div class="comment_container flex-1">
+          <div class="head flex items-center justify-between mb-3">
+            <p class="text-gray-800 font-medium text-sm">You</p>
+            <p class="text-[12px] text-gray_color">{{ message.createAt | date:'EEEE h:mma' }}</p>
+          </div>
+          <div class="comment_message_users flex ">
+            <p class="">{{ message.content }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+    }
+    }
+  </div>
+  }
+  @else{
+  <div class="text-center">
+    <div class="flex justify-center gap-1.5">
+      <img width="20px" height="20px" src="images/icons/chat_icons.svg" alt="">
+      <p class="not_comments">
+        {{'Comments.No_Comments' | translate}}
+      </p>
+    </div>
+    <p class="welcome mb-4">{{'Comments.Click_send' | translate}}</p>
+  </div>
+  }
+
+
+
+
+
+  <div class="send_box relative mb-6">
+    <textarea placeholder="{{ 'PLACEHOLDERS.SEND_MESSAGE' | translate }}"
+      (keydown.enter)="handleAddMessage(message_inp.value)" [(ngModel)]="message_text" #message_inp rows="3"
+      class="w-full mb-6"></textarea>
+
+
+    <div class="action_btn send_btn-comment absolute  ">
+      <p-button (onClick)="handleAddMessage(message_inp.value)" [disabled]="!message_inp.value"
+        [label]="(editingMessage ? 'BUTTONS.SAVE' : 'BUTTONS.SEND') | translate">
+      </p-button>
+      <!-- icon="fi fi-rr-paper-plane" -->
+    </div>
+  </div>
+</div>

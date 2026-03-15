@@ -1,0 +1,119 @@
+<section class="space-y-6 my-5 info p-8 rounded-lg bg-primary/5">
+
+  <div class="header flex items-center justify-between pb-4 mb-8 border-b border-gray_light">
+    <h3 class="font-medium text-lg">
+      {{ 'AWARENESS.VIEW' | translate }}
+    </h3>
+
+    <button (click)="actionMenu.toggle($event)" class="default_btn flex gap-2 items-center">
+      <span>{{ 'RISK_MANAGMENT.ACTIONS' | translate }}</span>
+      <i class="fi fi-rr-angle-small-down"></i>
+    </button>
+  </div>
+
+  <div class="grid grid-cols-12 gap-4">
+
+    <!-- Awareness Name -->
+    <div class="col-span-12 lg:col-span-4">
+      <h3 class="header-title header-para mb-3">{{ 'AWARENESS.NAME' | translate }}</h3>
+      @if (!loading) {
+      <p class="welcome">{{ dataAwareness?.name || '-' }}</p>
+      } @else {
+      <p-skeleton width="12rem"></p-skeleton>
+      }
+    </div>
+
+    <!-- Campaign Type -->
+    <div class="col-span-12 lg:col-span-4">
+      <h3 class="header-title header-para mb-3">{{ 'AWARENESS.TYPE' | translate }}</h3>
+      @if (!loading) {
+      <p class="welcome">{{ dataAwareness?.campaignTypeName || '-' }}</p>
+      } @else {
+      <p-skeleton width="10rem"></p-skeleton>
+      }
+    </div>
+
+    <!-- Campaign Status -->
+    <div class="col-span-12 lg:col-span-4">
+      <h3 class="header-title header-para mb-3">{{ 'AWARENESS.STATUS' | translate }}</h3>
+      @if (!loading) {
+      <p class="badge">{{ dataAwareness?.campaignStatusName || '-' }}</p>
+      } @else {
+      <p-skeleton width="8rem"></p-skeleton>
+      }
+    </div>
+
+    <!-- Start Date -->
+    <div class="col-span-12 lg:col-span-4">
+      <h3 class="header-title header-para mb-3">{{ 'AWARENESS.START_DATE' | translate }}</h3>
+      @if (!loading) {
+      <p class="welcome">{{ dataAwareness?.startDate | date:'mediumDate'}}</p>
+      } @else {
+      <p-skeleton width="8rem"></p-skeleton>
+      }
+    </div>
+
+    <!-- Due Date -->
+    <div class="col-span-12 lg:col-span-4">
+      <h3 class="header-title header-para mb-3">{{ 'AWARENESS.DUE_DATE' | translate }}</h3>
+      @if (!loading) {
+      <p class="welcome">{{ dataAwareness?.dueDate | date:'mediumDate' }}</p>
+      } @else {
+      <p-skeleton width="8rem"></p-skeleton>
+      }
+    </div>
+
+    <!-- Grace Days -->
+    <div class="col-span-12 lg:col-span-4">
+      <h3 class="header-title header-para mb-3">{{ 'AWARENESS.GRACE_DAYS' | translate }}</h3>
+      @if (!loading) {
+      <p class="welcome">{{ dataAwareness?.graceDays || '-' }}</p>
+      } @else {
+      <p-skeleton width="4rem"></p-skeleton>
+      }
+    </div>
+
+    <!-- Require Quiz Pass -->
+    <div class="col-span-12 lg:col-span-4">
+      <h3 class="header-title header-para mb-3">{{ 'AWARENESS.REQUIRE_QUIZ_PASS' | translate }}</h3>
+      @if (!loading) {
+      <p class="welcome">{{ dataAwareness?.requireQuizPass ? 'Yes' : 'No' }}</p>
+      } @else {
+      <p-skeleton width="4rem"></p-skeleton>
+      }
+    </div>
+
+    <!-- Delivery Subject -->
+    <div class="col-span-12 lg:col-span-4">
+      <h3 class="header-title header-para mb-3">{{ 'AWARENESS.DELIVERY_SUBJECT' | translate }}</h3>
+      @if (!loading) {
+      <p class="welcome">{{ dataAwareness?.deliverySubject || '-' }}</p>
+      } @else {
+      <p-skeleton width="12rem"></p-skeleton>
+      }
+    </div>
+
+    <!-- Delivery Message -->
+    <div class="col-span-12 lg:col-span-12">
+      <h3 class="header-title header-para mb-3">{{ 'AWARENESS.DELIVERY_MESSAGE' | translate }}</h3>
+      @if (!loading) {
+      <p class="welcome" [innerHTML]="safeMessage"></p>
+      } @else {
+      <p-skeleton width="100%"></p-skeleton>
+      }
+    </div>
+
+  </div>
+</section>
+
+<p-overlayPanel #actionMenu>
+  <div class="flex gap-2 flex-col">
+    @for (action of actions; track $index) {
+    @if(action?.visible()){
+    <button (click)="(action?.command())" class="flex gap-2 items-center">
+      <i [class]="action?.icon"></i> <span> {{ action?.label }}</span>
+    </button>
+    }
+    }
+  </div>
+</p-overlayPanel>

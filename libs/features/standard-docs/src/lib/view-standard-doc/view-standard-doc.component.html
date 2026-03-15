@@ -1,0 +1,12 @@
+<div class="flex name_questions mb-4">
+  @if(loadingData){
+  <p-skeleton width="150px" height="20px" borderRadius="8px"></p-skeleton>
+  } @else {
+  <span class="header-para">{{ data?.name }}</span>
+  }
+</div>
+
+<lib-shared-tabs [permissionFeature]="{module:'LIBRARY' , feature:'STANDARDDOCUMENTS'}"
+ [hasComments]="false"[hasAttachments]="false" [tabs]="tabs"></lib-shared-tabs>
+
+<router-outlet></router-outlet>

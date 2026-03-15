@@ -1,0 +1,116 @@
+<section class="form_sec">
+  <div class="header border-b border-gray_light pb-6 mb-6">
+    <h2 class="text-lg font-medium text-[#101828]">
+      {{ current_updated_id ? ('INCIDENT.UPDATE_TITLE' | translate) : ('GENERAL_ASSESSMENT.ADD_BUTTON' | translate) }}
+    </h2>
+  </div>
+
+  <form [formGroup]="generalAssessmentForm" class="grid grid-cols-12 gap-6 mb-6">
+
+    <!-- Name -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-input-text [placeholder]="'GENERAL_ASSESSMENT.NAME_PLACEHOLDER' | translate"
+        [inputLabel]="'GENERAL_ASSESSMENT.NAME' | translate" [control]="generalAssessmentForm.get('name')!"
+        [controlNameInput]="'name'" [validations]="validationsRequired">
+      </lib-input-text>
+    </div>
+
+    <div class="col-span-12 lg:col-span-6">
+      <lib-ui-dropdown [placeholder]="'GENERAL_ASSESSMENT.generalAssessmentType' | translate"
+        [label]="'GENERAL_ASSESSMENT.generalAssessmentType' | translate"
+        [control]="generalAssessmentForm.get('generalAssessmentTypeID')!"
+        [formControlNameInput]="'generalAssessmentTypeID'" [options]="generalAssessmentArray" [optionLabel]="'label'"
+        [optionValue]="'id'">
+      </lib-ui-dropdown>
+    </div>
+    <!-- Purpose -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-textarea-ui [placeholder]="'GENERAL_ASSESSMENT.PURPOSE_PLACEHOLDER' | translate"
+        [inputLabel]="'GENERAL_ASSESSMENT.PURPOSE' | translate" [control]="generalAssessmentForm.get('purpose')!"
+        [controlNameInput]="'purpose'">
+      </lib-textarea-ui>
+    </div>
+
+    <!-- Scope -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-textarea-ui [placeholder]="'GENERAL_ASSESSMENT.SCOPE_PLACEHOLDER' | translate"
+        [inputLabel]="'GENERAL_ASSESSMENT.SCOPE' | translate" [control]="generalAssessmentForm.get('scope')!"
+        [controlNameInput]="'scope'">
+      </lib-textarea-ui>
+    </div>
+
+    <!-- Out of Scope -->
+    <div class="col-span-12">
+      <lib-textarea-ui [placeholder]="'GENERAL_ASSESSMENT.OUT_OF_SCOPE_PLACEHOLDER' | translate"
+        [inputLabel]="'GENERAL_ASSESSMENT.OUT_OF_SCOPE' | translate"
+        [control]="generalAssessmentForm.get('outOfScope')!" [controlNameInput]="'outOfScope'">
+      </lib-textarea-ui>
+    </div>
+
+
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown [placeholder]="'GENERAL_ASSESSMENT.STATUS_PLACEHOLDER' | translate"
+        [label]="'GENERAL_ASSESSMENT.STATUS' | translate"
+        [control]="generalAssessmentForm.get('generalAssessmentStatusTypeID')!"
+        [formControlNameInput]="'generalAssessmentStatusTypeID'" [options]="statusTypes" [optionLabel]="'label'"
+        [optionValue]="'id'" [validations]="validationsRequired">
+      </lib-ui-dropdown>
+    </div>
+    <!-- Overall Score -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-number [placeholder]="'GENERAL_ASSESSMENT.OVERALL_SCORE_PLACEHOLDER' | translate"
+        [inputLabel]="'GENERAL_ASSESSMENT.OVERALL_SCORE' | translate"
+        [control]="generalAssessmentForm.get('overallScore')!" [controlNameInput]="'overallScore'">
+      </lib-input-number>
+    </div>
+    <!-- Start Date -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-date-packer [placeholder]="'GENERAL_ASSESSMENT.START_DATE_PLACEHOLDER' | translate"
+        [inputLabel]="'GENERAL_ASSESSMENT.START_DATE' | translate" [control]="generalAssessmentForm.get('startDate')!"
+        [controlNameInput]="'startDate'">
+      </lib-date-packer>
+    </div>
+
+    <!-- Due Date -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-date-packer [placeholder]="'GENERAL_ASSESSMENT.DUE_DATE_PLACEHOLDER' | translate"
+        [inputLabel]="'GENERAL_ASSESSMENT.DUE_DATE' | translate" [control]="generalAssessmentForm.get('dueDate')!"
+        [controlNameInput]="'dueDate'">
+      </lib-date-packer>
+    </div>
+
+    <!-- Responsible User Dropdown -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown [placeholder]="'GENERAL_ASSESSMENT.RESPONSIBLE_USER_PLACEHOLDER' | translate"
+        [label]="'GENERAL_ASSESSMENT.RESPONSIBLE_USER' | translate"
+        [control]="generalAssessmentForm.get('responsibleUserID')!" [formControlNameInput]="'responsibleUserID'"
+        [options]="usersList" [optionLabel]="'name'" [optionValue]="'id'">
+      </lib-ui-dropdown>
+    </div>
+
+    <!-- Responsible Role Dropdown -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown [placeholder]="'GENERAL_ASSESSMENT.RESPONSIBLE_ROLE_PLACEHOLDER' | translate"
+        [label]="'GENERAL_ASSESSMENT.RESPONSIBLE_ROLE' | translate"
+        [control]="generalAssessmentForm.get('responsibleRoleID')!" [formControlNameInput]="'responsibleRoleID'"
+        [options]="rolesList" [optionLabel]="'label'" [optionValue]="'id'">
+      </lib-ui-dropdown>
+    </div>
+
+  </form>
+
+
+  <div class="flex justify-end gap-4 py-4">
+    <div class="cancel_btn">
+      <button [routerLink]="`/gfw-portal/third-party/view/${this.generalId}/assessment`">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+    <div class="action_btn">
+      <p-button [label]='current_updated_id ? ("BUTTONS.UPDATE" | translate) : ("BUTTONS.SAVE" | translate)'
+        [outlined]="true" [loading]="isLoading" severity="secondary" (onClick)="submit()">
+      </p-button>
+    </div>
+  </div>
+
+</section>

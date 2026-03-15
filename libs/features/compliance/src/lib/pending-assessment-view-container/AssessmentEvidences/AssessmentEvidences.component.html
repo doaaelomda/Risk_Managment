@@ -1,0 +1,37 @@
+@if(!linkedEvidences.length){
+
+<lib-empty-state [loading]="loadingLinkedEvidences"></lib-empty-state>
+} @else { @if(!loadingLinkedEvidences){
+<p-accordion [(activeIndex)]="activeEvidenceIndex">
+  @for (evidence of linkedEvidences; track $index) {
+  <p-accordionTab (selectedChange)="selectedAccordionChange($event, evidence.id)" [header]="evidence?.name || '-'">
+
+    <div class="version_content_data my-3">
+      @if(this.current_selected_evidance_version_data||
+      loadingSelectedVersionData){
+      <lib-shared-overview [dataLoading]="loadingSelectedVersionData" [entries]="viewEntries"
+        [data]="current_selected_evidance_version_data"></lib-shared-overview>
+
+
+      <div class="py-3">
+        <h4 class="mb-3 font-medium text-lg">Version File </h4>
+        <lib-shared-file-viewer [file]="this.current_selected_evidance_version_data_file"></lib-shared-file-viewer>
+      </div>
+
+
+      }@else {
+      <lib-empty-state [loading]="false"></lib-empty-state>
+      } 
+
+    </div>
+  </p-accordionTab>
+  }
+</p-accordion>
+} @else {
+<div class="flex flex-col gap-2">
+  <p-skeleton height="4rem" />
+  <p-skeleton height="4rem" />
+  <p-skeleton height="4rem" />
+  <p-skeleton height="4rem" />
+</div>
+} }

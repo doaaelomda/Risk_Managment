@@ -1,0 +1,219 @@
+<section class="grid grid-cols-12 gap-12 ">
+  <div [ngClass]="hasActions ? 'col-span-12 lg:col-span-8' : 'col-span-12'">
+    <!-- main Section -->
+    <div class="gap-2.5">
+      <h2 class="text-gray-900 font-medium text-xl pb-3">
+        {{ 'Control_view.ControlMaiInfo' | translate }}
+      </h2>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        @for (field of controlMainInfo; track field.key) {
+        <div [ngClass]="field.key !== 'status' ? 'border-r border-gray-300' : ''">
+          <div class="">
+            <span class="text-gray-500 font-medium text-sm">{{ field.label | translate }}</span>
+            @if (loadingState) {
+            <p-skeleton [width]="field.isBadge ? '80%' : '8rem'"></p-skeleton>
+            }
+            @else if (data?.[field.key]) {
+            @if (field.isBadge) {
+            <div class="badge my-2.5">{{ data[field.key] }}</div>
+            } @else {
+            <p class="text-gray-700 font-medium text-[16px] py-2">{{ data[field.key] }}</p>
+            }
+            } @else {
+            @if (field.isBadge) {
+            <div class="badge my-2.5">-</div>
+            } @else {
+            <p class="text-gray-500 font-medium py-2">-</p>
+            }
+            }
+          </div>
+        </div>
+        }
+      </div>
+
+    </div>
+    @for (field of controlInfoFields; track field.key) {
+    <div class="text-gray-500 text-[16px] font-normal" [class.py-6]="field.hasBorder"
+      [class.border_scope]="field.hasBorder">
+      @if (!field.isObjective) {
+      <h2 class="text-gray-900 font-medium text-xl">{{ field.label | translate }}</h2>
+      }
+
+      @if (loadingState) {
+      <p-skeleton width="8rem"></p-skeleton>
+      } @else if (data?.[field.key]) {
+      <div class="py-2">
+        @if (field.isObjective) {
+        <div class="header-item lg:col-span-12">
+          <span>{{ field.label | translate }}</span>
+          <div class="gap-x-1 mt-2">
+            <p class="text-gray-900 font-medium flex items-center gap-1">
+              {{ data[field.key] }}
+              <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5.83203 14.9681L14.1654 6.63477M14.1654 6.63477H5.83203M14.1654 6.63477V14.9681"
+                  stroke="#344054" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </p>
+          </div>
+        </div>
+        } @else {
+        <p [class]="field.textClass || ''">{{ data[field.key] }}</p>
+        }
+      </div>
+      }
+    </div>
+    }
+
+    <!-- Classifications Section -->
+    <div class="my-2 border-b border-gray-300">
+      <h2 class="text-gray-900 font-medium text-xl my-3">
+        {{ 'RISK_MANAGMENT.CLASSIFICATIONS' | translate }}
+      </h2>
+
+      <div class="grid md:grid-cols-3 gap-4 px-2 py-4">
+        @for (field of classificationFields; track field.key) {
+        <div class="flex flex-col">
+          <p class="text-sm font-medium text-gray-500 mb-1">
+            {{ field.label | translate }}
+          </p>
+          <p class="text-base font-normal text-gray-900">
+            @if (loadingState) {
+            <p-skeleton width="10rem" height="1.5rem"></p-skeleton>
+            } @else {
+            {{ data?.[field.key] || '-' }}
+            }
+          </p>
+        </div>
+        }
+      </div>
+    </div>
+
+    <!-- Responsibility Section -->
+    <div class=" my-2 border-b border-gray-300 ">
+      <h2 class="text-gray-900 font-medium text-xl my-3">{{ 'RISK_MANAGMENT.Responsibility_Ownership' | translate }}
+      </h2>
+      <div class="grid md:grid-cols-3 gap-4 px-2 py-4">
+        <lib-owner-user [title]="'Control_view.Responsible_Role'" [roleOrUser]="'role'"
+          [postionOwner]="data?.responsibleRoleUserName || '-'" [subtitle]="data?.responsibleRoleName || '-'"
+          [loading]="loadingState">
+        </lib-owner-user>
+
+        <lib-owner-user [title]="'Control_view.Responsible_Role'" [roleOrUser]="'user'"
+          [postionOwner]="data?.responsibleUserPosition || '-'" [subtitle]="data?.responsibleUserName || '-'"
+          [loading]="loadingState">
+        </lib-owner-user>
+
+        <div>
+          <p class="header_cards mb-2">{{ 'Control_view.Organizational_Unit' | translate }}</p>
+          <p class="header_Manger mt-4">{{ data?.organizationUnitName || '-' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status -->
+
+    <div class="tabs flex flex-wrap items-center gap-4 border-b border-gray-200 py-6">
+      @for (tab of tabs; track tab.id) {
+      <button (click)="selectTab(tab.id)" [class.active_tab]="active_tab === tab.id"
+        class="flex justify-center items-center gap-3 font-medium px-3 py-3 min-w-40">
+        <span>{{ tab.name }}</span>
+      </button>
+      }
+    </div>
+
+    @for (tab of tabsData; track tab.id) {
+    @if (active_tab === tab.id) {
+    <div class="my-6">
+      <p class="text-gray-700 font-medium text-[18px]">
+        {{ 'pending_assessment.' + tab.key | translate }}
+      </p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
+        @for (field of fieldsConfig[tab.key]; track field.key) {
+        <div class="flex flex-col gap-1">
+          <span class="text-gray-500 font-medium text-sm">{{ field.label | translate }}</span>
+
+          @if (loadingState) {
+          <p-skeleton width="10rem" height="1rem"></p-skeleton>
+          } @else {
+          <span *ngIf="field.type === 'status'" class="flex items-center gap-2 badge text-primary font-medium">
+            <span class="w-2 h-2 rounded-full bg-primary"></span>
+            {{ data?.[field.key] || '-' }}
+          </span>
+
+          <span *ngIf="field.type === 'date'" class="text-gray-800 font-medium text-[16px] flex gap-2">
+            <i class="fi fi-rr-calendar"></i>
+            {{ (data?.[field.key] | date:'MMM d y') || '-' }}
+          </span>
+
+          <span *ngIf="!field.type" class="text-gray-800 font-medium text-[16px]">
+            {{ data?.[field.key] || '-' }}
+          </span>
+          }
+        </div>
+        }
+      </div>
+
+      @if(active_tab===1){
+      <div class="mt-6">
+        <span class="text-gray-500 font-medium text-sm">{{ 'controls.ComplianceNote' | translate }}</span>
+        @if (loadingState) {
+        <p-skeleton width="100%" height="3rem"></p-skeleton>
+        } @else {
+        <p class="ext-gray-800 font-medium text-[16px]">{{ data?.[tab.noteKey] || '-' }}</p>
+        }
+      </div>
+      }
+    </div>
+    }
+    }
+
+
+  </div>
+  <div [hidden]="!hasActions"  class="col-span-12 lg:col-span-4">
+
+    <lib-system-actions (foundActionEmitter)="onFoundAction($event)" [dataEntityTypeId]="10" [entityId]="id"></lib-system-actions>
+    <div class="status pt-4 px-4">
+      <div class="flex justify-between">
+        <p class="text-progress">{{'Control_view.MY_STATUS' |translate}}</p>
+        <i class="fi fi-rr-menu-dots-vertical"></i>
+      </div>
+      <div class="grid grid-cols-1 pt-6 pb-3">
+        @for (card of statusCards; track $index) {
+        <div class="card-status my-4">
+          <div class="paraggarpStauts flex gap-2 items-center">
+            <i class="@if(card.icon) { {{card.icon}} } color_icon"></i>
+            {{ card.title | translate }}
+          </div>
+
+          @if(data) {
+          <div class="flex items-center justify-between">
+            <span [class]="card.spanClass + ' flex gap-2 p-4 items-center'">
+              {{ data[card.value] || '-' }}
+            </span>
+
+            <div class="p-2 welcome_par">
+              <p class="flex items-center text-gray-500 text-sm font-medium mb-2">
+                {{ 'Control_view.UPDATED' | translate }} :
+                <span class="text-gray-700 text-sm font-normal">{{ (data[card.lastUpdated] | date:'MMM d y') || "-"
+                  }}</span>
+              </p>
+              <p class="flex items-center text-gray-500 text-sm font-medium">
+                {{ 'Control_view.NEXT_DATE' | translate }} :
+                <span class="text-gray-700 text-sm font-normal">{{ (data[card.nextDate] | date:'MMM d y') || "-"
+                  }}</span>
+              </p>
+            </div>
+          </div>
+          } @else {
+          <p-skeleton width="8rem"></p-skeleton>
+          }
+        </div>
+        }
+      </div>
+
+
+    </div>
+  </div>
+
+</section>

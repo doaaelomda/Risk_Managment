@@ -1,0 +1,152 @@
+<div class="grid grid-cols-12 gap-4 items-baseline">
+  @if(showSearch() && filesTemp?.length > 3){
+  <div class="col-span-4 my-5">
+    <lib-input-search (searchTermEmiter)="handleSearch($event)"></lib-input-search>
+  </div>
+  <div class="col-span-4">
+    <lib-ui-dropdown [placeholder]="attachmentsArray[0]?.label" [control]="attachmentControl"
+      [formControlNameInput]="'attachmentControl'" [options]="attachmentsArray" [optionLabel]="'label'"
+      [optionValue]="'id'" (onSelectionChange)="getFiles($event)">
+    </lib-ui-dropdown>
+  </div>
+  }
+</div>
+
+<div class="attach_container grid grid-cols-12 gap-4"
+  [ngClass]="filesTemp?.length > 0 ? 'border border-gray_light rounded-2xl' : 'border-none'">
+  @if(showSearch()){
+  <div class="add_attach p-2 col-span-12 lg:col-span-4 flex items-center gap-6 rounded-lg border border-primary">
+    <button (click)="add_emiter.emit(true)"
+      class="icon w-12 h-12 rounded-lg flex items-center justify-center text-primary border border-primary">
+      <i class="fi fi-br-plus"></i>
+    </button>
+    <div class="content">
+      <p class="text-gray-800 font-medium text-base">{{ 'ATTACHMENT.ADD_OR_USE_FILE' | translate }}</p>
+      <p class="text-gray-800 font-normal text-base">{{ 'ATTACHMENT.ALLOWED_FORMATS' | translate }}</p>
+    </div>
+  </div>
+  }
+  @if(loadingSatate()){
+  <div class="add_attach p-3 col-span-12 lg:col-span-4 flex items-center gap-4 rounded-lg border border-gray_light">
+    <div>
+      <p-skeleton shape="circle" size="3rem" />
+    </div>
+    <div class="content">
+      <p-skeleton width="10rem" styleClass="mb-2" />
+      <p-skeleton width="8rem" styleClass="mb-2" />
+    </div>
+  </div>
+  <div class="add_attach p-3 col-span-12 lg:col-span-4 flex items-center gap-4 rounded-lg border border-gray_light">
+    <div>
+      <p-skeleton shape="circle" size="3rem" />
+    </div>
+    <div class="content">
+      <p-skeleton width="10rem" styleClass="mb-2" />
+      <p-skeleton width="8rem" styleClass="mb-2" />
+    </div>
+  </div>
+  <div class="add_attach p-3 col-span-12 lg:col-span-4 flex items-center gap-4 rounded-lg border border-gray_light">
+    <div>
+      <p-skeleton shape="circle" size="3rem" />
+    </div>
+    <div class="content">
+      <p-skeleton width="10rem" styleClass="mb-2" />
+      <p-skeleton width="8rem" styleClass="mb-2" />
+    </div>
+  </div>
+  <div class="add_attach p-3 col-span-12 lg:col-span-4 flex items-center gap-4 rounded-lg border border-gray_light">
+    <div>
+      <p-skeleton shape="circle" size="3rem" />
+    </div>
+    <div class="content">
+      <p-skeleton width="10rem" styleClass="mb-2" />
+      <p-skeleton width="8rem" styleClass="mb-2" />
+    </div>
+  </div>
+  }
+  @if(filesTemp?.length > 0 && !loadingSatate()){
+  @for(file of paginatedFiles ; track $index){
+  <div
+    class="add_attach p-2 col-span-12 lg:col-span-4 flex flex-wrap items-center gap-6 rounded-lg border border-gray_light">
+    <button class="flex gap-4 w-[100%]" (click)="emitAction('Show', file)">
+      <div class="icon w-12 h-12 rounded-lg flex items-center justify-center text-primary">
+        <img class="w-full h-full" [src]="getIcon(file.fileExtension)" alt="">
+      </div>
+      <div class="content">
+        <div class="flex flex-wrap">
+          <div class="text-gray-800 font-medium text-base attach_title mb-2 gap-2 flex items-center"
+            [title]="file.fileTitle">
+            {{ truncate(file.fileTitle) }}{{file?.fileExtension}}
+          </div>
+
+          @if(dataClassicBadge()){
+          <span class="badge mx-2">{{file?.dataClassificationName}}</span>}
+        </div>
+        <div class="actions flex flex-wrap justify-between items-center">
+          <p class="text-gray-600 text-base font-normal">
+            {{ (file.fileSize / (1024 * 1024)) | number:'1.0-2' }} MB, {{ file.createdDate | date:'MMMd,y' }}
+          </p>
+          <div class="flex gap-2 items-center">
+            @if(showIconShow()){
+            <button (click)="emitAction('Show', file); $event.stopPropagation()"
+              class="text-gray_color text-lg font-semibold">
+              <i [ngClass]="file.fileExtension === 'link' ? 'fi fi-rs-eye-crossed' : 'fi fi-rs-eye'"></i>
+            </button>}
+            @if(showIconEdit()){
+            <button (click)="emitAction('Edit', file); $event.stopPropagation()"
+              class="text-gray_color text-lg font-semibold">
+              <i class="fi fi-rs-pencil"></i>
+            </button>}
+            @if(file.fileSize){
+            @if(showIconDownLoad()){
+            <button (click)="emitAction('Download', file); $event.stopPropagation()"
+              class="text-gray_color text-lg font-medium">
+              <i class="fi fi-rs-progress-download"></i>
+            </button>}
+            }
+            @if(showIconDelete()){
+            <button (click)="showDelete(file , $event)"
+              class="text-danger_text text-lg font-medium">
+              <i class="fi fi-rs-trash"></i>
+            </button>}
+          </div>
+        </div>
+      </div>
+    </button>
+
+  </div>
+
+  }
+  }
+
+
+</div>
+
+
+  @if(actionDeleteVisible){
+  <lib-delete-confirm-popup [titleDelete]="'DeletePopup.title'" [descriptionDelete]="'DeletePopup.description'"
+    (hideEmiter)="handleClosedDelete()" [visibleInput]="actionDeleteVisible">
+
+    <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+      <div class="cancel_btn">
+        <button class="w-40" (click)="handleClosedDelete()">
+          {{ 'BUTTONS.CANCEL' | translate }}
+        </button>
+      </div>
+
+      <div class="delete_btn w-40">
+        <p-button (onClick)="confirmDelete()" [label]="'BUTTONS.DELETE' | translate" />
+      </div>
+    </div>
+  </lib-delete-confirm-popup>
+  }
+
+@if(filesTemp?.length ===0 && !loadingSatate()) {
+<div class="bg-primaryColor-25  border border-primaryColor-500  p-8 rounded-2xl my-4 ">
+  <lib-empty-state-files></lib-empty-state-files>
+</div>
+}
+@if(filesTemp?.length > 0 && !loadingSatate()) {
+<lib-pagination-native [paginationObject]="pageginationObj"
+  (paginationChanged)="onPaginationChanged($event)"></lib-pagination-native>
+}

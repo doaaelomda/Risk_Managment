@@ -1,0 +1,22 @@
+  <div
+    class="tabs flex flex-wrap items-center mb-3 gap-1 border-b border-gray_light"
+  >
+    @for(tab of tabs ; track tab){
+      @if(tab?.visible()){
+            <button
+      [routerLink]="[tab.router]"
+      [queryParamsHandling]="'preserve'"
+      routerLinkActive="active_tab"
+      class="flex justify-center items-center  font-medium px-3 py-2 "
+    >
+
+      <span class="text-[14px]">{{ tab.name }}</span>
+    </button>
+      }
+    }
+  </div>
+
+
+
+
+  <router-outlet></router-outlet>

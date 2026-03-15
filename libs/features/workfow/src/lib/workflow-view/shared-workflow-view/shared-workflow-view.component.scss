@@ -1,0 +1,73 @@
+.view_data_container {
+  .view_data_container__img {
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+    img {
+      width: 100%;
+    }
+  }
+  .view_data_container__icon {
+    margin: auto 0;
+    i {
+      color: #6938ef;
+      font-size: 16px;
+    }
+  }
+  .expandBtn {
+    color: #5925dc;
+    font-weight: 500;
+    font-size: 14px;
+  }
+  .label,
+  .second_value,
+  .description_value {
+    color: #667085;
+  }
+
+  .main_value {
+    color: #344054;
+  }
+
+  .label {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .main_value {
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .second_value {
+    font-size: 11px;
+    font-weight: 400;
+  }
+
+  .description_value {
+    font-size: 16px;
+    font-weight: 400;
+  }
+}
+.step_name {
+  color: #101828;
+  font-size: 24px;
+  font-weight: 600;
+}
+.step_desc {
+  color: #6938ef;
+  font-size: 20px;
+  font-weight: 500;
+}
+::ng-deep .view_dialog {
+  .p-dialog-header,
+  .p-dialog-content {
+    padding: 32px;
+  }
+  .p-dialog-content {
+    padding-top: 0;
+  }
+  .p-dialog-header-close {
+    display: none;
+  }
+}

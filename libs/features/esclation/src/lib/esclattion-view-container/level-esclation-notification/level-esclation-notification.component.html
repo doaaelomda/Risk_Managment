@@ -1,0 +1,244 @@
+<section>
+  <div class="grid grid-cols-12 gap-3">
+    <div class="col-span-12 lg:col-span-8 "   [ngClass]="{
+        disabled: !_PermissionSystemService.can(
+          'ESCLATIONS',
+          'ESCLATIONCRITERIA',
+          'EDIT'
+        )
+      }">
+      @if(notficationForm){
+      <form [formGroup]="notficationForm">
+        <div class="flex flex-col gap-6">
+          <lib-input-text
+            [placeholder]="'ESCLATION.SUBJECT' | translate"
+            [inputLabel]="'ESCLATION.SUBJECT' | translate"
+            [control]="notficationForm?.get('notificationSubject')!"
+            [controlNameInput]="'notificationSubject'"
+          >
+          @if(_PermissionSystemService.can('ESCLATIONS' , 'ESCLATIONNOTIFICATION' , 'EDIT')
+){
+                  <div addition-action class="icon_btn">
+              <button
+                (click)="
+                  handleVaraibleControl(
+                    notficationForm?.get('notificationSubject')!
+                  )
+                "
+                class="btn"
+              >
+                <i class="fi fi-rr-record-vinyl"></i>
+              </button>
+            </div>
+          }
+          </lib-input-text>
+          <lib-input-text
+            [placeholder]="'ESCLATION.SUBJECT_AR' | translate"
+            [inputLabel]="'ESCLATION.SUBJECT_AR' | translate"
+            [control]="notficationForm?.get('notificationSubjectAr')!"
+            [controlNameInput]="'notificationSubjectAr'"
+          >
+          @if(_PermissionSystemService.can('ESCLATIONS' , 'ESCLATIONNOTIFICATION' , 'EDIT')
+){
+                <div addition-action class="icon_btn">
+              <button
+                (click)="
+                  handleVaraibleControl(
+                    notficationForm?.get('notificationSubjectAr')!
+                  )
+                "
+                class="btn"
+              >
+                <i class="fi fi-rr-record-vinyl"></i>
+              </button>
+            </div>
+          }
+          </lib-input-text>
+
+          <!-- <div>
+        <h3 class="label mb-2">{{ 'ESCLATION.TEMPLATE_TAGS' | translate }}</h3>
+        <div class="flex items-center gap-5">
+          @for (tag of templateTags; track $index) {
+          <button (click)="addTagToMessage(tag)">
+            <lib-tag [tag]="tag?.label"></lib-tag>
+          </button>
+          }
+        </div>
+      </div> -->
+
+          <div>
+            <div class="flex justify-between items-center gap-2">
+              <h3 class="label mb-2">
+                {{ 'ESCLATION.MESSAGE_TEMPLATE' | translate }}
+              </h3>
+              @if(_PermissionSystemService.can('ESCLATIONS' , 'ESCLATIONNOTIFICATION' , 'EDIT')
+){
+                    <div class="icon_btn">
+                <button
+                  (click)="
+                    handleVaraibleControl(
+                      notficationForm?.get('notificationMessage')!
+                    )
+                  "
+                  class="btn"
+                >
+                  <i class="fi fi-rr-record-vinyl"></i>
+                </button>
+              </div>
+              }
+            </div>
+            <lib-editor
+              [height]="'250px'"
+              [control]="notficationForm?.get('notificationMessage')!"
+              [controlNameInput]="'notificationMessage'"
+            ></lib-editor>
+          </div>
+          <div>
+            <div class="flex justify-between items-center gap-2">
+              <h3 class="label mb-2">
+                {{ 'ESCLATION.MESSAGE_TEMPLATE_AR' | translate }}
+              </h3>
+              @if(_PermissionSystemService.can('ESCLATIONS' , 'ESCLATIONNOTIFICATION' , 'EDIT')
+){
+                  <div class="icon_btn">
+                <button
+                  (click)="
+                    handleVaraibleControl(
+                      notficationForm?.get('notificationMessageAr')!
+                    )
+                  "
+                  class="btn"
+                >
+                  <i class="fi fi-rr-record-vinyl"></i>
+                </button>
+              </div>
+              }
+            </div>
+
+            <lib-editor
+              [height]="'250px'"
+              [control]="notficationForm?.get('notificationMessageAr')!"
+              [controlNameInput]="'notificationMessageAr'"
+            ></lib-editor>
+          </div>
+        </div>
+        <div class="flex-1 mt-2 flex justify-end items-center gap-3">
+          <!-- <p-button
+        (onClick)="handleCancel()"
+        styleClass="default_btn cancel"
+        [label]="'BUTTONS.CANCEL' | translate"
+      >
+      </p-button> -->
+      @if(_PermissionSystemService.can('ESCLATIONS' , 'ESCLATIONNOTIFICATION' , 'EDIT')){
+              <p-button
+            [loading]="isSavingNotfications"
+            (onClick)="saveNotfication()"
+            styleClass="default_btn"
+            [label]="'BUTTONS.SAVE' | translate"
+          >
+          </p-button>
+      }
+    
+        </div>
+      </form>
+
+      }
+    </div>
+
+    <div class="col-span-12 lg:col-span-4">
+      <h4 class="font-medium mb-2">
+        {{ 'NOTIFICATION_SETTING.PREVIEW' | translate }}
+      </h4>
+      <div class="content_preview">
+        <p class="mb-4">
+          <span>{{ 'NOTIFICATION_SETTING.SUBJECT' | translate }}: </span>
+          {{ notficationForm?.get('notificationSubject')?.value || '-' }}
+        </p>
+        <p class="mb-4">
+          <span>{{ 'NOTIFICATION_SETTING.SUBJECT_AR' | translate }}: </span>
+          {{ notficationForm?.get('notificationSubjectAr')?.value || '-' }}
+        </p>
+        <p class="mb-2">{{ 'NOTIFICATION_SETTING.MESSAGE' | translate }}:</p>
+        @if(notficationForm?.get('notificationMessage')?.value){
+        <div
+          [innerHTML]="
+            notficationForm?.get('notificationMessage')?.value | safeHtml
+          "
+          class="text-wrap"
+        ></div>
+        }@else {
+        <p>-</p>
+        }
+        <p class="mb-2">{{ 'NOTIFICATION_SETTING.MESSAGE_AR' | translate }}:</p>
+        @if(notficationForm?.get('notificationMessageAr')?.value){
+        <div
+          [innerHTML]="
+            notficationForm?.get('notificationMessageAr')?.value | safeHtml
+          "
+          class="text-wrap"
+        ></div>
+        }@else {
+        <p>-</p>
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="action_dailog">
+  <p-dialog
+    (onHide)="resetVaraibleList()"
+    [(visible)]="show_varaible"
+    [modal]="true"
+    [dismissableMask]="true"
+    [draggable]="false"
+    styleClass="w-[888px]"
+  >
+    <ng-template pTemplate="header"></ng-template>
+
+    <div class="content">
+      <div class="header flex flex-col gap-2 mb-5">
+        <div class="icon_head flex items-center justify-center">
+          <i class="fi fi-rr-tags text-xl font-semibold"></i>
+        </div>
+        <h2 class="text-[#101828] text-lg font-medium">
+          {{ 'NOTIFICATION_SETTING.ADD_EVENT_FIELD' | translate }}
+        </h2>
+        <!-- <p class="text-gray_light text-sm">
+          {{ 'NOTIFICATION_SETTING.LABELS_HELP_ORGANIZE' | translate }}
+        </p> -->
+      </div>
+
+      <div class="varaibles flex items-center gap-3 flex-wrap">
+        @for (varible of varaibles_list; track $index) {
+        @if(varible?.notificationTagName){
+        <button
+          (click)="setVariableInput(varible)"
+          [ngClass]="{ selected: varible.isSelected }"
+          class="var_btn"
+        >
+          {{ varible?.notificationTagName }}
+        </button>
+        } }
+      </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <div class="flex justify-end gap-4">
+        <div class="cancel_btn">
+          <button (click)="show_varaible = false; currentControlEffect = null">
+            {{ 'RISK_ACTION.CANCEL' | translate }}
+          </button>
+        </div>
+        <!-- <div class="action_btn">
+          <p-button
+            [label]="'NOTIFICATION_SETTING.ADD_LABELS' | translate"
+            [outlined]="true"
+            severity="secondary"
+          >
+          </p-button>
+        </div> -->
+      </div>
+    </ng-template>
+  </p-dialog>
+</div>

@@ -1,0 +1,433 @@
+<section class="grid grid-cols-12 gap-8">
+  <div [ngClass]="hasActions ? 'col-span-8' : 'col-span-12'" class="flex flex-col gap-3">
+    <h2 class="title">
+      {{ 'RISK_VIEW.MAIN_INFORMATION' | translate }}
+    </h2>
+    <div class="grid grid-cols-12 gap-6 pb-3">
+      <div class="lg:col-span-4 col-span-12">
+        <div class="flex flex-col gap-2">
+          <span class="label"> {{ 'RISK_VIEW.TYPE' | translate }} </span>
+          <span class="value">
+            {{ riskData?.riskAssessmentTypeName || '-' }}
+          </span>
+        </div>
+      </div>
+      <div class="lg:col-span-4 col-span-12">
+        <div class="flex flex-col gap-2">
+          <span class="label"> {{ 'SETTING.STATUS' | translate }} </span>
+          <span class="badge {{ riskData?.riskAssessmentStatusTypeColor }}">
+            {{ riskData?.riskAssessmentStatusTypeName || '-' }}
+          </span>
+        </div>
+      </div>
+      <div class="lg:col-span-4 col-span-12">
+        <div class="flex flex-col gap-2">
+          <span class="label">
+            {{ 'RISK_VIEW.CONTROL_EFFECTIVENESS_LEVEL' | translate }}
+          </span>
+          <span class="badge {{ riskData?.controlEffectivenessLevelColor }}">
+            {{ riskData?.controlEffectivenessLevelName || '-' }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col gap-2">
+      <h3 class="title title-sm">{{ 'RISK_VIEW.ASSUMPTIONS' | translate }}</h3>
+      <lib-shared-description
+        [description]="riskData?.assumptions"
+      ></lib-shared-description>
+    </div>
+    <div class="flex flex-col gap-2">
+      <h3 class="title title-sm">{{ 'RISK_VIEW.SCOPE' | translate }}</h3>
+      <lib-shared-description
+        [description]="riskData?.scope"
+      ></lib-shared-description>
+    </div>
+    <div class="flex flex-col gap-2 pb-3 border-b-[1px] border-gray-200">
+      <h3 class="title title-sm">
+        {{ 'RISK_VIEW.CONTEXT_SUMMARY' | translate }}
+      </h3>
+      <lib-shared-description
+        [description]="riskData?.contextSummary"
+      ></lib-shared-description>
+    </div>
+    <div class="flex flex-col gap-2 pb-3 border-b-[1px] border-gray-200">
+      <h2 class="title">{{ 'RISK_VIEW.RESPONSIBILITY' | translate }}</h2>
+      <div class="grid grid-cols-12 gap-3">
+        <div class="lg:col-span-4 col-span-12">
+          <lib-owner-user
+            [roleOrUser]="'user'"
+            [title]="'RISK_VIEW.ASSESSOR' | translate"
+            [image]="riskData?.assessedByUserImage"
+            [subtitle]="riskData?.assessedByUserName || '-'"
+          ></lib-owner-user>
+        </div>
+
+        <div class="lg:col-span-4 col-span-12">
+          <lib-owner-user
+            [roleOrUser]="'user'"
+            [title]="'RISK_VIEW.REVIEWER' | translate"
+            [image]="riskData?.reviewedByUserImage"
+            [subtitle]="riskData?.reviewedByUserName || '-'"
+          ></lib-owner-user>
+        </div>
+
+        <div class="lg:col-span-4 col-span-12">
+          <lib-owner-user
+            [roleOrUser]="'user'"
+            [title]="'RISK_VIEW.APPROVAL' | translate"
+            [image]="riskData?.approvedByUserImage"
+            [subtitle]="riskData?.approvedByUserName || '-'"
+            [hasBorder]="false"
+          ></lib-owner-user>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col gap-2 pb-3 border-b-[1px] border-gray-200">
+      <h2 class="title">{{ 'RISK_VIEW.TIMELINES' | translate }}</h2>
+      <div class="grid grid-cols-12 gap-3">
+        <div class="col-span-12 lg:col-span-6">
+          <div class="flex items-center gap-2 border-r-[1px] border-gray-300">
+            <span class="label">
+              {{ 'ASSESSMENT_RISK.ASS_DATE' | translate }}
+            </span>
+            <div class="value flex items-center gap-2">
+              <i class="fi fi-rr-calendar"></i>
+              <span>
+                {{
+                  riskData?.assessmentDate
+                    ? (riskData?.assessmentDate | date)
+                    : '-'
+                }}</span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <div class="flex items-center gap-2 border-r-[1px] border-gray-300">
+            <span class="label">
+              {{ 'RISK_MANAGMENT.APPROVAL_DATE' | translate }}
+            </span>
+            <div class="value flex items-center gap-2">
+              <i class="fi fi-rr-calendar"></i>
+              <span>
+                {{
+                  riskData?.approvalDate ? (riskData?.approvalDate | date) : '-'
+                }}</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="border border-gray-200 rounded-lg p-3 bg-white_color">
+      <div class="mb-3 flex gap-2">
+        <p class="text-gray-900 text-lg font-medium">
+          {{ 'RISK_VIEW.APPROACHE_ASSESSMENT_TYPE' | translate }} :
+        </p>
+        <span class="text-gray-500 text-base font-medium">
+          {{ riskData?.riskAssessmentApproachName }}
+        </span>
+      </div>
+
+      @switch(riskData?.riskAssessmentApproachID){ @case(1){
+      <div class="flex items-center gap-4">
+        <div>
+          <p class="text-gray-500 text-sm font-medium">
+            {{ 'RISK_VIEW.METHODOLOGY' | translate }}
+          </p>
+          <p class="text-gray-700 text-base font-medium">
+            {{ riskData?.riskMethodologyName }}
+          </p>
+        </div>
+
+        <i class="fi fi-rr-arrow-small-right text-gray-700 text-xl gap-1"></i>
+
+        <div
+          class="border border-gray-200 rounded-lg p-2 bg-white_color flex-1"
+        >
+          <div class="flex items-center gap-4 w-full flex-wrap">
+            <div>
+              <p class="text-gray-500 text-sm font-medium mb-2">
+                {{ 'RISK_VIEW.IMPACT' | translate }}
+              </p>
+              <p class="badge flex gap-1 {{ riskData?.riskImpactColor }}">
+                {{ riskData?.riskImpactName }}
+              </p>
+            </div>
+            <div>
+              <p class="text-gray-500 text-sm font-medium mb-2">
+                {{ 'RISK_VIEW.LIKELIHOOD' | translate }}
+              </p>
+              <p class="badge flex gap-1 {{ riskData?.riskLikelihoodColor }}">
+                {{ riskData?.riskLikelihoodName }}
+              </p>
+            </div>
+            <!-- <i class="fi fi-rr-equals text-gray-700 text-xl"></i>
+
+              <span class="text-gray-700 text-xl font-medium">
+                {{ 'testttttt' }}
+              </span> -->
+          </div>
+        </div>
+      </div>
+      <div class="my-4">
+        <p class="text-gray-900 text-lg font-medium">
+          {{ 'RISK_VIEW.JUSTIFICATION_RISK_IMPACT' | translate }}
+        </p>
+        <p class="text-gray-500 text-base font-normal">
+          <lib-shared-description
+            [description]="riskData?.justificationRiskImpact"
+          ></lib-shared-description>
+        </p>
+      </div>
+      <div>
+        <p class="text-gray-900 text-lg font-medium">
+          {{ 'RISK_VIEW.JUSTIFICATION_LIKELIHOOD' | translate }}
+        </p>
+        <p class="text-gray-500 text-base font-normal">
+          <lib-shared-description
+            [description]="riskData?.justificationRiskImpact"
+          ></lib-shared-description>
+        </p>
+      </div>
+      }} @if(riskData?.riskAssessmentApproachID !== 1) {
+      <div class="grid grid-cols-12 w-full my-2">
+        <div class="col-span-12 lg:col-span-3">
+          <div
+            class="flex flex-col gap-2 h-full justify-center items-center lg:flex-row"
+          >
+            <div>
+              <p class="text-gray-500 text-sm font-medium">
+                {{ 'RISK_VIEW.METHODOLOGY' | translate }}
+              </p>
+              <p class="text-gray-700 text-base font-medium">
+                {{ riskData?.riskMethodologyName }}
+              </p>
+            </div>
+            <i
+              class="fi fi-rr-arrow-small-down lg:hidden text-gray-700 text-xl"
+            ></i>
+            <i
+              class="hidden lg:inline fi fi-rr-arrow-small-right text-gray-700 text-xl"
+            ></i>
+          </div>
+        </div>
+
+        <div
+          class="border border-gray-200 rounded-lg p-2 bg-white_color col-span-12 lg:col-span-9"
+        >
+          <div class="flex gap-6 items-center flex-wrap">
+            <div>
+              <p class="text-gray-500 text-sm font-medium">
+                {{ 'RISK_VIEW.FORMULA' | translate }}
+              </p>
+              <p class="text-gray-700 text-base font-medium mb-1">
+                {{ riskData?.riskMethodologyFormulaName }}
+              </p>
+              <p class="text-gray-400 text-sm font-medium">
+                {{ riskData?.riskMethodologyFormulaExpression }}
+              </p>
+            </div>
+            <!-- <i
+              class="fi fi-rr-arrow-small-right text-gray-700 text-xl gap-1"
+            ></i> -->
+          </div>
+        </div>
+      </div>
+      <div class="table_container">
+        <p-table
+        [class]="is_ar ? 'rtl_dir' : 'ltr_dir'"
+          [paginator]="true"
+          [rows]="10"
+          [rowsPerPageOptions]="[10,15,20,50,100]"
+          [value]="riskData?.factors"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th>{{ 'GOVERNANCE_STANDARDS.NAME' | translate }}</th>
+              <th>{{ 'TABS.factorLevel' | translate }}</th>
+              <th>{{ 'FORMULA_FACTORS.VALUE' | translate }}</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-factor>
+            <tr>
+              <td>{{ factor?.factorName || '-' }}</td>
+              <td>
+                <span class="badge {{ factor?.statusColor }}">{{
+                  factor?.factorStatus || '-'
+                }}</span>
+              </td>
+              <td>{{ factor?.value || '-' }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+
+      }
+    </div>
+  </div>
+  <div [hidden]="!hasActions" class="col-span-12 lg:col-span-4">
+        <div class="mb-4">
+    <lib-system-actions (foundActionEmitter)="onFoundAction($event)" [dataEntityTypeId]="2" [entityId]="assID"></lib-system-actions>
+  </div>
+    <div class="risk_rating p-4  mt-5">
+
+      <h2 class="current_risk mb-2">
+        {{ 'RISK_VIEW.CURRENT_RISK_RATING' | translate }}
+      </h2>
+      <h3 class="high_header">
+        {{ 'RISK_VIEW.High' | translate }}
+      </h3>
+      <button
+        class="focus:outline-none absolute ltr:right-12 rtl:left-12"
+        aria-label="Toggle risk details"
+      >
+        <svg
+          width="25"
+          height="17"
+          viewBox="0 0 25 17"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M15.0762 15.249L24.4922 0.5L0.551189 0.499999L10.0002 15.243C10.27 15.6722 10.6441 16.026 11.0876 16.2714C11.5311 16.5168 12.0296 16.6459 12.5365 16.6465C13.0434 16.6471 13.5422 16.5192 13.9863 16.2748C14.4305 16.0304 14.8054 15.6775 15.0762 15.249Z"
+            fill="#667085"
+          />
+        </svg>
+      </button>
+      <div class="progress-container py-8">
+        @for (progress of progressValues; track progress) {
+        <div
+          class="progress-segment"
+          [style.width.%]="progress.value"
+          [style.background]="progress.background"
+          [style.transform]="progress.transform || 'none'"
+        ></div>
+        }
+      </div>
+
+      <div class="w-full mb-3">
+        <h6 class="text-progress mb-3">
+          {{ 'RISK_VIEW.RESIDUAL_RISK' | translate }}
+        </h6>
+
+        <div class="flex flex-wrap gap-3 badge_progress">
+          <div class="flex flex-wrap flex-col gap-2 px-2">
+            <label for="" class="text-gray-900 font-medium text-sm">{{
+              'RISK_VIEW.IMPACT' | translate
+            }}</label>
+            @if (!loadingData) {
+            <span
+              [title]="riskData?.riskImpactName"
+              class="badge rating_badges"
+              [ngClass]="riskData?.riskImpactColor"
+            >
+              {{ riskData?.riskImpactName || '-' }}
+            </span>
+            } @else {
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+          </div>
+
+          <div
+            class="border-l border-gray_light flex flex-wrap flex-col gap-2 px-2"
+          >
+            <label for="" class="text-gray-900 font-medium text-sm">{{
+              'RISK_VIEW.LIKELIHOOD' | translate
+            }}</label>
+            @if (!loadingData) {
+            <span
+              [title]="riskData?.riskLikelihoodName"
+              class="badge rating_badges"
+              [ngClass]="riskData?.residualLikelihoodColor"
+            >
+              {{ riskData?.riskLikelihoodName || '-' }}
+            </span>
+            } @else {
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+          </div>
+          <div
+            class="border-l border-gray_light flex flex-wrap flex-col gap-2 px-2"
+          >
+            <label for="" class="text-gray-900 font-medium text-sm">{{
+              'RISK_VIEW.RATING' | translate
+            }}</label>
+            @if (!loadingData) {
+            <span
+              [title]="riskData?.riskRatingName"
+              class="badge rating_badges"
+              [ngClass]="riskData?.riskRatingColor"
+            >
+              {{ riskData?.riskRatingName || '-' }}
+            </span>
+            } @else {
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+          </div>
+        </div>
+      </div>
+      <div class="w-full">
+        <h6 class="text-progress mb-3">Inherate Risk</h6>
+
+        <div class="flex flex-wrap gap-3 badge_progress">
+          <div class="flex flex-wrap flex-col gap-2 px-2">
+            <label for="" class="text-gray-900 font-medium text-sm">{{
+              'RISK_VIEW.IMPACT' | translate
+            }}</label>
+            @if (!loadingData) {
+            <span
+              [title]="riskData?.riskImpactName"
+              class="badge rating_badges"
+              [ngClass]="riskData?.riskImpactColor"
+            >
+              {{ riskData?.riskImpactName || '-' }}
+            </span>
+            } @else {
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+          </div>
+
+          <div
+            class="border-l border-gray_light flex flex-wrap flex-col gap-2 px-2"
+          >
+            <label for="" class="text-gray-900 font-medium text-sm">{{
+              'RISK_VIEW.LIKELIHOOD' | translate
+            }}</label>
+            @if (!loadingData) {
+            <span
+              [title]="riskData?.riskLikelihoodName"
+              class="badge rating_badges"
+              [ngClass]="riskData?.residualLikelihoodColor"
+            >
+              {{ riskData?.riskLikelihoodName || '-' }}
+            </span>
+            } @else {
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+          </div>
+          <div
+            class="border-l border-gray_light flex flex-wrap flex-col gap-2 px-2"
+          >
+            <label for="" class="text-gray-900 font-medium text-sm">{{
+              'RISK_VIEW.RATING' | translate
+            }}</label>
+            @if (!loadingData) {
+            <span
+              [title]="riskData?.riskRatingName"
+              class="badge rating_badges"
+              [ngClass]="riskData?.riskRatingColor"
+            >
+              {{ riskData?.riskRatingName || '-' }}
+            </span>
+            } @else {
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

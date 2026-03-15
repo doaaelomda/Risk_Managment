@@ -1,0 +1,10 @@
+
+.welcome{
+white-space: pre-line !important;
+}
+.overview-container{
+    @apply  p-3 border-[1px] border-gray_light rounded-lg
+}
+.overview-header {
+    @apply font-semibold text-lg pb-2
+}

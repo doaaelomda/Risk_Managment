@@ -1,0 +1,13 @@
+
+  <div class="flex name_process">
+    @if(isLoading){
+       <p-skeleton width="150px" height="20px" borderRadius="8px"></p-skeleton>
+    }
+    @else {
+    <span class="text-gray-700 text-2xl font-medium"> {{data?.answerText || '-'}}</span>
+    }
+  </div>
+  <lib-shared-tabs [permissionFeature]="{module:'QUESTIONNAIRES' , feature:'QUESTIONSQUESTIONNAIREANSWER'}"
+></lib-shared-tabs>
+
+  <router-outlet></router-outlet>

@@ -1,0 +1,95 @@
+<div class="col-span-12 lg:col-span-4 mb-8">
+  <div class="grid grid-cols-12 gap-4">
+    @for (type of data_types; track $index) {
+    <button [ngClass]="{'active_type':type?.id === selected_type?.id }" class="{{type.class}}  col-span-12 md:col-span-6 lg:col-span-3 card" (click)="handleSetSelectedType(type , true)">
+      <div class="paraggarpStauts mb-2">
+        <div class="flex gap-2 items-center">
+          <i [class]="type.icon + ' color_icon  text-xl'"></i>
+          <span class="text-[#475467] font-medium text-base">{{ type?.statusKey }}</span>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center flex-wrap">
+        @if (Data) {
+        <span [ngClass]="type?.class2" class="flex gap-2 p-[7px] items-center">
+          {{ type?.Data_Progress || "-" }}
+        </span>
+        } @else {
+        <p-skeleton width="50%"></p-skeleton>
+        }
+
+        @if (Data) {
+        <div class="welcome_par">
+          <p class="flex items-center text-gray-500 text-sm font-medium mb-2">
+            {{ 'Control_view.UPDATED' | translate }} :
+            <span class="text-gray-700 text-sm font-normal">{{ type?.dateAssess | date:'MMM d y' }}</span>
+          </p>
+          <p class="flex items-center text-gray-500 text-sm font-medium">
+            {{ 'Control_view.NEXT_DATE' | translate }} :
+            <span class="text-gray-700 text-sm font-normal">{{ type?.dateNext | date:'MMM d y' }}</span>
+          </p>
+        </div>
+        } @else {
+        <p-skeleton width="12rem"></p-skeleton>
+        }
+      </div>
+    </button>
+    }
+
+  </div>
+</div>
+
+
+
+<section>
+  <lib-new-table
+    [loading]="loadingState"
+    [table_data]="dataList"
+    [table_title]="currentLanguage === 'ar' ? 'سجل التقييمات' : 'Control ' + selected_type.table_name + ' History'"
+    [badge_title]="selected_type.table_name"
+    [dataViewId]="columnId()"
+    [entityID_Name]="selected_type.setSelectedRow"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="action_items"
+    (currentActionRow)="setSelectedRow($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{ module: 'GOVERNANCE', feature: 'CONTROLASSESSMENT', action: 'VIEW' }"
+  >
+  @if(_PermissionSystemService.can('GOVERNANCE' , 'CONTROLASSESSMENT' , 'ADD')){
+     <button (click)="mode = 'add';newControls()" addition_action
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+    <i class="fi fi-br-plus w-5 h-5 "></i>
+    <span>{{'SETTING.ADD_NEW_ASSESSMENT' |translate}}</span>
+  </button>
+  }
+  </lib-new-table>
+</section>
+@if(AddModal){
+<lib-add-controlassessment [mode]="mode" [updated_id]="current_row_selected" (refreshTable)="getPaganation($event)" (hide_emitter)="AddModal=false"
+  [show_view]="AddModal"></lib-add-controlassessment>
+}
+
+
+
+<lib-delete-confirm-popup [titleDelete]="'CONTROL_ASSESSMENT.DELETE_DESC'"
+  [descriptionDelete]="'CONTROL_ASSESSMENT.DELETE_TITLE'" (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'CONTROL_ASSESSMENT.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button (onClick)="deleteControls()" [loading]="loadDelted" [label]="'CONTROL_ASSESSMENT.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+<!-- @if(openModalInView){
+  <lib-view-assessment  [show_view]="openModalInView" [Id]="selectedRowId" (hide_emitter)="openModalInView=false">
+</lib-view-assessment>
+} -->

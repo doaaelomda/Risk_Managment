@@ -1,0 +1,401 @@
+@if(!loading){ @if(!items.length){
+<div class="header flex items-center justify-between my-4">
+  <div>
+    <h2 class="text-2xl font-medium mb-3">
+      {{ 'CONTENT.Covernance_Strctured_Content' | translate }}
+    </h2>
+  </div>
+
+  <div class="action_btn">
+    <button class="btn gap-2" (click)="setModifiedItem(); isModifing = true">
+      <i class="fi fi-rr-plus"></i>
+      {{ 'CONTENT.ADD_NEW_CONTENT_ITEM' | translate }}
+    </button>
+  </div>
+</div>
+<div class="flex flex-col gap-2 items-center empty_state_wrapper">
+  <lib-empty-state [loading]="loading"></lib-empty-state>
+</div>
+}@else {
+
+<div class="header flex items-center justify-between my-4">
+  <div>
+    <h2 class="text-2xl font-medium mb-3">
+      {{ 'CONTENT.Covernance_Strctured_Content' | translate }}
+    </h2>
+  </div>
+  <div class="action_btn">
+    <button class="btn gap-2" (click)="setModifiedItem(); isModifing = true">
+      <i class="fi fi-rr-plus"></i>
+      {{ 'CONTENT.ADD_NEW_CONTENT_ITEM' | translate }}
+    </button>
+  </div>
+</div>
+<div class="grid grid-cols-12 gap-8">
+  <div class="col-span-12 lg:col-span-4">
+    <div class="p-4 border border-gray-300 rounded-lg">
+      <p-tree
+        styleClass="node_wrapper p-0 "
+        class="w-full"
+        [value]="items"
+        [draggableNodes]="true"
+        [droppableNodes]="true"
+        draggableScope="self"
+        droppableScope="self"
+        (onNodeDrop)="handleDrop($event)"
+      >
+        <ng-template let-node pTemplate="default">
+          <button
+            class="flex gap-2 items-start w-full link"
+            [ngClass]="{
+              selected_node: node?.id === selectedNode?.id || node.active
+            }"
+            (click)="handleNodeClick(node)"
+          >
+            <p class="nodeName flex-1 text-start" [title]="node?.name">
+              <i class="fi fi-rr-layers layers-ico"></i>
+              {{ node?.name }}
+            </p>
+            <div class="flex items-center gap-2">
+              <button
+                class="iconActionWrapper"
+                (click)="
+                  $event.stopPropagation();
+                  menu.toggle($event);
+                  modifingNode = node
+                "
+              >
+                <i class="fi fi-br-menu-dots"></i>
+              </button>
+              @if(node?.children?.length){
+              <button
+                (click)="toggleNode($event, node)"
+                class="iconActionWrapper"
+              >
+                <i
+                  class="fi fi-rr-angle-small-{{
+                    node.expanded ? 'up' : 'down'
+                  }}"
+                ></i>
+              </button>
+              }
+            </div>
+          </button>
+        </ng-template>
+      </p-tree>
+    </div>
+  </div>
+  <div
+    class="col-span-12 lg:col-span-8 flex flex-col gap-3 view_data_container"
+  >
+    @if(selectedNode) {
+    <div class="flex flex-col view_data">
+      <span> {{ 'CONTENT.NAME' | translate }} </span>
+      @if(currentLang === 'en'){
+      <p class="content_txt" [innerHTML]="selectedNode.name | safeHtml"></p>
+      }@else {
+      <p class="content_txt" [innerHTML]="selectedNode.nameAr | safeHtml"></p>
+      }
+    </div>
+
+    <div class="flex flex-col view_data">
+      <span> {{ 'CONTENT.CONTENT' | translate }} </span>
+      @if(currentLang === 'en'){
+      <p
+        class="content_txt"
+        [innerHTML]="selectedNode?.description | safeHtml"
+      ></p>
+      }@else {
+      <p
+        class="content_txt"
+        [innerHTML]="selectedNode?.descriptionAr | safeHtml"
+      ></p>
+      }
+    </div>
+    } @else {
+    <div class="text-gray-500 text-center py-6">
+      {{ 'CONTENT.SELECT_NODE_TO_SHOW' | translate }}
+    </div>
+    }
+  </div>
+</div>
+} }@else {
+<div class="header flex flex-col my-4">
+  <p-skeleton height="2rem" width="18rem" styleClass="mb-2" />
+  <p-skeleton height="1.5rem" width="13rem" />
+</div>
+<div class="grid grid-cols-12 gap-x-3">
+  <div class="col-span-12 lg:col-span-6 flex flex-col gap-3">
+    <p-skeleton height="3rem" />
+    <p-skeleton height="3rem" />
+    <p-skeleton height="3rem" />
+    <p-skeleton height="3rem" />
+    <p-skeleton height="3rem" />
+  </div>
+  <div class="col-span-12 lg:col-span-6 flex flex-col gap-3">
+    <p-skeleton height="5rem" />
+    <p-skeleton height="5rem" />
+    <p-skeleton height="5rem" />
+    <p-skeleton height="5rem" />
+  </div>
+</div>
+}
+
+<p-dialog
+  [draggable]="false"
+  [dismissableMask]="true"
+  [header]="dialogHeaderText"
+  [modal]="true"
+  [(visible)]="isModifing"
+  styleClass="w-[50rem] h-[40rem]"
+>
+  @if(modifiedItem){
+  <div [formGroup]="modifiedItem" class="flex flex-col justify-center">
+    <div class="inputs_wrap mb-2">
+      <label for="" class="mb-2">
+        {{ 'CONTENT.CLASSFICATIONS' | translate }}
+      </label>
+      <div class="flex item-center gap-4 flex-wrap">
+        @for (option of elementOptions; track $index) {
+        <button
+          (click)="setElementOption(option)"
+          class=" flex justify-center items-center gap-2 border-[1px] {{
+            modifiedItem.get('grcDocumentElementClassificationID')?.value ===
+            option.id
+              ? 'border-primary_custom'
+              : 'border-gray_light'
+          }} rounded-md p-3 cursor-pointer"
+        >
+          <p-radioButton
+            [inputId]="`${option?.label}__${option?.id}_${$index}`"
+            [value]="option?.id"
+            formControlName="grcDocumentElementClassificationID"
+          />
+          <label
+            [for]="`${option?.label}__${option?.id}_${$index}`"
+            class="ml-2"
+          >
+            {{ option?.label }}
+          </label>
+        </button>
+        }
+      </div>
+    </div>
+
+    <div class="inputs_wrap grid grid-cols-12">
+      <label for="" class="col-span-4">{{
+        'GOVERNANCE_STANDARDS.CODE' | translate
+      }}</label>
+      <div class="col-span-8">
+        <input
+          [placeholder]="'PLACEHOLDERS.enter_code' | translate"
+          type="text"
+          pInputText
+          formControlName="code"
+        />
+      </div>
+    </div>
+    <div class="inputs_wrap grid grid-cols-12">
+      <label class="col-span-4" for="">{{ 'CONTENT.NAME' | translate }}</label>
+      <div class="col-span-8">
+        <input
+          [placeholder]="'CONTENT.PLACEHOLDERS.NAME' | translate"
+          type="text"
+          pInputText
+          formControlName="name"
+        />
+      </div>
+    </div>
+
+    <div class="inputs_wrap grid grid-cols-12">
+      <label class="col-span-4" for="">{{
+        'CONTENT.NAME_AR' | translate
+      }}</label>
+      <div class="col-span-8">
+        <input
+          [placeholder]="'CONTENT.PLACEHOLDERS.NAME_AR' | translate"
+          type="text"
+          pInputText
+          formControlName="nameAr"
+        />
+      </div>
+    </div>
+
+    <div class="inputs_wrap grid grid-cols-12">
+      <label for="" class="col-span-4">{{
+        'CONTENT.WEIGHT' | translate
+      }}</label>
+      <div class="col-span-8">
+        <input
+          [placeholder]="'CONTENT.PLACEHOLDERS.WEIGHT' | translate"
+          type="number"
+          pInputText
+          formControlName="wieght"
+        />
+      </div>
+    </div>
+
+    <div class="inputs_wrap grid grid-cols-12">
+      <label class="col-span-4" for="">{{
+        'CONTENT.CONTENT' | translate
+      }}</label>
+      <div class="col-span-8">
+        <lib-editor
+          [height]="'250px'"
+          [placeholder]="'CONTENT.PLACEHOLDERS.CONTENT' | translate"
+          [control]="modifiedItem.get('description')!"
+          [controlNameInput]="'description'"
+        ></lib-editor>
+      </div>
+    </div>
+
+    <div class="inputs_wrap grid grid-cols-12">
+      <label class="col-span-4" for="">{{
+        'CONTENT.CONTENT_AR' | translate
+      }}</label>
+      <div class="col-span-8">
+        <lib-editor
+          [height]="'250px'"
+          [placeholder]="'CONTENT.PLACEHOLDERS.CONTENT_AR' | translate"
+          [control]="modifiedItem.get('descriptiontAr')!"
+          [controlNameInput]="'descriptiontAr'"
+        ></lib-editor>
+      </div>
+    </div>
+
+    <div class="inputs_wrap grid grid-cols-12">
+      <label for="" class="col-span-4">{{
+        'CONTENT.REFERENCE_CODE' | translate
+      }}</label>
+      <div class="col-span-8">
+        <input
+          [placeholder]="'CONTENT.PLACEHOLDERS.REFERENCE_CODE' | translate"
+          type="text"
+          pInputText
+          formControlName="referenceCode"
+        />
+      </div>
+    </div>
+
+    <div *ngIf="isEditing" class="inputs_wrap grid grid-cols-12 no_border">
+      <label class="col-span-4" for="">{{
+        'CONTENT.GOVERNANCE_CONTROL' | translate
+      }}</label>
+      <div class="col-span-8">
+        <lib-ui-dropdown
+          [control]="modifiedItem.get('govControlID')!"
+          [formControlNameInput]="'govControlID'"
+          [options]="govControlList"
+          [optionLabel]="'label'"
+          [optionValue]="'id'"
+          [placeholder]="'CONTENT.PLACEHOLDERS.GOVERNANCE_CONTROL' | translate"
+        ></lib-ui-dropdown>
+      </div>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end w-full py-2">
+      <p-button
+        (onClick)="addNewItem()"
+        [loading]="isCreating"
+        [disabled]="modifiedItem.invalid"
+        [label]="'BUTTONS.SAVE' | translate"
+        styleClass="default_btn"
+      >
+      </p-button>
+    </div>
+  </ng-template>
+  }
+</p-dialog>
+
+<p-menu #menu [model]="actions" [popup]="true" />
+
+@if(dragNode){
+<p-dialog
+  [draggable]="false"
+  [dismissableMask]="false"
+  [modal]="true"
+  [(visible)]="isShowingDragDropModal"
+  styleClass="w-[50rem] h-[40rem]"
+>
+  <ng-template pTemplate="header">
+    <div class="border-b-[1px] border-gray_light pb-3 w-full">
+      <h2 class="text-[#101828] text-lg font-medium">
+        {{ 'CONTENT.ELEMENT_TYPE' | translate }}
+      </h2>
+    </div>
+  </ng-template>
+  <div class="mb-3">
+    <div class="flex item-center gap-4 flex-wrap">
+      @for (option of elementOptions; track $index) {
+      <button
+        (click)="setDragNodeElement(option.id)"
+        class="flex justify-center items-center gap-2 border-[1px] border-gray_light rounded-md py-5 px-6 cursor-pointer"
+        [ngClass]="{
+          active_border: dragNode?.grcDocumentElementClassificationID === option.id
+        }"
+      >
+        <span class="text-[#344054] font-medium text-lg">
+          {{ option?.label }}
+        </span>
+      </button>
+      }
+    </div>
+  </div>
+  <div
+    class="flex items-center gap-4 border-[1px] border-[#D0D5DD] rounded-lg py-3 px-6 w-full flex-wrap"
+  >
+    <div class="flex flex-col gap-2 justify-start items-start">
+      <span class="text-[#667085] text-sm font-medium">
+        {{ 'VERSIONS.From' | translate }}
+      </span>
+      <span class="text-[#344054] font-medium text-base">
+        {{ dragNode?.name }}
+      </span>
+    </div>
+    <i class="fi fi-rr-angle-right text-[#98A2B3] text-lg"></i>
+    <div class="flex flex-col gap-2 justify-start items-start">
+      @if(dropNode){
+      <span class="text-[#667085] text-sm font-medium">
+        {{ 'VERSIONS.To' | translate }}
+      </span>
+      <span class="text-[#344054] font-medium text-base">
+        {{ dropNode?.name }}
+      </span>
+      }@else {
+      <span class="text-[#667085] text-sm font-medium">
+        {{ 'GOVERNANCE_STANDARDS.OTHER_CATEGORY' | translate }}
+      </span>
+      }
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="flex items-center justify-between">
+      <p-button
+        pButton
+        class="bg-white_color text-[#344054] text-sm border border-gray_light rounded-lg"
+        [label]="'BUTTONS.CANCEL' | translate"
+        icon="pi pi-times"
+        (click)="isShowingDragDropModal = false; getDocsContent()"
+      />
+      <div class="flex justify-end items-center gap-4">
+        @if(dragContext && dragContext.canMerge){
+
+        <p-button
+          (onClick)="handleMergeActionElement()"
+          [label]="'Merge'"
+          styleClass="btn default_btn transparent"
+        ></p-button>
+        } @if(dragContext && dragContext.canMove){
+        <p-button
+          (onClick)="handleMoveActionElement()"
+          [label]="'Move'"
+          styleClass="btn default_btn"
+        ></p-button>
+        }
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+}

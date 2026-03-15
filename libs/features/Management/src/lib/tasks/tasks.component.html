@@ -1,0 +1,115 @@
+<section>
+  @if(isDialogVisible){
+  <lib-view-modal
+    (hide_emitter)="isDialogVisible = false"
+    [singleTaskData]="singleTaskData"
+    [show_view]="isDialogVisible"
+    [authId]="task_filter"
+    [BusinessTaskTypeID]="currentBussinessTypeId"
+    [fileUsageTypeId]="fileUsageTypeId" [relatedEntityId]="10" [BusinessTaskTypeID]="1"
+  ></lib-view-modal>
+  }
+  <div class="header flex items-center justify-between mb-6">
+    <h2 class="text-2xl font-medium">
+      {{ active_cat?.name }}
+    </h2>
+
+    <div class="custom_filters flex items-center gap-2">
+      @for(btn of taskFilterBtns; track $index) {
+      <button
+        (click)="handleFilterBtnChange(btn?.id)"
+        [ngClass]="{ active: task_filter === btn?.id }"
+      >
+        {{ btn?.name }}
+      </button>
+      }
+    </div>
+  </div>
+
+  <div class="content grid grid-cols-12 gap-8 items-start">
+    <div class="col-span-12 lg:col-span-4 custom_accor">
+      <p-accordion
+        (activeIndexChange)="handleActiveCat($event)"
+        [activeIndex]="0"
+        class="w-full"
+        expandIcon="pi pi-plus"
+        collapseIcon="pi pi-minus"
+      >
+        @for(cat of categories ; track $index){
+        <p-accordionTab>
+          <ng-template pTemplate="header">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-4 flex-1 card_task">
+                @if(cat?.icon){
+                <div class="icon">
+                  <i class="text-xl" [class]="cat?.icon"></i>
+                </div>
+                }
+                <h3 class="text-[18px] font-medium">{{ cat?.name }}</h3>
+              </div>
+
+              <button>
+                <i
+                  class="fi fi-rr-arrow-up-{{
+                    selectedLang === 'en' ? 'right' : 'left'
+                  }}"
+                ></i>
+              </button>
+            </div>
+          </ng-template>
+
+          @if(cat.analysis?.length) {
+          <div class="state_container">
+            @for(state of cat.analysis; track $index){
+            <button
+              (click)="handleCatClick(state?.id)"
+              [ngClass]="[
+                state?.color,
+                'state_single mb-3 flex items-center justify-between w-full flex-wrap',
+                +state?.id === +currentSideFilter ? 'active_cat' : ''
+              ]"
+              [ngStyle]="{
+                backgroundColor:
+                  +state?.id === +currentSideFilter ? state?.bgActiveColor : ''
+              }"
+            >
+              <div class="flex items-center flex-1 gap-3">
+                <div class="icon">
+                  <i [class]="state.icon"></i>
+                </div>
+                <p class="title text-lg">{{ state?.title }}</p>
+              </div>
+              <span class="value text-xl font-bold">{{ state?.value }}</span>
+            </button>
+            }
+          </div>
+          }
+        </p-accordionTab>
+        }
+      </p-accordion>
+    </div>
+    <div class="col-span-12 lg:col-span-8">
+      <lib-shared-ui
+        [entityID_Name]="'businessTaskID'"
+        (openModal)="openViewModal($event)"
+        [filter_id_input]="4"
+        [selected_profile_column]="selected_profile_column"
+        (filter_emitter)="handleFilter($event)"
+        [action_items]="items"
+        (sortEmiter)="handleSort($event)"
+        [total_items_input]="total_items_input"
+        (selected_emiter)="setSelected($event)"
+        [badge_name]="'items'"
+        [table_name]="active_cat?.name"
+        [loadingState]="loading"
+        (paginationEvent)="getTasksData($event)"
+        (showDeleteEvent)="handleShowDelete($event)"
+        [view_entityRouter]="'viewModal=true'"
+        [dataList]="tasksData"
+        [defultprofile]="defultProfile"
+        [profilesList]="profiles"
+      >
+      </lib-shared-ui>
+    </div>
+  </div>
+</section>

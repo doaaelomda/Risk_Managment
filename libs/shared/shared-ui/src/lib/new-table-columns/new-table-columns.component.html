@@ -1,0 +1,162 @@
+
+  <p-overlayPanel styleClass="w-[35rem]" #table_columns>
+
+
+    <div class="customize_container relative">
+      <div class="custom_height  pb-4">
+        <div class="header mb-5 pb-3">
+          <div class="flex items-center justify-between mb-3 gap-8">
+            <h2 class="font-semibold text-gray-800 text-lg">
+              {{ 'CUSTOM_COLUMNS.TITLE' | translate }}
+            </h2>
+
+            <div class="flex items-center flex-1 gap-3">
+              <div class="form_group flex-1">
+                <p-dropdown [options]="profiles" [(ngModel)]="selectedProfile" optionLabel="profileName"
+                  (onChange)="handleSelectedColumnProfile($event)"
+                  [placeholder]="'CUSTOM_COLUMNS.SELECT_PROFILE' | translate">
+                </p-dropdown>
+              </div>
+
+              <button (click)="table_columns.toggle(0)"
+                class="exit_icon p-3 rounded-lg flex items-center border border-gray_light">
+                <i class="fi fi-br-cross"></i>
+              </button>
+            </div>
+          </div>
+          <div>
+            <div class="flex mb-3 items-center justify-between">
+              <p class="text-gray_color/70 font-medium">
+                {{ 'CUSTOM_COLUMNS.ADD_DATA_INFO' | translate }}
+              </p>
+              <p class="text-gray_color/70 font-medium">
+                {{
+                'CUSTOM_COLUMNS.COLUMNS_SELECTED'
+                | translate : { count: getShownGolumns() }
+                }}
+              </p>
+            </div>
+            <div class="flex items-center gap-4">
+              <p>
+                {{ 'CUSTOM_COLUMNS.SELECT_DATA_INFO' | translate }}
+              </p>
+              <div class="flex min-w-fit items-center gap-2">
+                <p-inputSwitch (onChange)="handleChangeCheckAllColumns()" [(ngModel)]="isAllColumnsChecked" />
+                <p class="font-semibold">Check All </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="drag_contain ">
+          <div     style="max-height: 400px; overflow-y: auto;"
+    cdkDropList cdkDropListAutoScroll (cdkDropListDropped)="drop($event)">
+            @for(col of columns ; track $index){
+            <div cdkDrag [cdkDragDisabled]="col.isFixed" [class]="col.isFixed ? 'dis_curs' : ''"
+              class="col_container mb-3 flex items-center gap-2">
+              <div class="icon p-3">
+                <!-- drag icon -->
+                <svg width="10" height="18" viewBox="0 0 10 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M1.66667 4.00033C2.58714 4.00033 3.33333 3.25413 3.33333 2.33366C3.33333 1.41318 2.58714 0.666992 1.66667 0.666992C0.746192 0.666992 0 1.41318 0 2.33366C0 3.25413 0.746192 4.00033 1.66667 4.00033Z"
+                    fill="#667085" />
+                  <path
+                    d="M1.66667 10.6663C2.58714 10.6663 3.33333 9.92015 3.33333 8.99967C3.33333 8.0792 2.58714 7.33301 1.66667 7.33301C0.746192 7.33301 0 8.0792 0 8.99967C0 9.92015 0.746192 10.6663 1.66667 10.6663Z"
+                    fill="#667085" />
+                  <path
+                    d="M1.66667 17.3333C2.58714 17.3333 3.33333 16.5871 3.33333 15.6667C3.33333 14.7462 2.58714 14 1.66667 14C0.746192 14 0 14.7462 0 15.6667C0 16.5871 0.746192 17.3333 1.66667 17.3333Z"
+                    fill="#667085" />
+                  <path
+                    d="M8.33464 4.00033C9.25511 4.00033 10.0013 3.25413 10.0013 2.33366C10.0013 1.41318 9.25511 0.666992 8.33464 0.666992C7.41416 0.666992 6.66797 1.41318 6.66797 2.33366C6.66797 3.25413 7.41416 4.00033 8.33464 4.00033Z"
+                    fill="#667085" />
+                  <path
+                    d="M8.33464 10.6663C9.25511 10.6663 10.0013 9.92015 10.0013 8.99967C10.0013 8.0792 9.25511 7.33301 8.33464 7.33301C7.41416 7.33301 6.66797 8.0792 6.66797 8.99967C6.66797 9.92015 7.41416 10.6663 8.33464 10.6663Z"
+                    fill="#667085" />
+                  <path
+                    d="M8.33464 17.3333C9.25511 17.3333 10.0013 16.5871 10.0013 15.6667C10.0013 14.7462 9.25511 14 8.33464 14C7.41416 14 6.66797 14.7462 6.66797 15.6667C6.66797 16.5871 7.41416 17.3333 8.33464 17.3333Z"
+                    fill="#667085" />
+                </svg>
+              </div>
+              <div class="bg-primary/5 px-2 py-1 rounded-lg flex-1 cursor-auto flex items-center justify-between">
+                @if(showPin || col.isFixed){
+                <button (click)="handleFixedColumn(col)" class="icon p-3 cursor-pointer">
+                  <i [ngClass]="{
+                      'fi-rr-thumbtack': !col.isFixed,
+                      'fi-ss-thumbtack': col.isFixed,
+                      'text-primary': col.isFixed
+                    }" class="fi"></i>
+                </button>
+                }
+                <div class="flex-1 flex items-center justify-between">
+                  <div>
+                    {{ col.displayName ?? col.label }}
+                  </div>
+                  <div class="switch">
+                    <p-inputSwitch [disabled]="col.isFixed || shouldDisableSwitch(col)" [(ngModel)]="col.isShown" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+      <div class="actions fixed bottom-0 right-0 px-4 rounded-b-md left-0 bg-white_color flex items-center justify-between py-3 border-t border-gray_light">
+        <button (click)="table_columns.toggle(0)" class="px-3 py-2 border font-medium border-gray_light rounded-lg">
+          {{ 'CUSTOM_COLUMNS.CANCEL' | translate }}
+        </button>
+
+        <div class="flex items-center gap-4">
+          @if(this.selectedProfile()?.profileId !== 0){
+          <div class="delete_btn">
+            <p-button [loading]="loadingDeleteProfile" (onClick)="handleDeleteColumnProfile()"
+              styleClass="px-3 py-2 rounded-lg border border-danger_color text-danger_color">
+              {{ 'CUSTOM_COLUMNS.DELETE' | translate }}
+            </p-button>
+          </div>
+          }
+          <button (click)="handledRestColumns()" class="px-3 font-medium py-2 rounded-lg bg-primary/10 text-primary">
+            {{ 'CUSTOM_COLUMNS.RESET' | translate }}
+          </button>
+          <div class="action_btn">
+            <p-button (onClick)="showProfileName = true" [label]="
+                edit_column_flag
+                  ? ('CUSTOM_COLUMNS.UPDATE_PROFILE' | translate)
+                  : ('CUSTOM_COLUMNS.ADD_PROFILE' | translate)
+              ">
+            </p-button>
+          </div>
+        </div>
+      </div>
+    </div>
+</p-overlayPanel>
+
+
+
+
+
+<!-- profile column -->
+<p-dialog (onShow)="handledToggleStatusColumnProfile()"
+  [header]="edit_column_flag ? 'Update Profile' : 'Create Profile'"
+  (onHide)=" profile_name = ''" [modal]="true" [(visible)]="showProfileName"
+  styleClass="w-[25rem]">
+  <div class="form_group">
+    <label for="profile_name" class="font-semibold w-6rem">Enter Profile Name</label>
+    <input pInputText id="profile_name" class="flex-auto" [(ngModel)]="profile_name" autocomplete="off" />
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex items-center gap-6">
+      <div class="action_btn w-28">
+        <p-button label="Save" [outlined]="true" [disabled]="!profile_name.trim().length"
+          [loading]="loadSaveProfileColumn" (onClick)="handleSaveProfile()" />
+      </div>
+      <p-button label="Cancel" [text]="true" (onClick)="showProfileName = false" />
+    </div>
+  </ng-template>
+</p-dialog>

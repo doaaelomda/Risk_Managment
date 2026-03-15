@@ -1,0 +1,50 @@
+<li  class="relative w-full">
+  @if(currentLink.children && currentLink.children.length){
+  <button
+    (click)="sidebarState() ? handleexpanded(currentLink):menu.toggle($event)"
+    class="w-full flex w-full rounded-md items-center menue_single"
+    [ngClass]="{ style_active_menu: currentLink.expand }"
+  >
+    <div class="flex-1 flex items-center gap-3">
+      <i class="text-xl icon_side font-semibold" [class]="currentLink.icon"></i>
+
+      @if(sidebarState()){
+      <span
+        class="font-medium text-side"
+        [ngClass]="{ 'active-link': currentLink.expand }"
+        >{{ isAr() ? currentLink.nameAR : currentLink.name }}</span
+      >
+      }
+    </div>
+    @if(sidebarState()){
+      <div class="flex items-center gap-2">
+        <!-- @if(currentLink.childCount ){
+            <span class="length">{{ currentLink.childCount }}</span>
+          } -->
+        <i
+          [class]="
+            !currentLink.expand
+              ? 'fi fi-rr-angle-small-down'
+              : 'fi fi-rr-angle-small-up'
+          "
+        ></i>
+      </div>
+    }
+  </button>
+  }@else{
+  <a [routerLink]="currentLink.link" routerLinkActive="active-link" class="items-center flex gap-3 menue_single">
+    @if (currentLink.icon) {
+    <i class="text-xl icon_side font-semibold" [class]="currentLink.icon"></i>
+
+    } @if(sidebarState()){
+    <span class="">{{ isAr() ? currentLink.nameAR : currentLink.name }}</span>
+    }
+  </a>
+  }
+
+  <app-sub-menue [currentItem]="currentLink"></app-sub-menue>
+    <!-- use p-menu popup when sidebar is collapsed -->
+  @if(!sidebarState() && currentLink.children && currentLink.children.length){
+    <p-menu #menu [model]="menuItems" [popup]="true" [appendTo]="'body'"></p-menu>
+  }
+</li>

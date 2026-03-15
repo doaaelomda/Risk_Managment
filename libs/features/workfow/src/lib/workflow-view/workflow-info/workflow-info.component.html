@@ -1,0 +1,166 @@
+<section class="info p-8 rounded-lg bg-primary/5">
+  <div class="header flex items-center justify-between pb-4 mb-8 border-b border-gray_light">
+    <h3 class="font-medium text-lg">{{"WORKFLOW_VIEW.OVERVIEW"|translate}}</h3>
+
+
+    <button (click)="menu.toggle($event)"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+      <span>{{'WORKFLOW_VIEW.ACTION' |translate}}</span>
+      <i class="fi fi-rr-angle-small-down"></i>
+    </button>
+
+  </div>
+
+
+
+  <div class="content">
+    <div class="names flex items-center flex-wrap gap-6">
+      <div class="name w-6/12 border-r border-gray_light">
+        <p class="text-sm font-medium text-gray_color">{{"WORKFLOW_VIEW.NAME_EN"|translate}}</p>
+        @if(isLoading){
+        <p-skeleton width="70%"></p-skeleton>
+        }@else {
+
+        <p class="text-[#344054] font-medium text-base">{{current_WF_data?.name ?? "-"}}</p>
+        }
+      </div>
+      <div class="name w-2/5">
+        <p class="text-sm font-medium text-gray_color">{{"WORKFLOW_VIEW.NAME_AR"|translate}}</p>
+        @if(isLoading){
+        <p-skeleton width="70%"></p-skeleton>
+        }@else {
+
+        <p class="text-[#344054] font-medium text-base">{{current_WF_data?.nameAr ?? "-"}}</p>
+        }
+      </div>
+      <div class="name w-6/12">
+        <p class="text-sm font-medium text-gray_color">{{"WORKFLOW_VIEW.Data_Entity_Type"|translate}}</p>
+        <p class="text-[#344054] font-medium text-base"> {{current_WF_data?.dataEntityTypeName ?? "-"}} </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--
+<p-menu #menu [model]="itemsMenu" [appendTo]="'body'" [popup]="true" /> -->
+
+    <p-menu #menu [model]="itemsMenu" [popup]="true" [appendTo]="'body'">
+        <ng-template pTemplate="item" let-item>
+          @if(item?.visible()){
+          <button (click)="item.command()"
+            class="p-menuitem-link w-full flex items-center gap-3 px-4 py-2 hover:bg-gray_color-100">
+            <i [class]="item.icon"></i>
+            <span class="p-menuitem-text">{{ item.label | translate }}</span>
+          </button>
+          }
+        </ng-template>
+      </p-menu>
+
+
+<lib-delete-confirm-popup
+  [titleDelete]="'WORKFLOW.WORKFLOW_DELETE_TITLE' | translate"
+  [descriptionDelete]="'WORKFLOW.DELETE_WORKFLOW_DESC' | translate"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="handleClosedDelete()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteWorkflow()"
+        [loading]="isDeleting"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+<div class="action_dailog">
+  <p-dialog
+    header="Header"
+    [closable]="false"
+    [(visible)]="openModal"
+    [modal]="true"
+    [dismissableMask]="true"
+    [draggable]="false"
+    (onHide)="initWorkFlowForm()"
+    styleClass="w-[50rem]"
+  >
+    <ng-template pTemplate="header"> </ng-template>
+
+    <div class="container">
+      <!-- Header -->
+      <div class="head pb-4 border-b border-gray_light">
+        <h2 class="font-medium text-gray-800 text-lg mb-2">
+          @if (!isEditing) {
+          <span>{{ 'WORKFLOW.Define_Workflow' | translate }}</span>
+          }@else {
+          <span>{{ 'WORKFLOW.edit_Workflow' | translate }}</span>
+
+          }
+        </h2>
+        <p class="text-gray_color">
+          {{ 'RISK_ACTION.HEADER_DESC' | translate }}
+        </p>
+      </div>
+
+      <!-- Form -->
+      <form [formGroup]="workflowForm">
+        <div
+          class="form_control grid grid-cols-12 gap-6 items-center py-4 border-b border-gray_light"
+        >
+          <div class="col-span-6">
+            <lib-input-text [placeholder]="'WORKFLOW.NameEn' | translate" [control]="workflowForm.get('name')!"
+              [inputLabel]="'WORKFLOW.NameEn' | translate" [controlNameInput]="'name'" [validations]="[]">
+            </lib-input-text>
+          </div>
+
+          <div class="col-span-6">
+            <lib-input-text [placeholder]="'WORKFLOW.NameAr' | translate" [control]="workflowForm.get('nameAr')!"
+              [inputLabel]="'WORKFLOW.NameAr' | translate" [validations]="[]" [controlNameInput]="'nameAr'" >
+            </lib-input-text>
+          </div>
+
+          <div class="col-span-6">
+            <lib-ui-dropdown
+              [label]="'WORKFLOW.DataEntityType'|translate"
+              class="col-span-6"
+              [placeholder]="'WORKFLOW.DataEntityType' | translate"
+              [control]="workflowForm.get('dataEntityTypeID')!"
+              [formControlNameInput]="'dataEntityTypeID'"
+              [options]="userTypes"
+              [optionLabel]="'label'"
+              [optionValue]="'id'"
+              [validations]="[]"
+            >
+            </lib-ui-dropdown>
+          </div>
+        </div>
+      </form>
+
+      <div class="flex justify-end gap-4 py-4">
+        <div class="cancel_btn">
+          <button (click)="openModal = false">
+            {{ 'RISK_ACTION.CANCEL' | translate }}
+          </button>
+        </div>
+        <div class="action_btn">
+          <p-button
+            [disabled]="workflowForm.invalid"
+            [label]=" 'Update'"
+            [outlined]="true"
+            severity="secondary"
+            [loading]="isSaving"
+            (onClick)="submit()"
+          >
+          </p-button>
+        </div>
+      </div>
+    </div>
+  </p-dialog>
+</div>

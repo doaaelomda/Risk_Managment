@@ -1,0 +1,26 @@
+  .expandBtn {
+    color: #5925dc;
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  .value {
+    color: #344054;
+    font-size: 16px;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+.label {
+    color: #667085;
+    font-size: 14px;
+    font-weight: 500;
+}
+::ng-deep .action_dailog{
+  .p-dialog-header{
+    padding:  1rem;
+  }
+  .p-dialog-header .p-dialog-header-icons{
+    display: none;
+  }
+}

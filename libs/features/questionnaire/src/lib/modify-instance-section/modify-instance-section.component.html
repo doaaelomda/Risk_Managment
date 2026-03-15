@@ -1,0 +1,102 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+ <section class="form_sec">
+      <div class="header border-b border-gray_light pb-6 mb-6">
+    <h2 class="text-lg font-medium text-gray-900">
+      {{
+        sectionId
+          ? ('TEMPLATES.UPDATE_SECTION' | translate)
+          : ('TEMPLATES.ADD_NEW_SECTION' | translate)
+      }}
+    </h2>
+  </div>
+<form [formGroup]="form" class="grid grid-cols-12 gap-6 mb-6">
+  <!-- Name (EN) -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-input-text
+      [placeholder]="'LOOKUP.NAME_PLACEHOLDER' | translate"
+      [inputLabel]="'LOOKUP.NAME' | translate"
+      [control]="form.get('name')!"
+      [controlNameInput]="'name'"
+    >
+    </lib-input-text>
+  </div>
+
+  <!-- Name (AR) -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-input-text
+      [placeholder]="'LOOKUP.NAME_AR_PLACEHOLDER' | translate"
+      [inputLabel]="'LOOKUP.NAME_AR' | translate"
+      [control]="form.get('nameAr')!"
+      [controlNameInput]="'nameAr'"
+    >
+    </lib-input-text>
+  </div>
+
+    <div class="md:col-span-6 col-span-12">
+    <lib-input-number
+      [placeholder]="'TEMPLATES.WEIGHT_PLACEHOLDER' | translate"
+      [inputLabel]="'TEMPLATES.WEIGHT' | translate"
+      [control]="form.get('weight')!"
+      [controlNameInput]="'weight'"
+    >
+    </lib-input-number>
+  </div>
+
+    <div class="md:col-span-6 col-span-12">
+    <lib-input-number
+      [placeholder]="'TEMPLATES.DISPLAY_ORDER_PLACEHOLDER' | translate"
+      [inputLabel]="'TEMPLATES.DISPLAY_ORDER' | translate"
+      [control]="form.get('displayOrder')!"
+      [controlNameInput]="'displayOrder'"
+    >
+    </lib-input-number>
+  </div>
+
+    <!-- Description (EN) -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-textarea-ui
+      [placeholder]="'LOOKUP.DESCRIPTION_PLACEHOLDER' | translate"
+      [inputLabel]="'LOOKUP.DESCRIPTION' | translate"
+      [control]="form.get('description')!"
+      [controlNameInput]="'description'"
+    >
+    </lib-textarea-ui>
+  </div>
+
+  <!-- Description (AR) -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-textarea-ui
+      [placeholder]="'LOOKUP.DESCRIPTION_AR_PLACEHOLDER' | translate"
+      [inputLabel]="'LOOKUP.DESCRIPTION_AR' | translate"
+      [control]="form.get('descriptionAr')!"
+      [controlNameInput]="'descriptionAr'"
+    >
+    </lib-textarea-ui>
+  </div>
+
+
+  <div class="col-span-12 flex justify-end gap-4 py-4">
+    <div class="default_btn cancel">
+      <button (click)="navigateBack()" >
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+    <div class="action_btn">
+      <p-button
+        [label]="
+          sectionId
+            ? ('BUTTONS.UPDATE' | translate)
+            : ('BUTTONS.SAVE' | translate)
+        "
+        [outlined]="true"
+        [disabled]="form.invalid"
+        [loading]="isSavingTemplate"
+        severity="secondary"
+        (onClick)="save()"
+      >
+      </p-button>
+    </div>
+  </div>
+</form>
+ </section>
+

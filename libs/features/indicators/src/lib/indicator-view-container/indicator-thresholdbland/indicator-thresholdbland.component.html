@@ -1,0 +1,306 @@
+<section>
+  <p-dialog
+    [(visible)]="viewingItem"
+    (onHide)="viewingItem = false"
+    [modal]="true"
+    [dismissableMask]="true"
+    [draggable]="false"
+    styleClass="w-[45rem] action_dailog"
+  >
+    <div class="container space-y-6">
+      <div class="container space-y-6">
+        <h2 class="font-medium text-gray-800 text-lg mb-2">
+          {{ viewed_data?.indicatorName }}
+        </h2>
+        <div class="grid grid-cols-12 gap-4 border-b border-gray_light py-3">
+          @if(viewed_data?.name){
+             <div class="col-span-12 lg:col-span-6">
+            <h3 class="header-item mb-1">
+              {{ 'CONTENT.NAME' | translate }}
+            </h3>
+            <p class="font-medium text-gray-800 whitespace-pre-line">
+              @if (!loadingViewedData) {
+              {{ viewed_data?.name }}
+
+              } @else {
+              <p-skeleton width="2rem" styleClass="mb-2" />
+              }
+            </p>
+          </div>
+          }
+          <div class="col-span-12 lg:col-span-6">
+            <h3 class="header-item mb-1">
+              {{ 'INDICATORS.CREATE_BRANCH_ON_MATCH' | translate }}
+            </h3>
+            <p class="font-medium text-gray-800 whitespace-pre-line">
+              @if (!loadingViewedData) {
+              {{ viewed_data?.createBreachOnMatch ? 'Yes' : 'No' }}
+
+              } @else {
+              <p-skeleton width="2rem" styleClass="mb-2" />
+              }
+            </p>
+          </div>
+
+          <div class="col-span-12 lg:col-span-6">
+            <h3 class="header-item mb-1">
+              {{ 'INDICATORS.SEVERITY_TYPE_NAME' | translate }}
+            </h3>
+            <p class="font-medium text-gray-800 whitespace-pre-line">
+              @if (!loadingViewedData) {
+              {{ viewed_data?.severityTypeName }}
+
+              } @else {
+              <p-skeleton width="2rem" styleClass="mb-2" />
+              }
+            </p>
+          </div>
+          <div class="col-span-12">
+            <h3 class="header-item mb-1">
+              {{ 'INDICATORS.NOTE' | translate }}
+            </h3>
+            <p class="font-medium text-gray-800 whitespace-pre-line">
+              @if (!loadingViewedData) {
+              {{ viewed_data?.note }} } @else {
+              <p-skeleton width="2rem" styleClass="mb-2" />
+              }
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-12 gap-4 border-b border-gray_light py-3">
+          <div class="col-span-12 lg:col-span-6">
+            <h3 class="header-item mb-1">
+              {{ 'ASSET.RANGE_FROM' | translate }}
+            </h3>
+            <p class="header-para gap-2 flex">{{ viewed_data?.rangeFrom }}</p>
+          </div>
+
+          <div class="col-span-12 lg:col-span-6">
+            <h3 class="header-item mb-1">
+              {{ 'ASSET.RANGE_TO' | translate }}
+            </h3>
+            <p class="header-para gap-2 flex">{{ viewed_data?.rangeTo }}</p>
+          </div>
+          <div class="col-span-12 lg:col-span-6">
+            <h3 class="header-item mb-1">
+              {{ 'ASSET.EFFECTIVE_FROM' | translate }}
+            </h3>
+            <p class="header-para gap-2 flex">
+              <img src="images/icons/calendar.svg" alt="" />{{
+                viewed_data?.effectiveDateFrom | date : 'MMM d, y'
+              }}
+            </p>
+          </div>
+          <div class="col-span-12 lg:col-span-6">
+            <h3 class="header-item mb-1">
+              {{ 'ASSET.EFFECTIVE_TO' | translate }}
+            </h3>
+            <p class="header-para gap-2 flex">
+              <img src="images/icons/calendar.svg" alt="" />{{
+                viewed_data?.effectiveDateTo | date : 'MMM d, y'
+              }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-dialog>
+  <lib-new-table
+    [loading]="loadingTable"
+    [table_data]="dataTable"
+    [table_title]="'INDICATORS.INDICATOR_THRESHOLDS_LIST' | translate"
+    [badge_title]="'INDICATORS.THRESHOLDS' | translate"
+    [dataViewId]="139"
+    [entityID_Name]="'indicatorThresholdBandID'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="items"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{
+      module: 'INDICATORS',
+      feature: 'INDICATORTHRESHOLD',
+      action: 'VIEW'
+    }"
+  >
+    @if(_PermissionSystemService.can('INDICATORS' , 'INDICATORTHRESHOLD' ,
+    'ADD') ){
+    <button
+      addition_action
+      (click)="inputActionVisible = true"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+    >
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'INDICATORS.ADD_NEW_THRESHOLD' | translate }}</span>
+    </button>
+    }
+  </lib-new-table>
+</section>
+
+<!-- 🗑 Delete Confirmation -->
+<lib-delete-confirm-popup
+  [titleDelete]="'INDICATORS.DELETE_INDICATOR_THRESHOLD_TITLE'"
+  [descriptionDelete]="'INDICATORS.DELETE_INDICATOR_THRESHOLD_DESC'"
+  (hideEmiter)="handleClosedDelete()"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteThreshold()"
+        [loading]="loadDelted"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+<!-- 🧾 Dialog -->
+<p-dialog
+  (onHide)="initForm(); update_flag = false"
+  [(visible)]="inputActionVisible"
+  [modal]="true"
+  [dismissableMask]="true"
+  [draggable]="false"
+  styleClass="w-[50rem]"
+  [position]="'center'"
+>
+  <ng-template pTemplate="header">
+    <h3 class="text-gray-800 font-bold text-1xl">
+      {{
+        update_flag
+          ? ('INDICATORS.UPDATE_THRESHOLD' | translate)
+          : ('INDICATORS.ADD_NEW_THRESHOLD' | translate)
+      }}
+    </h3>
+  </ng-template>
+
+  <div class="border-b border-gray_light my-4"></div>
+
+  <ng-template pTemplate="content">
+    <form
+      [formGroup]="thresholdForm"
+      class="grid grid-cols-12 gap-6 mb-6"
+      (ngSubmit)="submit()"
+    >
+      <!-- name -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-text
+          [placeholder]="'CONTENT.PLACEHOLDERS.NAME' | translate"
+          [inputLabel]="'CONTENT.NAME' | translate"
+          [control]="thresholdForm.get('name')!"
+          [controlNameInput]="'name'"
+        >
+        </lib-input-text>
+      </div>
+      <!-- Severity Type -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-ui-dropdown
+          [label]="'INDICATORS.SEVERITY_TYPE'"
+          [optionValue]="'id'"
+          [optionLabel]="'label'"
+          [placeholder]="'INDICATORS.SEVERITY_TYPE_PLACEHOLDER' | translate"
+          [control]="thresholdForm.get('indicatorThresholdSeverityTypeID')!"
+          [formControlNameInput]="'indicatorThresholdSeverityTypeID'"
+          [options]="severityTypes"
+        >
+        </lib-ui-dropdown>
+      </div>
+
+      <!-- Range From -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-number
+          [placeholder]="'INDICATORS.RANGE_FROM_PLACEHOLDER' | translate"
+          [inputLabel]="'INDICATORS.RANGE_FROM' | translate"
+          [control]="thresholdForm.get('rangeFrom')!"
+          [controlNameInput]="'rangeFrom'"
+        >
+        </lib-input-number>
+      </div>
+
+      <!-- Range To -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-number
+          [placeholder]="'INDICATORS.RANGE_TO_PLACEHOLDER' | translate"
+          [inputLabel]="'INDICATORS.RANGE_TO' | translate"
+          [control]="thresholdForm.get('rangeTo')!"
+          [controlNameInput]="'rangeTo'"
+        >
+        </lib-input-number>
+      </div>
+      <!-- Effective Date From -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-date-packer
+          [placeholder]="
+            'INDICATORS.EFFECTIVE_DATE_FROM_PLACEHOLDER' | translate
+          "
+          [inputLabel]="'INDICATORS.EFFECTIVE_DATE_FROM' | translate"
+          [control]="thresholdForm.get('effectiveDateFrom')!"
+          [controlNameInput]="'effectiveDateFrom'"
+        >
+        </lib-date-packer>
+      </div>
+
+      <!-- Effective Date To -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-date-packer
+          [placeholder]="'INDICATORS.EFFECTIVE_DATE_TO_PLACEHOLDER' | translate"
+          [inputLabel]="'INDICATORS.EFFECTIVE_DATE_TO' | translate"
+          [control]="thresholdForm.get('effectiveDateTo')!"
+          [controlNameInput]="'effectiveDateTo'"
+        >
+        </lib-date-packer>
+      </div>
+
+      <!-- Create Breach On Match -->
+      <div class="md:col-span-6 col-span-12">
+        <label for="" class="mb-2">
+          {{ 'INDICATORS.CREATE_BREACH_ON_MATCH' | translate }}
+        </label>
+        <lib-switch-ui
+          [control]="thresholdForm.get('createBreachOnMatch')!"
+          [controlNameInput]="'createBreachOnMatch'"
+        >
+        </lib-switch-ui>
+      </div>
+
+      <!-- Note -->
+      <div class="col-span-12">
+        <lib-textarea-ui
+          [placeholder]="'INDICATORS.NOTE_PLACEHOLDER' | translate"
+          [inputLabel]="'INDICATORS.NOTE' | translate"
+          [control]="thresholdForm.get('note')!"
+          [controlNameInput]="'note'"
+        >
+        </lib-textarea-ui>
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <div class="flex flex-wrap justify-end gap-2">
+      <p-button
+        pButton
+        (onClick)="inputActionVisible = false"
+        class="bg-white_color text-gray-700 text-sm border border-gray_light rounded-lg"
+        [label]="'BUTTONS.CANCEL' | translate"
+        icon="pi pi-times"
+      />
+      <p-button
+        pButton
+        class="bg-primary text-white text-sm rounded-lg"
+        [label]="'BUTTONS.SAVE' | translate"
+        [loading]="loadingBtn"
+        icon="pi pi-check"
+        (click)="submit()"
+      />
+    </div>
+  </ng-template>
+</p-dialog>

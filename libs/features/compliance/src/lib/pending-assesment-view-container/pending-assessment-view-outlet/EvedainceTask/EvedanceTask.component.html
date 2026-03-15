@@ -1,0 +1,8 @@
+<lib-entity-action
+  [canView]="_PermissionSystemService.can('COMPLIANCE' , 'ONGOINGASSSESSMENT_CONTROLS_EVIDENCETASK' , 'VIEW')"
+  [canDelete]="_PermissionSystemService.can('COMPLIANCE' , 'ONGOINGASSSESSMENT_CONTROLS_EVIDENCETASK' , 'DELETE')"
+  [canAdd]="_PermissionSystemService.can('COMPLIANCE' , 'ONGOINGASSSESSMENT_CONTROLS_EVIDENCETASK' , 'ADD')"
+  [canEdit]="_PermissionSystemService.can('COMPLIANCE' , 'ONGOINGASSSESSMENT_CONTROLS_EVIDENCETASK' , 'EDIT')"
+[readOnly]="false" [HEADER_DESC]="'RISK_ACTION.DESC_ELEGANCE' | translate" [fileUsageTypeId]="23"
+  [HEADER_TITLE]="'RISK_ACTION.HEADER_ELEGANCE' | translate"  [entityID]="entityID" [dataEntityTypeID]="23" [businessTaskTypeID]="3"></lib-entity-action>
+

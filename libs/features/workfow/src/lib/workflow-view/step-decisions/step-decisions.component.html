@@ -1,0 +1,152 @@
+<lib-cards-list
+  (selected_item_emiter)="setSelected($event)"
+  [items_actions]="item_actions"
+  [data_list]="data_list"
+  [badge_title]="'WORKFLOW_STEPS.TITLES.DECISIONS' | translate"
+  [list_title]="'WORKFLOW_STEPS.TITLES.DECISIONS' | translate"
+  [total_items]="data_list.length"
+  [loadingState]="loadingList"
+    [externalAction]="{toolTip:'WORKFLOW_STEPS.BUTTONS.VIEW_ACTIONS'|translate , label:'WORKFLOW_VIEW.ACTION' |translate}"
+  (externalActionEmitter)="viewActions($event)"
+  [table_actions_permissions]="{ module: 'WORKFLOW', feature: 'SETDECISIONS', action: 'VIEW' }"
+
+>
+@if(_PermissionSystemService.can('WORKFLOW' , 'SETDECISIONS' , 'ADD')){
+  <button
+    actions
+    (click)="handleAddDecisionClick()"
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+  >
+    <i class="fi fi-br-plus w-5 h-5"></i>
+    <span> {{ 'WORKFLOW_STEPS.BUTTONS.ADD_NEW_DECISION' | translate }} </span>
+  </button>
+}
+</lib-cards-list>
+
+<lib-delete-confirm-popup
+  [titleDelete]="titleDelete"
+  [descriptionDelete]="descriptionDelete"
+  [visibleInput]="deletingDecisionDialog"
+  (hideEmiter)="handleCloseDelete($event)"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <!-- Cancel Button -->
+    <div class="cancel_btn">
+      <button class="w-40" (click)="handleCloseDelete(false)">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <!-- Delete Button -->
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteDecision()"
+        [loading]="isDeletingDecision"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+<div class="view_dialog">
+  <lib-shared-workflow-view
+    [title]="this.current_WF_data?.name"
+    [desc]="current_step_data?.name"
+    [view_data]="view_data"
+    [(isViewing)]="isViewingDecision"
+    [spanCols]="'6'"
+  ></lib-shared-workflow-view>
+</div>
+
+
+<div class="action_dailog">
+  <p-dialog
+    header="Header"
+    [(visible)]="show_action"
+    [modal]="true"
+    [dismissableMask]="true"
+    [draggable]="false"
+    (onHide)="initDecisionForm(); isEditingDecision = false"
+    styleClass="w-[888px]"
+  >
+    <ng-template pTemplate="header"> </ng-template>
+
+    <div class="container">
+      <!-- Header -->
+      <div class="head pb-4 border-b border-gray_light">
+        <h2 class="font-medium text-gray-800 text-lg mb-2">
+          {{
+            isEditingDecision
+              ? ('WORKFLOW_STEPS.BUTTONS.EDIT_DECISION' | translate)
+              : ('WORKFLOW_STEPS.BUTTONS.DEFINE_NEW_DECISION' | translate)
+          }}
+        </h2>
+
+        <p class="text-gray_color">
+          <!-- {{ 'RISK_ACTION.HEADER_DESC' | translate }} -->
+        </p>
+      </div>
+
+      <!-- content Form-->
+
+      @if(decision_form){
+      <form [formGroup]="decision_form" class="grid grid-cols-12 gap-6 py-3">
+        <div class="col-span-12 lg:col-span-6">
+          <lib-input-text
+            [placeholder]="'WORKFLOW_STEPS.PLACEHOLDERS.NAME_EN' | translate"
+            [control]="decision_form.get('declarationText')!"
+            [inputLabel]="('WORKFLOW_STEPS.FIELDS.NAME_EN' | translate) + ' * '"
+            [controlNameInput]="'declarationText'"
+          >
+          </lib-input-text>
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-input-text
+            [placeholder]="'WORKFLOW_STEPS.PLACEHOLDERS.NAME_AR' | translate"
+            [control]="decision_form.get('declarationTextAr')!"
+            [inputLabel]="'WORKFLOW_STEPS.FIELDS.NAME_AR' | translate"
+            [controlNameInput]="'declarationTextAr'"
+          >
+          </lib-input-text>
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <div class="flex gap-2 items-center">
+            <lib-switch-ui
+              [controlNameInput]="'isJustificationRequired'"
+              [control]="decision_form.get('isJustificationRequired')!"
+            >
+            </lib-switch-ui>
+            <label class="block" for=" ">{{
+              'WORKFLOW_STEPS.FIELDS.IS_JUSTIFICATION_REQUIRED' | translate
+            }}</label>
+          </div>
+        </div>
+      </form>
+
+      }
+    </div>
+
+    <ng-template pTemplate="footer">
+      <div class="flex justify-end gap-4">
+        <div class="cancel_btn">
+          <button (click)="closeForm()">
+            {{ 'RISK_ACTION.CANCEL' | translate }}
+          </button>
+        </div>
+        <div class="action_btn">
+          <p-button
+            [disabled]="decision_form.invalid"
+            [label]="'RISK_ACTION.SAVE' | translate"
+            [outlined]="true"
+            severity="secondary"
+            [loading]="loadSave"
+            (onClick)="handleSubmitActionDecision()"
+          >
+          </p-button>
+        </div>
+      </div>
+    </ng-template>
+  </p-dialog>
+</div>

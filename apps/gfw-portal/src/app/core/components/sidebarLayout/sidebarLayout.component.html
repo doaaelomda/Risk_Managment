@@ -1,0 +1,21 @@
+<div  class="h-screen py-8 flex flex-col border-r side">
+  <div class="px-6">
+
+    <a [routerLink]="['/gfw-portal']" class="logo block">
+      <img [src]="side_state() ? '/images/layer-MC0.svg':'/images/logo_small.svg'" alt="">
+    </a>
+
+    <!-- @if(side_state()){
+      <lib-input-search></lib-input-search>
+    } -->
+  </div>
+
+  <ul #scrollContainer class="mt-6 px-4 ">
+    @for(item of menueItems(); track item){
+      @if (item.visible()) {
+
+        <app-sidebar-single-item [sideBarLinks]="menueItems()" [currentItem]='item'></app-sidebar-single-item>
+      }
+    }
+  </ul>
+</div>

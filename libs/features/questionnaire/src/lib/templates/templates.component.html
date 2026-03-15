@@ -1,0 +1,43 @@
+<!-- 🔹 Shared UI Table -->
+<lib-new-table
+[table_actions_permissions]="{ module: 'QUESTIONNAIRES', feature: 'TEMPLATES', action: 'VIEW' }"
+
+[loading]="loading" [table_data]="tableData"      [badge_title]="labels.badge | translate"
+  [table_title]="labels.table | translate" [dataViewId]="dataEntityId" [entityID_Name]="entityIdField"
+  [isShownAction]="true" (payload_emiter)="handleDataTable($event)" [action_items]="actionItems"
+  (currentActionRow)="setSelected($event)" [columnControl]="columnControl">
+  @if(_PermissionSystemService.can('QUESTIONNAIRES' , 'TEMPLATES' , 'ADD')){
+      <button addition_action (click)="handleAddClick()"
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+    <i class="fi fi-br-plus w-5 h-5 "></i>
+    <span>{{ labels.add | translate }}
+    </span>
+  </button>
+  }
+</lib-new-table>
+
+<!-- 🔸 Delete Confirmation Popup -->
+<lib-delete-confirm-popup
+  [titleDelete]="labels.titleDelete | translate"
+  [descriptionDelete]="labels.descDelete | translate"
+  [visibleInput]="deleteModalVisible"
+  (hideEmiter)="toggleDeleteModal(false)"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <!-- Cancel -->
+    <div class="cancel_btn">
+      <button class="w-40" (click)="toggleDeleteModal(false)">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <!-- Confirm Delete -->
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="delete()"
+        [loading]="loadingDelete"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

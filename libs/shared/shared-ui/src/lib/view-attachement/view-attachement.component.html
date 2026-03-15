@@ -1,0 +1,127 @@
+<!-- Attachment Preview Dialog -->
+<p-dialog  [dismissableMask]="true" [(visible)]="displayModal" [modal]="true" [draggable]="false"
+  styleClass="attach_dailog new-attachment-ui w-[50rem]" (onHide)="modelVisibleEmiter.emit(false); selected_file_show = null">
+
+
+  <!-- Dialog Content Header -->
+
+  @if (selected_file_show) {
+  <div class="content flex justify-between items-center">
+
+    <!-- File Info (Icon + Title + Size) -->
+    <div class="flex gap-1">
+      <div class="icon w-12 h-12 rounded-lg flex items-center justify-center text-primary">
+        <img class="w-full h-full" [src]="getIcon(selected_file_show?.fileExtension)" alt="file icon" />
+      </div>
+
+      <div>
+        <div class="head mb-1 flex items-baseline gap-3">
+          <h2 class="text-xl font-semibold text-gray-900">
+            {{ selected_file_show?.fileTitle }}
+          </h2>
+
+          <!-- Data Classification Badge -->
+          <span class="badge">
+            {{ selected_file_show?.dataClassificationName }}
+          </span>
+        </div>
+
+        <!-- File Size -->
+        @if (selected_file_show?.fileSize) {
+        <p class="text-lg font-normal text-gray-500 mb-0">
+          {{
+          (selected_file_show?.fileSize / (1024 * 1024))
+          | number:'1.0-2'
+          }}
+          {{ 'ATTACHMENT.FILE_SIZE_UNIT' | translate }}
+        </p>
+        }
+      </div>
+    </div>
+
+    <!-- Uploaded By (User Info) -->
+    <div class="flex items-center gap-4">
+      <div class="img">
+        <!-- <img class="w-14" src="images/Avatar2.svg" alt="user avatar" /> -->
+         <lib-img-system [userId]="selected_file_show?.createdBy"></lib-img-system>
+      </div>
+
+      <div>
+        <p class="font-medium text-lg">
+          {{ selected_file_show?.username }}
+        </p>
+        <p class="text-gray-500 text-base font-normal">
+          {{ selected_file_show?.email }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- File Preview Section -->
+
+  <div class="my-5">
+
+    <!-- Image Preview -->
+    @if (
+    selected_file_show?.fileExtension?.includes('jpeg') ||
+    selected_file_show?.fileExtension?.includes('jpg') ||
+    selected_file_show?.fileExtension?.includes('png') ||
+    selected_file_show?.fileExtension?.includes('gif') ||
+    selected_file_show?.fileExtension?.includes('svg')
+    ) {
+    <div class="img rounded-lg">
+      <img class="w-full" [src]="env + selected_file_show?.fileUrl?.substring(1)"
+        [alt]="'ATTACHMENT.ATTACHMENT_IMAGE_ALT' | translate" />
+    </div>
+    }
+    @else {
+
+    <!-- PDF Preview -->
+    @if (selected_file_show?.fileExtension?.includes('pdf')) {
+    <lib-pdf-preview [pdfSrc]="env + selected_file_show?.fileUrl?.substring(1)"></lib-pdf-preview>
+    }
+
+    <!-- Word Document Preview -->
+    @else if (selected_file_show?.fileExtension?.includes('docx')) {
+    <div class="h-[500px] overflow-y-auto">
+      <lib-docs-preview [wordSrc]="env + selected_file_show?.fileUrl?.substring(1)"></lib-docs-preview>
+    </div>
+    }
+    }
+  </div>
+  }
+
+
+  <!-- Dialog Footer Actions -->
+
+  <ng-template pTemplate="footer">
+    <div class="grid grid-cols-12 gap-2">
+
+      <!-- Back Button -->
+      <div class="col-span-6 action_btn">
+          <p-button  (onClick)="displayModal = false; selected_file_show = null"
+            [label]="'ATTACHMENT.BACK_TO_HOME' | translate" />
+      </div>
+
+      <!-- View External Button -->
+      <div class="col-span-6">
+        <div class="bg-primaryColor-50 border border-primaryColor-50 h-[44px] rounded-lg flex justify-center">
+          <a class="m-auto" target="_blank" rel="noopener noreferrer" [href]="
+              !selected_file_show?.fileExtension
+                ? selected_file_show?.fileUrl?.substring(1)
+                : env + selected_file_show?.fileUrl?.substring(1)
+            ">
+            <button pButton type="button" class="p-button-text text-primaryColor-500  flex items-center gap-2">
+              <i class="fi fi-rr-up-right-from-square text-lg font-medium"></i>
+              <span class="text-lg font-medium">
+                {{ 'ATTACHMENT.VIEW_EXTERNAL' | translate }}
+              </span>
+            </button>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </ng-template>
+</p-dialog>

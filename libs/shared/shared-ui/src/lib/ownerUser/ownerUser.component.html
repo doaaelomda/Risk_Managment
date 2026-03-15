@@ -1,0 +1,24 @@
+<div [ngClass]="{respon_div: hasBorder}">
+  <p class="mb-2 header_cards">{{ title | translate }}</p>
+
+  <div class="flex items-center gap-3 div_body">
+    @if(isRole()) {
+    <img src="images/role_img.svg" alt="">
+    }
+    @else{
+    <lib-img-system [userId]="userId()"></lib-img-system>
+    }
+    <div>
+      @if(postionOwner){
+      <h4 class="text-gray-700 font-medium text-base">
+        {{ getDisplayText() }}
+        <p-skeleton width="4rem" styleClass="mb-2" *ngIf="loading" />
+      </h4>
+      }
+      @if(subtitle){
+      <h1 class="text-gray-700 font-medium text-base">{{ subtitle | translate }}</h1>
+      }
+    </div>
+
+  </div>
+</div>

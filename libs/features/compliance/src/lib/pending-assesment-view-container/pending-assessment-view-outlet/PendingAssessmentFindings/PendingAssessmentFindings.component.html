@@ -1,0 +1,10 @@
+<lib-finding-action 
+  [canView]="_PermissionSystemService.can('COMPLIANCE' , 'ONGOINGASSSESSMENT_CONTROLS_FINDINGS' , 'VIEW')"
+  [canDelete]="_PermissionSystemService.can('COMPLIANCE' , 'ONGOINGASSSESSMENT_CONTROLS_FINDINGS' , 'DELETE')"
+  [canAdd]="_PermissionSystemService.can('COMPLIANCE' , 'ONGOINGASSSESSMENT_CONTROLS_FINDINGS' , 'ADD')"
+  [canEdit]="_PermissionSystemService.can('COMPLIANCE' , 'ONGOINGASSSESSMENT_CONTROLS_FINDINGS' , 'EDIT')"
+[HEADER_DESC]="'RISK_ACTION.DESC_FINDING' | translate"
+  [HEADER_TITLE]="'RISK_ACTION.HEADER_FINDING' | translate"
+  [UPDATE_TITLE]="'RISK_ACTION.UPDATE_FINDING' | translate"
+  [fileUsageTypeId]="20"
+[entityID]="entityID" [dataEntityTypeID]="220"></lib-finding-action>

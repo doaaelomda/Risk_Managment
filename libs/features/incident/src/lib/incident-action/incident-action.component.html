@@ -1,0 +1,133 @@
+<section class="form_sec">
+  <div class="header border-b border-gray_light pb-6 mb-6">
+    <h2 class="text-lg font-medium text-[#101828]">
+      {{ current_updated_id ? ('INCIDENT.UPDATE_TITLE' | translate) : ('INCIDENT.ADD_TITLE' | translate) }}
+    </h2>
+  </div>
+
+  <form [formGroup]="incidentForm" class="grid grid-cols-12 gap-6 mb-6">
+
+    <!-- Name -->
+    <div class="col-span-12">
+      <lib-input-text [placeholder]="'INCIDENT.NAME_PLACEHOLDER' | translate" [inputLabel]="'INCIDENT.NAME' | translate"
+        [control]="incidentForm.get('name')!" [controlNameInput]="'name'" [validations]="nameVaildation">
+      </lib-input-text>
+    </div>
+
+
+    <!-- Description -->
+    <div class="col-span-12">
+      <lib-textarea-ui [placeholder]="'INCIDENT.DESCRIPTION_PLACEHOLDER' | translate"
+        [inputLabel]="'INCIDENT.DESCRIPTION' | translate" [control]="incidentForm.get('description')!"
+        [controlNameInput]="'description'">
+      </lib-textarea-ui>
+    </div>
+
+    <!-- Incident Type -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown [validations]="validationsRequired" [placeholder]="'INCIDENT.INCIDENT_TYPE_PLACEHOLDER' | translate"
+        [label]="'INCIDENT.INCIDENT_TYPE' | translate" [control]="incidentForm.get('incidentTypeID')!"
+        [formControlNameInput]="'incidentTypeID'" [options]="incidentTypes" [optionLabel]="'label'"
+        [optionValue]="'id'">
+      </lib-ui-dropdown>
+    </div>
+
+    <!-- Status -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown [placeholder]="'INCIDENT.STATUS_PLACEHOLDER' | translate" [label]="'INCIDENT.STATUS' | translate"
+        [control]="incidentForm.get('incidentStatusTypeID')!" [formControlNameInput]="'incidentStatusTypeID'"
+        [options]="statusTypes" [optionLabel]="'label'" [validations]="validationsRequired" [optionValue]="'id'">
+      </lib-ui-dropdown>
+    </div>
+
+    <!-- Priority Level -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown [placeholder]="'INCIDENT.PRIORITY_PLACEHOLDER' | translate"
+        [label]="'INCIDENT.PRIORITY' | translate" [control]="incidentForm.get('incidentPriorityLevelTypeID')!"
+        [formControlNameInput]="'incidentPriorityLevelTypeID'" [options]="priorityLevels" [optionLabel]="'label'"
+        [optionValue]="'id'" [validations]="validationsRequired">
+      </lib-ui-dropdown>
+    </div>
+
+    <!-- Severity Level -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown [placeholder]="'INCIDENT.SEVERITY_PLACEHOLDER' | translate" [validations]="validationsRequired"
+        [label]="'INCIDENT.SEVERITY' | translate" [control]="incidentForm.get('incidentSeverityLevelTypeID')!"
+        [formControlNameInput]="'incidentSeverityLevelTypeID'" [options]="severityLevels" [optionLabel]="'label'"
+        [optionValue]="'id'">
+      </lib-ui-dropdown>
+    </div>
+
+    <!-- Source -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown [placeholder]="'INCIDENT.SOURCE_PLACEHOLDER' | translate" [label]="'INCIDENT.SOURCE' | translate"
+        [control]="incidentForm.get('incidentSourceTypeID')!" [formControlNameInput]="'incidentSourceTypeID'"
+        [options]="sourceTypes" [optionLabel]="'label'" [optionValue]="'id'">
+      </lib-ui-dropdown>
+    </div>
+
+    <!-- Occurred At -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-date-packer [placeholder]="'INCIDENT.OCCURRED_AT_PLACEHOLDER' | translate"
+        [inputLabel]="'INCIDENT.OCCURRED_AT' | translate" [control]="incidentForm.get('occurredAt')!"
+        [controlNameInput]="'occurredAt'" [validations]="validationsRequired">
+      </lib-date-packer>
+    </div>
+
+    <!-- Reported At -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-date-packer [placeholder]="'INCIDENT.REPORTED_AT_PLACEHOLDER' | translate"
+        [inputLabel]="'INCIDENT.REPORTED_AT' | translate" [control]="incidentForm.get('reportedAt')!"
+        [controlNameInput]="'reportedAt'" [validations]="validationsRequired">
+      </lib-date-packer>
+    </div>
+
+    <!-- Location -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text [placeholder]="'INCIDENT.LOCATION_PLACEHOLDER' | translate"
+        [inputLabel]="'INCIDENT.LOCATION' | translate" [control]="incidentForm.get('location')!"
+        [controlNameInput]="'location'">
+      </lib-input-text>
+    </div>
+
+    <!-- Is Confidential -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown [validations]="validationsRequired" [placeholder]="'INCIDENT.IS_CONFIDENTIAL' | translate"
+        [label]="'INCIDENT.IS_CONFIDENTIAL' | translate" [control]="incidentForm.get('isConfidential')!"
+        [formControlNameInput]="'isConfidential'" [options]="confidentailArray" [optionLabel]="'label'"
+        [optionValue]="'value'">
+      </lib-ui-dropdown>
+    </div>
+
+
+    <!-- Estimated Financial Impact -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-currency-input [placeholder]="'INCIDENT.ESTIMATED_FINANCIAL_IMPACT_PLACEHOLDER' | translate"
+        [inputLabel]="'INCIDENT.ESTIMATED_FINANCIAL_IMPACT' | translate"
+        [control]="incidentForm.get('estimatedFinancialImpact')!" [controlNameInput]="'estimatedFinancialImpact'">
+      </lib-currency-input>
+    </div>
+
+    <!-- Reference Code -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text [placeholder]="'INCIDENT.REFERENCE_CODE_PLACEHOLDER' | translate"
+        [inputLabel]="'INCIDENT.REFERENCE_CODE' | translate" [control]="incidentForm.get('referenceCode')!"
+        [controlNameInput]="'referenceCode'">
+      </lib-input-text>
+    </div>
+  </form>
+
+  <div class="flex justify-end gap-4 py-4">
+    <div class="cancel_btn">
+      <button [routerLink]="['/gfw-portal/incident/list']">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+    <div class="action_btn">
+      <p-button [label]='current_updated_id ? ("BUTTONS.UPDATE" | translate) : ("BUTTONS.SAVE" | translate)'
+        [outlined]="true" [loading]="isLoading" severity="secondary" (onClick)="submit()">
+      </p-button>
+    </div>
+  </div>
+
+</section>

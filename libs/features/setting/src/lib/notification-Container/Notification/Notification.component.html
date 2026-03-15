@@ -1,0 +1,83 @@
+<section>
+
+  <div class="flex justify-between items-center">
+    <div class="header notification_header">
+      {{'BREAD_CRUMB_TITLES.Notification' | translate}}
+    </div>
+    <div class="flex ml-auto gap-3">
+    <div class="status py-2.5 px-4 text-center">
+      <span class="text-gray-700 font-medium text-[16px]">
+        {{ 'NOTIFICATION_SETTING.make' | translate }}
+        {{ NotificationsData.length }}
+        {{ 'NOTIFICATION_SETTING.allRead' | translate }}
+      </span>
+    </div>
+     <div [formGroup]="form" >
+       <lib-date-packer
+        [placeholder]="'RISK_ACTION.SELECT_DATE' | translate"
+        [control]="form.get('startDate')!"
+        [controlNameInput]="'startDate'">
+      </lib-date-packer>
+    </div>
+    </div>
+  </div>
+
+  <div class="tabs flex flex-wrap items-center gap-4 border-b border-gray_light my-6">
+    @for(tab of tabs ; track tab){
+    <button (click)="selectTab(tab.id)" [class.active_tab]="selectedTabId === tab.id"
+      class="flex justify-center items-center gap-1 font-medium px-2 py-3 min-w-10">
+      <i [class]="tab.icon" class="fi"></i>
+      <span>{{ tab.name }}</span>
+    </button>
+    }
+
+  </div>
+  @if (selectedTabId) {
+<div class="table_notify">
+  @for (not of NotificationsData; track not) {
+    <div class="notification_item flex items-center gap-4 px-3 py-4">
+
+      <div class="avatar">
+        <img src="images/icons/notify.svg" alt="">
+      </div>
+
+      <div class="relative content w-full">
+        <div class="flex gap-2 justify-between items-center">
+          @if (!loading_notification) {
+            <p class="text-sm font-semibold text-gray-700">{{ not.notificationTitle }}</p>
+            <p class="text-xs text-gray-400 font-normal">
+              {{ not.createdDate | date: 'MMM d, hh:mm a' }}
+            </p>
+          } @else {
+            <p-skeleton width="25rem" styleClass="mb-2"></p-skeleton>
+          }
+        </div>
+
+        @if (!loading_notification) {
+         <div class="">
+           <p class="text-sm text-gray-500">{{ not.notificationContent }}</p>
+          <p class="font-bold forget">{{ not.notificationFrom }}</p>
+         </div>
+        } @else {
+          <p-skeleton width="25rem" styleClass="mb-2"></p-skeleton>
+        }
+      </div>
+
+    </div>
+  }
+</div>
+
+  }
+
+
+  @if(NotificationsData.length===0){
+  <div class="text-center my-3">
+    <img class="m-auto" src="images/notification_bell.svg" alt="">
+    <h1 class="empty_state mt-[31px] mb-2.5">{{'NOTIFICATION_SETTING.no_notification' | translate}}</h1>
+    <p class="para_empty_state">{{'NOTIFICATION_SETTING.par_no_notification' | translate}}</p>
+  </div>
+  }
+  @if(NotificationsData){
+  <lib-pagination (paginationChanged)="getNotifications(selectedTabId)"></lib-pagination>}
+
+</section>

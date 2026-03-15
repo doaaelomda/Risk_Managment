@@ -1,0 +1,52 @@
+<section>
+  <div class="header flex items-center justify-between flex-wrap mb-4">
+    <div class="title flex items-center gap-4 flex-wrap ">
+      @if (loadDataThirdParty) {
+        <p-skeleton width="15rem" styleClass="mb-2" />
+      } @else {
+        <h2 class="text-2xl font-semibold text-gray-800">
+          {{ thirdPartyData?.name }}
+        </h2>
+
+      }
+    </div>
+
+    <div class="content flex flex-wrap items-center gap-4">
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">
+          {{ 'THIRD_PARTY.PRIMARY_EMAIL' | translate }}:
+        </p>
+        @if (loadDataThirdParty) {
+          <p-skeleton width="15rem" styleClass="mb-2" />
+        } @else {
+          <span class="font-semibold text-gray-800 text-base">
+            {{ thirdPartyData?.primaryEmail ?? '-' }}
+          </span>
+        }
+      </div>
+
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">
+          {{ 'THIRD_PARTY.PRIMARY_PHONE' | translate }}:
+        </p>
+        <span class="font-semibold text-gray-800 text-base">
+          {{ thirdPartyData?.primaryPhone ?? '-' }}
+        </span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">
+          {{ 'THIRD_PARTY.STATUS' | translate }}:
+        </p>
+        <span class="font-semibold badge">
+          {{ thirdPartyData?.statusTypeName ?? '-' }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <lib-shared-tabs [permissionFeature]="{module:'THIRDPARTIES' , feature:'THIRDPARTY'}"
+ [tabs]="tabs" [hasAttachments]="false" [hasComments]="false"></lib-shared-tabs>
+
+  <router-outlet></router-outlet>
+</section>

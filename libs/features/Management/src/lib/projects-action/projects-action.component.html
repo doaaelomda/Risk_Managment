@@ -1,0 +1,152 @@
+<section class="form_sec">
+  <div class="header border-b border-gray_light pb-6 mb-6">
+    <h2 class="text-lg font-medium text-[#101828]">
+      {{ updateFlag ? ('PROJECT.UPDATE_TITLE' | translate) : ('PROJECT.ADD_TITLE' | translate) }}
+    </h2>
+  </div>
+
+  <form [formGroup]="projectForm" class="grid grid-cols-12 gap-6 mb-6">
+
+    <!-- Name -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'PROJECT.NAME_PLACEHOLDER' | translate"
+        [inputLabel]="'PROJECT.NAME' | translate"
+        [control]="projectForm.get('name')!"
+        [controlNameInput]="'name'">
+      </lib-input-text>
+    </div>
+
+    <!-- Name (Arabic) -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'PROJECT.NAME_AR_PLACEHOLDER' | translate"
+        [inputLabel]="'PROJECT.NAME_AR' | translate"
+        [control]="projectForm.get('nameAr')!"
+        [controlNameInput]="'nameAr'">
+      </lib-input-text>
+    </div>
+
+    <!-- Start Date -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-date-packer
+        [placeholder]="'PROJECT.START_DATE_PLACEHOLDER' | translate"
+        [inputLabel]="'PROJECT.START_DATE' | translate"
+        [control]="projectForm.get('startDate')!"
+        [controlNameInput]="'startDate'">
+      </lib-date-packer>
+    </div>
+
+    <!-- End Date -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-date-packer
+        [placeholder]="'PROJECT.END_DATE_PLACEHOLDER' | translate"
+        [inputLabel]="'PROJECT.END_DATE' | translate"
+        [control]="projectForm.get('endDate')!"
+        [controlNameInput]="'endDate'">
+      </lib-date-packer>
+    </div>
+
+    <!-- Initiative -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'PROJECT.INITIATIVE_PLACEHOLDER' | translate"
+        [label]="'PROJECT.INITIATIVE' | translate"
+        [control]="projectForm.get('initiativeID')!"
+        [formControlNameInput]="'initiativeID'"
+        [options]="initiatives"
+        [optionLabel]="'label'"
+        [optionValue]="'id'">
+      </lib-ui-dropdown>
+    </div>
+
+    <!-- Project Manager Role -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-role-dropdown
+        [placeholder]="'PROJECT.MANAGER_ROLE_PLACEHOLDER' | translate"
+        [label]="'PROJECT.MANAGER_ROLE' | translate"
+        [control]="projectForm.get('projectManagerRoleID')!"
+        [formControlNameInput]="'projectManagerRoleID'"
+        [options]="managerRoles"
+        [optionLabel]="'label'"
+        [optionValue]="'id'">
+      </lib-role-dropdown>
+    </div>
+
+    <!-- Status -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'PROJECT.STATUS_PLACEHOLDER' | translate"
+        [label]="'PROJECT.STATUS' | translate"
+        [control]="projectForm.get('projectStatusTypeID')!"
+        [formControlNameInput]="'projectStatusTypeID'"
+        [options]="statusTypes"
+        [optionLabel]="'label'"
+        [optionValue]="'id'">
+      </lib-ui-dropdown>
+    </div>
+
+    <!-- Priority Level -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'PROJECT.PRIORITY_PLACEHOLDER' | translate"
+        [label]="'PROJECT.PRIORITY' | translate"
+        [control]="projectForm.get('projectPriorityLevelTypeID')!"
+        [formControlNameInput]="'projectPriorityLevelTypeID'"
+        [options]="priorityLevels"
+        [optionLabel]="'label'"
+        [optionValue]="'id'">
+      </lib-ui-dropdown>
+    </div>
+
+    <!-- Description -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-textarea-ui
+        [placeholder]="'PROJECT.DESCRIPTION_PLACEHOLDER' | translate"
+        [inputLabel]="'PROJECT.DESCRIPTION' | translate"
+        [control]="projectForm.get('description')!"
+        [controlNameInput]="'description'">
+      </lib-textarea-ui>
+    </div>
+
+    <!-- Description (Arabic) -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-textarea-ui
+        [placeholder]="'PROJECT.DESCRIPTION_AR_PLACEHOLDER' | translate"
+        [inputLabel]="'PROJECT.DESCRIPTION_AR' | translate"
+        [control]="projectForm.get('descriptionAr')!"
+        [controlNameInput]="'descriptionAr'">
+      </lib-textarea-ui>
+    </div>
+
+    <!-- Progress -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-number
+        [placeholder]="'PROJECT.PROGRESS_PLACEHOLDER' | translate"
+        [inputLabel]="'PROJECT.PROGRESS' | translate"
+        [control]="projectForm.get('progressPercentage')!"
+        [controlNameInput]="'progressPercentage'">
+      </lib-input-number>
+    </div>
+
+    <!-- Budget -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-currency-input
+        [placeholder]="'PROJECT.BUDGET_PLACEHOLDER' | translate"
+        [inputLabel]="'PROJECT.BUDGET' | translate"
+        [control]="projectForm.get('budget')!"
+        [controlNameInput]="'budget'">
+      </lib-currency-input>
+    </div>
+  </form>
+
+  <div class="col-span-12 flex items-center gap-4 justify-end py-6 border-t border-gray_light">
+    <div class="action_btn">
+      <p-button
+        [loading]="isLoading"
+        [label]="'BUTTONS.SAVE' | translate"
+        (onClick)="submit()">
+      </p-button>
+    </div>
+  </div>
+</section>

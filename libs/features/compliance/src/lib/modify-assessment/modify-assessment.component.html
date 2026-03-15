@@ -1,0 +1,177 @@
+<!-- Add Assessment Controls -->
+<div class="action_section mb-6">
+  <p-accordion class="w-full" [activeIndex]="0">
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div class="flex items-center gap-4">
+          <h2>{{ 'RISK_VIEW.MAIN_INFORMATION' | translate }}</h2>
+        </div>
+      </ng-template>
+
+      <form [formGroup]="form" class="grid grid-cols-12 gap-6">
+        <div class="col-span-12 pb-4 border-b">
+          <lib-input-text [placeholder]="'SETTING.NAME' | translate" [control]="form.get('name')!"
+            [inputLabel]="'SETTING.NAME' | translate" [controlNameInput]="'name'" [validations]="nameValidation">
+          </lib-input-text>
+        </div>
+
+        <div class="col-span-12 pb-4 border-b">
+          <lib-textarea-ui [placeholder]="'SETTING.description' | translate"
+            [control]="form.get('description')!" [inputLabel]="'SETTING.description' | translate"
+            [controlNameInput]="'description'">
+          </lib-textarea-ui>
+        </div>
+        <div class="col-span-12 grid grid-cols-12 pb-4 border-b gap-4">
+          <div class="col-span-12 lg:col-span-6">
+            <lib-date-packer class="col-span-6" [inputLabel]="'RISK_MANAGMENT.START_DATE'"
+              [validations]="dateValidation" [placeholder]="'PLACEHOLDERS.Select_Date' | translate"
+              [control]="form.get('startDate')!" [controlNameInput]="'startDate'">
+            </lib-date-packer>
+          </div>
+          <div class="col-span-12 lg:col-span-6">
+            <lib-date-packer [validations]="dateValidation" class="col-span-6" [inputLabel]="'RISK_MANAGMENT.EXPECTED_CLOSE_DATE'"
+              [placeholder]="'PLACEHOLDERS.Select_Date' | translate"
+              [control]="form.get('expectedCloseDate')!" [controlNameInput]="'expectedCloseDate'">
+            </lib-date-packer>
+          </div>
+        </div>
+
+        <!-- <div class="col-span-12 grid grid-cols-12 pb-4 border-b gap-4">
+          <div class="col-span-12 lg:col-span-6">
+            <lib-date-packer [validations]="dateValidation" class="col-span-6" [inputLabel]="'RISK_MANAGMENT.CLOSEDATE'"
+              [placeholder]="'PLACEHOLDERS.Select_Date' | translate" [control]="form.get('closeDate')!"
+              [controlNameInput]="'closeDate'">
+            </lib-date-packer>
+          </div>
+
+          <div class="col-span-12 lg:col-span-6">
+            <lib-date-packer class="col-span-6" [inputLabel]="'RISK_MANAGMENT.Evidencegatheringduedate'"
+              [validations]="dateValidation" [placeholder]="'PLACEHOLDERS.Select_Date' | translate"
+              [control]="form.get('evidenceGatheringDueDate')!"
+              [controlNameInput]="'evidenceGatheringDueDate'">
+            </lib-date-packer>
+          </div>
+        </div> -->
+        <div class="col-span-12 grid grid-cols-12 pb-4 border-b gap-4">
+          <div class="col-span-12 lg:col-span-6">
+            <lib-role-dropdown [options]="rolesLookUpData" [placeholder]="'RISK_ACTION.RESPONSIBLE_ROLE' | translate"
+              [label]="'RISK_ACTION.RESPONSIBLE_ROLE' | translate" [control]="form.get('responsableRoleID')!"
+              [formControlNameInput]="'responsableRoleID'" [optionLabel]="'label'" [optionValue]="'id'">
+            </lib-role-dropdown>
+          </div>
+          <div class="col-span-12 lg:col-span-6">
+            <lib-user-dropdown [options]="usersLookUpData" [placeholder]="'RISK_ACTION.RESPONSIBLE_USER' | translate"
+              [label]="'RISK_ACTION.RESPONSIBLE_USER' | translate" [control]="form.get('responsibleUserID')!"
+              [formControlNameInput]="'responsibleUserID'" [optionLabel]="'userName'" [optionValue]="'id'">
+            </lib-user-dropdown>
+          </div>
+        </div>
+        <div class="col-span-12 grid grid-cols-12 pb-4 border-b gap-4">
+          <div class="col-span-12 lg:col-span-6">
+            <lib-dropdown-checkbox [label]="'RISK_ACTION.Assessors' | translate"
+              [placeholder]="'RISK_ACTION.Assessors' | translate" [control]="form.get('assessorUserIDs')!"
+              [options]="assessorsLookUpData" [optionLabel]="'userName'" [optionValue]="'id'"
+              [formControlNameInput]="'assessorUserIDs'">
+            </lib-dropdown-checkbox>
+          </div>
+
+               <div class="col-span-12 lg:col-span-6">
+            <lib-ui-dropdown [placeholder]="'PLACEHOLDERS.Select_Stage' " [label]="'RISK_MANAGMENT.STAGE' "
+              [control]="form.get('complianceAssessmentStageID')!" [options]="assessmnetStage"
+              [optionLabel]="'label'" [optionValue]="'id'" [formControlNameInput]="'complianceAssessmentStageID'">
+            </lib-ui-dropdown>
+          </div>
+          <!-- <div class="col-span-12 lg:col-span-6">
+            <lib-ui-dropdown [options]="statusList" [placeholder]="'RISK_MANAGMENT.STATUS' | translate"
+              [validations]="statusValidation" [label]="'RISK_MANAGMENT.STATUS' | translate"
+              [control]="form.get('complianceAssessmentStatusTypeID')!"
+              [formControlNameInput]="'complianceAssessmentStatusTypeID'" [optionLabel]="'label'" [optionValue]="'id'">
+            </lib-ui-dropdown>
+          </div> -->
+        </div>
+        <!-- <div class="col-span-12 grid grid-cols-12 pb-4 border-b gap-4"> -->
+
+          <!-- <div class="col-span-12 lg:col-span-6">
+            <div class="flex justify-start items-center gap-2 h-full w-full">
+              <label for=""> {{'ASSESSMENTS.SHOW_PREVIOUS_ASSESSMENT'|translate}} </label>
+                   <lib-switch-ui  [controlNameInput]="'inclucePreviousAssessment'" [control]="form.get('inclucePreviousAssessment')!"></lib-switch-ui>
+            </div>
+
+          </div> -->
+        <!-- </div> -->
+         <!-- <div class="col-span-12 grid grid-cols-12 pb-4 border-b gap-4">
+          <div class="col-span-12 lg:col-span-4">
+            <div class="flex justify-start items-center gap-2 h-full w-full">
+              <label for=""> {{'ASSESSMENTS.REQUIREMENT_FLAG'|translate}} </label>
+                   <lib-switch-ui  [controlNameInput]="'incluceRequirementAssessment'" [control]="form.get('incluceRequirementAssessment')!"></lib-switch-ui>
+            </div>
+
+          </div>
+          <div class="col-span-12 lg:col-span-4">
+            <div class="flex justify-start items-center gap-2 h-full w-full">
+              <label for=""> {{'ASSESSMENTS.SHOW_PROCEDURE'|translate}} </label>
+                   <lib-switch-ui  [controlNameInput]="'incluceProcedureAssessment'" [control]="form.get('incluceProcedureAssessment')!"></lib-switch-ui>
+            </div>
+
+          </div>
+          <div class="col-span-12 lg:col-span-4">
+            <div class="flex justify-start items-center gap-2 h-full w-full">
+              <label for=""> {{'ASSESSMENTS.SHOW_MATURITY'|translate}} </label>
+                   <lib-switch-ui  [controlNameInput]="'incluceMaturityAssessment'" [control]="form.get('incluceMaturityAssessment')!"></lib-switch-ui>
+            </div>
+
+          </div>
+         </div> -->
+
+
+        @if(form && !assessmentId ){
+        <div class="col-span-6 gap-4 form_group">
+          <label class="mb-5" for="">{{ 'Control_view.scope' | translate }}</label>
+          <div class="grid grid-cols-6 gap-2">
+            @for (type of AssessmentStatusType; track $index) {
+            <div class="col-span-3 flex items-center gap-2">
+              <p-radioButton [value]="type.id"  formControlName="complianceAssessmentScopeTypeID"
+                [inputId]="'scope_' + type.id"  name="complianceAssessmentScopeTypeID"
+                (click)="onScopeClick(type.id, $index)"></p-radioButton>
+              <label [for]="'scope_' + type.id">
+                {{ type.label | translate }}
+              </label>
+            </div>
+            }
+
+
+
+          </div>
+
+
+          <!-- Units Dropdown -->
+          @if(showUnits && !assessmentId ){
+          <div class="col-span-12 lg:col-span-6 mt-3">
+            <lib-ui-dropdown [placeholder]="'Select Compliance Document' " [label]="'Compliance Document' "
+              [control]="form.get('complianceDocumentID')!" [options]="Units" [optionLabel]="'label'"
+              [optionValue]="'id'" [formControlNameInput]="'complianceDocumentID'">
+            </lib-ui-dropdown>
+          </div>
+          }
+        </div>
+
+        }
+
+
+      </form>
+
+      <div class="flex justify-end gap-4 py-4">
+        <div class="cancel_btn">
+          <button (click)="navigateBack()">
+            {{ 'RISK_ACTION.CANCEL' | translate }}
+          </button>
+        </div>
+        <div class="action_btn">
+          <p-button [loading]="isSaving" [label]="'RISK_MANAGMENT.SAVE_CHANGES' | translate" [outlined]="true"
+            severity="secondary" (onClick)="submit()">
+          </p-button>
+        </div>
+      </div>
+    </p-accordionTab>
+  </p-accordion>
+</div>

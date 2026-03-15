@@ -1,0 +1,253 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+
+
+<section>
+  <lib-new-table
+    [loading]="loading"
+    [table_data]="tableData"
+    [table_title]="labels.table | translate"
+    [badge_title]="labels.badge | translate"
+    [dataViewId]="dataEntityId"
+    [entityID_Name]="entityIdField"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="actionItems"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="{type:'route', data:viewRoute}"
+    [table_actions_permissions]="{ module: 'GOVERNANCE', feature: 'APPROVAL', action: 'VIEW' }"
+  >
+  @if(_PermissionSystemService.can('GOVERNANCE' , 'APPROVAL' , 'ADD')){
+
+  <button
+    (click)="handleAddClick()"
+    addition_action
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+  >
+    <i class="fi fi-br-plus w-5 h-5"></i>
+    <span>{{ labels.add | translate }}</span>
+  </button>
+  }
+  </lib-new-table>
+</section>
+
+<!-- 🔸 Delete Confirmation Popup -->
+<lib-delete-confirm-popup
+  [titleDelete]="labels.titleDelete | translate"
+  [descriptionDelete]="labels.descDelete | translate"
+  [visibleInput]="deleteModalVisible"
+  (hideEmiter)="toggleDeleteModal(false)"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <!-- Cancel -->
+    <div class="cancel_btn">
+      <button class="w-40" (click)="toggleDeleteModal(false)">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <!-- Confirm Delete -->
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="delete()"
+        [loading]="loadingDelete"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+<div class="action_dailog">
+  <p-dialog
+    [(visible)]="visible_dialog"
+    [modal]="true"
+    [dismissableMask]="true"
+    (onHide)="closeDialog()"
+    [draggable]="false"
+    styleClass="w-[40rem] min-h-[15rem]"
+    [position]="'center'"
+  >
+    <ng-template pTemplate="header">
+      <h3 class="text-gray-800 font-bold text-1xl">
+        {{
+          (selectedRow ? 'VERSION.UPDATE_APPROVAL' : 'VERSION.ADD_NEW_APPROVAL')
+            | translate
+        }}
+      </h3></ng-template
+    >
+
+    <div class="border-b border-gray_light mb-4"></div>
+
+    <!-- Assignee Type -->
+    <h6 class="header-para mb-2.5">
+      {{ 'VERSION.ASSIGNEE_TYPE' | translate }}
+    </h6>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- USER -->
+      <lib-radio-option
+        label="VERSION.USER_ASSIGNEE"
+        value="user"
+        name="assignee_type"
+        [(model)]="selectedAssigne"
+        image="images/icons/approvalUser.svg"
+        inputId="typeUser"
+        (clicked)="handleAssigneUser()"
+      ></lib-radio-option>
+
+      <!-- ROLE -->
+      <lib-radio-option
+        label="VERSION.ROLE_ASSIGNEE"
+        value="role"
+        name="assignee_type"
+        [(model)]="selectedAssigne"
+        image="images/icons/userApproval.svg"
+        inputId="typeRole"
+        (clicked)="handleAssigneRole()"
+      ></lib-radio-option>
+
+    </div>
+
+    <form [formGroup]="form">
+        @if(selectedAssigne === 'user'){
+           <div class="field flex flex-wrap items-center py-4">
+      <label class="font-bold w-1/4">{{ 'SETTING.USER' | translate }}</label>
+      <div class="w-3/4">
+        <lib-user-dropdown
+          [placeholder]="'SETTING.USER' | translate"
+          [control]="form.get('assigneeUserID')!"
+          [formControlNameInput]="'assigneeUserID'"
+          [options]="users"
+          optionLabel="name"
+          optionValue="id"
+        ></lib-user-dropdown>
+      </div>
+    </div>
+    }
+
+
+        @if(selectedAssigne === 'role'){
+
+          <div class="field flex flex-wrap items-center py-4">
+            <label class="font-bold w-1/4">{{ 'SETTING.ROLES' | translate }}</label>
+            <div class="w-3/4">
+              <lib-role-dropdown
+                [placeholder]="'SETTING.ROLES' | translate"
+                [control]="form.get('assigneeRoleID')!"
+                [formControlNameInput]="'assigneeRoleID'"
+                [options]="roles"
+                optionLabel="label"
+                optionValue="id"
+              ></lib-role-dropdown>
+            </div>
+          </div>
+    }
+
+
+
+    <div class="form_group field flex flex-wrap items-center py-4">
+         <label class="font-bold w-1/4">Is Approval Required</label>
+        <div class="w-3/4">
+          <lib-switch-ui [controlNameInput]="'isApprovalRequired'" [control]="form.get('isApprovalRequired')!">
+          </lib-switch-ui>
+        </div>
+    </div>
+    </form>
+    <!-- FORM USER -->
+
+    <!-- FORM ROLE -->
+
+
+
+
+    <!-- COMMON FIELDS -->
+    <!-- <form [formGroup]="form">
+      <div class="field flex flex-wrap items-center py-4">
+        <label class="font-bold w-1/4">{{
+          'VERSION.REQUEST_DATE' | translate
+        }}</label>
+        <div class="w-3/4">
+          <lib-date-packer
+            [placeholder]="'VERSION.REQUEST_DATE_PLACEHOLDER' | translate"
+            [control]="form.get('approvalRequestDate')!"
+            [controlNameInput]="'approvalRequestDate'"
+          ></lib-date-packer>
+        </div>
+      </div>
+
+      <div class="field flex flex-wrap items-center py-4">
+        <label class="font-bold w-1/4">{{
+          'VERSION.DUE_DATE' | translate
+        }}</label>
+        <div class="w-3/4">
+          <lib-date-packer
+            [placeholder]="'VERSION.DUE_DATE_PLACEHOLDER' | translate"
+            [control]="form.get('approvalDueDate')!"
+            [controlNameInput]="'approvalDueDate'"
+          ></lib-date-packer>
+        </div>
+      </div>
+
+      <div class="field flex flex-wrap items-center py-4">
+        <label class="font-bold w-1/4">{{
+          'VERSION.APPROVAL_DATE' | translate
+        }}</label>
+        <div class="w-3/4">
+          <lib-date-packer
+            [placeholder]="'VERSION.APPROVAL_DATE_PLACEHOLDER' | translate"
+            [control]="form.get('approvalDate')!"
+            [controlNameInput]="'approvalDate'"
+          ></lib-date-packer>
+        </div>
+      </div>
+
+      <div class="field flex flex-wrap items-center py-4">
+        <label class="font-bold w-1/4">{{
+          'VERSION.STATUS' | translate
+        }}</label>
+        <div class="w-3/4">
+          <lib-ui-dropdown
+            [placeholder]="'VERSION.STATUS_PLACEHOLDER' | translate"
+            [control]="form.get('govDocumentApprovalStatusTypeID')!"
+            [formControlNameInput]="'govDocumentApprovalStatusTypeID'"
+            [options]="approvalStatuses"
+            optionLabel="label"
+            optionValue="id"
+          ></lib-ui-dropdown>
+        </div>
+      </div>
+
+      <div class="field flex flex-wrap items-start py-4">
+        <label class="font-bold w-1/4">{{
+          'VERSION.DECISION_NOTE' | translate
+        }}</label>
+        <div class="w-3/4">
+          <lib-textarea-ui
+            [control]="form.get('approvalDecisionNote')!"
+            [controlNameInput]="'approvalDecisionNote'"
+            [placeholder]="'VERSION.DECISION_NOTE' | translate"
+          ></lib-textarea-ui>
+        </div>
+      </div>
+    </form> -->
+
+    <!-- FOOTER -->
+    <div
+      class="col-span-12 flex items-center gap-4 justify-end py-6 border-t border-gray_light"
+    >
+      <div class="cancel_btn">
+        <button (click)="closeDialog()">
+          {{ 'RISK_MANAGMENT.Cancel' | translate }}
+        </button>
+      </div>
+
+      <div class="action_btn">
+        <p-button
+          [disabled]="cannotSave()"
+          [label]="'RISK_MANAGMENT.SaveChanges' | translate"
+          [loading]="isLoading"
+          (onClick)="submit()"
+        ></p-button>
+      </div>
+    </div>
+  </p-dialog>
+</div>

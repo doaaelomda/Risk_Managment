@@ -1,0 +1,167 @@
+<div class="data-container flex flex-col gap-[18px]">
+  <h2 class="text-lg font-semibold text-gray-800">{{ viewedData?.name }}</h2>
+  <div class="grid grid-cols-12 gap-4">
+    <div class="col-span-12 lg:col-span-3 md:col-span-6">
+      <div class="flex gap-4 items-center item">
+        <div class="icon">
+          <i class="fi fi-rr-calendar"></i>
+        </div>
+        <div class="text flex flex-col">
+          <span class="label">
+            {{ 'MEETINGS.DATE' | translate }}
+          </span>
+          <span class="value">
+            {{
+              viewedData?.meetingDate ? (viewedData?.meetingDate | date) : '-'
+            }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-span-12 lg:col-span-3 md:col-span-6">
+      <div class="flex gap-4 items-center item">
+        <div class="icon">
+          <i class="fi fi-rr-calendar"></i>
+        </div>
+        <div class="text flex flex-col">
+          <span class="label">
+            {{ 'MEETINGS.NEXT_DATE' | translate }}
+          </span>
+          <span class="value">
+            {{
+              viewedData?.nextMeetingDate
+                ? (viewedData?.nextMeetingDate | date)
+                : '-'
+            }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-span-12 lg:col-span-3 md:col-span-6">
+      <div class="flex gap-4 items-center item">
+        <div class="icon">
+          <i class="fi fi-rr-clock"></i>
+        </div>
+        <div class="text flex flex-col">
+          <span class="label">
+            {{ 'MEETINGS.START_TIME' | translate }}
+          </span>
+          <span class="value">
+            {{ viewedData?.startTime ? (viewedData?.startTime | date:'HH:mm') : '-' }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-span-12 lg:col-span-3 md:col-span-6">
+      <div class="flex gap-4 items-center item">
+        <div class="icon">
+          <i class="fi fi-rr-clock"></i>
+        </div>
+        <div class="text flex flex-col">
+          <span class="label">
+            {{ 'MEETINGS.END_TIME' | translate }}
+          </span>
+          <span class="value">
+            {{ viewedData?.endTime ? (viewedData?.endTime | date:'HH:mm') : '-' }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-span-12 lg:col-span-3 md:col-span-6">
+      <div class="flex gap-4 items-center item">
+        <div class="icon">
+          <i class="fi fi-rs-marker"></i>
+        </div>
+        <div class="text flex flex-col">
+          <span class="label">
+            {{ 'MEETINGS.LOCATION' | translate }}
+          </span>
+          <span class="value">
+            {{ viewedData?.location || '-' }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-span-12 lg:col-span-3 md:col-span-6">
+      <div class="flex gap-4 items-center item">
+        <div class="icon">
+          <i class="fi fi-rr-link"></i>
+        </div>
+        <div class="text flex flex-col">
+          <span class="label">
+            {{ 'MEETINGS.LINK' | translate }}
+          </span>
+          <a
+            class="value link"
+            target="_blank"
+            [href]="viewedData?.meetingLink"
+          >
+            {{ 'MEETINGS.JOIN_THE_CALL' | translate }}
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="col-span-12 lg:col-span-3 md:col-span-6">
+      <div class="flex gap-4 items-center item">
+        <div class="icon">
+          <i class="fi fi-rr-portrait"></i>
+        </div>
+        <lib-owner-user
+          [loading]="isLoadingData"
+          [roleOrUser]="'user'"
+          [hasBorder]="false"
+          [title]="'MEETINGS.ORGANIZER' | translate"
+          [postionOwner]="viewedData?.organizerUserName"
+          [userId]="viewedData?.organizerUserID"
+        >
+        </lib-owner-user>
+      </div>
+    </div>
+    <div class="col-span-12 lg:col-span-3 md:col-span-6">
+      <div class="flex gap-4 items-center item">
+        <div class="icon">
+          <i class="fi fi-rr-hourglass"></i>
+        </div>
+        <div class="text flex flex-col">
+          <span class="label">
+            {{ 'MEETINGS.DURATION' | translate }}
+          </span>
+          <span class="value">
+            {{ (viewedData?.duration) + ' ' + ('MEETINGS.DURATION_MINUTES'|translate) || '-' }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-span-12 lg:col-span-3 md:col-span-6">
+      <div class="flex gap-4 items-center item">
+        <div class="icon">
+          <i class="fi fi-rs-building"></i>
+        </div>
+        <div class="text flex flex-col">
+          <span class="label">
+            {{ 'MEETINGS.DEPARTMENT' | translate }}
+          </span>
+          <span class="value">
+            {{ viewedData?.organizerDepartment || '-' }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="flex flex-col gap-2 my-2">
+  <h2 class="text-[#101828] text-lg font-semibold">
+    {{ 'MEETINGS.DESCRIPTION' | translate }}
+  </h2>
+  <lib-shared-description
+    [description]="viewedData?.description"
+  ></lib-shared-description>
+</div>
+<div class="flex flex-col gap-2">
+  <h2 class="text-[#101828] text-lg font-semibold">
+    {{ 'MEETINGS.OBJECTIVE' | translate }}
+  </h2>
+  <lib-shared-description
+    [description]="viewedData?.objective"
+  ></lib-shared-description>
+</div>

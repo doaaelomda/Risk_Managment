@@ -1,0 +1,26 @@
+<div class="w-full h-screen flex flex-col bg-white-color">
+  <div class="flex-1 flex flex-col items-center justify-center">
+    <div class="rounded-2xl max-w-md flex flex-col card-forget">
+      <img src="/images/icons/message.png" alt="">
+      <h1 class="text-gray-700 text-3xl font-semibold text-center mb-3">Check your email</h1>
+      <div class="text-gray-500 text-sm font-normal text-center pb-8 ">
+        We sent a verification code to
+        <p class="font-semibold">{{current_user_email}}</p>
+      </div>
+      <div class="routing_button m-auto mb-8">
+        <p-button (onClick)="handleRouting()" label="Enter code manually" />
+      </div>
+      <p routerLink="/auth/login"
+        class="text-gray-500 font-medium text-sm gap-2  flex m-auto items-center  hover:cursor-pointer ">
+        <i class="fi fi-rr-arrow-small-left text-2xl"></i>
+        Back to log in
+      </p>
+    </div>
+  </div>
+  <div class="w-3/4 mb-24 mx-auto">
+    <lib-steper [currentStepIndex]="0" [stepLabels]=stepsLabels [stepslabelspara]="stepslabelspara"></lib-steper>
+  </div>
+  <p class="absolute bottom-4 left-6 text-sm  text-gray-500 font-normal">
+    © GRC ORBITE 2077
+  </p>
+</div>

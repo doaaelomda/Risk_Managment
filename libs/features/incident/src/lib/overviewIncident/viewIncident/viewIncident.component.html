@@ -1,0 +1,8 @@
+<div class="grid grid-cols-12 gap-6">
+    <div [ngClass]="hasActions ? 'col-span-8' : 'col-span-12'">
+        <lib-shared-overview [dataLoading]="loadDataIncidentts" [data]="IncidenttsData" [entries]="entries"></lib-shared-overview>
+    </div>
+    <div [hidden]="!hasActions" class="col-span-4">
+        <lib-system-actions (foundActionEmitter)="onFoundAction($event)" [dataEntityTypeId]="51" [entityId]="IncidenttId"></lib-system-actions>
+    </div>
+</div>

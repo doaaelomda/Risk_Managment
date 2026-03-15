@@ -1,0 +1,48 @@
+<!-- handle new table -->
+<section>
+   <lib-new-table
+    [loading]="isLoading"
+    [table_data]="dataTable"
+    [table_title]="'MAIN_INFO.Gov_Document' | translate"
+    [badge_title]="'MAIN_INFO.Gov_Document' | translate"
+    [dataViewId]="30"
+    [entityID_Name]="'complianceDocumentID'"
+    [isShownAction]="true"
+    (payload_emiter)="handleTableChange($event)"
+    [action_items]="menuItems"
+    (currentActionRow)="setSelectedRow($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{ module: 'COMPLIANCE', feature: 'COMPLIANCEDOCUMENT', action: 'VIEW' }"
+
+  >
+  @if(_PermissionSystemService.can('COMPLIANCE' , 'COMPLIANCEDOCUMENT' , 'ADD')){
+        <button
+      addition_action
+      (click)="addDocument()"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+    >
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'MAIN_INFO.ButtonDoc' | translate }}</span>
+      <i class="fi fi-rr-angle-small-down"></i>
+    </button>
+  }
+  </lib-new-table>
+</section>
+
+<!-- Delete Popup -->
+<lib-delete-confirm-popup
+  [titleDelete]="'RISK_MANAGMENT.DELETE_DOC_TITLE'"
+  [descriptionDelete]="'RISK_MANAGMENT.DELETE_DOC_DESC'"
+(hideEmiter)="closeDeleteModal()" [visibleInput]="showDeletePopup">
+  <div class="flex flex-wrap items-center gap-4  justify-end" actions>
+    <div class="cancel_btn ">
+      <button class="w-40" (click)="closeDeleteModal()">
+         {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button (onClick)="confirmDelete()" [loading]="isDeleting" [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

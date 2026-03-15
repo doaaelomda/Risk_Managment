@@ -1,0 +1,69 @@
+<section>
+  <div class="header flex items-center justify-between flex-wrap mb-12">
+    <div class="title flex items-center gap-4 flex-wrap">
+      @if (loadingData) {
+      <p-skeleton width="15rem" styleClass="mb-2" />
+      <p-skeleton width="10rem" styleClass="mb-2" />
+      } @else {
+      <h2 class="text-2xl font-semibold text-gray-800">
+        {{ dataRisk ? dataRisk?.riskTitle : '-' }}
+        <h6 class="text-primary font-bold text-2xl py-4">
+          {{ Data?.name ?? '-' }}
+        </h6>
+      </h2>
+      <p class="text-gray_color m-0">
+        {{ dataRisk?.riskCode ? '(' + dataRisk.riskCode + ')' : '-' }}
+      </p>
+      }
+    </div>
+    <div class="content flex flex-wrap items-center gap-4">
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">
+          {{ 'TABS.RISK_RATING' | translate }}
+        </p>
+        <span class="badge Red">{{ dataRisk?.riskImpactName ?? '-' }}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">
+          {{ 'TABS.MITIGATION' | translate }}
+        </p>
+        <span class="font-semibold badge" [ngClass]="dataRisk?.riskResponseTypeColor">{{
+          dataRisk?.riskResponseTypeName ?? '-'
+        }}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">
+          {{ 'TABS.STATUS' | translate }}
+        </p>
+
+        <span class="font-semibold">{{
+          dataRisk?.riskMitigationPlanStatus ?? '-'
+        }}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">
+          {{ 'TABS.DEPARTMENT' | translate }}
+        </p>
+
+        @if (dataRisk?.organizationalUnits?.length > 0) {
+        <ng-container>
+          @for (unit of dataRisk.organizationalUnits; track $index) {
+          <ng-container>
+            @if (unit?.label) {
+            <span class="font-semibold">
+              {{ unit.label }}
+            </span>
+            }
+          </ng-container>
+          }
+        </ng-container>
+        }@else {
+        <span class="font-semibold">-</span>
+        }
+
+      </div>
+    </div>
+  </div>
+   <lib-shared-tabs [permissionFeature]="{module:'RISKS' , feature:'ASSESSMENT'}" [tabs]="tabs"></lib-shared-tabs>
+  <router-outlet></router-outlet>
+</section>

@@ -1,0 +1,1068 @@
+<div class="action_dailog">
+  <p-dialog [dismissableMask]="true" (onHide)="hide_emitter.emit(false)" [(visible)]="show_prop" [modal]="true"
+    [draggable]="false" styleClass="findingViewDialog w-[1000px] h-[660px]">
+    <div class="container_view">
+      <div class="tabs items-center gap-1 border-b border-gray_light grid grid-cols-12 mb-3">
+        @for(tab of tabs; track tab){
+        <button (click)="current_tab = tab.id" [ngClass]="{ active_tab: current_tab === tab.id }"
+          class="flex col-span-4 outline-none justify-center items-center gap-2 font-medium px-4 py-3 min-w-32">
+          <i [class]="tab.icon" class="fi"></i>
+          <span>{{ tab.name }}</span>
+        </button>
+        }
+      </div>
+
+      @switch (current_tab) { @case(1){
+      <div class="w-full flex flex-col gap-3 py-3">
+        @if(FindingData?.title || FindingData?.referenceCode || FindingData?.findingCategoryName ||
+        FindingData?.findingSeverityLevelTypeName || FindingData?.findingSourceTypeName){
+        <div class="flex flex-col gap-2 w-full items-start justify-start">
+          <h2 class="title">{{ 'FINDING.BASIC_INFO' | translate }}</h2>
+          <div class="grid grid-cols-12 py-3 px-6 rounded-lg gap-6 w-full border-[1px] border-[#D0D5DD]">
+            @if(!loading){
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              @if(FindingData?.title){
+              <div
+                class="flex flex-col w-full gap-2 items-start justify-start border-{{currentLanguage === 'ar' ? 'l' : 'r'}}-[1px] border-[#D0D5DD]">
+                <span class="label"> {{ 'FINDING.TITLE' | translate }} </span>
+                <span class="value"> {{ FindingData?.title || '-' }} </span>
+              </div>
+              }
+            </div>
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              @if(FindingData?.referenceCode){
+              <div
+                class="flex flex-col w-full gap-2 items-start justify-start border-{{currentLanguage === 'ar' ? 'l' : 'r'}}-[1px] border-[#D0D5DD]">
+                <span class="label">
+                  {{ 'FINDING.REFERENCE_CODE' | translate }}
+                </span>
+                <span class="value">
+                  {{ FindingData?.referenceCode || '-' }}
+                </span>
+              </div>
+              }
+            </div>
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              @if(FindingData?.findingCategoryName){
+              <div class="flex flex-col w-full gap-2 items-start justify-start">
+                <span class="label">
+                  {{ 'FINDING.CATEGORY' | translate }}
+                </span>
+                <span class="value">
+                  {{ FindingData?.findingCategoryName || '-' }}
+                </span>
+              </div>
+              }
+            </div>
+            <div class="col-span-12 border-b-[1px] border-[#D0D5DD]"></div>
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              @if(FindingData?.findingSeverityLevelTypeName){
+              <div
+                class="flex flex-col w-full gap-2 items-start justify-start border-{{currentLanguage === 'ar' ? 'l' : 'r'}}-[1px] border-[#D0D5DD]">
+                <span class="label">
+                  {{ 'FINDING.SEVERITY_LEVEL' | translate }}
+                </span>
+                <span class="value">
+                  {{ FindingData?.findingSeverityLevelTypeName || '-' }}
+                </span>
+              </div>
+              }
+            </div>
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              @if(FindingData?.findingSourceTypeName){
+              <div class="flex flex-col w-full gap-2 items-start justify-start">
+                <span class="label">
+                  {{ 'FINDING.SOURCE_TYPE' | translate }}
+                </span>
+                <span class="value">
+                  {{ FindingData?.findingSourceTypeName || '-' }}
+                </span>
+              </div>
+              }
+            </div>
+            }@else {
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              <p-skeleton height="3rem"></p-skeleton>
+            </div>
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              <p-skeleton height="3rem"></p-skeleton>
+            </div>
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              <p-skeleton height="3rem"></p-skeleton>
+            </div>
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              <p-skeleton height="3rem"></p-skeleton>
+            </div>
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              <p-skeleton height="3rem"></p-skeleton>
+            </div>
+            }
+          </div>
+        </div>
+        }
+        @if(FindingData?.ownerUserTitle || FindingData?.assigneeUserTitle || FindingData?.verificationUserTitle ||
+        FindingData?.remediationOwnerUserTitle){
+        <div class="flex flex-col gap-2 w-full items-start justify-start">
+          <h2 class="title">
+            {{ 'FINDING.OWNERSHIP_RESPONSIBILITY' | translate }}
+          </h2>
+          <div class="grid grid-cols-12 py-3 px-6 rounded-lg gap-6 w-full border-[1px] border-[#D0D5DD]">
+            @if(!loading){
+            @if(FindingData?.ownerUserTitle){
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              <lib-owner-user [roleOrUser]="'user'" [title]="'FINDING.OWNER_USER' | translate"
+                [image]="FindingData?.ownerUserImage" [subtitle]="FindingData?.ownerUserTitle"></lib-owner-user>
+            </div>
+            }
+            @if(FindingData?.assigneeUserTitle){
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              <lib-owner-user [roleOrUser]="'user'" [title]="'FINDING.ASSIGNEE_USER' | translate"
+                [image]="FindingData?.assigneeUserImage" [subtitle]="FindingData?.assigneeUserTitle"></lib-owner-user>
+            </div>
+            }
+            @if(FindingData?.verificationUserTitle){
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              <lib-owner-user [hasBorder]="false" [roleOrUser]="'user'"
+                [title]="'FINDING.VERIFICATION_USER' | translate" [image]="FindingData?.verificationUserImage"
+                [subtitle]="FindingData?.verificationUserTitle"></lib-owner-user>
+            </div>
+            }
+            @if(FindingData?.remediationOwnerUserTitle){
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              <lib-owner-user [hasBorder]="false" [roleOrUser]="'user'"
+                [title]="'FINDING.REMEDIATION_OWNER_USER' | translate" [image]="FindingData?.remediationOwnerUserImage"
+                [subtitle]="FindingData?.remediationOwnerUserTitle"></lib-owner-user>
+            </div>
+            }
+
+            }@else {
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              <p-skeleton height="3rem"></p-skeleton>
+            </div>
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              <p-skeleton height="3rem"></p-skeleton>
+            </div>
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              <p-skeleton height="3rem"></p-skeleton>
+            </div>
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              <p-skeleton height="3rem"></p-skeleton>
+            </div>
+            }
+          </div>
+        </div>
+        }
+        @if(FindingData?.dueDate || FindingData?.verificationDate || FindingData?.remediationTargetDate){
+        <div class="flex flex-col gap-2 w-full items-start justify-start">
+          <h2 class="title">{{ 'FINDING.DATES_TIMELINE' | translate }}</h2>
+          <div class="grid grid-cols-12 py-3 px-6 rounded-lg gap-6 w-full border-[1px] border-[#D0D5DD]">
+            @if(!loading){
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              @if(FindingData?.dueDate){
+              <div
+                class="flex flex-col w-full gap-2 items-start justify-start border-{{currentLanguage === 'ar' ? 'l' : 'r'}}-[1px] border-[#D0D5DD]">
+                <span class="label">
+                  {{ 'FINDING.DUE_DATE' | translate }}
+                </span>
+                <span class="value flex items-center gap-2">
+                  <i class="fi fi-rr-calendar text-[#344054]"></i>
+                  {{
+                  FindingData?.dueDate ? (FindingData?.dueDate | date) : '-'
+                  }}
+                </span>
+              </div>
+              }
+            </div>
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              @if(FindingData?.verificationDate){
+              <div
+                class="flex flex-col w-full gap-2 items-start justify-start border-{{currentLanguage === 'ar' ? 'l' : 'r'}}-[1px] border-[#D0D5DD]">
+                <span class="label">
+                  {{ 'FINDING.VERIFICATION_DATE' | translate }}
+                </span>
+                <span class="value flex items-center gap-2">
+                  <i class="fi fi-rr-calendar text-[#344054]"></i>
+                  {{
+                  FindingData?.verificationDate
+                  ? (FindingData?.verificationDate | date)
+                  : '-'
+                  }}
+                </span>
+              </div>
+              }
+            </div>
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              @if(FindingData?.remediationTargetDate){
+              <div class="flex flex-col w-full gap-2 items-start justify-start">
+                <span class="label">
+                  {{ 'FINDING.REMEDIATION_TARGET_DATE' | translate }}
+                </span>
+                <span class="value flex items-center gap-2">
+                  <i class="fi fi-rr-calendar text-[#344054]"></i>
+                  {{
+                  FindingData?.remediationTargetDate
+                  ? (FindingData?.remediationTargetDate | date)
+                  : '-'
+                  }}
+                </span>
+              </div>
+              }
+            </div>
+            }@else {
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              <p-skeleton height="3rem"></p-skeleton>
+            </div>
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              <p-skeleton height="3rem"></p-skeleton>
+            </div>
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              <p-skeleton height="3rem"></p-skeleton>
+            </div>
+
+            }
+          </div>
+        </div>
+        }
+        @if(FindingData?.rootCause || FindingData?.impact){
+        <div class="flex flex-col gap-2 w-full items-start justify-start">
+          <h2 class="title">{{ 'FINDING.ROOT_CAUSE_ANALYSIS' | translate }}</h2>
+          <div class="grid grid-cols-12 py-3 px-6 rounded-lg gap-6 w-full border-[1px] border-[#D0D5DD]">
+            @if(!loading){
+            @if(FindingData?.rootCause){
+            <div class="col-span-12 lg:col-span-6">
+              <div class="flex flex-col w-full gap-2 items-start justify-start">
+                <span class="label dark">
+                  {{ 'FINDING.ROOT_CAUSE' | translate }}
+                </span>
+                <lib-shared-description [description]="FindingData?.rootCause"></lib-shared-description>
+              </div>
+            </div>
+            }
+            @if(FindingData?.impact){
+            <div class="col-span-12 lg:col-span-6">
+              <div class="flex flex-col w-full gap-2 items-start justify-start">
+                <span class="label dark">
+                  {{ 'FINDING.IMPACT' | translate }}
+                </span>
+                <lib-shared-description [description]="FindingData?.impact"></lib-shared-description>
+              </div>
+            </div>
+            }
+            }@else {
+            <div class="col-span-12 lg:col-span-6">
+              <p-skeleton height="6rem"></p-skeleton>
+            </div>
+            <div class="col-span-12 lg:col-span-6">
+              <p-skeleton height="6rem"></p-skeleton>
+            </div>
+            }
+          </div>
+        </div>
+        }
+        @if(FindingData?.observation || FindingData?.recommendation){
+        <div class="flex flex-col gap-2 w-full items-start justify-start">
+          <h2 class="title">{{ 'FINDING.DETAILS_EVIDENCE' | translate }}</h2>
+          <div class="grid grid-cols-12 py-3 px-6 rounded-lg gap-6 w-full border-[1px] border-[#D0D5DD]">
+            @if(!loading){
+            @if(FindingData?.observation){
+            <div class="col-span-12 lg:col-span-6">
+              <div class="flex flex-col w-full gap-2 items-start justify-start">
+                <span class="label dark">
+                  {{ 'FINDING.OBSERVATION' | translate }}
+                </span>
+                <lib-shared-description [description]="FindingData?.observation"></lib-shared-description>
+              </div>
+            </div>
+            }
+            @if(FindingData?.recommendation){
+            <div class="col-span-12 lg:col-span-6">
+              <div class="flex flex-col w-full gap-2 items-start justify-start">
+                <span class="label dark">
+                  {{ 'FINDING.RECOMMENDATION' | translate }}
+                </span>
+                <lib-shared-description [description]="FindingData?.recommendation"></lib-shared-description>
+              </div>
+            </div>
+            }
+            }@else {
+            <div class="col-span-12 lg:col-span-6">
+              <p-skeleton height="6rem"></p-skeleton>
+            </div>
+            <div class="col-span-12 lg:col-span-6">
+              <p-skeleton height="6rem"></p-skeleton>
+            </div>
+            }
+          </div>
+        </div>
+        }
+      </div>
+
+      }@case (2) {
+      <div class="pt-4">
+        <lib-new-attach-list [loadingSatate]="loadingState" (action_emiter)="handleActionSingleFile($event)"
+          (add_emiter)="handleShowAdd($event)" [files]="task_attachments">
+        </lib-new-attach-list>
+
+        <p-dialog (onHide)="initAttachmentForm(); initSelectForm(); activeTab = 1" [dismissableMask]="true"
+          styleClass="attach_dailog w-[50rem]" [(visible)]="show_add_dailog" [modal]="true" [draggable]="false"
+          [position]="'center'">
+          <ng-template pTemplate="header"></ng-template>
+
+          <ng-template pTemplate="content">
+            <div class="tabs flex items-center gap-4 border-b border-gray_light mb-4">
+              @for (tab of tabs; track tab.id) {
+              <button (click)="activeTab = tab.id" [ngClass]="{ active_tab: activeTab === tab.id }"
+                class="flex justify-center items-center gap-3 font-medium px-4 py-3 min-w-40">
+                <span>{{ tab.name }}</span>
+              </button>
+              }
+            </div>
+
+            <div class="header pb-4 border-b border-gray_light mb-4">
+              <h3 class="text-gray-800 font-bold text-1xl">
+                {{ 'ATTACHMENT.ADD_NEW' | translate }}
+              </h3>
+              <h6 class="text-gray_color">
+                {{ 'ATTACHMENT.UPDATE_INFO' | translate }}
+              </h6>
+            </div>
+
+            @if(activeTab === 1){
+            <form [formGroup]="attachment_form" action="">
+              <!-- Attachment Type -->
+              <div class="flex items-start justify-between border-b border-gray_light py-4">
+                <p class="font-bold w-1/3">
+                  {{ 'ATTACHMENT.TYPE' | translate }}
+                </p>
+                <div class="w-2/3 grid grid-cols-12">
+                  <div class="col-span-6 flex align-items-center gap-4">
+                    <p-radioButton (onClick)="handleToogleFileLink()" name="add_type" formControlName="add_type"
+                      value="file" inputId="typeFile" />
+                    <label class="text-base font-medium text-gray-800" for="typeFile">
+                      {{ 'ATTACHMENT.FILE' | translate }}
+                    </label>
+                  </div>
+                  <div class="col-span-6 flex align-items-center gap-4">
+                    <p-radioButton (onClick)="handleToogleFileLink()" name="add_type" formControlName="add_type"
+                      value="link" inputId="typeLink" />
+                    <label class="text-base font-medium text-gray-800" for="typeLink">
+                      {{ 'ATTACHMENT.LINK' | translate }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Title -->
+              <div class="field flex items-start border-b border-gray_light py-4">
+                <label class="font-bold w-1/4" for="code">{{
+                  'ATTACHMENT.TITLE' | translate
+                  }}</label>
+                <div class="w-3/4">
+                  <lib-input-text [placeholder]="'ATTACHMENT.PLACEHOLDER_TITLE' | translate"
+                    [control]="attachment_form.get('FileTitle')!" [controlNameInput]="'FileTitle'"
+                    [validations]="FileTitleValidations">
+                  </lib-input-text>
+                </div>
+              </div>
+
+              <!-- File Type -->
+              <div class="field flex items-start border-b border-gray_light py-4">
+                <div class="w-1/4 flex gap-2 items-start">
+                  <div class="text-sm">
+                    <p class="font-bold block mb-1">
+                      {{ 'ATTACHMENT.TYPE' | translate }}
+                    </p>
+                  </div>
+                </div>
+                <div class="w-3/4">
+                  <lib-ui-dropdown [options]="fileTypes" [optionLabel]="'label'" [optionValue]="'id'"
+                    [placeholder]="'ATTACHMENT.SELECT_TYPE' | translate" [control]="attachment_form.get('FileTypeID')!"
+                    [formControlNameInput]="'FileTypeID'" [validations]="FileTypeValidations">
+                  </lib-ui-dropdown>
+                </div>
+              </div>
+
+              <!-- Classification -->
+              <div class="field flex items-start border-b border-gray_light py-4">
+                <div class="w-1/4 flex">
+                  <div class="text-sm">
+                    <p class="font-bold block mb-1">
+                      {{ 'ATTACHMENT.CLASSIFICATION' | translate }}
+                    </p>
+                  </div>
+                </div>
+                <div class="w-3/4">
+                  <lib-ui-dropdown [options]="classfications" [optionLabel]="'label'" [optionValue]="'id'"
+                    [placeholder]="
+                      'ATTACHMENT.SELECT_CLASSIFICATION' | translate
+                    " [control]="attachment_form.get('DataClassificationID')!"
+                    [formControlNameInput]="'DataClassificationID'" [validations]="ClassificationValidations">
+                  </lib-ui-dropdown>
+                </div>
+              </div>
+
+              <!-- File / Link Input -->
+              @if(attachment_form.get('add_type')?.value === 'file'){
+              <div class="field flex items-start border-b border-gray_light py-4">
+                <div class="w-1/4 flex gap-2 items-start">
+                  <div class="text-sm">
+                    <p class="font-bold block mb-1">
+                      {{ 'ATTACHMENT.ATTACH_FILE' | translate }}
+                    </p>
+                  </div>
+                </div>
+                <div class="w-3/4">
+                  <lib-attach-ui [isLabelVisible]="false" (fileEventEmiter)="
+                      attachment_form.get('File')?.setValue($event)
+                    " [is_disabled_input]="attachment_form.get('File')?.value">
+                  </lib-attach-ui>
+                  @if (attachment_form.get('File')?.value) {
+                  <div class="mt-4">
+                    <div
+                      class="single_attachment mb-4 border border-gray_light/30 p-4 rounded-lg flex items-center justify-between flex-wrap">
+                      <div class="info flex flex-wrap items-start gap-3">
+                        <div class="icon">
+                          <i class="fi fi-rr-file"></i>
+                        </div>
+                        <div class="details">
+                          <h2 class="font-medium mb-1">
+                            {{ attachment_form.get('File')?.value.name }}
+                          </h2>
+                          <div class="flex items-center gap-2 flex-wrap">
+                            <p class="text-gray_color">
+                              {{
+                              attachment_form.get('File')?.value.size / 1024
+                              | number : '1.0-2'
+                              }}
+                              KB - 100% {{ 'ATTACHMENT.UPLOADED' | translate }}
+                            </p>
+                            <div class="badge">
+                              {{
+                              attachment_form.get('File')?.value.type ||
+                              'Unknown Type'
+                              }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="actions flex items-center gap-4">
+                        <button (click)="removeFile()" class="text-primary text-lg font-medium">
+                          <i class="fi fi-rr-trash"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  }
+                </div>
+              </div>
+              }@else{
+              <div class="field flex items-start border-b border-gray_light py-4">
+                <div class="w-1/4 flex gap-2 items-start">
+                  <div class="text-sm">
+                    <p class="font-bold block mb-1">
+                      {{ 'ATTACHMENT.LINK' | translate }}
+                    </p>
+                  </div>
+                </div>
+                <div class="w-3/4">
+                  <div class="input-container">
+                    <span class="prefix">https://</span>
+                    <input type="text" pInputText [placeholder]="'ATTACHMENT.PLACEHOLDER_LINK' | translate"
+                      formControlName="LinkUrl" class="custom-input" />
+                  </div>
+                </div>
+              </div>
+              }
+
+              <!-- Searchable -->
+              <div class="flex items-start justify-between py-4">
+                <p class="font-bold w-1/3">
+                  {{ 'ATTACHMENT.SEARCHABLE' | translate }}
+                </p>
+                <div class="w-2/3 grid grid-cols-12">
+                  <div class="col-span-6 flex align-items-center gap-4">
+                    <p-radioButton name="IsVisibleInSearch" formControlName="IsVisibleInSearch" [value]="true"
+                      inputId="searchable" />
+                    <label class="text-base font-medium text-gray-800" for="searchable">{{ 'ATTACHMENT.YES' | translate
+                      }}</label>
+                  </div>
+                  <div class="col-span-6 flex align-items-center gap-4">
+                    <p-radioButton name="IsVisibleInSearch" formControlName="IsVisibleInSearch" [value]="false"
+                      inputId="unsearchable" />
+                    <label class="text-base font-medium text-gray-800" for="unsearchable">{{ 'ATTACHMENT.NO' | translate
+                      }}</label>
+                  </div>
+                </div>
+              </div>
+            </form>
+            }@else {
+            <!-- Existing Files Tab -->
+            <div class="flex items-center gap-6 pb-4 border-b mb-4 border-gray_light">
+              <div class="flex items-center gap-2">
+                <input type="radio" (change)="handledToggleFilter()" [id]="1" [value]="1" [(ngModel)]="fileFilter"
+                  name="fileFilter" class="mr-2" />
+                <label [for]="1" class="text-gray-800 font-medium">{{
+                  'ATTACHMENT.MY_FILES' | translate
+                  }}</label>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="radio" (change)="handledToggleFilter()" [id]="2" [value]="2" [(ngModel)]="fileFilter"
+                  name="fileFilter" class="mr-2" />
+                <label [for]="2" class="text-gray-800 font-medium">{{
+                  'ATTACHMENT.ALL_FILES' | translate
+                  }}</label>
+              </div>
+            </div>
+
+            <div>
+              <div class="field mb-4">
+                <label for="">{{ 'ATTACHMENT.SEARCH' | translate }}</label>
+                <lib-input-search (searchTermEmiter)="handleSerachExistFiles($event)"></lib-input-search>
+              </div>
+
+              <div class="border border-gray_light rounded-lg mb-4">
+                <div class="data grid grid-cols-12 gap-4 py-6 px-3">
+                  @if(!loadSearchState){ @for(file of searchFiles; track file) {
+                  <button (click)="handleSelectFile(file)" [ngClass]="{
+                      'border-primary': file?.selected,
+                      'bg-primary/15': file?.selected,
+                      'border-2': file.selected
+                    }"
+                    class="add_attach cursor-pointer p-2 col-span-12 lg:col-span-6 flex items-center gap-6 rounded-lg border border-gray_light">
+                    <div class="icon w-14 h-14 rounded-lg flex items-center justify-center text-primary">
+                      <img [src]="getIcon(file.fileExtension)" alt="" />
+                    </div>
+                    <div class="content">
+                      <p class="text-gray-800 font-semibold mb-2">
+                        {{ file.fileTitle }}
+                      </p>
+                      <p class="text-sm">
+                        {{ file.fileSize / 1024 | number : '1.0-2' }} KB.{{
+                        file.createdDate | date : 'MMM d y'
+                        }}
+                      </p>
+                    </div>
+                  </button>
+                  } }@else {
+                  <div
+                    class="add_attach p-3 col-span-12 lg:col-span-6 md:col-span-6 flex items-center gap-4 rounded-lg border border-gray_light">
+                    <div><p-skeleton shape="circle" size="3rem" /></div>
+                    <div class="content">
+                      <p-skeleton width="10rem" styleClass="mb-2" />
+                      <p-skeleton width="8rem" styleClass="mb-2" />
+                    </div>
+                  </div>
+                  }
+                </div>
+                <lib-pagination (paginationChanged)="getAllSearchFiles($event)"></lib-pagination>
+              </div>
+
+              <form [formGroup]="select_form">
+                <lib-input-text [inputLabel]="'ATTACHMENT.TITLE' | translate"
+                  [placeholder]="'ATTACHMENT.PLACEHOLDER_TITLE' | translate" [control]="select_form.get('FileTitle')!"
+                  [controlNameInput]="'FileTitle'" [validations]="FileTitleValidations">
+                </lib-input-text>
+              </form>
+            </div>
+            }
+          </ng-template>
+
+          <ng-template pTemplate="footer">
+            <div class="flex justify-end gap-4">
+              <div class="cancel_btn">
+                <button (click)="
+                    show_add_dailog = false;
+                    initAttachmentForm();
+                    initSelectForm()
+                  ">
+                  {{ 'BUTTONS.CANCEL' | translate }}
+                </button>
+              </div>
+              <div class="action_btn">
+                <p-button [disabled]="
+                    activeTab === 1
+                      ? attachment_form.invalid
+                      : handleValidationExist()
+                  " (onClick)="
+                    activeTab === 1 ? handleAction() : handleExistFile()
+                  " label="{{ 'BUTTONS.SAVE' | translate }}" [loading]="loadingSave" />
+              </div>
+            </div>
+          </ng-template>
+        </p-dialog>
+
+        <p-dialog [draggable]="false" (onHide)="selected_file_show = null" styleClass="attach_dailog w-[50rem]"
+          [(visible)]="displayModal" [modal]="true" [closable]="true">
+          @if(selected_file_show){
+          <div>
+            @if(selected_file_show?.fileExtension?.includes('jpeg')||selected_file_show?.fileExtension?.includes('png')||selected_file_show?.fileExtension?.includes('gif')||selected_file_show?.fileExtension?.includes('svg')){
+
+            <div class="img mb-5">
+              <img [src]="env + selected_file_show?.fileUrl?.substring(1)"
+                [alt]="'ATTACHMENT.ATTACHMENT_IMAGE_ALT' | translate" class="w-full h-96 rounded-lg" />
+            </div>
+            }@else{
+            <div class="action_btn flex items-center justify-center mb-6 w-fit mx-auto">
+              <button class="btn">
+                <a target="_blank" [href]="
+                    !selected_file_show?.fileExtension
+                      ? selected_file_show?.fileUrl
+                      : env + selected_file_show?.fileUrl
+                  ">{{
+                  selected_file_show?.fileExtension
+                  ? 'Show File'
+                  : 'Show Link '
+                  }}
+                </a>
+              </button>
+            </div>
+            }
+
+            <div class="content">
+              <div class="head mb-2 flex items-baseline gap-3">
+                <h2 class="text-2xl font-semibold text-gray-800">
+                  {{ selected_file_show?.fileTitle }}
+                </h2>
+                <p class="mb-0">
+                  {{
+                  selected_file_show?.fileSize / (1024 * 1024)
+                  | number : '1.0-2'
+                  }}
+                  {{ 'ATTACHMENT.FILE_SIZE_UNIT' | translate }}
+                </p>
+                <span class="badge">{{
+                  selected_file_show?.dataClassificationName
+                  }}</span>
+              </div>
+
+              <p class="text-gray_color text-xl mb-5">
+                {{ 'ATTACHMENT.FILE_PUBLISHED' | translate }}
+              </p>
+
+              <div class="flex items-center gap-4">
+                <p class="font-semibold text-2xl text-gray-800">
+                  {{ 'ATTACHMENT.UPLOADED_BY' | translate }}
+                </p>
+                <div class="flex items-center gap-4">
+                  <!-- <div class="img">
+                    <img class="w-8" src="images/avatar.svg" alt="" />
+                  </div> -->
+                  <lib-img-system [userId]="selected_file_show?.createdBy"></lib-img-system>
+                  <div>
+                    <p class="font-medium text-lg">
+                      {{ selected_file_show?.username }}
+                    </p>
+                    <p class="text-gray_color">
+                      {{ selected_file_show?.roleName }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          }
+          <ng-template pTemplate="footer">
+            <div class="action_btn">
+              <p-button (onClick)="displayModal = false; selected_file_show = null"
+                [label]="'ATTACHMENT.BACK_TO_HOME' | translate" />
+            </div>
+          </ng-template>
+        </p-dialog>
+
+        <p-dialog [header]="'ATTACHMENT.EDIT_FILE_TITLE' | translate"
+          (onHide)="current_title_update = ''; current_file_update = null" [modal]="true" [(visible)]="edit_file_name"
+          styleClass="w-[25rem]">
+          <div class="form_group">
+            <label for="profile_name" class="font-semibold w-6rem">Title</label>
+            <!-- <input pInputText id="profile_name" class="flex-auto" [(ngModel)]="current_title_update" autocomplete="off" /> -->
+            <input type="text" pInputText [(ngModel)]="current_title_update" />
+          </div>
+
+          <ng-template pTemplate="footer">
+            <div class="flex items-center gap-6">
+              <div class="action_btn w-28">
+                <p-button [label]="'BUTTONS.UPDATE' | translate" [loading]="loadUpdate"
+                  (onClick)="handleUpdateTitle()" />
+              </div>
+
+              <div class="cancel_btn">
+                <button (click)="edit_file_name = false">
+                  {{ 'BUTTONS.CANCEL' | translate }}
+                </button>
+              </div>
+            </div>
+          </ng-template>
+        </p-dialog>
+      </div>
+
+      <p-dialog [dismissableMask]="true" styleClass="attach_dailog w-[50rem]" [(visible)]="show_add_dailog"
+        [modal]="true" [draggable]="false" [position]="'center'">
+        <ng-template pTemplate="header"> </ng-template>
+
+        <ng-template pTemplate="content">
+          <div class="tabs flex items-center gap-4 border-b border-gray_light mb-4">
+            @for (tab of tabs_files; track tab.id) {
+            <!-- Updated ngFor to @for, using tab.id for tracking -->
+            <button (click)="activeTab = tab.id" [ngClass]="{ active_tab: activeTab === tab.id }"
+              class="flex justify-center items-center gap-3 font-medium px-4 py-3 min-w-40">
+              <span>{{ tab.name }}</span>
+            </button>
+            }
+          </div>
+
+          <div class="header pb-4 border-b border-gray_light mb-4">
+            <h3 class="text-gray-800 font-bold text-1xl">
+              {{ 'ATTACHMENT.ADD_NEW' | translate }}
+            </h3>
+            <h6 class="text-gray_color">
+              {{ 'ATTACHMENT.UPDATE_INFO' | translate }}
+            </h6>
+          </div>
+
+          @if(activeTab === 1){
+          <form [formGroup]="attachment_form" action="">
+            <div class="flex items-start justify-between border-b border-gray_light py-4">
+              <p class="font-bold w-1/3">Attachement Type</p>
+
+              <div class="w-2/3 grid grid-cols-12">
+                <div class="col-span-6 flex align-items-center gap-4">
+                  <p-radioButton (onClick)="handleToogleFileLink()" name="add_type" formControlName="add_type"
+                    value="file" inputId="typeFile" />
+                  <label class="text-base font-medium text-gray-800" for="typeFile">
+                    File
+                  </label>
+                </div>
+                <div class="col-span-6 flex align-items-center gap-4">
+                  <p-radioButton (onClick)="handleToogleFileLink()" name="add_type" formControlName="add_type"
+                    value="link" inputId="typeLink" />
+                  <label class="text-base font-medium text-gray-800" for="typeLink">
+                    Link
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="field flex items-start border-b border-gray_light py-4">
+              <label class="font-bold w-1/4" for="code">Title</label>
+              <div class="w-3/4">
+                <lib-input-text [placeholder]="'Enter Title'" [control]="attachment_form.get('FileTitle')!"
+                  [controlNameInput]="'FileTitle'" [validations]="FileTitleValidations">
+                </lib-input-text>
+              </div>
+            </div>
+
+            <div class="field flex items-start border-b border-gray_light py-4">
+              <div class="w-1/4 flex gap-2 items-start">
+                <div class="text-sm">
+                  <p class="font-bold block mb-1">Type</p>
+                </div>
+              </div>
+              <div class="w-3/4">
+                <lib-ui-dropdown [options]="fileTypes" [optionLabel]="'label'" [optionValue]="'id'"
+                  [placeholder]="'Select Type'" [control]="attachment_form.get('FileTypeID')!"
+                  [formControlNameInput]="'FileTypeID'" [validations]="FileTypeValidations">
+                </lib-ui-dropdown>
+              </div>
+            </div>
+
+            <div class="field flex items-start border-b border-gray_light py-4">
+              <div class="w-1/4 flex">
+                <div class="text-sm">
+                  <p class="font-bold block mb-1">Classification</p>
+                </div>
+              </div>
+              <div class="w-3/4">
+                <lib-ui-dropdown [options]="classfications" [optionLabel]="'label'" [optionValue]="'id'"
+                  [placeholder]="'Select Classification'" [control]="attachment_form.get('DataClassificationID')!"
+                  [formControlNameInput]="'DataClassificationID'" [validations]="ClassificationValidations">
+                </lib-ui-dropdown>
+              </div>
+            </div>
+
+            @if(attachment_form.get('add_type')?.value === 'file'){
+            <div class="field flex items-start border-b border-gray_light py-4">
+              <div class="w-1/4 flex gap-2 items-start">
+                <div class="text-sm">
+                  <p class="font-bold block mb-1">Attachment</p>
+                </div>
+              </div>
+              <div class="w-3/4">
+                <lib-attach-ui [isLabelVisible]="false" (fileEventEmiter)="
+                    attachment_form.get('File')?.setValue($event)
+                  " [is_disabled_input]="attachment_form.get('File')?.value">
+                </lib-attach-ui>
+                @if (attachment_form.get('File')?.value) {
+                <div class="mt-4">
+                  <div
+                    class="single_attachment mb-4 border border-gray_light/30 p-4 rounded-lg flex items-center justify-between flex-wrap">
+                    <div class="info flex flex-wrap items-start gap-3">
+                      <div class="icon">
+                        <i class="fi fi-rr-file"></i>
+                      </div>
+                      <div class="details">
+                        <h2 class="font-medium mb-1">
+                          {{ attachment_form.get('File')?.value.name }}
+                        </h2>
+                        <div class="flex items-center gap-2 flex-wrap">
+                          <p class="text-gray_color">
+                            {{
+                            attachment_form.get('File')?.value.size / 1024
+                            | number : '1.0-2'
+                            }}
+                            KB - 100% uploaded
+                          </p>
+                          <div class="badge">
+                            {{
+                            attachment_form.get('File')?.value.type ||
+                            'Unknown Type'
+                            }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="actions flex items-center gap-4">
+                      <button (click)="removeFile()" class="text-primary text-lg font-medium">
+                        <i class="fi fi-rr-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                }
+              </div>
+            </div>
+            }@else{
+            <div class="field flex items-start border-b border-gray_light py-4">
+              <div class="w-1/4 flex gap-2 items-start">
+                <div class="text-sm">
+                  <p class="font-bold block mb-1">Link</p>
+                </div>
+              </div>
+              <div class="w-3/4">
+                <div class="input-container">
+                  <span class="prefix">https://</span>
+                  <input type="text" pInputText placeholder="www.grorbit.com" formControlName="LinkUrl"
+                    class="custom-input" />
+                </div>
+              </div>
+            </div>
+            }
+
+            <div class="flex items-start justify-between py-4">
+              <p class="font-bold w-1/3">Searchable</p>
+
+              <div class="w-2/3 grid grid-cols-12">
+                <div class="col-span-6 flex align-items-center gap-4">
+                  <p-radioButton name="IsVisibleInSearch" formControlName="IsVisibleInSearch" [value]="true"
+                    inputId="searchable" />
+                  <label class="text-base font-medium text-gray-800" for="searchable">
+                    Yes
+                  </label>
+                </div>
+                <div class="col-span-6 flex align-items-center gap-4">
+                  <p-radioButton name="IsVisibleInSearch" formControlName="IsVisibleInSearch" [value]="false"
+                    inputId="unsearchable" />
+                  <label class="text-base font-medium text-gray-800" for="unsearchable">
+                    No
+                  </label>
+                </div>
+              </div>
+            </div>
+          </form>
+          }@else {
+          <div class="flex items-center gap-6 pb-4 border-b mb-4 border-gray_light">
+            <div class="flex items-center gap-2">
+              <input type="radio" (change)="handledToggleFilter()" [id]="1" [value]="1" [(ngModel)]="fileFilter"
+                name="fileFilter" class="mr-2" />
+              <label [for]="1" class="text-gray-800 font-medium">My Files</label>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="radio" (change)="handledToggleFilter()" [id]="2" [value]="2" [(ngModel)]="fileFilter"
+                name="fileFilter" class="mr-2" />
+              <label [for]="2" class="text-gray-800 font-medium">All Files</label>
+            </div>
+          </div>
+
+          <div>
+            <div class="field mb-4">
+              <label for=""> {{ 'ATTACHMENT.SEARCH' | translate }} </label>
+              <lib-input-search (searchTermEmiter)="handleSerachExistFiles($event)"></lib-input-search>
+            </div>
+
+            <div class="border border-gray_light rounded-lg mb-4">
+              <div class="data grid grid-cols-12 gap-4 py-6 px-3">
+                @if(!loadSearchState){ @for(file of searchFiles; track file) {
+                <button (click)="handleSelectFile(file)" [ngClass]="{
+                    'border-primary': file?.selected,
+                    'bg-primary/15': file?.selected,
+                    'border-2': file.selected
+                  }"
+                  class="add_attach cursor-pointer p-2 col-span-12 lg:col-span-6 flex items-center gap-6 rounded-lg border border-gray_light">
+                  <div class="icon w-14 h-14 rounded-lg flex items-center justify-center text-primary">
+                    <img [src]="getIcon(file.fileExtension)" alt="" />
+                  </div>
+                  <div class="content">
+                    <p class="text-gray-800 font-semibold mb-2">
+                      {{ file.fileTitle }}
+                    </p>
+                    <p class="text-sm">
+                      {{ file.fileSize / 1024 | number : '1.0-2' }} KB.{{
+                      file.createdDate | date : 'MMM d y'
+                      }}
+                    </p>
+                  </div>
+                </button>
+                } }@else {
+                <div
+                  class="add_attach p-3 col-span-12 lg:col-span-6 md:col-span-6 flex items-center gap-4 rounded-lg border border-gray_light">
+                  <div>
+                    <p-skeleton shape="circle" size="3rem" />
+                  </div>
+                  <div class="content">
+                    <p-skeleton width="10rem" styleClass="mb-2" />
+                    <p-skeleton width="8rem" styleClass="mb-2" />
+                  </div>
+                </div>
+                <div
+                  class="add_attach p-3 col-span-12 lg:col-span-6 md:col-span-6 flex items-center gap-4 rounded-lg border border-gray_light">
+                  <div>
+                    <p-skeleton shape="circle" size="3rem" />
+                  </div>
+                  <div class="content">
+                    <p-skeleton width="10rem" styleClass="mb-2" />
+                    <p-skeleton width="8rem" styleClass="mb-2" />
+                  </div>
+                </div>
+                <div
+                  class="add_attach p-3 col-span-12 lg:col-span-6 md:col-span-6 flex items-center gap-4 rounded-lg border border-gray_light">
+                  <div>
+                    <p-skeleton shape="circle" size="3rem" />
+                  </div>
+                  <div class="content">
+                    <p-skeleton width="10rem" styleClass="mb-2" />
+                    <p-skeleton width="8rem" styleClass="mb-2" />
+                  </div>
+                </div>
+                }
+              </div>
+
+              <lib-pagination (paginationChanged)="getAllSearchFiles($event)"></lib-pagination>
+            </div>
+
+            <form [formGroup]="select_form">
+              <lib-input-text [inputLabel]="'Title'" [placeholder]="'Enter Title'"
+                [control]="select_form.get('FileTitle')!" [controlNameInput]="'FileTitle'"
+                [validations]="FileTitleValidations">
+              </lib-input-text>
+            </form>
+          </div>
+          }
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+          <div class="flex justify-end gap-4">
+            <div class="cancel_btn">
+              <button (click)="show_add_dailog = false">Cancel</button>
+            </div>
+
+            <div class="action_btn">
+              <p-button [disabled]="
+                  activeTab === 1
+                    ? attachment_form.invalid
+                    : handleValidationExist()
+                " (onClick)="activeTab === 1 ? handleAction() : handleExistFile()" label="Save"
+                [loading]="loadingSave" />
+            </div>
+          </div>
+        </ng-template>
+      </p-dialog>
+
+      <p-dialog (onHide)="selected_file_show = null" styleClass="attach_dailog w-[50rem]" [(visible)]="displayModal"
+        [modal]="true" [closable]="true">
+        @if(selected_file_show){
+        <div>
+          <div class="img mb-5">
+            <img [src]="env + selected_file_show?.fileUrl?.substring(1)" alt="Attachment Image"
+              class="w-full h-96 rounded-lg" />
+          </div>
+
+          <div class="content">
+            <div class="head mb-2 flex items-baseline gap-3">
+              <h2 class="text-2xl font-semibold text-gray-800">
+                {{ selected_file_show?.fileTitle }}
+              </h2>
+              <p class="mb-0">
+                {{
+                selected_file_show?.fileSize / (1024 * 1024)
+                | number : '1.0-2'
+                }}
+                MB
+              </p>
+              <span class="badge">{{
+                selected_file_show?.dataClassificationName
+                }}</span>
+            </div>
+            <p class="text-gray_color text-xl mb-5">
+              {{ 'ATTACHMENT.FILE_PUBLISHED' | translate }}
+            </p>
+
+            <div class="flex items-center gap-4">
+              <p class="font-semibold text-2xl text-gray-800">
+                {{ 'ATTACHMENT.UPLOADED_BY' | translate }}
+              </p>
+              <div class="flex items-center gap-4">
+                <!-- <div class="img">
+                  <img class="w-8" src="images/avatar.svg" alt="" />
+                </div> -->
+                <lib-img-system [userId]="selected_file_show?.createdBy"></lib-img-system>
+                <div>
+                  <p class="font-medium text-lg">
+                    {{ selected_file_show?.username }}
+                  </p>
+                  <p class="text-gray_color">
+                    {{ selected_file_show?.roleName }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        }
+        <ng-template pTemplate="footer">
+          <div class="action_btn">
+            <p-button (onClick)="displayModal = false; selected_file_show = null" label="Back To Home" />
+          </div>
+        </ng-template>
+      </p-dialog>
+
+      <p-dialog header="Edit File Title" (onHide)="current_title_update = ''; current_file_update = null" [modal]="true"
+        [(visible)]="edit_file_name" styleClass="w-[25rem]">
+        <div class="form_group">
+          <label for="profile_name" class="font-semibold w-6rem">
+            {{ 'ATTACHMENT.TITLE' | translate }}</label>
+          <!-- <input pInputText id="profile_name" class="flex-auto" [(ngModel)]="current_title_update" autocomplete="off" /> -->
+          <input type="text" pInputText [(ngModel)]="current_title_update" />
+        </div>
+
+        <ng-template pTemplate="footer">
+          <div class="flex items-center gap-6">
+            <div class="action_btn w-28">
+              <p-button label="Update" [loading]="loadUpdate" (onClick)="handleUpdateTitle()" />
+            </div>
+
+            <div class="cancel_btn">
+              <button (click)="edit_file_name = false">
+                {{ 'BUTTONS.CANCEL' | translate }}
+              </button>
+            </div>
+          </div>
+        </ng-template>
+      </p-dialog>
+      } @case (3) {
+      <lib-comment-section (deleteCommentEvent)="deleteComment($event)"
+        (updateCommentEvent)="updateMessage($event.newContent, $event.message)"
+        [relatedColumnId]="FindingData?.findingID" [relatedEntityId]="relatedEntityId()">
+      </lib-comment-section>
+      } }
+    </div>
+  </p-dialog>
+</div>

@@ -1,0 +1,253 @@
+<section class="form_sec">
+  <div class="header border-b border-gray_light pb-6 mb-6">
+    <h2 class="text-lg font-medium text-[#101828]">{{current_update_id ? ("ASSETS.UPDATE_ASSET"|translate) :("HEARDE_TABLE.ADD_NEW_ASSETS"|translate)}}</h2>
+  </div>
+
+
+
+
+<form [formGroup]="asset_form" class="grid grid-cols-12 gap-6 mb-6 ">
+
+  <!-- Short Name -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-input-text
+      [placeholder]="'ASSETS.SHORT_NAME_PLACEHOLDER' | translate"
+      [inputLabel]="'ASSETS.SHORT_NAME' | translate"
+      [control]="asset_form.get('shortName')!"
+      [controlNameInput]="'shortName'" [validations]="validationsRequired">
+    </lib-input-text>
+  </div>
+
+  <!-- Purpose -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-input-text
+      [placeholder]="'ASSETS.PURPOSE_PLACEHOLDER' | translate"
+      [inputLabel]="'ASSETS.PURPOSE' | translate"
+      [control]="asset_form.get('purpose')!"
+      [controlNameInput]="'purpose'" [validations]="validationsRequired">
+    </lib-input-text>
+  </div>
+
+  <!-- Location -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-input-text
+      [placeholder]="'ASSETS.LOCATION_PLACEHOLDER' | translate"
+      [inputLabel]="'ASSETS.LOCATION' | translate"
+      [control]="asset_form.get('location')!"
+      [controlNameInput]="'location'" [validations]="validationsRequired">
+    </lib-input-text>
+  </div>
+
+  <!-- Manufacturer -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-input-text
+      [placeholder]="'ASSETS.MANUFACTURER_PLACEHOLDER' | translate"
+      [inputLabel]="'ASSETS.MANUFACTURER' | translate"
+      [control]="asset_form.get('manufacturer')!"
+      [controlNameInput]="'manufacturer'" [validations]="validationsRequired">
+    </lib-input-text>
+  </div>
+
+  <!-- Acquisition Date -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-date-packer
+      [placeholder]="'ASSETS.ACQUISITION_DATE_PLACEHOLDER' | translate"
+      [inputLabel]="'ASSETS.ACQUISITION_DATE' | translate"
+      [control]="asset_form.get('acquisitionDate')!"
+      [controlNameInput]="'acquisitionDate'" [validations]="validationsRequired">
+    </lib-date-packer>
+  </div>
+
+    <!-- Assignment Date -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-date-packer
+      [placeholder]="'ASSETS.ASSIGNMENT_DATE_PLACEHOLDER' | translate"
+      [inputLabel]="'ASSETS.ASSIGNMENT_DATE' | translate"
+      [control]="asset_form.get('assignmentDate')!"
+      [controlNameInput]="'assignmentDate'" [validations]="validationsRequired">
+    </lib-date-packer>
+  </div>
+
+  <!-- Expiry Date -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-date-packer
+      [placeholder]="'ASSETS.EXPIRY_DATE_PLACEHOLDER' | translate"
+      [inputLabel]="'ASSETS.EXPIRY_DATE' | translate"
+      [control]="asset_form.get('expiryDate')!"
+      [controlNameInput]="'expiryDate'">
+    </lib-date-packer>
+  </div>
+
+  <!-- Asset Priority -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-ui-dropdown
+      [placeholder]="'ASSETS.ASSET_PRIORITY_ID_PLACEHOLDER' | translate"
+      [label]="'ASSETS.ASSET_PRIORITY_ID' | translate"
+      [control]="asset_form.get('assetPriorityId')!"
+      [formControlNameInput]="'assetPriorityId'" [validations]="validationsRequired"
+      [options]="assetPriorities"
+      [optionLabel]="'label'"
+      [optionValue]="'id'">
+    </lib-ui-dropdown>
+  </div>
+
+  <!-- Asset Category -->
+  <div class="md:col-span-6 col-span-12">
+    <!-- <lib-ui-dropdown
+      [placeholder]="'ASSETS.ASSET_CATEGORY_ID_PLACEHOLDER' | translate"
+      [label]="'ASSETS.ASSET_CATEGORY_ID' | translate"
+      [control]="asset_form.get('assetCategoryId')!"
+      [formControlNameInput]="'assetCategoryId'" [validations]="validationsRequired"
+      [options]="assetCategories"
+      [optionLabel]="'label'"
+      [optionValue]="'id'">
+    </lib-ui-dropdown> -->
+        <lib-tree-select-ui [nodes_input]="assetsCategories" [placeholder]="'ASSETS.ASSET_CATEGORY_ID_PLACEHOLDER' "
+        [label]="'ASSETS.ASSET_CATEGORY_ID'|translate " [control]="asset_form.get('assetCategoryId')!"
+        [formControlNameInput]="'assetCategoryId'" [validations]="[]">
+      </lib-tree-select-ui>
+  </div>
+
+  <!-- Asset Type -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-ui-dropdown
+      [placeholder]="'ASSETS.ASSET_TYPE_ID_PLACEHOLDER' | translate"
+      [label]="'ASSETS.ASSET_TYPE_ID' | translate"
+      [control]="asset_form.get('assetTypeId')!"
+      [formControlNameInput]="'assetTypeId'"
+      [options]="assetTypes"
+      [optionLabel]="'label'" [validations]="validationsRequired"
+      [optionValue]="'id'">
+    </lib-ui-dropdown>
+  </div>
+
+  <!-- Asset Status -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-ui-dropdown
+      [placeholder]="'ASSETS.ASSET_STATUS_TYPE_ID_PLACEHOLDER' | translate"
+      [label]="'ASSETS.ASSET_STATUS_TYPE_ID' | translate"
+      [control]="asset_form.get('assetStatusTypeId')!"
+      [formControlNameInput]="'assetStatusTypeId'"
+      [options]="assetStatuses"
+      [optionLabel]="'label'" [validations]="validationsRequired"
+      [optionValue]="'id'">
+    </lib-ui-dropdown>
+  </div>
+
+  <!-- Financial Value -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-currency-input
+      type="number"
+      [placeholder]="'ASSETS.FINANCIAL_VALUE_PLACEHOLDER' | translate"
+      [inputLabel]="'ASSETS.FINANCIAL_VALUE' | translate"
+      [control]="asset_form.get('financialValue')!"
+      [controlNameInput]="'financialValue'" [validations]="validationsRequired">
+    </lib-currency-input>
+  </div>
+
+  <!-- Responsible User -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-user-dropdown
+      [placeholder]="'ASSETS.RESPONSIBLE_USER_ID_PLACEHOLDER' | translate"
+      [label]="'ASSETS.RESPONSIBLE_USER_ID' | translate"
+      [control]="asset_form.get('responsibleUserId')!"
+      [formControlNameInput]="'responsibleUserId'"
+      [options]="userList"
+      [optionLabel]="'name'" [validations]="validationsRequired"
+      [optionValue]="'id'">
+    </lib-user-dropdown>
+  </div>
+
+
+  <!-- Criticality Level -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-ui-dropdown
+      [placeholder]="'ASSETS.ASSET_CRITICALITY_LEVEL_ID_PLACEHOLDER' | translate"
+      [label]="'ASSETS.ASSET_CRITICALITY_LEVEL_ID' | translate"
+      [control]="asset_form.get('assetCriticalityLevelId')!"
+      [formControlNameInput]="'assetCriticalityLevelId'"
+      [options]="criticalityLevels"
+      [optionLabel]="'label'"
+      [optionValue]="'id'">
+    </lib-ui-dropdown>
+  </div>
+
+  <!-- Criticality Overall Score -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-input-number
+
+      [placeholder]="'ASSETS.ASSET_CRITICALITY_OVERALL_SCORE_PLACEHOLDER' | translate"
+      [inputLabel]="'ASSETS.ASSET_CRITICALITY_OVERALL_SCORE' | translate"
+      [control]="asset_form.get('assetCriticalityOverallScore')!"
+      [controlNameInput]="'assetCriticalityOverallScore'">
+    </lib-input-number>
+  </div>
+
+
+    <!-- IP Address -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-input-text
+      [placeholder]="'ASSETS.IP' | translate"
+      [inputLabel]="'ASSETS.IP' | translate"
+      [control]="asset_form.get('ip')!"
+      [controlNameInput]="'ip'" [validations]="validationsRequired">
+    </lib-input-text>
+  </div>
+
+
+    <!-- Availability Level  -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-ui-dropdown
+      [placeholder]="'ASSETS.AvailabilityLevel' | translate"
+      [label]="'ASSETS.AvailabilityLevel' | translate"
+      [control]="asset_form.get('availabilityLevelID')!"
+      [formControlNameInput]="'availabilityLevelID'"
+      [options]="AvailabilityLevel"
+      [optionLabel]="'label'"
+      [optionValue]="'id'">
+    </lib-ui-dropdown>
+  </div>
+
+
+    <!-- Integrity Level  -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-ui-dropdown
+      [placeholder]="'ASSETS.IntegrityLevel' | translate"
+      [label]="'ASSETS.IntegrityLevel' | translate"
+      [control]="asset_form.get('integrityLevelID')!"
+      [formControlNameInput]="'integrityLevelID'"
+      [options]="IntegrityLevel"
+      [optionLabel]="'label'"
+      [optionValue]="'id'">
+    </lib-ui-dropdown>
+  </div>
+
+
+      <!-- Confidentiality  Level  -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-ui-dropdown
+      [placeholder]="'ASSETS.ConfidentialityLevel' | translate"
+      [label]="'ASSETS.ConfidentialityLevel' | translate"
+      [control]="asset_form.get('confidentialityLevelID')!"
+      [formControlNameInput]="'confidentialityLevelID'"
+      [options]="ConfidentialityLevel"
+      [optionLabel]="'label'"
+      [optionValue]="'id'">
+    </lib-ui-dropdown>
+  </div>
+
+</form>
+<!-- Buttons -->
+<div class="col-span-12 flex items-center gap-4 justify-end py-6 border-t border-gray_light">
+  <div class="cancel_btn">
+    <button [routerLink]="['/gfw-portal/assets/list']"
+      routerLinkActive="router-link-active">{{"RISK_MANAGMENT.Cancel"|translate}}</button>
+  </div>
+  <div class="action_btn">
+    <p-button [label]="'RISK_MANAGMENT.SaveChanges' | translate " [loading]="isLoading" (onClick)="submit()">
+    </p-button>
+  </div>
+</div>
+
+
+</section>

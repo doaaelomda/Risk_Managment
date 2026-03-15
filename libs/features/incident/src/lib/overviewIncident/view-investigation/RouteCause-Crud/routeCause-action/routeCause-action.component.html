@@ -1,0 +1,172 @@
+<div class="action_section">
+  <form [formGroup]="RouteCauseLearnForm">
+    <section class="form_sec grid grid-cols-12 gap-6 mb-6">
+      <div class="header border-b border-gray_light pb-6 mb-6 col-span-12">
+        <h2 class="text-lg font-medium text-[#101828]">
+          {{ current_updated_id ? ('RooteCause.Update_RouteCauseLearn' | translate) : ('RooteCause.ADD_BUTTON' |
+          translate)
+          }}
+        </h2>
+      </div>
+      <!-- Name -->
+      <div class="col-span-12">
+        <lib-input-text [placeholder]="'RooteCause.NAME' | translate" [inputLabel]="'RooteCause.NAME' | translate"
+          [control]="RouteCauseLearnForm.get('name')!" [controlNameInput]="'name'" [validations]="validationsRequired">
+        </lib-input-text>
+      </div>
+
+      <!-- Description -->
+      <div class="col-span-12">
+        <lib-textarea-ui [placeholder]="'RooteCause.DESCRIPTION' | translate"
+          [inputLabel]="'RooteCause.DESCRIPTION' | translate" [control]="RouteCauseLearnForm.get('description')!"
+          [controlNameInput]="'description'">
+        </lib-textarea-ui>
+      </div>
+
+      <!-- Root Cause Category -->
+      <div class="col-span-12 lg:col-span-6">
+        <lib-ui-dropdown [placeholder]="'RooteCause.CATEGORY' | translate" [label]="'RooteCause.CATEGORY' | translate"
+          [control]="RouteCauseLearnForm.get('rootCauseCategoryID')!" [formControlNameInput]="'rootCauseCategoryID'"
+          [options]="categoriesList" [optionLabel]="'label'" [optionValue]="'id'" [validations]="validationsRequired">
+        </lib-ui-dropdown>
+      </div>
+
+      <!-- Root Cause Methodology -->
+      <div class="col-span-12 lg:col-span-6">
+        <lib-ui-dropdown [placeholder]="'RooteCause.TYPE' | translate" [label]="'RooteCause.TYPE' | translate"
+          [control]="RouteCauseLearnForm.get('rootCauseMethodologyID')!"
+          [formControlNameInput]="'rootCauseMethodologyID'" [options]="methodologyList" [optionLabel]="'label'"
+          [optionValue]="'id'" [validations]="validationsRequired">
+        </lib-ui-dropdown>
+      </div>
+
+      <!-- Detection Date -->
+      <div class="col-span-12 lg:col-span-6">
+        <lib-date-packer [placeholder]="'RooteCause.DETECTION_DATE' | translate"
+          [inputLabel]="'RooteCause.DETECTION_DATE' | translate" [control]="RouteCauseLearnForm.get('detectionDate')!"
+          [controlNameInput]="'detectionDate'">
+        </lib-date-packer>
+      </div>
+
+      <!-- Identified By -->
+      <div class="col-span-12 lg:col-span-6">
+        <lib-ui-dropdown [placeholder]="'RooteCause.DOCUMENTED_BY' | translate"
+          [label]="'RooteCause.DOCUMENTED_BY' | translate" [control]="RouteCauseLearnForm.get('identifiedByUserID')!"
+          [formControlNameInput]="'identifiedByUserID'" [options]="usersList" [optionLabel]="'name'"
+          [optionValue]="'id'">
+        </lib-ui-dropdown>
+      </div>
+
+      <!-- Severity -->
+      <div class="col-span-12 lg:col-span-6">
+        <lib-ui-dropdown [placeholder]="'RooteCause.SEVERITY' | translate" [label]="'RooteCause.SEVERITY' | translate"
+          [control]="RouteCauseLearnForm.get('rootCauseSeverityLevelID')!"
+          [formControlNameInput]="'rootCauseSeverityLevelID'" [options]="severityList" [optionLabel]="'label'"
+          [optionValue]="'id'">
+        </lib-ui-dropdown>
+      </div>
+
+      <!-- Status -->
+      <div class="col-span-12 lg:col-span-6">
+        <lib-ui-dropdown [placeholder]="'RooteCause.STATUS' | translate" [label]="'RooteCause.STATUS' | translate"
+          [control]="RouteCauseLearnForm.get('rootCauseStatusTypeID')!" [formControlNameInput]="'rootCauseStatusTypeID'"
+          [options]="statusList" [optionLabel]="'label'" [optionValue]="'id'">
+        </lib-ui-dropdown>
+      </div>
+
+      <!-- Recommendation -->
+      <div class="col-span-12">
+        <lib-textarea-ui [placeholder]="'RooteCause.RECOMMENDATION' | translate"
+          [inputLabel]="'RooteCause.RECOMMENDATION' | translate" [control]="RouteCauseLearnForm.get('recommendation')!"
+          [controlNameInput]="'recommendation'">
+        </lib-textarea-ui>
+      </div>
+    </section>
+
+    <section class="form_sec my-6">
+      <div class="action_section mb-6 col-span-12">
+
+        <div class="flex items-center gap-4">
+          <h2 class="text-gray-700 font-medium text-xl my-6">The 5 Whys</h2>
+        </div>
+        <div formArrayName="target">
+          @for(question of target.controls; track $index; let i = $index){
+          <div class=" mb-4 w-full card_question py-2 px-4">
+
+            <div class="flex items-center py-4 justify-between">
+              <div class="flex items-center gap-1">
+                <img src="images/icons/quest_icon.svg" alt="Question Number">
+                <h1 class="text-gray-900 font-medium text-xl">Question {{i + 1}}</h1>
+              </div>
+              @if (i > 0) {
+              <button type="button" (click)="removeQuestion(i)">
+                <i class="fi fi-rr-trash text-danger_color_text text-sm"></i>
+              </button>
+              }
+
+            </div>
+
+            <div class="grid grid-cols-12 gap-6" [formGroupName]="i">
+              <div class="col-span-12">
+                <div class="form_group">
+                  <label class="mb-2 block" for="
+      ">{{'RooteCause.WHY_QUESTION' | translate}}</label>
+                  <input type="text" pInputText formControlName="whyQuestion"
+                    [placeholder]="'RooteCause.WHY_QUESTION' | translate" />
+                </div>
+              </div>
+              <div class="col-span-12 lg:col-span-6">
+
+                <div class="form_group">
+                  <label class="mb-2 block " for="">{{'RooteCause.WHY_ANSWER' | translate}}</label>
+
+                  <textarea type="text" rows="5" [placeholder]="'RooteCause.WHY_ANSWER' | translate" pInputText
+                    formControlName="whyAnswer"></textarea>
+
+                  <span class="text-sm text-gray-500 font-normal">
+                    {{ 'RISK_ACTION.CHARACTERS_LEFT' | translate:{ count: 275- question.get('whyAnswer')?.value?.length
+                    }
+                    }}
+                  </span>
+
+                </div>
+              </div>
+              <div class="col-span-12 lg:col-span-6">
+
+                <label class="mb-2 block " for="">{{'RooteCause.WHY_NOTE' | translate}}</label>
+
+                <textarea type="text" rows="5" [placeholder]="'RooteCause.WHY_NOTE' | translate" pInputText
+                  formControlName="whyNote"></textarea>
+                <span class="text-sm text-gray-500 font-normal">
+                  {{ 'RISK_ACTION.CHARACTERS_LEFT' | translate:{ count: 275- question.get('whyNote')?.value?.length } }}
+                </span>
+              </div>
+
+            </div>
+          </div>
+          }
+        </div>
+
+        <div class="col-span-12 flex justify-start">
+          <button type="button" (click)="pushNewQuestion()" class="btn-addition text-primaryColor-700"> + Add
+            Why?</button>
+        </div>
+
+      </div>
+    </section>
+  </form>
+</div>
+
+
+<div class="flex justify-end gap-4 border-t border-gray_light py-6">
+  <div class="cancel_btn">
+    <button (click)="closePage()">
+      {{ 'BUTTONS.CANCEL' | translate }}
+    </button>
+  </div>
+  <div class="action_btn">
+    <p-button [label]='current_updated_id ? ("BUTTONS.UPDATE" | translate) : ("BUTTONS.SAVE" | translate)'
+      [outlined]="true" [loading]="isLoading" severity="secondary" (onClick)="submit()">
+    </p-button>
+  </div>
+</div>

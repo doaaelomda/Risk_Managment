@@ -1,0 +1,96 @@
+@if(currentActions?.length || currentWFActions?.length){
+<div class="action_container border flex flex-col gap-3 border-[#EAECF0] rounded-lg p-3 mb-2">
+  @if(currentActions?.length){
+    <div class="system_action-wrapper">
+      <div class="head mb-3">
+        <h4 class="text-[#101828] text-lg font-medium">{{'MESSAGES.SystemActions' | translate}}</h4>
+      </div>
+
+      <div class="flex items-center  flex-wrap">
+        @for(action of currentActions ; track action){
+         <div class="btn_custom-actions w-fit p-1 ">
+
+            <p-button
+              (onClick)="handleActionClick(action)"
+              styleClass="{{action?.color}} p-[10px] flex items-center justify-center gap-2 text-[#fff] text-sm font-medium"
+              [disabled]="cannotDoAnotherAction"
+              [loading]="action?.isLoading"
+            >
+            <i [class]="action?.icon"></i>
+            <span > {{action?.name || '-'}} </span>
+            </p-button>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+
+  @if(currentWFActions?.length){
+
+    <div class="WF_action-wrapper">
+      <div class="head  mb-3">
+        <h4 class="text-[#101828] text-lg font-medium">Work Flow Actions</h4>
+      </div>
+
+      <div class="flex items-center  flex-wrap">
+        @for(action of currentWFActions ; track action){
+          <div class="btn_custom-actions w-fit p-1 ">
+
+            <p-button
+              (onClick)="handleWFAction(action)"
+              styleClass="{{action?.color}} flex items-center justify-center gap-2 text-[#fff] text-sm font-medium"
+              [disabled]="cannotDoAnotherAction"
+              [loading]="action?.isLoading"
+            >
+            <i [class]="action?.icon"></i>
+            <span > {{action?.name || '-'}} </span>
+            </p-button>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>
+}
+
+<div class="action_dailog">
+  <p-dialog
+    [(visible)]="visibleConfirm"
+    [modal]="true"
+    [dismissableMask]="true"
+    [draggable]="false"
+    styleClass="w-[60%]"
+    [closable]="true"
+    (onHide)="selectedAction = null"
+  >
+    <div class="container py-4 px-2">
+      <div class="flex gap-6 items-start">
+
+
+        <div class=" flex justify-center items-center w-[48px] h-[48px] rounded-full bg-[#F4F3FF] text-[#5925DC]">
+              <i [class]="selectedAction?.icon"></i>
+        </div>
+
+        <div class="content_notifaication mb-8">
+          <h1 class="headers_view mb-2">
+            {{ selectedAction?.declaration || '-' }}
+          </h1>
+          <p class="welcome">
+            {{ selectedAction?.description || '-' }}
+          </p>
+        </div>
+      </div>
+      <div class="flex justify-end">
+        <div class="action_btn">
+          <p-button
+            [loading]="isExecutingAction"
+            (onClick)="callBack(selectedAction)"
+          >
+            {{ 'BUTTONS.Confirm' | translate }}
+          </p-button>
+        </div>
+      </div>
+    </div>
+  </p-dialog>
+</div>

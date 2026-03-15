@@ -1,0 +1,61 @@
+<!-- Delete Popup Indicators -->
+
+<section>
+
+  <lib-new-table
+    [loading]="loadingTable"
+    [table_data]="dataTable"
+    [table_title]="indicatorName"
+    [badge_title]="'INDICATORS.INDICATOR' | translate"
+    [dataViewId]="35"
+    [entityID_Name]="'indicatorID'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="items"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{ module: this.moduleName, feature: this.featureName, action: 'VIEW' }"
+
+  >
+  @if(_PermissionSystemService.can(this.moduleName , this.featureName , 'ADD')){
+        <button
+      addition_action
+      [routerLink]="['/gfw-portal/indicators/add']"
+      [queryParams]="{
+        indicatorTypeID: routesParams.indicatorTypeID,
+        routing: routesParams.routing
+      }"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+    >
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'INDICATORS.ADD_NEW_INDICATOR' | translate }}</span>
+      <!-- <i class="fi fi-rr-angle-small-down"></i> -->
+    </button>
+  }
+  </lib-new-table>
+</section>
+
+<!-- Delete Popup Indicators -->
+
+<lib-delete-confirm-popup
+  [titleDelete]="'INDICATORS.DELETE_INDICATOR_TITLE'"
+  [descriptionDelete]="'INDICATORS.DELETE_INDICATOR_DESC'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteIndicator()"
+        [loading]="loadDeleted"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

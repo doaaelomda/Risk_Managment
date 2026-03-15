@@ -1,0 +1,102 @@
+<div class="action_dailog">
+  <p-dialog header="Header" [(visible)]="show_linked" (onHide)="onModalClose()" [modal]="true" [dismissableMask]="true"
+    [draggable]="false"  styleClass="w-[80%]">
+    <ng-template pTemplate="header">
+    </ng-template>
+
+
+    <div class="container">
+      <lib-shared-ui (selected_emiter_checkbox_item)="handleCheckedEventItemChange($event)" (selected_emiter_checkbox)="handleCheckedEventItemChange($event)" [selected_items]="checked_selected_items" [isActionShow]="false" [isCheckbox]="true" [entityID_Name]="current_data_view?.entityID_Name"
+        [dataViewId]="current_data_view?.dataViewId" [selected_profile_column]="selected_profile_column"
+        (filter_emitter)="handleFilter($event)" [filter_id_input]="current_data_view?.dataViewId" [action_items]="[]" [loadingState]="loadingTable"
+        (sortEmiter)="handleSort($event)" [total_items_input]="pageginationObj.totalItems"
+        [badge_name]="current_data_view?.badge_name | translate" [table_name]="current_data_view?.table_name | translate"
+        (paginationEvent)="getCurrentData($event)" [dataList]="dataList" [defultprofile]="defultProfile"
+        [profilesList]="currentProfiles">
+        <div addition_action class="action_btn">
+          <button (click)="ShowConfirm = true" class="btn">
+            Save Changes
+          </button>
+        </div>
+      </lib-shared-ui>
+    </div>
+
+  </p-dialog>
+</div>
+
+
+
+<div class="action_dailog">
+  <p-dialog header="Header" [(visible)]="ShowConfirm"
+    [modal]="true"
+    [draggable]="false" styleClass="w-[40rem]">
+
+        <ng-template pTemplate="header">
+    </ng-template>
+
+
+    <div class="container">
+      @if(addedSelectionItems.length || removedSelectionItems.length){
+        <h2 class="text-xl font-semibold text-gray-800 mb-4"><span class="font-bold">{{addedSelectionItems.length + removedSelectionItems.length}}</span> Items Effected</h2>
+
+        <div class="grid grid-cols-12 gap-6">
+          <div class="col-span-12">
+            <h3 class="text-gray-800 font-medium text-xl mb-2">Added Items</h3>
+            @if(addedSelectionItems.length){
+
+              <div class="grid grid-cols-12 gap-2">
+                @for (item of addedSelectionItems ; track $index) {
+                  <div class=" col-span-12 lg:col-span-6 border  border-success_color rounded-lg py-2 px-4">
+                    <p> ID : {{item[current_data_view?.entityID_Name]}} </p>
+                    <p> Name : {{item?.name}} </p>
+                  </div>
+                }
+              </div>
+            }@else {
+              <p>No Items Effected </p>
+            }
+          </div>
+          <div class="col-span-12">
+            <h3 class="text-gray-800 font-medium text-xl mb-2">ٌRemoved Items</h3>
+            @if(removedSelectionItems.length){
+                <div class="grid grid-cols-12 gap-2">
+                @for (item of removedSelectionItems ; track $index) {
+                  <div class=" col-span-12 lg:col-span-6 border  border-danger_color rounded-lg py-2 px-4">
+                    <p> ID : {{item[current_data_view?.entityID_Name]}} </p>
+                    <p> Name : {{item?.name}} </p>
+                  </div>
+                }
+              </div>
+            }@else {
+              <p>No Item Effected</p>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+
+  <ng-template pTemplate="footer">
+    <div class="flex flex-wrap justify-end gap-2">
+     <p-button
+  pButton
+  class="bg-white_color text-gray-700 text-sm border border-gray_light rounded-lg"
+  [label]="'BUTTONS.CANCEL' | translate"
+  icon="pi pi-times"
+  (onClick)="ShowConfirm = false"
+   />
+
+<p-button
+  pButton
+  class="bg-primary text-white text-sm rounded-lg"
+  [label]="'BUTTONS.SAVE' | translate"
+  [loading]="loadingBtn"
+  icon="pi pi-check"
+  (click)="submitSaveEffectedItems()" />
+
+    </div>
+
+  </ng-template>
+
+  </p-dialog>
+</div>

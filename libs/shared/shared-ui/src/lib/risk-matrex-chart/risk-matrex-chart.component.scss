@@ -1,0 +1,71 @@
+:host {
+  --cell-size: 66.78px;
+  --cell-gap: 2px;
+}
+
+/* Container */
+.risk-wrapper {
+  display: inline-block;
+}
+
+/* MATRIX + Y AXIS */
+.risk-container {
+  display: flex;
+  align-items: flex-start;
+}
+
+/* MATRIX GRID */
+.matrix {
+  display: grid;
+    align-content: end;
+  gap: var(--cell-gap);
+}
+
+/* CELL */
+.matrix-cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  border-radius: 5.84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.matrix-cell:hover {
+  transform: scale(1.04);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Y AXIS */
+.y-axis {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cell-gap);
+  // margin-right: 16px;
+}
+
+.y-label {
+  height: var(--cell-size);
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* X AXIS */
+.x-axis {
+  display: grid;
+  gap: var(--cell-gap);
+  margin-top: 16px;
+}
+
+.x-label {
+  width: var(--cell-size);
+  text-align: center;
+  font-weight: 500;
+}

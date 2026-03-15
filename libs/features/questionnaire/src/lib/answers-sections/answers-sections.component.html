@@ -1,0 +1,117 @@
+@if(_PermissionSystemService.can('THIRDPARTIES' ,
+'THIRDPARTYQUESTIONNAIREANSWERS' , 'VIEW') ){
+<div class="mb-4">
+  <div class="grid grid-cols-12 gap-4">
+    @if(!loadingAnswers){ @for(card of cards ; track $index ; let i = $index) {
+    <div
+      class="bg-primaryColor-25 rounded-lg px-6 py-4 border border-gray-200 col-span-12 lg:col-span-4 md:col-span-6"
+    >
+      <h3 class="text-primaryColor-800 text-sm font-medium mb-6">
+        {{ card.title }}
+      </h3>
+      @if(card.total){
+      <p class="text-primaryColor-900 text-4xl font-semibold">
+        {{ card.value }}/{{ card.total }}
+      </p>
+      }@else {
+      <p class="text-primaryColor-900 text-4xl font-semibold">
+        {{ card.value }}
+      </p>
+      }
+    </div>
+    } }@else {
+    <div class="col-span-12 lg:col-span-4 md:col-span-6">
+      <p-skeleton height="7rem" />
+    </div>
+        <div class="col-span-12 lg:col-span-4 md:col-span-6">
+      <p-skeleton height="7rem" />
+    </div>
+        <div class="col-span-12 lg:col-span-4 md:col-span-6">
+      <p-skeleton height="7rem" />
+    </div>
+    }
+  </div>
+</div>
+
+@if(!loadingAnswers){ @for(section of sections; let i = $index; track i) {
+<div class="action_section py-4">
+  <p-accordion
+    class="w-full"
+    expandIcon="fi fi-rr-angle-small-down"
+    collapseIcon="fi fi-rr-angle-small-up"
+  >
+    <p-accordionTab>
+      <!-- Header -->
+      <ng-template pTemplate="header">
+        <div class="section-header flex">
+          <span class="section-title text-gray-700 font-semibold text-[18px]">{{ section.secsionName }}</span>
+          <!-- <div class="section-info">
+            <span class="section-score">Score: {{ section.score }}</span>
+            <span class="section-questions">{{ section.questions }}</span>
+          </div> -->
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="content">
+        <div class="questions-grid">
+          @if(section.questions) { @for(question of section.questions; track
+          $index; let j = $index) {
+          <div class="rounded-lg px-3 py-2 border border-gray-300 mb-4">
+            <div class="flex justify-between questions-center mb-1">
+              <div class="text-gray-700 font-semibold text-[16px]">
+                {{ question.questionName }}
+              </div>
+              <!-- <div class="badge !bg-blue-50 !text-blue-700 font-medium text-sm">Score: {{ question.score }}</div> -->
+            </div>
+            @if(!singleTypes.includes(question.quesitionTypeID) &&
+            !multiTypes.includes(question.quesitionTypeID)){
+            <div class="text-gray-500 font-normal text-[18px]">
+              {{ question.answerText }}
+            </div>
+            }@else { @if(singleTypes.includes(question.quesitionTypeID)){
+            <div class="grid grid-cols-12 gap-2">
+              @for (option of question.answerOptions; track $index) {
+              <div class="col-span-12 lg:col-span-6">
+                <p-radioButton
+                  disabled
+                  [label]="option.name"
+                  [value]="option.questionnaireAnswerOptionID"
+                  [(ngModel)]="question.answerText"
+                />
+              </div>
+              }
+            </div>
+            }@else if(multiTypes.includes(question.quesitionTypeID)){
+            <div class="grid grid-cols-12 gap-2">
+              @for (option of question.answerOptions; track $index) {
+              <div class="col-span-12 lg:col-span-6">
+                <p-checkbox
+                  disabled
+                  [label]="option.name"
+                  [value]="option.questionnaireAnswerOptionID"
+                  [binary]="false"
+                  [(ngModel)]="question.answersArray"
+                />
+              </div>
+              }
+            </div>
+            } }
+          </div>
+          } } @else {
+          <p class="text-gray-500 font-normal text-[18px] text-center">
+            No Data
+          </p>
+          }
+        </div>
+      </ng-template>
+    </p-accordionTab>
+  </p-accordion>
+</div>
+} }@else {
+<div class="flex gap-6 flex-col">
+  <p-skeleton height="4rem" />
+  <p-skeleton height="4rem" />
+  <p-skeleton height="4rem" />
+  <p-skeleton height="4rem" />
+</div>
+} }

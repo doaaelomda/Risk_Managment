@@ -1,0 +1,42 @@
+<div class="form_group">
+  @if(currentLabel.length){
+    <label for="" class="block mb-2">{{currentLabel|translate}}</label>
+  }
+<p-dropdown
+  [showClear]="true"
+  [options]="currentData"
+  [optionLabel]="currentOptionLabel"
+  [placeholder]="currentPlaceHolder|translate"
+  [formControl]="currentControl"
+  [optionValue]="currentOptionValue"
+  appendTo="body"
+>
+
+
+    <ng-template let-user pTemplate="item">
+
+      <div class="flex items-center gap-3">
+        <div class="avatar">
+          <!-- <img src="images/Avatar2.svg" alt=""> -->
+            <lib-img-system [userId]="user?.id"></lib-img-system>
+        </div>
+        <div class="conte">
+          <p class="font-medium text-ellipsis text-gray-800 text-sm mb-1">{{user?.userName}}</p>
+          <p class="text-gray_color text-sm">{{user?.role}}</p>
+
+        </div>
+      </div>
+    </ng-template>
+
+</p-dropdown>
+
+  @if(currentValidations.length){
+    @if(currentControl.errors &&  currentControl.touched && currentValidations.length){
+      @for(val of currentValidations ; track val){
+        @if(currentControl.getError(val.key)){
+          <p class="text-sm p-1 text-danger_color">{{val.message |translate }}</p>
+        }
+      }
+    }
+  }
+</div>

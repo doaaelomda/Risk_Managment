@@ -1,0 +1,1140 @@
+<section>
+  <div
+    class="header border lg:flex sm:block rounded-t-lg border-b-0 items-center justify-between py-5 px-6"
+  >
+    <div class="table_title flex flex-wrap items-start gap-4">
+      <h3 class="table_title_header">{{ table_title }}</h3>
+
+      <span class="badge_small_table">{{ total_items }} Item</span>
+    </div>
+
+    <div class="table_actions flex flex-wrap items-center gap-4">
+      <!-- <div class="search md:w-80 sm:w-50">
+        <lib-input-search (searchTermEmiter)="handleEmitSearchTerm($event)"></lib-input-search>
+      </div> -->
+
+      <button (click)="sortable.toggle($event)" class="icon_btn primary">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M4.16406 10.0013C4.16406 9.54106 4.53716 9.16797 4.9974 9.16797H14.9974C15.4576 9.16797 15.8307 9.54106 15.8307 10.0013C15.8307 10.4615 15.4576 10.8346 14.9974 10.8346H4.9974C4.53716 10.8346 4.16406 10.4615 4.16406 10.0013Z"
+            fill="#5925DC"
+          />
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M1.66406 5.0013C1.66406 4.54106 2.03716 4.16797 2.4974 4.16797H17.4974C17.9576 4.16797 18.3307 4.54106 18.3307 5.0013C18.3307 5.46154 17.9576 5.83464 17.4974 5.83464H2.4974C2.03716 5.83464 1.66406 5.46154 1.66406 5.0013Z"
+            fill="#5925DC"
+          />
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M6.66406 15.0013C6.66406 14.5411 7.03716 14.168 7.4974 14.168H12.4974C12.9576 14.168 13.3307 14.5411 13.3307 15.0013C13.3307 15.4615 12.9576 15.8346 12.4974 15.8346H7.4974C7.03716 15.8346 6.66406 15.4615 6.66406 15.0013Z"
+            fill="#5925DC"
+          />
+        </svg>
+      </button>
+      <button (click)="custom.toggle($event)" class="icon_btn reqular">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M7.5 2.5V17.5M12.5 2.5V17.5M6.5 2.5H13.5C14.9001 2.5 15.6002 2.5 16.135 2.77248C16.6054 3.01217 16.9878 3.39462 17.2275 3.86502C17.5 4.3998 17.5 5.09987 17.5 6.5V13.5C17.5 14.9001 17.5 15.6002 17.2275 16.135C16.9878 16.6054 16.6054 16.9878 16.135 17.2275C15.6002 17.5 14.9001 17.5 13.5 17.5H6.5C5.09987 17.5 4.3998 17.5 3.86502 17.2275C3.39462 16.9878 3.01217 16.6054 2.77248 16.135C2.5 15.6002 2.5 14.9001 2.5 13.5V6.5C2.5 5.09987 2.5 4.3998 2.77248 3.86502C3.01217 3.39462 3.39462 3.01217 3.86502 2.77248C4.3998 2.5 5.09987 2.5 6.5 2.5Z"
+            stroke="#344054"
+            stroke-width="1.67"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+      @if((current_data_filter_entity.length > 0 && showFilters && mode() ===
+      'view') || current_data_filter_entity.length > 0 && mode() !== 'view'){
+
+      <div class="custom_filter_btn">
+        <button
+          [ngClass]="{ btn_filter_flex: filter_count }"
+          class="my_filter"
+          (click)="op.toggle($event)"
+        >
+          <i class="fi fi-rr-filter text-primaryColor-500"></i>
+          @if(filter_count){
+          <div class="flex-1 flex items-center gap-2">
+            <span class="text-sm text-primaryColor-500 font-medium">{{
+              filter_count
+            }}</span>
+            <span class="text-sm text-primaryColor-500 font-medium"
+              >Filter</span
+            >
+
+            <button
+              (click)="
+                selected_profile_filter = undefined;
+                filter_emitter.emit([]);
+                initFilterForm();
+                filter_count = 0
+              "
+            >
+              <i class="fi fi-rr-cross-small text-primaryColor-500"></i>
+            </button>
+          </div>
+          }
+        </button>
+      </div>
+      }
+      <ng-content select="[addition_action]"></ng-content>
+    </div>
+  </div>
+
+  <div [class]="is_ar ? 'rtl_dir' : 'ltr_dir'" class="table_container rounded-b-lg pb-4">
+    <p-table
+      (selectionChange)="onSelectionChange($event)"
+      [(selection)]="selectedItem"
+      [dataKey]="entityID_Name()"
+      [value]="data"
+      class="m-2 lg:m-0"
+      styleClass="custom_table"
+      columnResizeMode="expand"
+      [resizableColumns]="true"
+      [scrollable]="true"
+      [tableStyle]="{ 'min-width': '50' }"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          @for(col of columns; track $index){ @if(col.isShown && col.isResizable
+          ){
+          <th pResizableColumn>
+            <div class="flex items-center gap-2">
+              <span>{{ col.displayName ?? col.label }}</span>
+              @if(col.filed === selected_sort){ @if(selected_sort_direction ===
+              1){
+
+              <i class="fi fi-rr-sort-amount-up text-primary"></i>
+              }@else {
+              <i class="fi fi-rr-sort-amount-down-alt text-primary"></i>
+              } }
+            </div>
+          </th>
+          } @else if (col.isShown && col.isFixed) {
+          <th [alignFrozen]="is_ar ? 'right' : 'left'" pFrozenColumn>
+            <div class="flex items-center gap-2">
+              <span>{{ col.displayName ?? col.label }}</span>
+              @if(col.filed === selected_sort){ @if(selected_sort_direction ===
+              1){
+
+              <i class="fi fi-rr-sort-amount-up text-primary"></i>
+              }@else {
+              <i class="fi fi-rr-sort-amount-down-alt text-primary"></i>
+              } }
+            </div>
+          </th>
+          } } @if(isShownAction){
+
+          <th pFrozenColumn alignFrozen="right">
+            {{ 'LOOKUP.ACTIONS' | translate }}
+          </th>
+          }
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          @for(col of columns; track $index; let i=$index){ @if(col.isShown){
+          @switch (col.type){ @case('text'){ @if(col.isFixed){
+          <td (click)="handleColumnClick(row, i)" pFrozenColumn>
+            @if(row[getValueProperty('text' , col)]){
+            <span class="text-">{{ row[getValueProperty('text', col)] }}</span>
+            }@else {
+            <span>-</span>
+            }
+          </td>
+          }@else {
+          <td (click)="handleColumnClick(row, i)">
+            @if(col?.label === 'RiskSourceID' && row[getValueProperty('text' ,
+            col)]){
+            <span>{{ row['riskSourceName'] }}</span>
+            } @if(col?.label === 'RiskDomainID' && row[getValueProperty('text' ,
+            col)]){
+            <span class="badge" [ngClass]="row['riskDomainColor']">{{
+              row[getValueProperty('text', col)]
+            }}</span>
+            } @else if(row[getValueProperty('text' , col)]){ @let x =
+            row[getValueProperty('text' , col)]?.split('');
+            <span class="text-">{{
+              x?.length > 50 ? x?.slice(0, 40)?.join('') + ' ...' : x?.join('')
+            }}</span>
+            } @else {
+            <span>-</span>
+            }
+          </td>
+          } } @case('number'){ @if(col.isFixed){
+          <td (click)="handleColumnClick(row, i)" pFrozenColumn>
+            @if(row[getValueProperty('number' , col)]){
+            <span class="text-">{{
+              row[getValueProperty('number', col)] | number
+            }}</span>
+            }@else {
+            <span>-</span>
+            }
+          </td>
+          }@else {
+          <td (click)="handleColumnClick(row, i)">
+            @if(row[getValueProperty('number' , col)]){
+            <span class="text-">{{
+              row[getValueProperty('number', col)] | number
+            }}</span>
+            }@else {
+            <span>-</span>
+            }
+          </td>
+          } } @case('currency'){ @if(col.isFixed){
+          <td (click)="handleColumnClick(row, i)" pFrozenColumn>
+            @if(row[getValueProperty('currency' , col)]){
+            <span class="text-">{{
+              row[getValueProperty('currency', col)] | currency
+            }}</span>
+            }@else {
+            <span>-</span>
+            }
+          </td>
+          }@else {
+          <td (click)="handleColumnClick(row, i)">
+            @if(row[getValueProperty('currency' , col)]){
+            <span class="text-">{{
+              row[getValueProperty('currency', col)] | currency
+            }}</span>
+            }@else {
+            <span>-</span>
+            }
+          </td>
+          } } @case('multiline'){ @if(col.isFixed){
+          <td
+            (click)="handleColumnClick(row, i)"
+            pFrozenColumn
+            class="flex items-center gap-1"
+          >
+            @if(row[getValueProperty('notes' , col)]?.length){ @for(line of
+            row[getValueProperty('notes' , col)]?.slice(0,2) ; track $index){
+            <span class="multilines_single">{{ line?.label }}</span>
+            } @if(row[getValueProperty('notes' , col)]?.length > 2){
+            <div class="number_badge">
+              <span
+                >+ {{ row[getValueProperty('notes', col)]?.length - 2 }}</span
+              >
+            </div>
+            } }@else {
+            <span>-</span>
+            }
+          </td>
+          }@else {
+          <td
+            (click)="handleColumnClick(row, i)"
+            class="flex items-center gap-1"
+          >
+            @if(row[getValueProperty('notes' , col)]?.length){ @for(line of
+            row[getValueProperty('notes' , col)]?.slice(0,2) ; track $index){
+            <span class="multilines_single">{{ line?.label }}</span>
+            } @if(row[getValueProperty('notes' , col)]?.length > 2){
+            <div class="number_badge">
+              <span
+                >+ {{ row[getValueProperty('notes', col)]?.length - 2 }}</span
+              >
+            </div>
+            } }@else {
+            <span>-</span>
+            }
+          </td>
+          } } @case('userCard'){ @if(col.isFixed){
+          <td pFrozenColumn>
+            <div class="flex items-center gap-4">
+              @if (row[getValueProperty('image' , col)]) {
+              <div class="avatar">
+                <!-- <img width="40" [src]="row[getValueProperty('image' , col)]" alt=""> -->
+                <img width="40" src="images/Avatar2.svg" alt="" />
+              </div>
+              }
+
+              <div class="content">
+                <h2 class="tex-base font-medium">
+                  {{
+                    col.label === 'RiskOwnerRolesID'
+                      ? row['riskOwnerRole']
+                      : col.filed === 'Manager'
+                      ? row['riskManagerRole']
+                      : row[getValueProperty('title', col)] || '-'
+                  }}
+                </h2>
+                <p class="text-sm text-gray_color">
+                  {{
+                    col.filed === 'Manager'
+                      ? row['riskManagerUser']
+                      : row[getValueProperty('description', col)]
+                  }}
+                </p>
+              </div>
+            </div>
+          </td>
+          }@else {
+          <td (click)="handleColumnClick(row, i)">
+            <div class="flex items-center gap-4">
+              @if (row[getValueProperty('image' , col)]) {
+              <div class="avatar">
+                <!-- <img width="40" [src]="row[getValueProperty('image' , col)]" alt=""> -->
+                <img width="40" src="images/Avatar2.svg" alt="" />
+              </div>
+              }
+
+              <div class="content">
+                <h2 class="tex-base font-medium">
+                  {{
+                    col.label === 'RiskOwnerRolesID'
+                      ? row['riskOwnerRole']
+                      : col.filed === 'Manager'
+                      ? row['riskManagerRole']
+                      : row[getValueProperty('title', col)] || '-'
+                  }}
+                </h2>
+                <p class="text-sm text-gray_color">
+                  {{
+                    col.filed === 'Manager'
+                      ? row['riskManagerUser']
+                      : row[getValueProperty('description', col)]
+                  }}
+                </p>
+              </div>
+            </div>
+          </td>
+          } } @case('roleCard'){ @if(col.isFixed){
+          <td (click)="handleColumnClick(row, i)" pFrozenColumn>
+            @if(row[getValueProperty('text' , col)]){
+
+            <div class="flex items-center gap-4">
+              <div class="avatar">
+                <svg
+                  width="30"
+                  height="30"
+                  viewBox="0 0 30 30"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect
+                    x="0.800781"
+                    y="0.601562"
+                    width="28.8"
+                    height="28.8"
+                    rx="14.4"
+                    fill="#F4F3FF"
+                  />
+                  <path
+                    d="M22.2012 21.3031V19.9031C22.2012 18.5984 21.3088 17.5022 20.1012 17.1913M17.6512 8.90666C18.6773 9.32203 19.4012 10.328 19.4012 11.5031C19.4012 12.6782 18.6773 13.6842 17.6512 14.0996M18.7012 21.3031C18.7012 19.9985 18.7012 19.3462 18.488 18.8316C18.2039 18.1455 17.6588 17.6004 16.9727 17.3163C16.4581 17.1031 15.8058 17.1031 14.5012 17.1031H12.4012C11.0965 17.1031 10.4442 17.1031 9.92966 17.3163C9.24358 17.6004 8.69849 18.1455 8.41431 18.8316C8.20117 19.3462 8.20117 19.9985 8.20117 21.3031M16.2512 11.5031C16.2512 13.0495 14.9976 14.3031 13.4512 14.3031C11.9048 14.3031 10.6512 13.0495 10.6512 11.5031C10.6512 9.95673 11.9048 8.70312 13.4512 8.70312C14.9976 8.70312 16.2512 9.95673 16.2512 11.5031Z"
+                    stroke="#6938EF"
+                    stroke-width="1.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <div class="content">
+                <h2 class="tex-base font-medium">
+                  {{ row[getValueProperty('text', col)] }}
+                </h2>
+              </div>
+            </div>
+            }@else {
+            <span>-</span>
+            }
+          </td>
+          }@else {
+          <td (click)="handleColumnClick(row, i)">
+            @if(row[getValueProperty('text' , col)]){
+
+            <div class="flex items-center gap-4">
+              <div class="avatar">
+                <svg
+                  width="30"
+                  height="30"
+                  viewBox="0 0 30 30"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect
+                    x="0.800781"
+                    y="0.601562"
+                    width="28.8"
+                    height="28.8"
+                    rx="14.4"
+                    fill="#F4F3FF"
+                  />
+                  <path
+                    d="M22.2012 21.3031V19.9031C22.2012 18.5984 21.3088 17.5022 20.1012 17.1913M17.6512 8.90666C18.6773 9.32203 19.4012 10.328 19.4012 11.5031C19.4012 12.6782 18.6773 13.6842 17.6512 14.0996M18.7012 21.3031C18.7012 19.9985 18.7012 19.3462 18.488 18.8316C18.2039 18.1455 17.6588 17.6004 16.9727 17.3163C16.4581 17.1031 15.8058 17.1031 14.5012 17.1031H12.4012C11.0965 17.1031 10.4442 17.1031 9.92966 17.3163C9.24358 17.6004 8.69849 18.1455 8.41431 18.8316C8.20117 19.3462 8.20117 19.9985 8.20117 21.3031M16.2512 11.5031C16.2512 13.0495 14.9976 14.3031 13.4512 14.3031C11.9048 14.3031 10.6512 13.0495 10.6512 11.5031C10.6512 9.95673 11.9048 8.70312 13.4512 8.70312C14.9976 8.70312 16.2512 9.95673 16.2512 11.5031Z"
+                    stroke="#6938EF"
+                    stroke-width="1.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <div class="content">
+                <h2 class="tex-base font-medium">
+                  {{ row[getValueProperty('text', col)] }}
+                </h2>
+              </div>
+            </div>
+            }@else {
+            <span>-</span>
+            }
+          </td>
+          } } @case('badge'){ @if(col.isFixed){
+          <td (click)="handleColumnClick(row, i)" pFrozenColumn>
+            @if(row[getValueProperty('text' , col)]){
+
+            <span [class]="row[getValueProperty('color', col)]" class="badge">
+              <div class="small_doted"></div>
+
+              <span>{{ row[getValueProperty('text', col)] }}</span>
+            </span>
+            }@else {
+            <span>-</span>
+            }
+          </td>
+          }@else {
+          <td (click)="handleColumnClick(row, i)">
+            @if(row[getValueProperty('text' , col)]){
+
+            <span [class]="row[getValueProperty('color', col)]" class="badge">
+              <div class="small_doted"></div>
+              <span>{{ row[getValueProperty('text', col)] }}</span>
+            </span>
+            }@else {
+            <span>-</span>
+            }
+          </td>
+
+          } }@case('bool'){ @if(col.isFixed){
+          <td (click)="handleColumnClick(row, i)" pFrozenColumn>
+            @if(row[getValueProperty('bool' , col)]){
+
+            <span class="badge green">
+              <div class="small_doted"></div>
+
+              <span>Active</span>
+            </span>
+            }@else {
+            <span class="badge red">
+              <div class="small_doted"></div>
+
+              <span>InActive</span>
+            </span>
+            }
+          </td>
+          }@else {
+          <td (click)="handleColumnClick(row, i)">
+            @if(row[getValueProperty('bool' , col)]){
+
+            <span class="badge green">
+              <div class="small_doted"></div>
+
+              <span>Active</span>
+            </span>
+            }@else {
+            <span class="badge red">
+              <div class="small_doted"></div>
+
+              <span>InActive</span>
+            </span>
+            }
+          </td>
+
+          } } @case('date'){ @if(col.isFixed){
+
+          <td (click)="handleColumnClick(row, i)" pFrozenColumn>
+            @if(row[getValueProperty('date' , col)]){
+            <span>{{
+              row[getValueProperty('date', col)] | date : 'dd , MMM yy h:m a'
+            }}</span>
+            }@else {
+            <span>-</span>
+            }
+          </td>
+          }@else {
+          <td (click)="handleColumnClick(row, i)">
+            @if(row[getValueProperty('date' , col)]){
+            <span>{{
+              row[getValueProperty('date', col)] | date : 'dd , MMM yy h:m a'
+            }}</span>
+            }@else {
+            <span>-</span>
+            }
+          </td>
+          } }@case('progress'){ @if(col.isFixed){
+          <td (click)="handleColumnClick(row, i)" pFrozenColumn>
+            <div class="progress_outer">
+              <div
+                [style.width]="row[getValueProperty('progress', col)] + '%'"
+                class="inner"
+              ></div>
+            </div>
+          </td>
+          }@else {
+          <td (click)="handleColumnClick(row, i)">
+            <div class="progress_outer">
+              <div
+                [style.width]="row[getValueProperty('progress', col)] + '%'"
+                class="inner"
+              ></div>
+            </div>
+          </td>
+          } } } } } @if(this.isShownAction){
+          <td pFrozenColumn alignFrozen="right">
+            <div class="flex items-center justify-start">
+              <button
+                (click)="
+                    menu.toggle($event);
+                    selected_emiter.emit(row[`${entityID_Name()}`]);
+                    selected_row = row
+                  "
+                class="icon"
+              >
+                <i class="fi fi-rr-menu-dots-vertical text-gray_color"></i>
+              </button>
+            </div>
+          </td>
+          }
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td [attr.colspan]="10">
+            <lib-empty-state [loading]="loading"></lib-empty-state>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</section>
+
+<p-overlayPanel styleClass="w-[60rem]" #op>
+  <div class="p-4 flex items-center justify-between mb-6">
+    <h3 class="text-lg font-semibold mb-2">Filters</h3>
+
+    <div class="flex items-center gap-4">
+      <button (click)="cancelAllFilters(op)">Clear All</button>
+
+      <div class="form_group w-72">
+        <p-dropdown
+          [showClear]="true"
+          [(ngModel)]="selected_profile_filter"
+          (onChange)="handledselectedFilterProfile()"
+          (onClear)="cancelAllFilters(op)"
+          optionLabel="profileName"
+          [options]="filter_profiles"
+          placeholder="Saved Filters"
+        />
+      </div>
+    </div>
+  </div>
+
+  <form [formGroup]="filter_form" class="mb-6">
+    <div formArrayName="filters" class="filters">
+      @for(control of filterForm.controls ; track $index ; let i = $index){
+      <div
+        class="flex items-center justify-between gap-6 bg-gray_light/10 p-4 rounded-lg mb-4"
+      >
+        <div [formGroupName]="i" class="single_filter grid grid-cols-12 gap-4">
+          <div class="form_group col-span-3">
+            <p-dropdown
+              [options]="current_data_filter_entity"
+              formControlName="filter_type"
+              optionLabel="displayName"
+              [filter]="true"
+              filterBy="displayName"
+              (onChange)="handleSelectFilter(i, $event)"
+              placeholder="Select Filter"
+            />
+          </div>
+
+          @if(control.get('operator')){
+
+          <div class="form_group col-span-3">
+            <p-dropdown
+              [options]="current_operator_map.get(i)"
+              formControlName="operator"
+              optionLabel="OperatorName"
+              [filter]="true"
+              filterBy="OperatorName"
+              placeholder="Select Operator"
+            />
+          </div>
+          } @if(control.get('firstValue')){ @switch
+          (control.get('filter_type')?.value.filterType) { @case ('Text') {
+          <div class="form_group col-span-3">
+            <input
+              type="text"
+              pInputText
+              formControlName="firstValue"
+              placeholder="Search Text"
+            />
+          </div>
+          } @case ('Integer Number') {
+          <div class="form_group col-span-3">
+            <!-- <input type="text" pInputText
+              [placeholder]="'Filters.SearchText' | translate" /> -->
+            <p-inputNumber inputId="integeronly" formControlName="firstValue" />
+          </div>
+          } @case('List'){
+          <div class="form_group col-span-3">
+            <p-dropdown
+              [options]="filters_list_map.get(i)"
+              optionValue="id"
+              formControlName="firstValue"
+              optionLabel="label"
+            />
+          </div>
+          }@case('Date'){
+          <div class="form_group col-span-2">
+            <p-dropdown
+              [options]="filters_list_map.get(i)"
+              optionValue="DataEntityTypeFilterDateOptionID"
+              formControlName="firstValue"
+              optionLabel="NameEn"
+            />
+          </div>
+          @if(control.get('firstValue')?.value === 18){
+          <div class="form_group col-span-4">
+            <p-calendar
+              formControlName="secondValue"
+              [iconDisplay]="'input'"
+              placeholder="Select Date"
+              [showIcon]="true"
+              selectionMode="range"
+              inputId="icondisplay"
+            />
+          </div>
+          }@else if(control.get('firstValue')?.value === 19){
+          <div class="form_group col-span-4">
+            <p-calendar
+              formControlName="secondValue"
+              [iconDisplay]="'input'"
+              placeholder="Select Date"
+              [showIcon]="true"
+              inputId="icondisplay"
+            />
+          </div>
+          } }@case('User'){
+          <div class="form_group col-span-4">
+            <lib-user-dropdown
+              placeholder="Select User"
+              [formControlNameInput]="'firstValue'"
+              [options]="filters_list_map.get(i)"
+              optionLabel="name"
+              optionValue="id"
+              [control]="control.get('firstValue')!"
+            ></lib-user-dropdown>
+          </div>
+          }@case('Role'){
+          <div class="form_group col-span-4">
+            <lib-role-dropdown
+              placeholder="Select Role"
+              [formControlNameInput]="'firstValue'"
+              [options]="filters_list_map.get(i)"
+              optionLabel="label"
+              optionValue="id"
+              [control]="control.get('firstValue')!"
+            ></lib-role-dropdown>
+          </div>
+          } } }
+        </div>
+        <button
+          (click)="removeFromArray(i)"
+          class="btn_icon p-3 rounded-lg bg-danger_color col-span-1 text-white_color"
+        >
+          <i class="fi fi-rr-trash"></i>
+        </button>
+      </div>
+
+      }
+    </div>
+  </form>
+
+  <button
+    (click)="addNewFilter()"
+    class="flex items-center gap-2 px-3 mb-6 py-2 font-medium rounded-lg bg-primary/20 text-primary"
+  >
+    <span>Add Filter</span>
+    <i class="fi fi-rr-plus-small"></i>
+  </button>
+
+  <div class="flex items-center justify-between">
+    <div>
+      <button
+        (click)="cancelAllFilters(op)"
+        class="px-3 py-2 rounded-lg border border-gray_light font-medium"
+      >
+        Cancel
+      </button>
+    </div>
+    <div class="flex items-center gap-4">
+      @if(selected_profile_filter){
+      <div class="action_btn flex">
+        <p-button
+          label="Apply & Update"
+          icon=""
+          [disabled]="filter_form.invalid || !filterForm.controls.length"
+          (onClick)="handleApplyUpdateFilter(op)"
+        />
+      </div>
+      }@else{
+      <div class="action_btn flex">
+        <p-button
+          label="Apply & Save"
+          icon=""
+          [disabled]="filter_form.invalid || !filterForm.controls.length"
+          (onClick)="handleApplySaveFilter(op)"
+        />
+      </div>
+      }
+
+      <button
+        [disabled]="filter_form.invalid || !filterForm.controls.length"
+        (click)="handleApplyFilter(op)"
+        class="apply_btn px-3 py-2 font-medium rounded-lg border border-primary text-primary"
+      >
+        Apply
+      </button>
+
+      @if(selected_profile_filter){
+      <button
+        (click)="op.toggle(0); handledDeleteFilterProfile()"
+        class="px-3 py-2 rounded-lg border border-danger_color text-danger_color"
+      >
+        Delete
+      </button>
+      }
+    </div>
+  </div>
+</p-overlayPanel>
+
+<p-menu #menu [model]="items" [popup]="true" />
+
+<!-- <p-dialog [draggable]="false" [dismissableMask]="true" [modal]="true" [position]="'right'" [(visible)]="visible"
+  >
+  <ng-template pTemplate="header">
+    <div class="header flex items-center justify-between gap-8">
+      <h2 class="font-semibold text-gray-800 text-lg">Customize Columns</h2>
+
+      <div class=" flex-1 ">
+        <div class="form_group flex-1">
+          <p-dropdown [options]="profiles" [(ngModel)]="selectedProfile" optionLabel="profileName"
+            (onChange)="columns =selectedProfile" optionValue="columns" placeholder="Select a Profile" />
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <div class="py-4 flex flex-col gap-4">
+
+
+
+    <div class="drag_contain flex-1 ">
+      <div cdkDropList (cdkDropListDropped)="drop($event)">
+        @for(col of columns ; track col){
+        <div cdkDrag [cdkDragDisabled]="col.isFixed" [class]="col.isFixed ? 'dis_curs':''"
+          class="col_container mb-3 flex border border-gray_light rounded-2xl p-2  items-center gap-2">
+          @if(showPin || col.isFixed){
+          <button (click)="handleFixedColumn(col)" class="icon p-3 cursor-pointer">
+            <i [class]="col.isFixed ? 'text-success_color' : ''" class="fi fi-ss-thumbtack"></i>
+          </button>
+          }
+          <div class="icon p-3 ">
+            <i class="fi fi-br-menu-burger"></i>
+          </div>
+          <div class="flex-1 flex items-center justify-between">
+            <div>
+              {{col.label}}
+            </div>
+            <div class="switch">
+              <p-inputSwitch [disabled]="col.isFixed || shouldDisableSwitch(col)" [(ngModel)]="col.isShown" />
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+
+
+
+  <ng-template pTemplate="footer">
+    <div class="action_btn">
+      <p-button label="Apply Profile" (onClick)="showProfileName = true;" />
+    </div>
+  </ng-template>
+</p-dialog> -->
+
+<p-overlayPanel styleClass="w-[35rem]" #custom>
+  <div class="customize_container relative">
+    <div class="custom_height pb-4">
+      <div class="header mb-5 pb-3">
+        <div class="flex items-center justify-between mb-3 gap-8">
+          <h2 class="font-semibold text-gray-800 text-lg">
+            {{ 'CUSTOM_COLUMNS.TITLE' | translate }}
+          </h2>
+
+          <div class="flex items-center flex-1 gap-3">
+            <div class="form_group flex-1">
+              <p-dropdown
+                [options]="profiles"
+                [(ngModel)]="selectedProfile"
+                optionLabel="profileName"
+                (onChange)="handleSelectedColumnProfile($event)"
+                [placeholder]="'CUSTOM_COLUMNS.SELECT_PROFILE' | translate"
+              >
+              </p-dropdown>
+            </div>
+
+            <button
+              (click)="custom.toggle(0)"
+              class="exit_icon p-3 rounded-lg flex items-center border border-gray_light"
+            >
+              <i class="fi fi-br-cross"></i>
+            </button>
+          </div>
+        </div>
+        <div>
+          <div class="flex mb-3 items-center justify-between">
+            <p class="text-gray_color/70 font-medium">
+              {{ 'CUSTOM_COLUMNS.ADD_DATA_INFO' | translate }}
+            </p>
+            <p class="text-gray_color/70 font-medium">
+              {{
+                'CUSTOM_COLUMNS.COLUMNS_SELECTED'
+                  | translate : { count: getShownGolumns() }
+              }}
+            </p>
+          </div>
+          <div class="flex items-center gap-4">
+            <p>
+              {{ 'CUSTOM_COLUMNS.SELECT_DATA_INFO' | translate }}
+            </p>
+            <div class="flex min-w-fit items-center gap-2">
+              <p-inputSwitch
+                (onChange)="handleChangeCheckAllColumns()"
+                [(ngModel)]="isAllColumnsChecked"
+              />
+              <p class="font-semibold">Check All</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drag_contain">
+        <div
+          style="max-height: 400px; overflow-y: auto"
+          cdkDropList
+          cdkDropListAutoScroll
+          (cdkDropListDropped)="drop($event)"
+        >
+          @for(col of columns ; track $index){
+          <div
+            cdkDrag
+            [cdkDragDisabled]="col.isFixed"
+            [class]="col.isFixed ? 'dis_curs' : ''"
+            class="col_container mb-3 flex items-center gap-2"
+          >
+            <div class="icon p-3">
+              <!-- drag icon -->
+              <svg
+                width="10"
+                height="18"
+                viewBox="0 0 10 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M1.66667 4.00033C2.58714 4.00033 3.33333 3.25413 3.33333 2.33366C3.33333 1.41318 2.58714 0.666992 1.66667 0.666992C0.746192 0.666992 0 1.41318 0 2.33366C0 3.25413 0.746192 4.00033 1.66667 4.00033Z"
+                  fill="#667085"
+                />
+                <path
+                  d="M1.66667 10.6663C2.58714 10.6663 3.33333 9.92015 3.33333 8.99967C3.33333 8.0792 2.58714 7.33301 1.66667 7.33301C0.746192 7.33301 0 8.0792 0 8.99967C0 9.92015 0.746192 10.6663 1.66667 10.6663Z"
+                  fill="#667085"
+                />
+                <path
+                  d="M1.66667 17.3333C2.58714 17.3333 3.33333 16.5871 3.33333 15.6667C3.33333 14.7462 2.58714 14 1.66667 14C0.746192 14 0 14.7462 0 15.6667C0 16.5871 0.746192 17.3333 1.66667 17.3333Z"
+                  fill="#667085"
+                />
+                <path
+                  d="M8.33464 4.00033C9.25511 4.00033 10.0013 3.25413 10.0013 2.33366C10.0013 1.41318 9.25511 0.666992 8.33464 0.666992C7.41416 0.666992 6.66797 1.41318 6.66797 2.33366C6.66797 3.25413 7.41416 4.00033 8.33464 4.00033Z"
+                  fill="#667085"
+                />
+                <path
+                  d="M8.33464 10.6663C9.25511 10.6663 10.0013 9.92015 10.0013 8.99967C10.0013 8.0792 9.25511 7.33301 8.33464 7.33301C7.41416 7.33301 6.66797 8.0792 6.66797 8.99967C6.66797 9.92015 7.41416 10.6663 8.33464 10.6663Z"
+                  fill="#667085"
+                />
+                <path
+                  d="M8.33464 17.3333C9.25511 17.3333 10.0013 16.5871 10.0013 15.6667C10.0013 14.7462 9.25511 14 8.33464 14C7.41416 14 6.66797 14.7462 6.66797 15.6667C6.66797 16.5871 7.41416 17.3333 8.33464 17.3333Z"
+                  fill="#667085"
+                />
+              </svg>
+            </div>
+            <div
+              class="bg-primary/5 px-2 py-1 rounded-lg flex-1 cursor-auto flex items-center justify-between"
+            >
+              @if(showPin || col.isFixed){
+              <button
+                (click)="handleFixedColumn(col)"
+                class="icon p-3 cursor-pointer"
+              >
+                <i
+                  [ngClass]="{
+                    'fi-rr-thumbtack': !col.isFixed,
+                    'fi-ss-thumbtack': col.isFixed,
+                    'text-primary': col.isFixed
+                  }"
+                  class="fi"
+                ></i>
+              </button>
+              }
+              <div class="flex-1 flex items-center justify-between">
+                <div>
+                  {{ col.displayName ?? col.label }}
+                </div>
+                <div class="switch">
+                  <p-inputSwitch
+                    [disabled]="col.isFixed || shouldDisableSwitch(col)"
+                    [(ngModel)]="col.isShown"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="actions fixed bottom-0 right-0 px-4 rounded-b-md left-0 bg-white_color flex items-center justify-between py-3 border-t border-gray_light"
+    >
+      <button
+        (click)="custom.toggle(0)"
+        class="px-3 py-2 border font-medium border-gray_light rounded-lg"
+      >
+        {{ 'CUSTOM_COLUMNS.CANCEL' | translate }}
+      </button>
+
+      <div class="flex items-center gap-4">
+        @if(this.selectedProfile?.profileId !== 0){
+        <div class="delete_btn">
+          <button
+            (click)="handleDeleteColumnProfile()"
+            class="px-3 py-2 rounded-lg border border-danger_color text-danger_color"
+          >
+            {{ 'CUSTOM_COLUMNS.DELETE' | translate }}
+          </button>
+        </div>
+        }
+        <button
+          (click)="handledRestColumns()"
+          class="px-3 font-medium py-2 rounded-lg bg-primary/10 text-primary"
+        >
+          {{ 'CUSTOM_COLUMNS.RESET' | translate }}
+        </button>
+        <div class="action_btn">
+          <p-button
+            (onClick)="showProfileName = true"
+            [label]="
+              edit_column_flag
+                ? ('CUSTOM_COLUMNS.UPDATE_PROFILE' | translate)
+                : ('CUSTOM_COLUMNS.ADD_PROFILE' | translate)
+            "
+          >
+          </p-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-overlayPanel>
+
+<!-- profile column -->
+<p-dialog
+  (onShow)="handledToggleStatusColumnProfile()"
+  [header]="edit_column_flag ? 'Update Profile' : 'Create Profile'"
+  (onHide)="update_filter_flag = false; profile_name = ''"
+  [modal]="true"
+  [(visible)]="showProfileName"
+  styleClass="w-[25rem]"
+>
+  <div class="form_group">
+    <label for="profile_name" class="font-semibold w-6rem"
+      >Enter Profile Name</label
+    >
+    <input
+      pInputText
+      id="profile_name"
+      class="flex-auto"
+      [(ngModel)]="profile_name"
+      autocomplete="off"
+    />
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex items-center gap-6">
+      <div class="action_btn w-28">
+        <p-button
+          label="Save"
+          [outlined]="true"
+          [disabled]="!profile_name.trim().length"
+          [loading]="loadSaveProfileColumn"
+          (onClick)="handleSaveProfile()"
+        />
+      </div>
+      <p-button
+        label="Cancel"
+        [text]="true"
+        (onClick)="showProfileName = false"
+      />
+    </div>
+  </ng-template>
+</p-dialog>
+
+<!-- profile filter -->
+<p-dialog
+  header="Create Filter Profile"
+  [modal]="true"
+  [(visible)]="showProfileNameFilter"
+  styleClass="w-[25rem]"
+>
+  <div class="form_group">
+    <label for="profile_name" class="font-semibold w-6rem"
+      >Enter Profile Filter Name</label
+    >
+    <input
+      pInputText
+      id="profile_name"
+      class="flex-auto"
+      [(ngModel)]="profile_name_filter"
+      autocomplete="off"
+    />
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex items-center gap-6">
+      <div class="action_btn w-28">
+        <p-button
+          [label]="update_filter_flag ? 'Update' : 'Save'"
+          [loading]="load_save_filter"
+          [outlined]="true"
+          severity="secondary"
+          (onClick)="handleSaveProfileFilter()"
+        />
+      </div>
+      <p-button
+        label="Cancel"
+        [text]="true"
+        severity="secondary"
+        (onClick)="showProfileNameFilter = false"
+      />
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-overlayPanel
+  (onHide)="searchTermSort = ''; handleSearchColumnsFilter()"
+  styleClass="w-[20rem]"
+  #sortable
+>
+  <div class="h-96 overflow-y-auto">
+    <div class="search flex items-center gap-2">
+      <div class="input_adon_search flex-1">
+        <input
+          (keyup)="handleSearchColumnsFilter()"
+          type="text"
+          pInputText
+          placeholder="Search ..."
+          [(ngModel)]="searchTermSort"
+        />
+        <i class="fi fi-rr-search"></i>
+      </div>
+
+      <button
+        (click)="
+          searchTermSort = '';
+          selected_sort = null;
+          selected_sort_direction = 1;
+          sortEmiter.emit({
+            direction: null,
+            field: null
+          });
+          sortable.toggle(0)
+        "
+        class="icon_btn reqular"
+      >
+        <i class="fi fi-rr-cross"></i>
+      </button>
+    </div>
+
+    <div class="content py-3">
+      @for(col of ColumnsFilter ; track $index){
+      <div class="flex items-center gap-4 mb-4 pl-2">
+        <p-radioButton
+          [inputId]="col.id"
+          name="sort"
+          [value]="col.filed"
+          (onClick)="handleSortEmiter()"
+          [(ngModel)]="selected_sort"
+        />
+        <label [for]="col?.id" class="ml-2">
+          {{ col?.displayName ?? col.label }}
+        </label>
+      </div>
+      }
+    </div>
+  </div>
+  <div class="py-3 border-t border-gray_light flex flex-col gap-2">
+    <button
+      (click)="
+        selected_sort_direction = 1;
+        sortEmiter.emit({
+          direction: selected_sort_direction,
+          field: selected_sort
+        })
+      "
+      [ngClass]="{
+        'bg-primary/15': selected_sort_direction === 1,
+        'text-primary': selected_sort_direction === 1
+      }"
+      class="flex px-4 py-3 items-center gap-4"
+    >
+      <i class="fi fi-rr-arrow-small-up"></i>
+      <span>{{ 'CUSTOM_COLUMNS.LOWEST_TO_HIGHEST' | translate }}</span>
+    </button>
+
+    <button
+      (click)="
+        selected_sort_direction = 2;
+        sortEmiter.emit({
+          direction: selected_sort_direction,
+          field: selected_sort
+        })
+      "
+      [ngClass]="{
+        'bg-primary/15': selected_sort_direction === 2,
+        'text-primary': selected_sort_direction === 2
+      }"
+      class="flex px-4 py-3 items-center gap-4"
+    >
+      <i class="fi fi-rr-arrow-small-down"></i>
+      <span>{{ 'CUSTOM_COLUMNS.HIGHEST_TO_LOWEST' | translate }}</span>
+    </button>
+  </div>
+</p-overlayPanel>

@@ -1,0 +1,90 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+ <section class="form_sec">
+    <div class="header border-b border-gray_light pb-6 mb-6">
+    <h2 class="text-lg font-medium text-gray-900">
+      {{
+        templateId
+          ? ('TEMPLATES.UPDATE_TEMPLATE' | translate)
+          : ('TEMPLATES.ADD_NEW_TEMPLATE' | translate)
+      }}
+    </h2>
+  </div>
+  <form [formGroup]="form" class="grid grid-cols-12 gap-6 mb-6">
+
+  <!-- Name (EN) -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-input-text
+      [placeholder]="'LOOKUP.NAME_PLACEHOLDER' | translate"
+      [inputLabel]="'LOOKUP.NAME' | translate"
+      [control]="form.get('name')!"
+      [controlNameInput]="'name'"
+    >
+    </lib-input-text>
+  </div>
+
+  <!-- Name (AR) -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-input-text
+      [placeholder]="'LOOKUP.NAME_AR_PLACEHOLDER' | translate"
+      [inputLabel]="'LOOKUP.NAME_AR' | translate"
+      [control]="form.get('nameAr')!"
+      [controlNameInput]="'nameAr'"
+    >
+    </lib-input-text>
+  </div>
+
+  <!-- Description (EN) -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-textarea-ui
+      [placeholder]="'LOOKUP.DESCRIPTION_PLACEHOLDER' | translate"
+      [inputLabel]="'LOOKUP.DESCRIPTION' | translate"
+      [control]="form.get('description')!"
+      [controlNameInput]="'description'"
+    >
+    </lib-textarea-ui>
+  </div>
+
+  <!-- Description (AR) -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-textarea-ui
+      [placeholder]="'LOOKUP.DESCRIPTION_AR_PLACEHOLDER' | translate"
+      [inputLabel]="'LOOKUP.DESCRIPTION_AR' | translate"
+      [control]="form.get('descriptionAr')!"
+      [controlNameInput]="'descriptionAr'"
+    >
+    </lib-textarea-ui>
+  </div>
+
+  <!-- Is Active -->
+  <div class="md:col-span-6 col-span-12 flex items-center gap-3">
+    <label class="text-sm font-medium text-gray_color">
+      {{ 'THREAT.IS_ACTIVE' | translate }}
+    </label>
+    <p-inputSwitch formControlName="isActive"></p-inputSwitch>
+  </div>
+
+  <div class="col-span-12 flex justify-end gap-4 py-4">
+<div class="default_btn cancel">
+      <a [routerLink]="'/gfw-portal/questionnaire/templates'">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </a>
+    </div>
+    <div class="action_btn">
+      <p-button
+        [label]="
+          templateId
+            ? ('BUTTONS.UPDATE' | translate)
+            : ('BUTTONS.SAVE' | translate)
+        "
+        [outlined]="true"
+        [disabled]="form.invalid"
+        [loading]="isSavingTemplate"
+        severity="secondary"
+        (onClick)="save()"
+      >
+      </p-button>
+    </div>
+  </div>
+</form>
+
+ </section>

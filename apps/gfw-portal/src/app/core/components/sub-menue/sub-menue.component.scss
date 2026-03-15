@@ -1,0 +1,20 @@
+.active-link {
+  @apply text-primaryColor-500;
+      // padding: 10px;
+    border-radius: 10px;
+}
+
+.active-link i,
+.active-link span {
+  @apply text-primaryColor-500
+}
+
+.active-link span.rounded-full {
+  @apply bg-primaryColor-50 text-primaryColor-500;
+}
+
+
+
+.sub_menue-custom{
+  z-index: 9999999;
+}

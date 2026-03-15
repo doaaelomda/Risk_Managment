@@ -1,0 +1,27 @@
+<div
+  class="tag flex items-center w-fit rounded px-2 py-1"
+  [ngStyle]="{
+    'background-color': hasBackGround ? getTheme(theme).bg : '',
+    'border': hasBorder ? '1px solid ' + getTheme(theme).text : ''
+  }"
+>
+  @if (hasBullet) {
+    <i class="fi fi-ss-bullet mr-1"></i>
+  }
+  @if (icon && iconPos === 'left') {
+    <i [class]="icon" [ngStyle]="{ color: getTheme(theme).icon }"></i>
+  }
+  @if (beforeTag) {
+    <span class="mr-1" [ngStyle]="{ color: getTheme(theme).text }">
+      {{ beforeTag }}
+    </span>
+  }
+
+  <span class="mx-1" [ngStyle]="{ color: getTheme(theme).text }">
+    {{ tag }}
+  </span>
+
+  @if (icon && iconPos === 'right') {
+    <i [class]="icon" [ngStyle]="{ color: getTheme(theme).icon }"></i>
+  }
+</div>

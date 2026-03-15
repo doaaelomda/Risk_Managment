@@ -1,0 +1,59 @@
+<div class="p-4 rounded-lg border border-gray_light overflow-auto" >
+  <div class="header mb-4">
+    <h2 class="text-lg font-medium text-gray-700">{{isAr ? 'خريطة حرارة المخاطر':' Risk Heat Map' }}</h2>
+  </div>
+
+<div class="risk-container">
+
+  <!-- Y AXIS -->
+  <div  class="y-axis me-4">
+    @for(impact of impacts; track impact) {
+      <div class="y-label">
+        {{ isAr ? impact?.nameAr : impact.name }}
+      </div>
+    }
+  </div>
+
+  <!-- MATRIX + X AXIS WRAPPER -->
+  <div class="matrix-wrapper flex-1">
+
+    <!-- MATRIX -->
+    <div class="matrix"
+         [style.gridTemplateColumns]="gridTemplateColumns">
+
+      @for(row of heatMap; track row) {
+        @for(cell of row; track cell) {
+          <div [class]="cell.color" class="matrix-cell"
+               >
+
+            @for(c of cell?.content ; track c ; let last = $last){
+              <span class="text-xl font-semibold" >{{c}}</span>
+           @if(!last) {
+    <span>, </span>
+  }
+            }
+
+          </div>
+        }
+      }
+
+    </div>
+
+    <!-- X AXIS -->
+    <div class="x-axis"
+         [style.gridTemplateColumns]="gridTemplateColumns">
+      @for(likelihood of liklehoods; track likelihood) {
+        <div class="x-label">
+          {{ isAr ? likelihood.nameAr: likelihood.name }}
+        </div>
+      }
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
+</div>

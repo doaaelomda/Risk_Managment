@@ -1,0 +1,161 @@
+<section class="main_info p-6 rounded-lg bg-sec_color mb-8">
+  <div class="header border-b border-gray_light pb-6">
+    <h2 class="text-lg font-semibold">{{'RISK_VIEW.MAIN_INFORMATION' | translate}}</h2>
+  </div>
+
+
+  <form [formGroup]="form" class="grid grid-cols-12 gap-6 pt-6">
+
+      <!-- @if(!Docid){
+         <div class="col-span-12">
+      <lib-input-number [placeholder]="'TABS.EXIST_FILE' | translate" [inputLabel]="'TABS.EXIST_FILE' | translate"
+        [control]="form.get('fileId')!" [controlNameInput]="'fileId'" [validations]="validationRequired">
+      </lib-input-number>
+    </div>
+      } -->
+
+    <!-- Name Arabic -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-input-text [placeholder]="'GOV_DOC.TITLE_AR' | translate" [inputLabel]="'GOV_DOC.TITLE_AR' | translate"
+        [control]="form.get('nameAr')!" [controlNameInput]="'nameAr'" [validations]="validationRequired">
+      </lib-input-text>
+    </div>
+
+    <!-- Name English -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-input-text [placeholder]="'GOV_DOC.TITLE_EN' | translate" [inputLabel]="'GOV_DOC.TITLE_EN' | translate"
+        [control]="form.get('name')!" [controlNameInput]="'name'" [validations]="validationRequired">
+      </lib-input-text>
+    </div>
+
+    <!-- Description Arabic -->
+    <div class="col-span-12">
+      <lib-textarea-ui [placeholder]="'MAIN_INFO.DescriptionArabic' | translate"
+        [inputLabel]="'MAIN_INFO.DescriptionArabic' | translate" [control]="form.get('descriptionAr')!"
+        [controlNameInput]="'descriptionAr'">
+      </lib-textarea-ui>
+      <small class="welcome mt-1">{{275 - (form.get('descriptionAr')?.value?.length )}}
+        {{'ASSESSMENT.CharactersLeft' | translate}}</small>
+    </div>
+
+
+    <!-- Description English -->
+    <div class="col-span-12">
+      <lib-textarea-ui [placeholder]="'MAIN_INFO.DescriptionEnglish' | translate"
+        [inputLabel]="'MAIN_INFO.DescriptionEnglish' | translate" [control]="form.get('description')!"
+        [controlNameInput]="'description'">
+      </lib-textarea-ui>
+      <small class="welcome mt-1">{{275 - (form.get('description')?.value?.length )}}
+        {{'ASSESSMENT.CharactersLeft' | translate}}</small>
+    </div>
+
+    <!-- Document Type Dropdown -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-ui-dropdown [placeholder]="'Control_view.GOV_DOCUMENT_TYPE' | translate"
+        [label]="'Control_view.GOV_DOCUMENT_TYPE' | translate" [control]="form.get('govDocumentTypeID')!"
+        [options]="documentTypes" [optionLabel]="'label'" [optionValue]="'id'"
+        [formControlNameInput]="'govDocumentTypeID'" [validations]="validationRequired">
+      </lib-ui-dropdown>
+    </div>
+
+
+        <div class="col-span-12 lg:col-span-6">
+      <lib-tree-multiselect [multiChoose]="true" [placeholder]="'AWARENESS.CONTENT_TYPE_PLACEHOLDER' | translate"
+        [label]="'AWARENESS.CONTENT_TYPE_PLACEHOLDER' | translate" [control]="form.get('govDocumentContentTypeIds')!"
+        [nodes_input]="ContentTypes"
+        [formControlNameInput]="'govDocumentContentTypeIds'" [validations]="validationRequired">
+      </lib-tree-multiselect>
+    </div>
+
+    <!-- Organization Unit -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-tree-select-ui [nodes_input]="OrganizationalUnit" [placeholder]="'PLACEHOLDERS.Select_Organizational_Unit' "
+        [label]="'RISK_MANAGMENT.ORG_UNIT' " [control]="form.get('organizationalUnitID')!"
+        [formControlNameInput]="'organizationalUnitID'" [validations]="validationRequired">
+      </lib-tree-select-ui>
+    </div>
+
+    <!-- WorkFlow Dropdown -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-ui-dropdown [label]="'RISK_MANAGMENT.WORKFLOW' | translate "
+        [placeholder]="'PLACEHOLDERS.SELECT_WORKFLOW' | translate" [control]="form.get('wfid')!"
+        [options]="ApprovalWorkflow" [optionLabel]="'label'" [optionValue]="'id'" [formControlNameInput]="'wfid'">
+      </lib-ui-dropdown>
+    </div>
+
+
+
+
+    <!-- DataClassification Dropdown -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-ui-dropdown [label]="'ATTACHMENT.CLASSIFICATION' | translate " [options]="classfications"
+        [optionLabel]="'label'" [optionValue]="'id'" [placeholder]="'ATTACHMENT.SELECT_CLASSIFICATION' | translate"
+        [control]="form.get('dataClassificationId')!" [formControlNameInput]="'dataClassificationId'"
+        [validations]="validationRequired">
+      </lib-ui-dropdown>
+    </div>
+
+    <!-- User Dropdown -->
+    <!-- <div class="col-span-12 lg:col-span-6">
+      <div class="col-span-12 lg:col-span-6">
+        <lib-ui-dropdown  [placeholder]="'ASSESSMENT_RISK.ASSESSOR_BY'" [label]="'ASSESSMENT_RISK.SELECT_USER'"
+          [control]="form.get('coordinatorUserID')!" [options]="users" [optionLabel]="'userName'" [optionValue]="'id'"
+          [formControlNameInput]="'coordinatorUserID'">
+        </lib-ui-dropdown>
+      </div>
+    </div> -->
+    <!-- Roles Dropdown -->
+    <!-- <div class="col-span-12 lg:col-span-6">
+      <lib-role-dropdown  [label]="'ADUIANCE.ROLE' | translate" [placeholder]="'SETTING.ROLES' | translate" [control]="form.get('ownerRoleID')!"
+        [formControlNameInput]="'ownerRoleID'" [options]="roles" [optionLabel]="'label'" [optionValue]="'id'">
+      </lib-role-dropdown>
+    </div> -->
+
+  </form>
+
+
+</section>
+@if(Docid){
+<div [ngClass]="{'invaild':showErrorResponsbility}" class="action_section my-6">
+  <p-accordion class="w-full" expandIcon="fi fi-rr-angle-small-down" collapseIcon="fi fi-rr-angle-small-up">
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div>
+          <h2>{{'GOV_DOC.Review' |translate}}</h2>
+        </div>
+      </ng-template>
+      <form [formGroup]="Review_form" class="grid grid-cols-12 gap-6">
+        <!-- Issue Date -->
+        <div class="col-span-12 lg:col-span-6">
+          <lib-date-packer [placeholder]="'GOV_DOC.Revision_DATE' | translate"
+            [inputLabel]="'GOV_DOC.Revision_DATE' | translate" [control]="Review_form.get('revisionDate')!"
+            [controlNameInput]="'revisionDate'">
+          </lib-date-packer>
+        </div>
+
+        <!-- Review_Period dropdown -->
+        <div class="col-span-12 lg:col-span-6">
+          <lib-input-text [placeholder]="'GOV_DOC.Review_Period' | translate"
+            [inputLabel]="'GOV_DOC.Review_Period' | translate" [control]="Review_form.get('revisionPeriod')!"
+            [controlNameInput]="'revisionPeriod'" [validations]="validationRequired">
+          </lib-input-text>
+        </div>
+
+      </form>
+    </p-accordionTab>
+  </p-accordion>
+</div>
+}
+
+
+<div class="col-span-12 flex items-center gap-4 justify-end py-6 ">
+  <div class="cancel_btn">
+    <button [routerLink]="['/gfw-portal/governance/documents']" routerLinkActive="router-link-active">
+      {{'RISK_MANAGMENT.Cancel'|translate}}
+    </button>
+  </div>
+  <div class="action_btn">
+    <p-button [label]="'RISK_MANAGMENT.SaveChanges' | translate" [loading]="isLoading" (onClick)="submit()">
+    </p-button>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+<lib-new-table
+[table_actions_permissions]="{ module: 'QUESTIONNAIRES', feature: 'MYQUESTIONNAIRES', action: 'VIEW' }"
+
+  [loading]="loading"
+  [table_data]="data"
+  [table_title]="'MY_QUESTIONNAIRES.TABLE_TITLE' | translate"
+  [badge_title]="'MY_QUESTIONNAIRES.TABLE_BADGE' | translate"
+  [dataViewId]="74"
+  [entityID_Name]="'questionnaireInstanceID'"
+  [isShownAction]="true"
+  (payload_emiter)="handleDataTable($event)"
+  [action_items]="actions"
+  (currentActionRow)="setSelected($event)"
+  [columnControl]="columnControl"
+>
+</lib-new-table>

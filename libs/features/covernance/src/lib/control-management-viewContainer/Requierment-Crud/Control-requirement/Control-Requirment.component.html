@@ -1,0 +1,226 @@
+<section>
+  <lib-new-table [loading]="loadingTable" [table_data]="dataTable"
+    [table_title]="'ControlRequirement.TABLE_TITLE' | translate"
+    [badge_title]="'ControlRequirement.TABLE_BADGE' | translate" [dataViewId]="124"
+    [entityID_Name]="'govControlRequirementID'" [isShownAction]="true" (payload_emiter)="handleDataTable($event)"
+    [action_items]="items" (currentActionRow)="setSelected($event)" [columnControl]="columnControl"
+    [table_actions_permissions]="{ module: 'GOVERNANCE', feature: 'CONTROLREQUIRMENT', action: 'VIEW' }">
+    @if(_PermissionSystemService.can('GOVERNANCE' , 'CONTROLREQUIRMENT' , 'ADD')){
+    <button addition_action (click)="openModalControlMangment()"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'ControlRequirement.ADD_NEW' | translate }}</span>
+    </button>
+    }
+
+  </lib-new-table>
+</section>
+
+<lib-delete-confirm-popup [titleDelete]="'ControlRequirement.DELETE_TITLE'"
+  [descriptionDelete]="'ControlRequirement.DELETE_DESC'" (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible">
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button (onClick)="deleteControlRequirement()" [loading]="loadDeleted" [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+<div class="action_dailog">
+  <p-dialog header="{{
+      current_update_id
+        ? ('ControlRequirement.UPDATE' | translate)
+        : ('ControlRequirement.ADD_NEW' | translate)
+    }}" [(visible)]="visibleModalMangment" (onHide)="onModalClose()" [modal]="true" [dismissableMask]="true"
+    [draggable]="false" styleClass="w-[60%]" [closable]="false">
+    <div class="container p-4">
+      <!-- Form -->
+      <form [formGroup]="requirement_form" class="grid grid-cols-12 gap-6 mb-6">
+        <!-- Requirement Text EN -->
+        <div class="md:col-span-6 col-span-12">
+          <lib-input-text [placeholder]="'ControlRequirement.TEXT_EN' | translate"
+            [inputLabel]="'ControlRequirement.TEXT_EN' | translate" [control]="requirement_form.get('requirementText')!"
+            [controlNameInput]="'requirementText'" [validations]="validationsRequired"></lib-input-text>
+        </div>
+
+        <!-- Requirement Text AR -->
+        <div class="md:col-span-6 col-span-12">
+          <lib-input-text [placeholder]="'ControlRequirement.TEXT_AR' | translate"
+            [inputLabel]="'ControlRequirement.TEXT_AR' | translate"
+            [control]="requirement_form.get('requirementTextAr')!"
+            [controlNameInput]="'requirementTextAr'"></lib-input-text>
+        </div>
+
+        <div class="md:col-span-6 col-span-12">
+          <lib-ui-dropdown [placeholder]="'ACTIVITY.RESPONSIBLE_ROLE_PLACEHOLDER' | translate"
+            [label]="'ACTIVITY.RESPONSIBLE_ROLE' | translate" [control]="requirement_form.get('responsibleRoleID')!"
+            [formControlNameInput]="'responsibleRoleID'" [options]="Roles" [optionLabel]="'label'" [optionValue]="'id'">
+          </lib-ui-dropdown>
+        </div>
+        <div class="md:col-span-6 col-span-12">
+          <lib-user-dropdown [placeholder]="'ASSESSMENT_RISK.REVIEWR'" [label]="'RISK_MANAGMENT.ResponsibleUser'"
+            [control]="requirement_form.get('responsibleUserID')!" [options]="users" optionLabel="name" optionValue="id"
+            [formControlNameInput]="'responsibleUserID'">
+          </lib-user-dropdown>
+        </div>
+
+        <div class="md:col-span-6 col-span-12">
+          <lib-tree-select-ui [nodes_input]="organizationUnitOptions"
+            [placeholder]="'RISK_ACTION.SELECT_DEPARTMENT' | translate" [label]="'RISK_ACTION.DEPARTMENT' | translate"
+            [control]="requirement_form.get('organizationalUnitID')!" [formControlNameInput]="'organizationalUnitID'">
+          </lib-tree-select-ui>
+        </div>
+        <!-- Order Number -->
+        <div class="md:col-span-6 col-span-12">
+          <lib-input-number [placeholder]="'ControlRequirement.ORDER_NUMBER' | translate"
+            [inputLabel]="'ControlRequirement.ORDER_NUMBER' | translate"
+            [control]="requirement_form.get('orderNumber')!" [controlNameInput]="'orderNumber'"
+            [validations]="validationsRequired"></lib-input-number>
+        </div>
+
+        <!-- External Reference -->
+        <div class="md:col-span-6 col-span-12">
+          <lib-input-text [placeholder]="'ControlRequirement.EXTERNAL_REF' | translate"
+            [inputLabel]="'ControlRequirement.EXTERNAL_REF' | translate"
+            [control]="requirement_form.get('externalReference')!"
+            [controlNameInput]="'externalReference'"></lib-input-text>
+        </div>
+        <div class="md:col-span-6 col-span-12 ">
+          <lib-ui-dropdown [label]="'ASSESSMENT.Maturity_Level' | translate" class="col-span-8" [options]="GovControlMaturityLevelType"
+            [placeholder]="'ASSESSMENT.Maturity_Level' | translate"
+            [control]="requirement_form.get('govControlMaturityLevelID')!"
+            [formControlNameInput]="'govControlMaturityLevelID'" [validations]="[]"
+            [optionLabel]="'label'" [optionValue]="'id'"></lib-ui-dropdown>
+        </div>
+      </form>
+
+      <!-- Actions -->
+      <div class="col-span-12 flex items-center gap-4 justify-end border-t border-gray_light py-3">
+        <div class="cancel_btn">
+          <button (click)="visibleModalMangment = false">
+            {{ 'BUTTONS.CANCEL' | translate }}
+          </button>
+        </div>
+
+        <div class="action_btn">
+          <p-button [label]="'BUTTONS.SAVE' | translate" [loading]="isLoadingRequirement"
+            (onClick)="submit()"></p-button>
+        </div>
+      </div>
+    </div>
+  </p-dialog>
+</div>
+
+
+<div class="action_dailog">
+  <p-dialog [header]="'TABS.REQUIREMENT_CONTROL' | translate" [(visible)]="showDataRequirement"
+    (onHide)="showDataRequirement=false;active_tab=1" [modal]="true" [dismissableMask]="true" [draggable]="false"
+    [closable]="true" styleClass="w-[60rem]">
+
+    <div class="tabs flex flex-wrap items-center gap-4 border-b border-gray_light">
+      @for(tab of tabs ; track tab; let i = $index){
+      @if(tab?.visible()){
+      <button (click)="active_tab = i+1" [class.active_tab]="active_tab === tab.id"
+        class="flex justify-center items-center gap-3 font-medium px-4 py-3 min-w-40">
+        <i [class]="tab.icon" class="fi"></i>
+        <span>{{ tab.name }}</span>
+      </button>
+      }
+      }
+    </div>
+    @if(active_tab===1){
+    <div class="container">
+      <div class="p-4">
+        <div class="border-b border-b-gray-300 pb-3">
+          <div class="grid grid-cols-12 gap-4">
+            @if(dataRequirmentData?.name) {
+            <div class="col-span-10 mb-4">
+              <h3 class="text-gray-500 font-medium text-sm mb-1">
+                {{ 'CONTENT.NAME' | translate }}
+              </h3>
+              <p class="text-gray-700 font-medium text-[16px]">
+                {{ dataRequirmentData?.name
+                }}
+              </p>
+            </div>
+            }
+            @if(dataRequirmentData?.controlRequirementComplianceStatusTypeName) {
+            <div class="col-span-2 mb-4">
+              <h3 class="text-gray-500 font-medium text-sm mb-1">
+                {{ 'STATUS.TITLE' | translate }}
+              </h3>
+              <p class="badge" [ngClass]="dataRequirmentData?.controlRequirementComplianceStatusTypeColor">
+                {{ dataRequirmentData?.controlRequirementComplianceStatusTypeName }}
+              </p>
+            </div>
+            }
+          </div>
+          @if(dataRequirmentData?.requirementText) {
+          <div class="grid grid-cols-12 gap-4 mb-4">
+            <div class="col-span-12 mb-3">
+              <h3 class="text-gray-500 font-medium text-sm mb-1">
+                {{ 'ControlRequirement.TEXT_EN' | translate }}
+              </h3>
+              <p class="text-gray-700 font-medium text-[16px]">
+                {{ dataRequirmentData?.requirementText
+                }}
+              </p>
+            </div>
+          </div>
+          }
+          <div class="grid grid-cols-12  gap-3">
+            <div class="col-span-4">
+              @if(dataRequirmentData?.responsibleRole?.roleName){
+              <lib-owner-user [title]="'Control_view.Responsible_Role'" [roleOrUser]="'role'"
+                [postionOwner]="dataRequirmentData?.responsibleRole?.roleName" [loading]="isLoadingRequirement"
+                [userId]="dataRequirmentData?.responsibleRoleID">
+              </lib-owner-user>
+              }
+            </div>
+            <div class="col-span-4">
+              @if (dataRequirmentData?.responsibleUser?.name) {
+              <lib-owner-user [title]="'GENERAL_ASSESSMENT.RESPONSIBLE_USER'" [roleOrUser]="'user'"
+                [postionOwner]="dataRequirmentData?.responsibleUser?.name" [loading]="isLoadingRequirement"
+                [userId]="dataRequirmentData?.responsibleUser?.userID">
+              </lib-owner-user>
+              }
+            </div>
+            <div class="col-span-4">
+              @if(dataRequirmentData?.organizationalUnit?.name){
+              <div>
+                <p class="header_cards mb-2">{{ 'Control_view.Organizational_Unit' | translate }}</p>
+                <p class="text-gray-700 font-medium text-[16px]">{{ dataRequirmentData?.organizationalUnit?.name }}
+                </p>
+              </div>
+              }
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    <div class="col-span-12 flex items-center gap-4 justify-end py-4">
+      <div class="cancel_btn">
+        <button (click)="showDataRequirement = false">
+          {{ 'BUTTONS.BACKTOHOME' | translate }}
+        </button>
+      </div>
+    </div>
+    }
+    @if(active_tab===2){
+    <lib-comment-section [relatedColumnId]="current_row_selected" [relatedEntityId]="96"></lib-comment-section>
+    }
+    @if(active_tab===3){
+    <lib-attachment-control-requirment [id]="current_row_selected"></lib-attachment-control-requirment>
+    }
+
+  </p-dialog>
+</div>

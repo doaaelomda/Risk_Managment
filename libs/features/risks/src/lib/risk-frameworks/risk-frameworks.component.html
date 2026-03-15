@@ -1,0 +1,57 @@
+<p-accordion styleClass="frameworkAccordion" [activeIndex]="activeIndex">
+  @for (list of lists; track $index) {
+  <p-accordionTab
+    tabStyleClass="mb-4"
+    (selectedChange)="handleAccordionChange(list, $index, $event)"
+  >
+    <ng-template pTemplate="header">
+      <div class="flex gap-2 w-full">
+        <i [class]="list?.icon"></i>
+        <span>{{ list.title }}</span>
+        <div class="expand-icon-wrapper ms-auto flex items-center">
+          <i
+            [ngClass]="{
+              'fi fi-rr-angle-small-up': list?.isExpanded,
+              'fi fi-rr-angle-small-down': !list?.isExpanded
+            }"
+          ></i>
+        </div>
+      </div>
+    </ng-template>
+    @if(activeIndex === $index){
+    <lib-shared-ui
+      #sharedUiComp
+      [view_entityRouter]="list.table_setting.view_entityRouter"
+      [entityID_Name]="list.table_setting.entityID_Name"
+      [dataViewId]="list.table_setting.dataViewId"
+      [selected_profile_column]="selected_profile_column"
+      (filter_emitter)="handleFilter($event)"
+      [filter_id_input]="list.table_setting.filter_id"
+      [action_items]="items"
+      (sortEmiter)="handleSort($event)"
+      [total_items_input]="pageginationObj.totalItems"
+      (selected_emiter)="setSelected($event)"
+      [badge_name]="list.table_setting.badge_name | translate"
+      [table_name]="list.table_setting.table_name | translate"
+      [loadingState]="isGettingData"
+      (paginationEvent)="getFrameWorkData($event)"
+      (showDeleteEvent)="handleShowDelete($event)"
+      [dataList]="dataList"
+      [defultprofile]="defultProfile"
+      [profilesList]="frameWorksProfiles"
+    >
+      @if (list.table_setting?.btn_name) {
+      <button
+        addition_action
+        class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+      >
+        <i class="fi fi-br-plus w-5 h-5"></i>
+        <span>{{ list.table_setting?.btn_name | translate }}</span>
+        <i class="fi fi-rr-angle-small-down"></i>
+      </button>
+      }
+    </lib-shared-ui>
+    }
+  </p-accordionTab>
+  }
+</p-accordion>

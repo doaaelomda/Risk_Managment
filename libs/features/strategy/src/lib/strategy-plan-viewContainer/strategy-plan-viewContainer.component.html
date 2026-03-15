@@ -1,0 +1,27 @@
+<section>
+  <div class="header flex items-center justify-between">
+    <div class="title">
+      @if(loadData){
+      <p-skeleton width="15rem" styleClass="mb-2" />
+      }@else {
+      <h4 class="header-para"> {{headTitle}}</h4>
+      }
+    </div>
+    <!-- <div class="flex items-center gap-2">
+      @if(data?.strategicPlanStatusTypeName ){
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">
+          {{ 'TABS.FOCUS_AREA' | translate }}:
+        </p>
+        <span class="badge" [ngClass]="data?.strategicPlanStatusTypeColor">{{
+          data?.strategicPlanStatusTypeName
+          }}</span>
+      </div>
+      }
+    </div> -->
+  </div>
+
+  <lib-shared-tabs [permissionFeature]="{module:'STRATEGY' , feature:'PLAN'}" [tabs]="tabs" [hasComments]="false"
+    [hasAttachments]="false" [dynamicOverView]="true"></lib-shared-tabs>
+  <router-outlet></router-outlet>
+</section>

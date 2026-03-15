@@ -1,0 +1,37 @@
+<section class="space-y-6">
+  <div class="grid grid-cols-12 gap-4">
+
+    <!-- Question Text -->
+    <div class="col-span-12 lg:col-span-6">
+      <h3 class="header-title header-para mb-3">{{ 'QUESTION.TEXT' | translate }}</h3>
+      @if (!loading) {
+        <p class="text-gray-600 text-base font-normal whitespace-pre-line">{{ dataQuestion?.questionText || '-' }}</p>
+      } @else {
+        <p-skeleton width="12rem"></p-skeleton>
+      }
+    </div>
+
+    <!-- Question Text Arabic -->
+    <div class="col-span-12 lg:col-span-6">
+      <h3 class="header-title header-para mb-3">{{ 'QUESTION.TEXT_AR' | translate }}</h3>
+      @if (!loading) {
+        <p class="text-gray-600 text-base font-normal whitespace-pre-line">{{ dataQuestion?.questionTextAr || '-' }}</p>
+      } @else {
+        <p-skeleton width="12rem"></p-skeleton>
+      }
+    </div>
+
+
+
+    <!-- Weight -->
+    <div class="col-span-12 lg:col-span-3">
+      <h3 class="header-title header-para mb-3">{{ 'AWARENESS_QUESTION.POINTS' | translate }}</h3>
+      @if (!loading) {
+        <p class="text-gray-600 text-base font-normal whitespace-pre-line">{{ dataQuestion?.points || '-' }}</p>
+      } @else {
+        <p-skeleton width="4rem"></p-skeleton>
+      }
+    </div>
+
+  </div>
+</section>

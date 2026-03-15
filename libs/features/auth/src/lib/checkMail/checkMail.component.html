@@ -1,0 +1,46 @@
+<div class="w-full h-screen flex flex-col bg-white-color overflow-hidden">
+
+  <div class="flex-1 flex flex-col items-center justify-center py-8">
+    <div class="p-6 rounded-2xl w-3/4 lg:w-full max-w-md flex flex-col gap-2 card-forget">
+      <img src="/images/icons/message.png" alt="" class="mx-auto">
+
+      <h1 class="text-gray-700 text-3xl font-semibold text-center">Check your email</h1>
+
+      <div class="text-gray-500 text-lg font-medium text-center">
+        We sent a password reset link to
+        <p class="m-0">{{ current_user_email }}</p>
+      </div>
+
+      <div class="form_group otp_group">
+        <p-inputOtp (onInput)="onOtpInput($event)"  [length]="4" [integerOnly]="true" styleClass="otp-custom"></p-inputOtp>
+      </div>
+
+
+      <div class="py-1 text-center text-primary text-2xl font-medium">
+        <p>{{ minutes }}:{{ seconds < 10 ? '0' + seconds : seconds }}</p>
+      </div>
+      <div class="action_btn mt-1 m-auto">
+        <button (click)="handlRouting()" class="btn">Continue</button>
+      </div>
+
+      <p class="text-gray_color flex m-auto hover:cursor-pointer text-sm mt-1 gap-1">
+        <span>Didn't receive the email?</span>
+        <button (click)="resendCode()" [disabled]="!canResend" class="text-primary font-semibold"> Click to Resend
+        </button>
+      </p>
+
+      <p routerLink="/auth/login" class="text-gray_color font-semibold flex m-auto hover:cursor-pointer text-sm mt-1">
+        <i class="text-2xl text-primary fi fi-rr-arrow-small-left mx-3"></i>
+        Back to log in
+      </p>
+    </div>
+
+  </div>
+
+  <div class="w-3/4 my-12 mx-auto">
+    <lib-steper [currentStepIndex]="1"></lib-steper>
+  </div>
+
+  <p class="absolute bottom-4 left-6 text-sm  text-gray-500 font-normal">
+    © GRC ORBITE 2077
+  </p>

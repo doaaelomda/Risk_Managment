@@ -1,0 +1,60 @@
+<!-- 🔹 Shared UI Table -->
+
+<section>
+  <lib-new-table
+    [loading]="loading"
+    [table_data]="tableData"
+    [table_title]="labels.table | translate"
+    [badge_title]="labels.badge | translate"
+    [dataViewId]="dataEntityId"
+    [entityID_Name]="entityIdField"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="actionItems"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="{ type: 'route', data: viewRoute }"
+    [table_actions_permissions]="{
+      module: 'LIBRARY',
+      feature: 'STANDARDDOCUMENTS',
+      action: 'VIEW'
+    }"
+  >
+    @if(_PermissionSystemService.can('LIBRARY' , 'STANDARDDOCUMENTS' , 'ADD')){
+
+    <button
+      (click)="handleAddClick()"
+      addition_action
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+    >
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ labels.add | translate }}</span>
+    </button>
+    }
+  </lib-new-table>
+</section>
+
+<!-- 🔸 Delete Confirmation Popup -->
+<lib-delete-confirm-popup
+  [titleDelete]="labels.titleDelete | translate"
+  [descriptionDelete]="labels.descDelete | translate"
+  [visibleInput]="deleteModalVisible"
+  (hideEmiter)="toggleDeleteModal(false)"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <!-- Cancel -->
+    <div class="cancel_btn">
+      <button class="w-40" (click)="toggleDeleteModal(false)">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <!-- Confirm Delete -->
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="delete()"
+        [loading]="loadingDelete"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

@@ -1,0 +1,13 @@
+<lib-new-table
+[loading]="load_data"
+[table_data]="data"
+[table_title]="'TABS.Controlassessment' | translate"
+[badge_title]="'HEARDE_TABLE.CONTROL' | translate"
+[dataViewId]="37"
+[entityID_Name]="'controlAssessmentID'"
+[isShownAction]="true"
+(payload_emiter)="handleDataTable($event)"
+[action_items]="actions"
+(currentActionRow)="setActionRow($event)"
+[columnControl]="columnControl"
+></lib-new-table>

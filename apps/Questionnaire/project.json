@@ -1,0 +1,96 @@
+{
+  "name": "Questionnaire",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/Questionnaire/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/Questionnaire",
+        "index": "apps/Questionnaire/src/index.html",
+        "main": "apps/Questionnaire/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/Questionnaire/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/Questionnaire/public"
+          }
+        ],
+        "styles": [
+              "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
+      "node_modules/primeng/resources/primeng.min.css",
+          "apps/Questionnaire/src/styles.scss"
+        ],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "5mb",
+              "maximumError": "5mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "5mb",
+              "maximumError": "5mb"
+            }
+          ],
+              "fileReplacements": [
+            {
+              "replace": "apps/Questionnaire/env/env.dev.ts",
+              "with": "apps/Questionnaire/env/env.prod.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "Questionnaire:build:production"
+        },
+        "development": {
+          "buildTarget": "Questionnaire:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "Questionnaire:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "serve-static": {
+      "continuous": true,
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "Questionnaire:build",
+        "spa": true
+      }
+    }
+  }
+}

@@ -1,0 +1,54 @@
+<section>
+
+  <div class="header flex flex-wrap justify-between items-center mt-5 mb-8">
+    <div class="title flex items-center gap-4 flex-wrap">
+      @if(loading_data){
+      <p-skeleton width="15rem" styleClass="mb-2" />
+      }@else {
+      <h2 class="text-2xl font-semibold text-gray-800">{{ data?.name }}</h2>
+      <p class="text-gray_color m-0">
+        {{ '(' + data?.code + ')' }}
+      </p>
+      }
+    </div>
+    <div class="content flex items-center gap-4">
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">
+          {{ 'TABS.indicatorTypeName' | translate }}:
+        </p>
+        @if(loading_data){
+        <p-skeleton width="15rem" styleClass="mb-2" />
+        }
+        @else{
+        <span class="font-semibold text-gray-800 ">{{
+          data?.indicatorTypeName ?? '-'
+          }}</span> }
+      </div>
+
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">
+          {{ 'TABS.indicatorUnitTypeName' | translate }}:
+        </p>
+        <span class="font-semibold text-gray-800 ">{{
+          data?.indicatorUnitTypeName ?? '-'
+          }}</span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">
+          {{ 'TABS.indicatorAggregationPeriodTypeName' | translate }}:
+        </p>
+        <span class="font-semibold text-gray-800 ">{{
+          data?.indicatorAggregationPeriodTypeName ?? '-'
+          }}</span>
+      </div>
+
+
+    </div>
+  </div>
+
+  <lib-shared-tabs [permissionFeature]="{module:'COMPLIANCE' , feature:'KEYCOMPLIANCEINDICATORSMEASURMENTLIST'}"
+ [tabs]="tabs"></lib-shared-tabs>
+
+  <router-outlet></router-outlet>
+</section>

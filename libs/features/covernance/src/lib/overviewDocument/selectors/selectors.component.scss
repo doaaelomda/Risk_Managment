@@ -1,0 +1,11 @@
+::ng-deep .p-dialog-header-icons{
+  display: none !important;
+}
+::ng-deep .p-dialog-header{
+  padding: 15px;
+}
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}

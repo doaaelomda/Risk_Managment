@@ -1,0 +1,188 @@
+<section class="form_sec">
+      <div class="header border-b border-gray_light pb-6 mb-6">
+    <h2 class="text-lg font-medium text-[#101828]">
+      {{ dueDiligenceId
+          ? ('DUE_DILIGENCES.UPDATE_DUE_DILIGENCE' | translate)
+          : ('DUE_DILIGENCES.ADD_NEW_DUE_DILIGENCE' | translate)
+      }}
+    </h2>
+  </div>
+    <form [formGroup]="form" class="grid grid-cols-12 gap-6 mb-6">
+  <!-- Third Party -->
+   @if(!tpId){
+  <div class="md:col-span-6 col-span-12">
+    <lib-ui-dropdown
+      [placeholder]="'ADUIANCE.THIRD_PARTY' | translate"
+      [label]="'ADUIANCE.THIRD_PARTY_PLACEHOLDER' | translate"
+      [control]="form.get('thirdPartyID')!"
+      [formControlNameInput]="'thirdPartyID'"
+      [options]="thirdPartyList"
+      [optionLabel]="'label'"
+      [optionValue]="'id'"
+    >
+    </lib-ui-dropdown>
+  </div>}
+    <div class="md:col-span-6 col-span-12">
+    <lib-input-text
+      [placeholder]="'GOVERNANCE_STANDARDS.PLACEHOLDERS.NAME' | translate"
+      [inputLabel]="'GOVERNANCE_STANDARDS.NAME' | translate"
+      [control]="form.get('name')!"
+      [controlNameInput]="'name'"
+    >
+    </lib-input-text>
+  </div>
+    <div class="md:col-span-6 col-span-12">
+    <lib-input-text
+      [placeholder]="'GOVERNANCE_STANDARDS.PLACEHOLDERS.NAME_AR' | translate"
+      [inputLabel]="'GOVERNANCE_STANDARDS.NAME_AR' | translate"
+      [control]="form.get('nameAr')!"
+      [controlNameInput]="'nameAr'"
+    >
+    </lib-input-text>
+  </div>
+
+  <!-- Due Diligence Type -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-ui-dropdown
+      [placeholder]="'DUE_DILIGENCES.DUE_DILIGENCE_TYPE_PLACEHOLDER' | translate"
+      [label]="'DUE_DILIGENCES.DUE_DILIGENCE_TYPE' | translate"
+      [control]="form.get('thirdPartyDueDiligenceTypeID')!"
+      [formControlNameInput]="'thirdPartyDueDiligenceTypeID'"
+      [options]="dueDiligenceTypeList"
+      [optionLabel]="'label'"
+      [optionValue]="'id'"
+    >
+    </lib-ui-dropdown>
+  </div>
+
+  <!-- Result Status -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-ui-dropdown
+      [placeholder]="'DUE_DILIGENCES.RESULT_STATUS_PLACEHOLDER' | translate"
+      [label]="'DUE_DILIGENCES.RESULT_STATUS' | translate"
+      [control]="form.get('thirdPartyDueDiligenceResultStatusTypeID')!"
+      [formControlNameInput]="'thirdPartyDueDiligenceResultStatusTypeID'"
+      [options]="resultStatusList"
+      [optionLabel]="'label'"
+      [optionValue]="'id'"
+    >
+    </lib-ui-dropdown>
+  </div>
+
+  <!-- Requested Date -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-date-packer
+      [placeholder]="'DUE_DILIGENCES.REQUESTED_DATE_PLACEHOLDER' | translate"
+      [inputLabel]="'DUE_DILIGENCES.REQUESTED_DATE' | translate"
+      [control]="form.get('requestedDate')!"
+      [controlNameInput]="'requestedDate'"
+    >
+    </lib-date-packer>
+  </div>
+
+  <!-- Completed Date -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-date-packer
+      [placeholder]="'DUE_DILIGENCES.COMPLETED_DATE_PLACEHOLDER' | translate"
+      [inputLabel]="'DUE_DILIGENCES.COMPLETED_DATE' | translate"
+      [control]="form.get('completedDate')!"
+      [controlNameInput]="'completedDate'"
+    >
+    </lib-date-packer>
+  </div>
+
+  <!-- Score -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-input-number
+      [placeholder]="'DUE_DILIGENCES.SCORE_PLACEHOLDER' | translate"
+      [inputLabel]="'DUE_DILIGENCES.SCORE' | translate"
+      [control]="form.get('score')!"
+      [controlNameInput]="'score'"
+    >
+    </lib-input-number>
+  </div>
+
+  <!-- Report Reference -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-input-text
+      [placeholder]="'DUE_DILIGENCES.REPORT_REFERENCE_PLACEHOLDER' | translate"
+      [inputLabel]="'DUE_DILIGENCES.REPORT_REFERENCE' | translate"
+      [control]="form.get('reportReference')!"
+      [controlNameInput]="'reportReference'"
+    >
+    </lib-input-text>
+  </div>
+
+  <!-- Conditions -->
+  <div class="col-span-12">
+    <lib-textarea-ui
+      [placeholder]="'DUE_DILIGENCES.CONDITIONS_PLACEHOLDER' | translate"
+      [inputLabel]="'DUE_DILIGENCES.CONDITIONS' | translate"
+      [control]="form.get('conditions')!"
+      [controlNameInput]="'conditions'"
+    >
+    </lib-textarea-ui>
+  </div>
+
+  <!-- Result Summary -->
+  <div class="col-span-12">
+    <lib-textarea-ui
+      [placeholder]="'DUE_DILIGENCES.RESULT_SUMMARY_PLACEHOLDER' | translate"
+      [inputLabel]="'DUE_DILIGENCES.RESULT_SUMMARY' | translate"
+      [control]="form.get('resultSummary')!"
+      [controlNameInput]="'resultSummary'"
+    >
+    </lib-textarea-ui>
+  </div>
+
+  <!-- Responsible Role -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-ui-dropdown
+      [placeholder]="'DUE_DILIGENCES.RESPONSIBLE_ROLE_PLACEHOLDER' | translate"
+      [label]="'DUE_DILIGENCES.RESPONSIBLE_ROLE' | translate"
+      [control]="form.get('responsibleRoleID')!"
+      [formControlNameInput]="'responsibleRoleID'"
+      [options]="roleList"
+      [optionLabel]="'label'"
+      [optionValue]="'id'"
+    >
+    </lib-ui-dropdown>
+  </div>
+
+  <!-- Responsible User -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-user-dropdown
+      [placeholder]="'DUE_DILIGENCES.RESPONSIBLE_USER_PLACEHOLDER' | translate"
+      [label]="'DUE_DILIGENCES.RESPONSIBLE_USER' | translate"
+      [control]="form.get('responsibleUserID')!"
+      [formControlNameInput]="'responsibleUserID'"
+      [options]="userList"
+      [optionLabel]="'name'"
+      [optionValue]="'id'"
+    >
+    </lib-user-dropdown>
+  </div>
+    <div class="col-span-12 flex justify-end gap-4 py-4">
+<div class="default_btn cancel">
+      <a [routerLink]="`/gfw-portal/third-party/view/${tpId}/due-diligence`">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </a>
+    </div>
+    <div class="action_btn">
+      <p-button
+        [label]="
+          dueDiligenceId
+            ? ('BUTTONS.UPDATE' | translate)
+            : ('BUTTONS.SAVE' | translate)
+        "
+        [outlined]="true"
+        [disabled]="form.invalid"
+        [loading]="isSaving"
+        severity="secondary"
+        (onClick)="save()"
+      >
+      </p-button>
+    </div>
+  </div>
+</form>
+</section>

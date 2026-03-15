@@ -1,0 +1,167 @@
+
+
+<section>
+  <lib-new-table
+    [loading]="loadingTable"
+    [table_data]="dataTable"
+    [table_title]="'ESCALATION.LIST_TITLE' | translate"
+    [badge_title]="'ESCALATION.BADGE' | translate"
+    [dataViewId]="43"
+    [entityID_Name]="'escalationDefinationID'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="items"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{ module: 'ESCLATIONS', feature: 'ESCLATION', action: 'VIEW' }"
+  >
+  @if(_PermissionSystemService.can('ESCLATIONS' , 'ESCLATION' , 'ADD')){
+   <button addition_action (click)="showDialog = true"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+      <i class="fi fi-br-plus w-5 h-5 "></i>
+      <span>{{ 'ESCALATION.ADD_NEW' | translate }}</span>
+    </button>
+  }
+
+  </lib-new-table>
+</section>
+
+<lib-delete-confirm-popup
+  [titleDelete]="'ESCALATION.DELETE_TITLE'"
+  [descriptionDelete]="'ESCALATION.DELETE_DESC'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button (onClick)="deleteEscalation()" [loading]="loadDeleted" [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+
+
+
+<p-dialog
+  [(visible)]="showDialog"
+  [modal]="true"
+  [dismissableMask]="true"
+  styleClass="w-[45rem]"
+  [draggable]="false"
+  header="{{ formMode === 'add' ? ('ESCALATION.ADD_TITLE' | translate) : ('ESCALATION.EDIT_TITLE' | translate) }}"
+  (onHide)="closeDialog()"
+>
+  <form [formGroup]="escalation_form" class="grid grid-cols-12 gap-6 mb-6">
+
+    <!-- Code -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'ESCALATION.CODE_PLACEHOLDER' | translate"
+        [inputLabel]="'ESCALATION.CODE' | translate"
+        [control]="escalation_form.get('code')!"
+        [controlNameInput]="'code'">
+      </lib-input-text>
+    </div>
+
+    <!-- Entity -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'ESCALATION.ENTITY_PLACEHOLDER' | translate"
+        [label]="'ESCALATION.ENTITY' | translate"
+        [control]="escalation_form.get('dataEntityTypeID')!"
+        [formControlNameInput]="'dataEntityTypeID'"
+        [options]="dataEntities"
+        [optionLabel]="'label'"
+        [optionValue]="'id'">
+      </lib-ui-dropdown>
+    </div>
+        <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'ESCLATION.TYPE_PLACEHOLDER' | translate"
+        [label]="'ESCLATION.TYPE' | translate"
+        [control]="escalation_form.get('escalationTypeID')!"
+        [formControlNameInput]="'escalationTypeID'"
+        [options]="esclationTypes"
+        [optionLabel]="'label'"
+        [optionValue]="'id'">
+      </lib-ui-dropdown>
+    </div>
+
+    <!-- Name English -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'ESCALATION.NAME_EN_PLACEHOLDER' | translate"
+        [inputLabel]="'ESCALATION.NAME_EN' | translate"
+        [control]="escalation_form.get('name')!"
+        [controlNameInput]="'name'">
+      </lib-input-text>
+    </div>
+
+    <!-- Name Arabic -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'ESCALATION.NAME_AR_PLACEHOLDER' | translate"
+        [inputLabel]="'ESCALATION.NAME_AR' | translate"
+        [control]="escalation_form.get('nameAr')!"
+        [controlNameInput]="'nameAr'">
+      </lib-input-text>
+    </div>
+
+    <!-- Description English -->
+    <div class="col-span-12">
+      <lib-textarea-ui
+        [placeholder]="'ESCALATION.DESCRIPTION_EN_PLACEHOLDER' | translate"
+        [inputLabel]="'ESCALATION.DESCRIPTION_EN' | translate"
+        [control]="escalation_form.get('description')!"
+        [controlNameInput]="'description'">
+      </lib-textarea-ui>
+    </div>
+
+    <!-- Description Arabic -->
+    <div class="col-span-12">
+      <lib-textarea-ui
+        [placeholder]="'ESCALATION.DESCRIPTION_AR_PLACEHOLDER' | translate"
+        [inputLabel]="'ESCALATION.DESCRIPTION_AR' | translate"
+        [control]="escalation_form.get('descriptionAr')!"
+        [controlNameInput]="'descriptionAr'">
+      </lib-textarea-ui>
+    </div>
+
+    <!-- Status Switch -->
+    <div class="col-span-12 flex items-center gap-3">
+      <lib-switch-ui
+        [control]="escalation_form.get('active')!"
+        [controlNameInput]="'active'">
+      </lib-switch-ui>
+      <span class="font-medium">{{ 'ESCALATION.STATUS' | translate }}</span>
+    </div>
+  </form>
+
+  <!-- Footer -->
+  <ng-template pTemplate="footer">
+    <div class="flex flex-wrap justify-end gap-2">
+      <p-button
+        pButton
+        class="bg-white_color text-[#344054] text-sm border border-gray_light rounded-lg"
+        [label]="'BUTTONS.CANCEL' | translate"
+        icon="pi pi-times"
+        (click)="closeDialog()" />
+
+      <p-button
+        pButton
+        class="bg-primary text-white text-sm rounded-lg"
+        [label]="'BUTTONS.SAVE' | translate"
+        [loading]="loadSave"
+        icon="pi pi-check"
+        [disabled]="escalation_form.invalid"
+        (click)="saveEscalation()" />
+    </div>
+  </ng-template>
+</p-dialog>
+

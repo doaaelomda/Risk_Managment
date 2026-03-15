@@ -1,0 +1,12 @@
+.active_tab{
+  @apply border-b-2 border-primary;
+  @apply bg-primary/10 text-primary font-medium;
+}
+::ng-deep .action_dailog{
+  .p-dialog-header{
+    padding:  1rem;
+  }
+  .p-dialog-header .p-dialog-header-icons{
+    display: none;
+  }
+}

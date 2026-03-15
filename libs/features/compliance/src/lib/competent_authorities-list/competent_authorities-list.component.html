@@ -1,0 +1,230 @@
+<section class="border border-[#EAECF0] rounded-lg">
+  <div class="header flex justify-between items-center py-4 px-6 border-b border-[#EAECF0] mb-6 ">
+    <h1 class="text-lg font-medium">{{'CompetentAuthorities.CompetentAuthorities' | translate}}</h1>
+
+    @if(_PermissionSystemService.can('COMPLIANCE' , 'COMPLIANCEDOCUMENT' , 'ADD')){
+    <button (click)="addVisible = true"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+      <i class="fi fi-br-plus w-5 h-5 "></i>
+      <span>{{'CompetentAuthorities.AddNewCompetentAuthorities' | translate}}</span>
+    </button>
+    }
+  </div>
+
+
+
+
+  <div class="list_container p-4 grid grid-cols-12 gap-4">
+
+    @if(loadingTable) {
+    @for(i of skeletonArray; track $index){
+    <div class="col-span-3 card">
+      <div class="inner">
+        <p-skeleton width="100%" height="100px" styleClass="mb-2" />
+        <p-skeleton width="80%" styleClass="mb-2" />
+      </div>
+    </div>
+    }
+    } @else {
+    @if(_PermissionSystemService.can('COMPLIANCE' , 'COMPETENTAUTHORITIES' , 'VIEW')
+
+    ){
+    @for(CompetentAut of CompetentAuthoritiesData; track $index){
+    <div class="col-span-3 card">
+      <div class="inner">
+        <div class="img_container flex justify-center mb-4">
+          <img class="image_mokup" [src]="domain_URI+'Gov/ComplianceRegulator/ComplianceRegulatorImage/'+CompetentAut?.id" alt="">
+        </div>
+        <div class="content text-center">
+          <h2 class="mb-2 font-medium">{{CompetentAut?.name}}</h2>
+          <p class="text-sm text-gray_color flex-wrap mb-3">{{CompetentAut?.description}}</p>
+        </div>
+        <div class="actions_btns flex items-center justify-center gap-2 mb-2">
+          @if(_PermissionSystemService.can('COMPLIANCE' , 'COMPETENTAUTHORITIES' , 'VIEW')){
+          <button (click)="viewCompetentAuthorities(CompetentAut?.id)" class="btn">
+            <i class="fi fi-rr-eye"></i>
+          </button>
+          }
+          @if(_PermissionSystemService.can('COMPLIANCE' , 'COMPETENTAUTHORITIES' , 'EDIT')){
+          <button (click)="editCompetentAuthorities(CompetentAut?.id)" class="btn">
+            <i class="fi fi-rr-edit"></i>
+          </button>
+          }
+          @if(_PermissionSystemService.can('COMPLIANCE' , 'COMPETENTAUTHORITIES' , 'DELETE')){
+          <button (click)="handleShowDelete(CompetentAut?.id)" class="btn">
+            <i class="fi fi-rr-trash"></i>
+          </button>
+          }
+        </div>
+      </div>
+    </div>
+    }
+    }
+    }
+  </div>
+
+</section>
+<lib-pagination (paginationChanged)="ListOfCompetentAuthorities($event)"></lib-pagination>
+
+
+
+
+<p-dialog (onHide)="initForm()" header="{{'CompetentAuthorities.AddNewCompetentAuthorities' | translate}}"
+  [(visible)]="addVisible" [modal]="true" [dismissableMask]="true" [draggable]="false" styleClass="w-[50rem]"
+  [position]="'center'">
+  <ng-template pTemplate="header">
+    <h3 class="text-gray-800 font-bold text-1xl ">{{'RISK_VIEW.MAIN_INFORMATION' | translate}}</h3>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+
+    <div class="field flex flex-wrap items-center border-b border-gray_light py-4">
+      <label class="font-bold w-1/4" for="title">Authority Image</label>
+      <div class="w-3/4 flex justify-center items-center gap-4">
+        <div class="image_mokup relative ">
+          <img class="w-full h-full rounded-full" [src]="authority_image" alt="">
+          <button (click)="handleFileUpload()"
+            class="z-50 absolute -bottom-3 left-3/4 -translate-x-1/2  text-white_color w-[30px] h-[30px] rounded-full bg-primary_custom flex justify-center items-center">
+            <i class="fi fi-rr-plus-small text-xl"></i>
+          </button>
+        </div>
+        @if(selectedFile){
+        <div class="delete_btn ">
+          <p-button (onClick)="selectedFile = null ; authority_image = 'images/image_placeholder.png'"
+            [label]="'BUTTONS.DELETE' | translate" />
+        </div>
+        }
+      </div>
+    </div>
+
+
+    <input #fileInput type="file" class="hidden" accept="image/*" (change)="onFileSelected($event)" />
+    <div class="p-fluid" [formGroup]="form">
+
+      <div class="field flex flex-wrap items-center border-b border-gray_light py-4">
+        <label class="font-bold w-1/4" for="title">{{'CompetentAuthorities.Name' | translate}}</label>
+        <div class="w-3/4">
+          <lib-input-text [placeholder]="'CompetentAuthorities.Name' | translate" [validations]="validationsRequired"
+            [control]="form.get('name')!" [controlNameInput]="'name'">
+          </lib-input-text>
+        </div>
+      </div>
+      <div class="field flex flex-wrap items-center border-b border-gray_light py-4">
+        <label class="font-bold w-1/4" for="title">{{'CompetentAuthorities.NameAr' | translate}}</label>
+        <div class="w-3/4">
+          <lib-input-text [placeholder]="'CompetentAuthorities.NameAr' | translate" [validations]="[]"
+            [control]="form.get('nameAr')!" [controlNameInput]="'nameAr'">
+          </lib-input-text>
+        </div>
+      </div>
+
+      <div class="field flex flex-wrap border-b border-gray_light py-4">
+        <div class="w-1/4">
+          <label class="font-bold block mb-1" for="Des1">{{'CompetentAuthorities.DESCRIPTION' | translate}}</label>
+          <p class="text-xs text-gray_color">{{'hint.Writeashortintroduction' | translate}}</p>
+        </div>
+        <div class="w-3/4">
+          <lib-textarea-ui [placeholder]="'CompetentAuthorities.DESCRIPTION'" [control]="form.get('description')!"
+            [controlNameInput]="'description'">
+          </lib-textarea-ui>
+          {{ 'RISK_ACTION.CHARACTERS_LEFT' | translate:{ count: 275- form.get('description')?.value?.length } }}
+        </div>
+      </div>
+
+
+
+      <div class="field flex flex-wrap border-b border-gray_light py-4">
+        <div class="w-1/4">
+          <label class="font-bold block mb-1" for="Des1">{{'CompetentAuthorities.describtionAr' | translate}}</label>
+          <p class="text-xs text-gray_color">{{'hint.Writeashortintroduction' | translate}}</p>
+        </div>
+        <div class="w-3/4">
+          <lib-textarea-ui [placeholder]="'CompetentAuthorities.describtionAr'" [control]="form.get('descriptionAr')!"
+            [controlNameInput]="'descriptionAr'">
+          </lib-textarea-ui>
+          {{ 'RISK_ACTION.CHARACTERS_LEFT' | translate:{ count: 275- form.get('descriptionAr')?.value?.length } }}
+        </div>
+      </div>
+
+
+      <div class="field flex flex-wrap items-center border-b border-gray_light py-4">
+        <label class="font-bold w-1/4" for="title">{{'CompetentAuthorities.Email' | translate}}</label>
+        <div class="w-3/4">
+          <lib-input-text [placeholder]="'CompetentAuthorities.Email' | translate" [control]="form.get('email')!"
+            [controlNameInput]="'email'" [validations]="validationsEmail">
+          </lib-input-text>
+
+        </div>
+      </div>
+
+
+      <div class="field flex flex-wrap items-center border-b border-gray_light py-4">
+        <label class="font-bold w-1/4" for="title">{{'CompetentAuthorities.phone' | translate}}</label>
+        <div class="w-3/4">
+          <lib-input-number [placeholder]="'CompetentAuthorities.phone' | translate" [control]="form.get('phone')!"
+            [controlNameInput]="'phone'" [validations]="validationsPhone">
+          </lib-input-number>
+        </div>
+      </div>
+
+      <div class="field flex flex-wrap items-center border-b border-gray_light py-4">
+        <label class="font-bold w-1/4" for="title">{{'CompetentAuthorities.address' | translate}}</label>
+        <div class="w-3/4">
+          <lib-input-text [placeholder]="'CompetentAuthorities.address' | translate" [validations]="[]"
+            [control]="form.get('address')!" [controlNameInput]="'address'">
+          </lib-input-text>
+        </div>
+      </div>
+
+      <div class="field flex flex-wrap items-center border-b border-gray_light py-4">
+        <label class="font-bold w-1/4" for="title">{{'CompetentAuthorities.TypeRegulatoryAuthority' |
+          translate}}</label>
+        <div class="w-3/4">
+          <lib-ui-dropdown [placeholder]="'CompetentAuthorities.TypeRegulatoryAuthority' | translate"
+            [control]="form.get('complianceRegulatorTypeID')!" [formControlNameInput]="'complianceRegulatorTypeID'"
+            [options]="govTypeIdArray" [optionLabel]="'label'" [optionValue]="'id'" [validations]="validationsRequired">
+          </lib-ui-dropdown>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+
+
+  <ng-template pTemplate="footer">
+    <div class="flex flex-wrap justify-end gap-2 py-3">
+
+
+      <div class="cancel_btn">
+        <button (click)="closeModel()" routerLinkActive="router-link-active">
+          {{ 'RISK_MANAGMENT.Cancel' | translate }}
+        </button>
+      </div>
+      <div class="action_btn">
+        <p-button [label]="'RISK_MANAGMENT.SaveChanges' | translate" [loading]="loadingBtn" (onClick)="submit()">
+        </p-button>
+      </div>
+    </div>
+
+  </ng-template>
+</p-dialog>
+
+
+
+<lib-delete-confirm-popup [titleDelete]="'CompetentAuthorities.DELETE_TITLE'"
+  [descriptionDelete]="'CompetentAuthorities.DELETE_DESC'" (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button (onClick)="deleteCompetentAuthorities()" [loading]="loadDelted"
+        [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

@@ -1,0 +1,39 @@
+<section class="p-8">
+  <div class="grid grid-cols-12 px-6 gap-8">
+    <div class="col-span-12 lg:col-span-6">
+      <div class="bref mb-8">
+        <p class="text-primary font-semibold mb-4">
+          {{ 'QUESTIONNAIRE.TITLE' | translate }}
+        </p>
+        <h1 class="text-gray-800 text-5xl font-semibold mb-6">
+          {{ 'QUESTIONNAIRE.WHAT_IS_QUESTIONNAIRE' | translate }}
+        </h1>
+        <p class="text-xl text-[#667085]">
+          {{ 'QUESTIONNAIRE.DESCRIPTION' | translate }}
+        </p>
+      </div>
+
+      <div class="cards-icons mb-8 flex flex-col gap-6">
+        @for(card of cards_section ; track card){
+        <div class="option_card flex gap-2 items-start flex-col">
+          <div class="icon">
+            <i [class]="card.icon"></i>
+          </div>
+          <h2 class="text-xl font-semibold">{{ card.title }}</h2>
+          <p class="text-base">{{ card.desc }}</p>
+        </div>
+        }
+      </div>
+
+      <button [routerLink]="'/Questionnaire'" class="btn action_btn_question">
+        {{ 'BUTTONS.START_NOW' | translate }}
+      </button>
+    </div>
+
+    <div class="col-span-12 lg:col-span-6">
+      <div class="hero flex items-center justify-end h-full rounded-xl">
+        <img src="images/hero1.svg" alt="" srcset="" />
+      </div>
+    </div>
+  </div>
+</section>

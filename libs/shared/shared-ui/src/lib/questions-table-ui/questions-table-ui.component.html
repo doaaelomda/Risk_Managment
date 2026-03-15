@@ -1,0 +1,66 @@
+<section class="custom_table_wrapper">
+  <div
+    class="header border lg:flex sm:block rounded-t-lg border-b-0 items-center justify-between py-5 px-6 bg-white"
+  >
+    <div class="table_title flex flex-wrap items-start gap-4">
+      <h3 class="table_title_header">
+        {{ table_title | translate }}
+      </h3>
+      <span class="badge_small_table">
+        {{ total_items || 0 }}
+        {{ badge_title | translate }}
+      </span>
+    </div>
+
+    <lib-input-search
+      (searchTermEmiter)="handleSearch($event)"
+    ></lib-input-search>
+
+    <div class="table_actions flex flex-wrap items-center gap-4">
+      <ng-content select="[additional_action]"></ng-content>
+    </div>
+  </div>
+
+  <div [class]="is_ar ? 'rtl_dir' : 'ltr_dir'" class="table_container bg-white overflow-hidden">
+    <p-table
+      class="custom_table"
+      [value]="data"
+      [(selection)]="questions"
+      dataKey="questionnaireQuestionID"
+      [tableStyle]="{ 'min-width': '100%' }"
+      [rowHover]="false"
+      [paginator]="false"
+      (selectionChange)="handleSelection($event)"
+    >
+      <ng-template pTemplate="header">
+        <tr class="bg-gray-50 text-gray-700 text-sm font-medium">
+          <th style="width: 4rem" class="text-center">
+            <p-tableHeaderCheckbox class="check-native" />
+          </th>
+          <th>{{ 'TEMPLATES.QUESTIONS_LIST' | translate }}</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-question>
+        <tr class="text-sm text-gray-800 hover:bg-gray-50 transition-colors">
+          <td class="text-center">
+            <p-tableCheckbox class="check-native" [value]="question" />
+          </td>
+          <td>{{ question.questionText }}</td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td [attr.colspan]="10">
+            <lib-empty-state [loading]="loading"></lib-empty-state>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <lib-pagination
+    (paginationChanged)="handleChangePage($event)"
+  ></lib-pagination>
+</section>

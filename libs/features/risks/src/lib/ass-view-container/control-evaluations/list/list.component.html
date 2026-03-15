@@ -1,0 +1,52 @@
+<section>
+  @if(isListMode){
+
+  <lib-new-table [loading]="loading" [table_data]="tableData" [table_title]="labels.badge  | translate"
+    [badge_title]="labels.table  | translate" [dataViewId]="dataEntityId" [entityID_Name]="entityIdField"
+    [isShownAction]="true" (payload_emiter)="handleDataTable($event)" [action_items]="actionItems"
+    (currentActionRow)="setSelected($event)" [columnControl]="columnControl"
+    [table_actions_permissions]="{ module: 'RISKS', feature: 'RISKASSESSMENTCONTROLEVALUATION', action: 'VIEW' }">
+    @if(_PermissionSystemService.can('RISKS','RISKASSESSMENTCONTROLEVALUATION','ADD')){
+
+    <button (click)="handleAddClick()" addition_action
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ labels.add | translate }}</span>
+    </button>
+    }
+  </lib-new-table>
+
+
+  @if(isRisk()){
+    <form [formGroup]="effectivinessForm" class="grid grid-cols-12 py-4">
+        <div class="col-span-12 lg:col-span-6">
+        <lib-ui-dropdown [placeholder]="'ASSESSMENT_RISK.SE_CONTRL_EFF_LEVEL' | translate"
+          [label]="'ASSESSMENT_RISK.CONTRL_EFF_LEVEL' | translate"
+          [control]="effectivinessForm.get('controlEffectivenessLevelID')!" [options]="EffectivenessLevel"
+          [optionLabel]="'label'" [disabled]="false" [optionValue]="'id'" [formControlNameInput]="'controlEffectivenessLevelID'">
+        </lib-ui-dropdown>
+      </div>
+      </form>
+  }
+  }@else {
+  <lib-evaluation-action (action_data_emiter)="handleEvaluationActionEmiterData($event)" [isRisk]="isRisk()" [evaluation_id_risk]="custom_updated" ></lib-evaluation-action>
+  }
+</section>
+
+<lib-delete-confirm-popup [titleDelete]="labels.titleDelete | translate"
+  [descriptionDelete]="labels.descDelete | translate" [visibleInput]="deleteModalVisible"
+  (hideEmiter)="toggleDeleteModal(false)">
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <!-- Cancel -->
+    <div class="cancel_btn">
+      <button class="w-40" (click)="toggleDeleteModal(false)">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <!-- Confirm Delete -->
+    <div class="delete_btn w-40">
+      <p-button (onClick)="delete()" [loading]="loadingDelete" [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

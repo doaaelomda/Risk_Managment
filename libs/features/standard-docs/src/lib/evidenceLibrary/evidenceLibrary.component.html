@@ -1,0 +1,54 @@
+<!-- Handle Evidence List in New Table -->
+<lib-new-table [loading]="loadingTable" [table_data]="dataTable"
+  [table_title]="'BREAD_CRUMB_TITLES.EVIDENCE_LIBRARY_LIST' | translate"
+  [badge_title]="'HEARDE_TABLE.EVIDENCE_LIBRARY' | translate"
+  [dataViewId]="144"
+  [entityID_Name]="'templateEvidenceTypeID'"
+  [isShownAction]="true"
+  (payload_emiter)="handleDataTable($event)"
+  [action_items]="items"
+  (currentActionRow)="setSelectedRow($event)"
+  [columnControl]="columnControl"
+  [table_actions_permissions]="{ module: 'LIBRARY', feature: 'EVIDENCELIBRARY', action: 'VIEW' }"
+  >
+
+  @if(_PermissionSystemService.can('LIBRARY' , 'EVIDENCELIBRARY' , 'ADD')){
+  <button addition_action
+    [routerLink]="'/gfw-portal/library/add-evidence-library'"
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+    <i class="fi fi-br-plus w-5 h-5"></i>
+    <span>
+      {{'HEARDE_TABLE.ADD_NEW_EVIDENCE_LIBRARY' | translate}}
+    </span>
+  </button>
+}
+
+</lib-new-table>
+
+
+<!-- Delete Popup Evidence Library -->
+<lib-delete-confirm-popup
+  [titleDelete]="'EVIDENCE_LIBRARY.DELETE_TITLE'"
+  [descriptionDelete]="'EVIDENCE_LIBRARY.DELETE_DESC'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteEvidenceLibrary()"
+        [loading]="loadDeleted"
+        [label]="'BUTTONS.DELETE' | translate">
+      </p-button>
+    </div>
+  </div>
+
+</lib-delete-confirm-popup>
+
+

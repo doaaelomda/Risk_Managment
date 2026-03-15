@@ -1,0 +1,35 @@
+<div class="breadcrumb_container px-6 py-3 flex flex-wrap items-center justify-between">
+  <div class="breadcrumb_links flex flex-wrap items-center gap-4">
+    @for(link of bread_crumb_links() ; track $index ; let i = $index){
+
+      <a [routerLink]="link.routerLink" [class]="i === bread_crumb_links().length - 1 ? 'active':''" class="flex flex-wrap text-gray_color font-medium bread_single text-sm items-center gap-2">
+        @if(link.icon){
+          <i [class]="link.icon"></i>
+        }
+        <p>{{ truncate(link.name) }}</p>
+      </a>
+      @if(i !== bread_crumb_links().length - 1){
+        <i [class]="direction === 'rtl' ? 'fi fi-rr-angle-small-left text-gray_light' : 'fi fi-rr-angle-small-right text-gray_light'"></i>
+      }
+    }
+  </div>
+
+
+
+  <div class="action_btn">
+    @if(action_btn() !== null ){
+      <!-- <p-button (onClick)="menu.toggle($event)" [icon]="action_btn()?.icon" [label]="action_btn()?.name" />
+        -->
+        <button (click)="menu.toggle($event)" class="flex flex-wrap items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+          <i [class]="action_btn()?.icon"></i>
+          <span>{{action_btn()?.name}}</span>
+          <i class="fi fi-rr-angle-small-down"></i>
+        </button>
+      }
+  </div>
+</div>
+
+
+
+
+<p-menu #menu [model]="items" [appendTo]="'body'" [popup]="true" />

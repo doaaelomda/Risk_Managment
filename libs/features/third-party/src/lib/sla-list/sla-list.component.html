@@ -1,0 +1,190 @@
+<section>
+
+
+  <lib-new-table
+    [table_actions_permissions]="{ module: 'THIRDPARTIES', feature: 'THIRDPARTYCONTRACTSLA', action: 'VIEW' }"
+
+  [loading]="loadingTable" [table_data]="dataTable"
+    [table_title]="'THIRD_PARTY.' + FEATURE_LIST_NAME | translate"
+    [badge_title]="'THIRD_PARTY.' + FEATURE_PLURAL_NAME | translate" [dataViewId]="DATA_VIEW_ID"
+    [entityID_Name]="ENTITY_ID_NAME" [isShownAction]="true" (payload_emiter)="handleDataTable($event)"
+    [action_items]="items" (currentActionRow)="setSelected($event)" [columnControl]="columnControl">
+  @if(_PermissionSystemService.can('THIRDPARTIES' , 'THIRDPARTYCONTRACTSLA' , 'ADD')){
+        <button addition_action (click)="visible_save_dialog = true"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'THIRD_PARTY.ADD_NEW_' + FEATURE_NAME | translate }}</span>
+    </button>
+  }
+  </lib-new-table>
+</section>
+<p-dialog (onHide)="resetForm()" [header]="
+    (current_row_selected ? 'THIRD_PARTY.UPDATE_' : 'THIRD_PARTY.ADD_NEW_') + FEATURE_NAME
+      | translate
+  " [modal]="true" [(visible)]="visible_save_dialog" styleClass="w-[50rem]">
+  @if(form){
+  <form [formGroup]="form">
+    <div class="grid grid-cols-12 gap-6 mb-6">
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-text [placeholder]="'CONTENT.PLACEHOLDERS.NAME' | translate"
+          [inputLabel]="'CONTENT.NAME' | translate" [control]="form.get('name')!" [controlNameInput]="'name'">
+        </lib-input-text>
+      </div>
+      <!-- 📊 Metric Name -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-text [placeholder]="'THIRD_PARTY.METRIC_NAME_PLACEHOLDER' | translate"
+          [inputLabel]="'THIRD_PARTY.METRIC_NAME' | translate" [control]="form.get('metricName')!"
+          [controlNameInput]="'metricName'">
+        </lib-input-text>
+      </div>
+
+      <!-- 🎯 Target Value -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-number [placeholder]="'THIRD_PARTY.TARGET_VALUE_PLACEHOLDER' | translate"
+          [inputLabel]="'THIRD_PARTY.TARGET_VALUE' | translate" [control]="form.get('targetValue')!"
+          [controlNameInput]="'targetValue'">
+        </lib-input-number>
+      </div>
+
+      <!-- ⚖️ Unit -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-text [placeholder]="'THIRD_PARTY.PARTY_UNIT_PLACEHOLDER_' | translate"
+          [inputLabel]="'THIRD_PARTY.UNIT' | translate" [control]="form.get('unit')!" [controlNameInput]="'unit'">
+        </lib-input-text>
+      </div>
+
+      <!-- 📏 Measurement Method -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-text [placeholder]="
+            'THIRD_PARTY.MEASUREMENT_METHOD_PLACEHOLDER' | translate
+          " [inputLabel]="'THIRD_PARTY.MEASUREMENT_METHOD' | translate" [control]="form.get('measurementMethod')!"
+          [controlNameInput]="'measurementMethod'">
+        </lib-input-text>
+      </div>
+      @if(!contractId){
+      <div class="md:col-span-6 col-span-12">
+        <lib-ui-dropdown [placeholder]="'THIRD_PARTY.CONTRACT' | translate" [label]="'THIRD_PARTY.CONTRACT' | translate"
+          [control]="form.get('thirdPartyContractID')!" [formControlNameInput]="'thirdPartyContractID'"
+          [options]="contractsList" [optionLabel]="'label'" [optionValue]="'id'">
+        </lib-ui-dropdown>
+      </div>
+      }
+      <!-- ⚠️ Penalty Clause -->
+      <div class="col-span-12">
+        <lib-textarea-ui [placeholder]="'THIRD_PARTY.PENALITY_CLAUSE_PLACEHOLDER_' | translate"
+          [inputLabel]="'THIRD_PARTY.PENALTY_CLAUSE' | translate" [control]="form.get('penaltyClause')!"
+          [controlNameInput]="'penaltyClause'">
+        </lib-textarea-ui>
+      </div>
+    </div>
+  </form>
+  }
+
+  <ng-template pTemplate="footer">
+    <p-button styleClass="default_btn cancel" (onClick)="resetForm()" [label]="'BUTTONS.CANCEL' | translate"></p-button>
+    <p-button [disabled]="form.invalid" styleClass="default_btn ms-4" (onClick)="add()" [loading]="addLoading"
+      [label]="'BUTTONS.SAVE' | translate"></p-button>
+  </ng-template>
+</p-dialog>
+<lib-delete-confirm-popup [titleDelete]="`THIRD_PARTY.${FEATURE_NAME}_DELETE_TITLE`"
+  [descriptionDelete]="`THIRD_PARTY.${FEATURE_NAME}_DELETE_DESC`" (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible">
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="handleClosedDelete()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+    <div class="delete_btn w-40">
+      <p-button (onClick)="delete()" [loading]="loadDeleted" [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+
+<div class="action_dailog">
+  <p-dialog [header]="'TABS.REQUIREMENT_CONTROL' | translate" [(visible)]="isViewPopupVisible"
+    (onHide)="isViewPopupVisible=false;active_tab=1;current_row_selected = null" [modal]="true" [dismissableMask]="true" [draggable]="false"
+    [closable]="true" styleClass="w-[60rem]">
+
+    <div class="tabs flex flex-wrap items-center gap-4 border-b border-gray_light">
+      @for(tab of tabs ; track tab; let i = $index){
+      <button (click)="active_tab = i+1" [class.active_tab]="active_tab === tab.id"
+        class="flex justify-center items-center gap-3 font-medium px-4 py-3 min-w-40">
+        <i [class]="tab.icon" class="fi"></i>
+        <span>{{ tab.name }}</span>
+      </button>
+      }
+    </div>
+    @if(active_tab===1){
+    <div class="container p-4">
+      <div class="border-b border-b-gray-300 pb-3">
+        <div class="grid grid-cols-12 gap-4">
+          @if(data?.name) {
+          <div class="col-span-4 mb-4">
+            <h3 class="text-gray-500 font-medium text-sm mb-1">{{ 'CONTENT.NAME' | translate }}</h3>
+            <p class="text-gray-700 font-medium text-[16px]">{{ data?.name }}</p>
+          </div>
+          }
+          @if(data?.contractName) {
+          <div class="col-span-4 mb-4">
+            <h3 class="text-gray-500 font-medium text-sm mb-1">{{ 'THIRD_PARTY.CONTRACT' | translate }}</h3>
+            <p class="badge">{{ data?.contractName }}</p>
+          </div>
+          }
+          @if(data?.metricName) {
+          <div class="col-span-4 mb-4">
+            <h3 class="text-gray-500 font-medium text-sm mb-1">{{ 'THIRD_PARTY.METRIC_NAME' | translate }}</h3>
+            <p class="text-gray-700 font-medium text-[16px]">{{ data?.metricName }}</p>
+          </div>
+          }
+
+          @if(data?.targetValue) {
+          <div class="col-span-4 mb-4">
+            <h3 class="text-gray-500 font-medium text-sm mb-1">{{ 'THIRD_PARTY.TARGET_VALUE' | translate }}</h3>
+            <p class="text-gray-700 font-medium text-[16px]">{{ data?.targetValue }}</p>
+          </div>
+          }
+          @if(data?.unit) {
+          <div class="col-span-4 mb-4">
+            <h3 class="text-gray-500 font-medium text-sm mb-1">{{ 'THIRD_PARTY.UNIT' | translate }}</h3>
+            <p class="text-gray-700 font-medium text-[16px]">{{ data?.unit }}</p>
+          </div>
+          }
+          @if(data?.measurementMethod) {
+          <div class="col-span-4 mb-4">
+            <h3 class="text-gray-500 font-medium text-sm mb-1">{{ 'THIRD_PARTY.MEASUREMENT_METHOD' | translate }}</h3>
+            <p class="text-gray-700 font-medium text-[16px]">{{ data?.measurementMethod }}</p>
+          </div>
+          }
+          @if(data?.penaltyClause) {
+          <div class="col-span-4 mb-4">
+            <h3 class="text-gray-500 font-medium text-sm mb-1">{{ 'THIRD_PARTY.PENALTY_CLAUSE' | translate }}</h3>
+            <p class="text-gray-700 font-medium text-[16px]">{{ data?.penaltyClause }}</p>
+          </div>
+          }
+          @if(data?.notes) {
+          <div class="col-span-4 mb-4">
+            <h3 class="text-gray-500 font-medium text-sm mb-1">{{ 'THIRD_PARTY.NOTES' | translate }}</h3>
+            <p class="text-gray-700 font-medium text-[16px]">{{ data?.notes }}</p>
+          </div>
+          }
+        </div>
+      </div>
+
+      <div class="col-span-12 flex items-center gap-4 justify-end py-4">
+        <div class="cancel_btn">
+          <button (click)="isViewPopupVisible = false">{{ 'BUTTONS.BACKTOHOME' | translate }}</button>
+        </div>
+      </div>
+    </div>
+    }
+    <!-- @if(active_tab===2){
+    <lib-comment-section [relatedColumnId]="current_row_selected" [relatedEntityId]="96"></lib-comment-section>
+    } -->
+    <!-- @if(active_tab===3){
+    <lib-attachment-control-requirment [id]="current_row_selected"></lib-attachment-control-requirment>
+    } -->
+
+  </p-dialog>
+</div>

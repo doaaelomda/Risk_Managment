@@ -1,0 +1,161 @@
+<section class="form_sec">
+  <div class="header border-b border-gray_light pb-6 mb-6">
+    <h2 class="text-lg font-medium text-gray-900">
+      {{
+        current_update_id
+          ? ('STRATEGY_PLAN.UPDATE' | translate)
+          : ('STRATEGY_PLAN.ADD_NEW' | translate)
+      }}
+    </h2>
+  </div>
+
+  <form [formGroup]="strategyPlanForm" class="grid grid-cols-12 gap-6 mb-6">
+    <!-- English Name -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'STRATEGY_PLAN.NAME_PLACEHOLDER' | translate"
+        [inputLabel]="'STRATEGY_PLAN.NAME' | translate"
+        [control]="strategyPlanForm.get('name')!"
+        [controlNameInput]="'name'"
+      >
+      </lib-input-text>
+    </div>
+
+    <!-- Arabic Name -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'STRATEGY_PLAN.NAME_AR_PLACEHOLDER' | translate"
+        [inputLabel]="'STRATEGY_PLAN.NAME_AR' | translate"
+        [control]="strategyPlanForm.get('nameAr')!"
+        [controlNameInput]="'nameAr'"
+      >
+      </lib-input-text>
+    </div>
+
+    <!-- Description -->
+    <div class="col-span-12">
+      <lib-textarea-ui
+        [placeholder]="'STRATEGY_PLAN.DESCRIPTION_PLACEHOLDER' | translate"
+        [inputLabel]="'STRATEGY_PLAN.DESCRIPTION' | translate"
+        [control]="strategyPlanForm.get('description')!"
+        [controlNameInput]="'description'"
+      >
+      </lib-textarea-ui>
+    </div>
+
+    <!-- Description Arabic -->
+    <div class="col-span-12">
+      <lib-textarea-ui
+        [placeholder]="'STRATEGY_PLAN.DESCRIPTION_AR_PLACEHOLDER' | translate"
+        [inputLabel]="'STRATEGY_PLAN.DESCRIPTION_AR' | translate"
+        [control]="strategyPlanForm.get('descriptionAr')!"
+        [controlNameInput]="'descriptionAr'"
+      >
+      </lib-textarea-ui>
+    </div>
+
+    <!-- Owner Role -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'STRATEGY_PLAN.OWNER_ROLE_PLACEHOLDER' | translate"
+        [label]="'STRATEGY_PLAN.OWNER_ROLE' | translate"
+        [control]="strategyPlanForm.get('ownerRoleID')!"
+        [formControlNameInput]="'ownerRoleID'"
+        [options]="roleList"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      >
+      </lib-ui-dropdown>
+    </div>
+
+    <!-- Start Date -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-date-packer
+        [placeholder]="'STRATEGY_PLAN.START_DATE_PLACEHOLDER' | translate"
+        [inputLabel]="'STRATEGY_PLAN.START_DATE' | translate"
+        [control]="strategyPlanForm.get('startDate')!"
+        [controlNameInput]="'startDate'"
+      >
+      </lib-date-packer>
+    </div>
+
+    <!-- End Date -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-date-packer
+        [placeholder]="'STRATEGY_PLAN.END_DATE_PLACEHOLDER' | translate"
+        [inputLabel]="'STRATEGY_PLAN.END_DATE' | translate"
+        [control]="strategyPlanForm.get('endDate')!"
+        [controlNameInput]="'endDate'"
+      >
+      </lib-date-packer>
+    </div>
+
+    <!-- Color -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-color-dropdown
+        [control]="strategyPlanForm.get('color')!"
+        [controlNameInput]="'color'"
+        [placeholder]="'orginazation.color_PLACEHOLDER'|translate"
+        [inputLabel]="'STRATEGY_PLAN.COLOR' | translate"
+      ></lib-color-dropdown>
+    </div>
+
+    <!-- Importance Order -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-number
+        [placeholder]="'STRATEGY_PLAN.IMPORTANCE_ORDER_PLACEHOLDER' | translate"
+        [inputLabel]="'STRATEGY_PLAN.IMPORTANCE_ORDER' | translate"
+        [control]="strategyPlanForm.get('importanceOrder')!"
+        [controlNameInput]="'importanceOrder'"
+      >
+      </lib-input-number>
+    </div>
+
+    <!-- Status -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'STRATEGY_PLAN.STATUS_PLACEHOLDER' | translate"
+        [label]="'STRATEGY_PLAN.STATUS' | translate"
+        [control]="strategyPlanForm.get('strategicPlanStatusTypeID')!"
+        [formControlNameInput]="'strategicPlanStatusTypeID'"
+        [options]="statusList"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      >
+      </lib-ui-dropdown>
+    </div>
+
+    <!-- Priority -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'STRATEGY_PLAN.PRIORITY_PLACEHOLDER' | translate"
+        [label]="'STRATEGY_PLAN.PRIORITY' | translate"
+        [control]="strategyPlanForm.get('strategicPlanPriorityLevelTypeID')!"
+        [formControlNameInput]="'strategicPlanPriorityLevelTypeID'"
+        [options]="priorityList"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      >
+      </lib-ui-dropdown>
+    </div>
+  </form>
+
+  <!-- Buttons -->
+  <div
+    class="col-span-12 flex items-center gap-4 justify-end py-6 border-t border-gray_light"
+  >
+    <button
+      [routerLink]="['/gfw-portal/strategy/plans']"
+      class="default_btn cancel"
+    >
+      {{ 'BUTTONS.CANCEL' | translate }}
+    </button>
+    <p-button
+      [disabled]="strategyPlanForm.invalid"
+      [label]="'BUTTONS.SAVE' | translate"
+      [loading]="isLoading"
+      styleClass="default_btn"
+      (onClick)="submit()"
+    ></p-button>
+  </div>
+</section>

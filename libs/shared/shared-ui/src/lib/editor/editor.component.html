@@ -1,0 +1,30 @@
+<div class="editor-wrapper" [class.has-error]="currentControl.invalid && currentControl.touched">
+  <p-editor [placeholder]="placeholder" [formControlName]="controlName" (onInit)="onEditorCreated($event)" styleClass="h-[{{height()}}]">
+    <ng-template pTemplate="header">
+      <span class="ql-formats flex items-center gap-2">
+         <select class="ql-header">
+        <option selected></option>
+        <option value="1">Title</option>
+        <option value="2">Subtitle</option>
+      </select>
+        <button type="button" class="ql-bold font-medium text-xl" aria-label="Bold"></button>
+        <button type="button" class="ql-italic font-medium text-xl" aria-label="Italic"></button>
+        <button type="button" class="ql-link font-medium text-xl" aria-label="Insert Link"></button>
+        <button type="button" class="ql-list font-medium text-xl" value="ordered" aria-label="Ordered List"></button>
+        <button type="button" class="ql-list font-medium text-xl" value="bullet" aria-label="Bullet List"></button>
+      </span>
+
+    </ng-template>
+  </p-editor>
+
+</div>
+
+@if (currentControl.errors && currentControl.touched && currentValidations.length) {
+@for (val of currentValidations; track val) {
+@if (currentControl.getError(val.key)) {
+<p class="editor-error">
+  {{ val.message | translate }}
+</p>
+}
+}
+}

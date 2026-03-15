@@ -1,0 +1,22 @@
+.change_width{
+    width: 75% !important;
+}
+/* ::ng-deep .p-menu.p-component {
+  width: 238px !important;
+  text-align: center !important;
+} */
+
+::ng-deep .p-ripple .p-element .p-menuitem-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+}
+/* ::ng-deep .p-menuitem-content{
+      width: 100%;
+    display: flex;
+      justify-content: center;
+} */
+

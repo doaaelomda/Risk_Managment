@@ -1,0 +1,26 @@
+.quiz_card {
+  background-color: #f9fafb;
+  border-radius: 10px;
+    .img {
+        border-radius: inherit
+    }
+  .subtitle {
+    @apply text-sm text-[#5925DC];
+  }
+  .title {
+    @apply text-2xl text-[#101828];
+  }
+  .description {
+    @apply text-[#667085] font-normal;
+  }
+  .date {
+    @apply font-medium text-[#344054];
+  }
+
+  @apply p-6 pb-8 font-semibold text-base;
+}
+.arrow {
+  &.ar {
+      transform: rotateY(200deg);
+  }
+}

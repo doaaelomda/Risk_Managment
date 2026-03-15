@@ -1,0 +1,59 @@
+<section class="pt-8">
+
+  <lib-new-table
+    [loading]="loading"
+    [table_data]="dataTable"
+    [table_title]="'MIGITATION.ADD_PALN' | translate"
+    [badge_title]="'MIGITATION.Mitigation' | translate"
+    [dataViewId]="3"
+    [entityID_Name]="'id'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="items_table"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+        [table_actions_permissions]="{ module: 'RISKS', feature: 'TREATMENT',  action: 'VIEW' }"
+
+  >
+
+  @if(_PermissionSystemService.can('RISKS' , 'TREATMENT','ADD')){
+    <button
+      [routerLink]="[`/gfw-portal/risks-management/risk/${current_risk_id}/mitigation-action`]"
+      addition_action
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+    >
+      <i class="fi fi-rr-plus"></i>
+      <span>{{ 'MIGITATION.ADD_NEW_PALN' | translate }}</span>
+      <!-- <i class="fi fi-rr-angle-small-down"></i> -->
+    </button>
+  }
+  </lib-new-table>
+</section>
+<lib-delete-confirm-popup
+  [titleDelete]="'RISK_MANAGMENT.DELETE_MITIGATION_TITLE'"
+  [descriptionDelete]="'RISK_MANAGMENT.DELETE_MITIGATION_DESC'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn w-40">
+      <p-button
+        [label]="'BUTTONS.CANCEL' | translate"
+        class="w-full"
+        [routerLink]="['/gfw-portal/risks-management/risk']"
+      />
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteRiskMitagtion()"
+        [loading]="loadDelted"
+        [label]="'BUTTONS.DELETE' | translate"
+        class="w-full"
+        severity="danger"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+<!-- <p-menu #menu [model]="items" [appendTo]="'body'" [popup]="true" /> -->

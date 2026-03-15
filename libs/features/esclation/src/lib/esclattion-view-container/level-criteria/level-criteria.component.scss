@@ -1,0 +1,25 @@
+.criteria_card {
+  border: 1px solid #d0d5dd;
+  padding: 12px 24px 24px 24px;
+  border-radius: 10px;
+  .header {
+    padding-bottom: 16px;
+    .title {
+      color: #101828;
+      font-size: 18px;
+      font-weight: 500;
+    }
+    .count {
+      background-color: #f4f3ff;
+      color: #5925dc;
+      padding: 2px 8px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+  }
+}
+.disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+}

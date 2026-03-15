@@ -1,0 +1,278 @@
+<!-- main  Form -->
+<section class="form_sec mb-6">
+  <div class="header border-b border-gray-200 mb-6">
+    <h2 class="text-lg font-medium text-gray-900 py-6">
+      <h2>{{"RISK_MANAGMENT.MAIN_INFO" | translate}}</h2>
+    </h2>
+  </div>
+  <form [formGroup]="form" class="grid grid-cols-12 gap-6">
+
+    <div class="col-span-12">
+      <div class="lg:w-1/2">
+        <lib-input-text [placeholder]="'MAIN_INFO.Code' | translate" [control]="form.get('controlCode')!"
+          [inputLabel]="'MAIN_INFO.Code' | translate" [controlNameInput]="'controlCode'">
+        </lib-input-text>
+      </div>
+    </div>
+
+
+    <div class="col-span-12 lg:col-span-6">
+      <lib-input-text [placeholder]="'MAIN_INFO.Name' | translate" [control]="form.get('nameAr')!"
+        [inputLabel]="'MAIN_INFO.Name' | translate" [controlNameInput]="'nameAr'">
+      </lib-input-text>
+    </div>
+
+    <div class="col-span-12 lg:col-span-6">
+      <lib-input-text [placeholder]="'MAIN_INFO.NameEnglish' | translate" [validations]="validationsTitle"
+        [control]="form.get('name')!" [inputLabel]="'MAIN_INFO.NameEnglish' | translate" [controlNameInput]="'name'">
+      </lib-input-text>
+    </div>
+
+    <div class="md:col-span-6 col-span-12 flex items-center gap-3">
+      <label for="" class="text-sm font-medium text-gray-700">
+        {{ 'PERMISSIONS.fullControlText' | translate }}
+      </label>
+      <p-inputSwitch class="small-switch" formControlName="isFullControlText"></p-inputSwitch>
+    </div>
+
+    <div class="col-span-12">
+      <lib-textarea-ui [placeholder]="'PERMISSIONS.fullControlText' | translate"
+        [control]="form.get('fullControlText')!" [controlNameInput]="'fullControlText'">
+      </lib-textarea-ui>
+      <p class="text-gray-500 font-normal text-sm">{{ 'RISK_ACTION.CHARACTERS_LEFT' | translate:{ count: 275-
+        form.get('fullControlText')?.value?.length } }}</p>
+    </div>
+
+    <div class="md:col-span-6 col-span-12 flex items-center gap-3">
+      <label for="" class="text-sm font-medium text-gray-700">
+        {{ 'MAIN_INFO.Objective' | translate }}
+      </label>
+      <p-inputSwitch class="small-switch" formControlName="isObjective"></p-inputSwitch>
+    </div>
+    <div class="col-span-12 ">
+      <lib-textarea-ui [placeholder]="'MAIN_INFO.Objective' | translate" [control]="form.get('objective')!"
+        [controlNameInput]="'objective'">
+      </lib-textarea-ui>
+    </div>
+
+    <div class="md:col-span-6 col-span-12 flex items-center gap-3">
+      <label for="" class="text-sm font-medium text-gray-700">
+        {{ 'Control_view.Evidence_Description' | translate }}
+      </label>
+      <p-inputSwitch class="small-switch" formControlName="isEvidenceDescription"></p-inputSwitch>
+    </div>
+    <div class="col-span-12">
+      <lib-textarea-ui [placeholder]="'Control_view.Evidence_Description' | translate"
+        [control]="form.get('evidenceDescription')!" [controlNameInput]="'evidenceDescription'">
+      </lib-textarea-ui>
+      <p class="text-gray-500 font-normal text-sm">
+        {{ 'RISK_ACTION.CHARACTERS_LEFT' | translate:{ count: 275-
+        form.get('evidenceDescription')?.value?.length } }}
+      </p>
+    </div>
+    <div class="col-span-12">
+      <lib-textarea-ui [placeholder]="'MAIN_INFO.EvidenceDescription' | translate"
+        [control]="form.get('evidenceDescription')!" [inputLabel]="'MAIN_INFO.EvidenceDescription' | translate"
+        [controlNameInput]="'evidenceDescription'">
+      </lib-textarea-ui>
+      <p class="text-gray-500 font-normal text-sm">
+        {{ 'RISK_ACTION.CHARACTERS_LEFT' | translate:{ count: 275-
+        form.get('evidenceDescription')?.value?.length } }}
+      </p>
+    </div>
+
+    <div class="col-span-12 lg:col-span-6">
+      <lib-input-text [placeholder]="'MAIN_INFO.Reference' | translate" [control]="form.get('referenceNumber')!"
+        [inputLabel]="'MAIN_INFO.Reference' | translate" [controlNameInput]="'referenceNumber'">
+      </lib-input-text>
+    </div>
+
+    <div class="col-span-12 lg:col-span-6">
+      <lib-input-text [placeholder]="'MAIN_INFO.Scope' | translate" [control]="form.get('scope')!"
+        [inputLabel]="'MAIN_INFO.Scope' | translate" [controlNameInput]="'scope'">
+      </lib-input-text>
+    </div>
+
+
+  </form>
+</section>
+
+
+<!-- classification Form -->
+<div class="action_section mb-6">
+  <p-accordion class="w-full" [activeIndex]="0">
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div class="flex items-center gap-4">
+          <h2>{{"RISK_MANAGMENT.CLASSIFICATIONS" | translate}}</h2>
+        </div>
+      </ng-template>
+      <form [formGroup]="ClassificationForm" class="grid grid-cols-12 gap-6">
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown [placeholder]="'MAIN_INFO.GovRegulatorID' | translate"
+            [label]="'MAIN_INFO.GovRegulatorID'|translate" [control]="ClassificationForm.get('govRegulatorID')!"
+            [options]="govRegulator" [optionLabel]="'label'" [optionValue]="'id'"
+            [formControlNameInput]="'govRegulatorID'">
+          </lib-ui-dropdown>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown [placeholder]="'RISK_MANAGMENT.CATEGORY' | translate"
+            [label]="'RISK_MANAGMENT.CATEGORY' | translate" [control]="ClassificationForm.get('categoryId')!"
+            [options]="CategoryType" [optionLabel]="'label'" [optionValue]="'id'" [formControlNameInput]="'categoryId'">
+          </lib-ui-dropdown>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown [placeholder]="'MAIN_INFO.DocumentType' | translate"
+            [label]="'MAIN_INFO.DocumentType' | translate" [control]="ClassificationForm.get('govDocumentTypeID')!"
+            [options]="DocumentTypeOptions" [optionLabel]="'label'" [optionValue]="'id'"
+            [formControlNameInput]="'govDocumentTypeID'">
+          </lib-ui-dropdown>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown [placeholder]="'MAIN_INFO.DocumentName' | translate"
+            [label]="'MAIN_INFO.DocumentName' | translate" [control]="ClassificationForm.get('govDocumentID')!"
+            [options]="DocumentNames" [optionLabel]="'label'" [optionValue]="'id'"
+            [formControlNameInput]="'govDocumentID'">
+          </lib-ui-dropdown>
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-tree-select-ui [nodes_input]="organizationUnitOptions"
+            [placeholder]="'RISK_MANAGMENT.ORG_UNIT' | translate" [label]="'RISK_MANAGMENT.ORG_UNIT' | translate"
+            [control]="ClassificationForm.get('organizationalUnitID')!" [formControlNameInput]="'organizationalUnitID'">
+          </lib-tree-select-ui>
+        </div>
+      </form>
+    </p-accordionTab>
+  </p-accordion>
+</div>
+
+<!-- Responsibility Form -->
+<div class="action_section mb-6">
+  <p-accordion class="w-full" [activeIndex]="0">
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div class="flex items-center gap-4">
+          <h2>{{"RISK_MANAGMENT.Responsibility_Ownership" | translate}}</h2>
+        </div>
+      </ng-template>
+
+      <form [formGroup]="ResponsibilityForm" class="grid grid-cols-12 gap-6">
+        <div class="col-span-12 lg:col-span-6">
+          <lib-role-dropdown [placeholder]="'ASSESSMENT_RISK.REVIEWR' " [label]="'RISK_MANAGMENT.ResponsibleRole' "
+            [control]="ResponsibilityForm.get('responsibleRoleID')!" [options]="roles" [optionLabel]="'label'"
+            [optionValue]="'id'" [formControlNameInput]="'responsibleRoleID'">
+          </lib-role-dropdown>
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-user-dropdown [placeholder]="'ASSESSMENT_RISK.REVIEWR' " [label]="'RISK_MANAGMENT.ResponsibleUser' "
+            [control]="ResponsibilityForm.get('responsibleUserID')!" [options]="users" optionLabel="name"
+            optionValue="id" [formControlNameInput]="'responsibleUserID'">
+          </lib-user-dropdown>
+        </div>
+      </form>
+    </p-accordionTab>
+  </p-accordion>
+
+</div>
+
+<!-- Responsibility Form -->
+<div class="form_sec mb-6">
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-gray-900 font-medium text-xl">{{ 'PERMISSIONS.Status' | translate }}</h2>
+
+    <div class="tabs flex flex-wrap items-center gap-4 border-b border-gray_light">
+      @for (tab of tabs; track tab) {
+      <button (click)="selectTab(tab.id)" [class.active_tab]="active_tab === tab.id"
+        class="flex justify-center items-center gap-3 font-medium px-3 py-3 min-w-20">
+        <i [class]="tab.icon" class="fi"></i>
+        <span>{{ tab.name }}</span>
+      </button>
+      }
+    </div>
+  </div>
+  <form [formGroup]="StatusForm" class="grid grid-cols-12 gap-6">
+    @if(active_tab===1){
+    <div class="col-span-12 lg:col-span-6">
+      <lib-date-packer [placeholder]="'controls.ComplianceNextTest' | translate"
+        [inputLabel]="'controls.ComplianceNextTest' | translate" [control]="StatusForm.get('ComplianceNextTest')!"
+        [controlNameInput]="'ComplianceNextTest'">
+      </lib-date-packer>
+    </div>
+    <div class="col-span-12 lg:col-span-6">
+      <lib-date-packer [placeholder]="'controls.ComplianceReptation' | translate"
+        [inputLabel]="'controls.ComplianceReptation' | translate" [control]="StatusForm.get('ComplianceReptation')!"
+        [controlNameInput]="'ComplianceReptation'">
+      </lib-date-packer>
+    </div>
+    <div class="col-span-12">
+      <lib-textarea-ui [placeholder]="'controls.ComplianceNote' | translate"
+        [control]="StatusForm.get('ComplianceNote')!" [controlNameInput]="'ComplianceNote'">
+      </lib-textarea-ui>
+      <p class="text-gray-500 font-normal text-sm">{{ 'RISK_ACTION.CHARACTERS_LEFT' | translate:{ count: 275-
+        form.get('ComplianceNote')?.value?.length } }}</p>
+    </div>
+    }
+    @if(active_tab===2){
+    <div class="col-span-12 lg:col-span-6">
+      <lib-date-packer [placeholder]="'controls.EffectivenessNextTest' | translate"
+        [inputLabel]="'controls.EffectivenessNextTest' | translate" [control]="StatusForm.get('EffectivenessNextTest')!"
+        [controlNameInput]="'EffectivenessNextTest'">
+      </lib-date-packer>
+    </div>
+    <div class="col-span-12 lg:col-span-6">
+      <lib-date-packer [placeholder]="'controls.EffectivenessReptation' | translate"
+        [inputLabel]="'controls.EffectivenessReptation' | translate"
+        [control]="StatusForm.get('EffectivenessReptation')!" [controlNameInput]="'EffectivenessReptation'">
+      </lib-date-packer>
+    </div>
+    }
+    @if(active_tab===3){
+    <div class="col-span-12 lg:col-span-6">
+      <lib-date-packer [placeholder]="'controls.ImplementationNextTest' | translate"
+        [inputLabel]="'controls.ImplementationNextTest' | translate"
+        [control]="StatusForm.get('ImplementationNextTest')!" [controlNameInput]="'ImplementationNextTest'">
+      </lib-date-packer>
+    </div>
+    <div class="col-span-12 lg:col-span-6">
+      <lib-date-packer [placeholder]="'controls.ImplementationReptation' | translate"
+        [inputLabel]="'controls.ImplementationReptation' | translate"
+        [control]="StatusForm.get('ImplementationReptation')!" [controlNameInput]="'ImplementationReptation'">
+      </lib-date-packer>
+    </div>
+    }
+
+    @if(active_tab===4){
+    <div class="col-span-12 lg:col-span-6">
+      <lib-date-packer [placeholder]="'controls.MaturityNextTest' | translate"
+        [inputLabel]="'controls.MaturityNextTest' | translate" [control]="StatusForm.get('MaturityNextTest')!"
+        [controlNameInput]="'MaturityNextTest'">
+      </lib-date-packer>
+    </div>
+    <div class="col-span-12 lg:col-span-6">
+      <lib-date-packer [placeholder]="'controls.MaturityReptation' | translate"
+        [inputLabel]="'controls.MaturityReptation' | translate" [control]="StatusForm.get('MaturityReptation')!"
+        [controlNameInput]="'MaturityReptation'">
+      </lib-date-packer>
+    </div>
+    }
+
+  </form>
+</div>
+
+<!-- Actions -->
+<div class="col-span-12 flex items-center gap-4 justify-end py-6 border-t border-gray_light">
+  <div class="flex justify-end gap-4 py-4">
+    <div class="cancel_btn">
+      <button [routerLink]="'/gfw-portal/governance/control-management/list'">{{ 'RISK_ACTION.CANCEL' | translate
+        }}</button>
+    </div>
+    <div class="action_btn">
+      <p-button [label]="id ? ('BUTTONS.UPDATE' | translate) : ('RISK_MANAGMENT.SAVE_CHANGES' | translate)"
+        [outlined]="true" severity="secondary" [loading]="isLoader" (onClick)="submit()">
+      </p-button>
+
+    </div>
+  </div>
+</div>

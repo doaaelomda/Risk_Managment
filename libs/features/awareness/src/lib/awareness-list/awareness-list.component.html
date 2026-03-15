@@ -1,0 +1,71 @@
+<section>
+  <!-- <lib-shared-ui
+    [view_entityRouter]="'/gfw-portal/awareness/campaign'"
+    [entityID_Name]="'awarenessCampaignID'"
+    [dataViewId]="47"
+    [selected_profile_column]="selected_profile_column"
+    (filter_emitter)="handleFilter($event)"
+    [filter_id_input]="47"
+    [action_items]="items"
+    (sortEmiter)="handleSort($event)"
+    [total_items_input]="pageginationObj.totalItems"
+    (selected_emiter)="setSelected($event)"
+    [badge_name]="'AWARENESS.TITLE' | translate"
+    [table_name]="awarenessTitle"
+    [loadingState]="loadingTable"
+    (paginationEvent)="getAwarenessList($event)"
+    (showDeleteEvent)="handleShowDelete($event)"
+    [dataList]="dataTable"
+    [defultprofile]="defultProfile"
+    [profilesList]="awarenessColumns"
+  > -->
+    <lib-new-table
+    [loading]="loadingTable"
+    [table_data]="dataTable"
+    [table_title]="awarenessTitle"
+    [badge_title]="'AWARENESS.TITLE' | translate"
+    [dataViewId]="47"
+    [entityID_Name]="'awarenessCampaignID'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="items"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{ module: 'AWARNESS', feature: 'CAMPAIGNS', action: 'VIEW' }"
+  >
+      @if(_PermissionSystemService.can('AWARNESS' , 'CAMPAIGNS' , 'ADD')){
+    <button
+      addition_action
+      [routerLink]="['/gfw-portal/awareness/add-campaign']"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+    >
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'AWARENESS.ADD_NEW' | translate }}</span>
+    </button>
+  }
+    </lib-new-table>
+
+</section>
+
+<lib-delete-confirm-popup
+  [titleDelete]="'AWARENESS.DELETE_TITLE'"
+  [descriptionDelete]="'AWARENESS.DELETE_DESC'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-47" (click)="handleClosedDelete(false)">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-47">
+      <p-button
+        (onClick)="deleteAwareness()"
+        [loading]="loadDelted"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

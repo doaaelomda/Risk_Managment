@@ -1,0 +1,113 @@
+<div class="container_view">
+  <h1 class="py-3 font-medium text-xl">
+    {{ 'HEARDE_TABLE.ADD_NEW_RISK_ASSESS' | translate }}
+  </h1>
+
+  @if(mode() !== 'readonly'){
+
+    <form [formGroup]="form" class="grid grid-cols-12 gap-6 p-8">
+      <div class="col-span-10 grid grid-cols-12 items-center gap-4">
+        <label for="" class="col-span-4 text-sm font-medium">{{
+          'ASSESSMENT.Compliance_STATUS' | translate
+          }}</label>
+        <lib-ui-dropdown class="col-span-8" [options]="statusList"
+          [placeholder]="'ASSESSMENT.SELECT_COMPLIANCE_STATUS' | translate"
+          [control]="form.get('complianceAssessmentItemResultStatusTypeID')!"
+          [formControlNameInput]="'complianceAssessmentItemResultStatusTypeID'" [optionLabel]="'label'"
+          [optionValue]="'id'"></lib-ui-dropdown>
+      </div>
+
+
+      <!-- <div class="border_scope col-span-12"></div> -->
+      <!-- <div class="col-span-10 grid grid-cols-12 items-center gap-4">
+              <label for="" class="col-span-4 text-sm font-medium">{{
+                'ASSESSMENT.WORK_FLOW_STAGE' | translate
+              }}</label>
+              <lib-ui-dropdown
+                class="col-span-8"
+                [options]="workflowsList"
+                [placeholder]="'ASSESSMENT.WORK_FLOW_STAGE' | translate"
+                [control]="form.get('GovControlAssessmentWorkflowStageID')!"
+                [formControlNameInput]="'GovControlAssessmentWorkflowStageID'"
+                [validations]="[]"
+                [optionLabel]="'label'"
+                [optionValue]="'id'"
+              ></lib-ui-dropdown>
+            </div> -->
+      <!-- <div class="border_scope col-span-12"></div> -->
+      <!-- <div class="col-span-10 grid grid-cols-12 items-center gap-4">
+        <label for="" class="col-span-4 text-sm font-medium">{{
+          'ASSESSMENT.ASSESSMENT_PHASE' | translate
+          }}</label>
+        <lib-ui-dropdown class="col-span-8" [options]="phases_list"
+          [placeholder]="'ASSESSMENT.ASSESSMENT_PHASE' | translate"
+          [control]="form.get('govControlAssessmentPhaseTypeID')!"
+          [formControlNameInput]="'govControlAssessmentPhaseTypeID'" [validations]="[]" [optionLabel]="'label'"
+          [optionValue]="'id'"></lib-ui-dropdown>
+      </div> -->
+      <div class="border_scope col-span-12"></div>
+      <div class="col-span-10 grid grid-cols-12 items-start gap-4">
+        <label for="" class="col-span-4 text-sm font-medium pt-2">{{
+          'ASSESSMENT.Finding' | translate
+          }}</label>
+        <div class="col-span-8">
+          <lib-textarea-ui [placeholder]="'ASSESSMENT.EnterFinding' | translate" [control]="form.get('findings')!"
+            [controlNameInput]="'findings'"></lib-textarea-ui>
+          <small class="text-gray-500 block mt-1">{{ 275 - (form.get('findings')?.value?.length || 0) }}
+            {{ 'ASSESSMENT.CharactersLeft' | translate }}</small>
+        </div>
+      </div>
+      <div class="border_scope col-span-12"></div>
+      <div class="col-span-10 grid grid-cols-12 items-start gap-4">
+        <label for="" class="col-span-4 text-sm font-medium pt-2">{{
+          'ASSESSMENT.Risk' | translate
+          }}</label>
+        <div class="col-span-8">
+          <lib-textarea-ui [placeholder]="'ASSESSMENT.EnterRisk' | translate" [control]="form.get('risks')!"
+            [controlNameInput]="'risks'"></lib-textarea-ui>
+          <small class="text-gray-500 block mt-1">{{ 275 - (form.get('risks')?.value?.length || 0) }}
+            {{ 'ASSESSMENT.CharactersLeft' | translate }}</small>
+        </div>
+      </div>
+      <div class="border_scope col-span-12"></div>
+      <div class="col-span-10 grid grid-cols-12 items-start gap-4">
+        <label for="" class="col-span-4 text-sm font-medium pt-2">{{
+          'ASSESSMENT.Recommendation' | translate
+          }}</label>
+        <div class="col-span-8">
+          <lib-textarea-ui [placeholder]="'ASSESSMENT.EnterRecommendation' | translate"
+            [control]="form.get('recommendations')!" [controlNameInput]="'recommendations'"></lib-textarea-ui>
+          <small class="text-gray-500 block mt-1">{{ 275 - (form.get('recommendations')?.value?.length || 0) }}
+            {{ 'ASSESSMENT.CharactersLeft' | translate }}</small>
+        </div>
+      </div>
+
+
+
+
+
+
+      <!-- buttons  -->
+
+
+
+
+               <div class="col-span-12 flex items-center justify-between">
+
+            <div class="flex items-center gap-4">
+              <div class="action_btn">
+                <p-button
+                  [label]="'Save Changes' | translate"
+                  [loading]="saving"
+                  (onClick)="save()"
+                ></p-button>
+              </div>
+            </div>
+          </div>
+
+    </form>
+  }@else {
+    <lib-shared-overview [data]="currentItemResultData" [dataLoading]="loading_data" [entries]="entires"></lib-shared-overview>
+  }
+
+</div>

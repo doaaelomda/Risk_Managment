@@ -1,0 +1,116 @@
+.col_container{
+  cursor: move;
+}
+
+
+.col_container.dis_curs{
+  cursor: not-allowed	!important;
+}
+
+.header{
+    box-shadow: 0px 1px 2px 0px #1018280F;
+
+box-shadow: 0px 1px 3px 0px #1018281A;
+}
+
+.table_container{
+  box-shadow: 0px 1px 2px 0px #1018280F;
+
+box-shadow: 0px 1px 3px 0px #1018281A;
+
+}
+
+.apply_btn:disabled{
+  cursor: auto;
+  pointer-events: none;
+}
+
+
+
+.avatar img{
+  width: 60 ;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.table_title_header{
+  color: rgba(16, 24, 40, 1);
+  font-size: 18px;
+  font-weight: 500;
+}
+::ng-deep .action_btn_filter{
+  background-color: transparent;
+  border:1px solid rgba(122, 90, 248, 1);
+  padding: 10px;
+
+}
+ .action_btn_filter_icon {
+  margin-left: -6px;
+}
+
+.action_btn_filter_icon {
+  margin-inline-start: -6px;
+}
+
+.progress_outer{
+  @apply bg-success_color/25 rounded-md h-2;
+  .inner{
+    @apply bg-success_color rounded-md h-2;
+  }
+}
+
+
+
+.custom_height{
+  max-height: 500px  ;
+  overflow: hidden;
+}
+
+
+
+.header{
+  border-color: #EAECF0
+}
+
+
+::ng-deep  .action_btn_filter .btn {
+    background-color: transparent;
+}
+/* .action_btn_filter .icon {
+  color: white;
+} */
+::ng-deep .check-native .p-checkbox-box {
+      border:1px solid #D0D5DD;
+      background: #FAFAFF;
+      border-radius:6px ;
+      -webkit-border-radius:6px ;
+      -moz-border-radius:6px ;
+      -ms-border-radius:6px ;
+      -o-border-radius:6px ;
+      width: 20px;
+      height: 20px;
+}
+
+::ng-deep .check-native .p-checkbox-box.p-highlight {
+  border: 1px solid #7A5AF8;
+}
+::ng-deep .check-native .p-checkbox-icon{
+  color: #7A5AF8;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+
+
+
+.custom_filter_btn{
+  .my_filter{
+    padding: 10px;
+    @apply border border-primaryColor-500 rounded-lg;
+    box-shadow: 0px 1px 2px 0px #1018280D;
+    &.btn_filter_flex{
+      @apply flex items-center gap-3;
+    }
+
+  }
+}

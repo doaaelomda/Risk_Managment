@@ -1,0 +1,32 @@
+<div [dir]="isAr()  ? 'rtl':'ltr'" class="app_layout"
+  [ngClass]="{'app_layout-sidebar-open':sideBarState() , 'app_layout-sidebar-close':!sideBarState() , 'isAr':isAr()}">
+  @if(isOverLay()){
+
+    <div tabindex="0" (click)="handleCloseOverlay()" (keydown.enter)="handleCloseOverlay()" class="app-layout__sidebar-back-overlay"></div>
+  }
+  <div
+  [@overlay]="isOverLay() ? {value:'show' , params:{transitionParams:'.5s ease-in-out' } }:{value:'hide',params:{transitionParams:'.5s ease-in-out' },style:{left:0}} "
+   class="app-layout_side-bar fixed top-0 bottom-0">
+    <app-sidebar-layout></app-sidebar-layout>
+  </div>
+  <div class="app-layout_content">
+    <div class="app-layout_content-header   bg-white_color">
+      <app-header-layout></app-header-layout>
+      <!-- <app-breadcrumb></app-breadcrumb> -->
+    </div>
+    <div class="app-layout_content-main lg:px-8 py-4   ">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
+@if(isShowGlobalLoader()){
+  <div class="custom_global_loader bg-white_color fixed top-0 bottom-0 right-0 left-0 ">
+    <lib-loader></lib-loader>
+  </div>
+}
+
+
+<app-notification-toast></app-notification-toast>
+
+

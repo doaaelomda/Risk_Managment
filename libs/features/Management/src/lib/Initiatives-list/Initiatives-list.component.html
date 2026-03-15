@@ -1,0 +1,48 @@
+<section>
+     <lib-new-table
+    [loading]="loadingTable"
+    [table_data]="dataTable"
+     [badge_title]="'INITIATIVE.INITIATIVE' | translate"
+    [table_title]="'INITIATIVE.LIST' | translate"
+    [dataViewId]="41"
+    [entityID_Name]="'initiativeID'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="items"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+        [table_actions_permissions]="{ module: 'MANAGEMENT', feature: 'INITIATIVE', action: 'VIEW' }"
+
+  >
+ @if(_PermissionSystemService.can('MANAGEMENT' , 'INITIATIVE' , 'ADD')){
+    <button addition_action [routerLink]="'/gfw-portal/management/add-initiative'"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'INITIATIVE.ADD_NEW' | translate }}</span>
+    </button>
+  }
+     </lib-new-table>
+
+</section>
+
+<lib-delete-confirm-popup
+  [titleDelete]="'INITIATIVE.DELETE_INITIATIVE_TITLE' | translate"
+  [descriptionDelete]="'INITIATIVE.DELETE_INITIATIVE_DESC' | translate"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteinitiative()"
+        [loading]="loadDelted"
+        [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

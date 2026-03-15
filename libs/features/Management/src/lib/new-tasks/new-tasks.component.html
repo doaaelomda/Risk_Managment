@@ -1,0 +1,155 @@
+<section>
+  @if(isDialogVisible && singleTaskData){
+  <lib-view-modal
+    (hide_emitter)="handledHideEmiter($event)"
+    [singleTaskData]="singleTaskData"
+    [show_view]="isDialogVisible"
+    [authId]="currentTaskType"
+    [BusinessTaskTypeID]="currentTaskCategory.id"
+    [fileUsageTypeId]="10"
+    [relatedEntityId]="10"
+    [BusinessTaskTypeID]="1"
+  ></lib-view-modal>
+  }
+  <header class="header flex items-center justify-between mb-6">
+    @if(!loadingCategories){
+    <h2 class="text-2xl font-medium">
+      {{ currentTaskCategory.name }}
+    </h2>
+    }@else {
+    <p-skeleton width="10rem" styleClass="mb-2" />
+
+    }
+
+    <div class="tasks-types-container flex items-center gap-2">
+      @for(type of tasksTypes; track $index) {
+      <button
+        (click)="changeTasksType(type.id)"
+        [ngClass]="{ active: currentTaskType === type?.id }"
+      >
+        {{ type?.name }}
+      </button>
+      }
+    </div>
+  </header>
+
+  <main class="main_content grid grid-cols-12 gap-7">
+    <div class="col-span-12 grid grid-cols-12 gap-1">
+      @if(loadedSummaries){ @for (summary of summaries; track $index) {
+      <button
+        class="summary col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-2"
+        (click)="changeCurrentSummary(summary)"
+        [ngClass]="hoverBgMap[summary.color]"
+      >
+        <div
+          class="flex gap-1 items-start justify-start summary-wrapper flex-wrap"
+        >
+          <div
+            class="flex justify-center items-center rounded-full w-[40px] h-[40px]"
+            [ngClass]="
+              currentSummary && !summary.active
+                ? 'bg-gray-100 text-gray-600'
+                : getSummaryClasses(summary.color)
+            "
+          >
+            <i class="text-xl" [ngClass]="summary.icon"></i>
+          </div>
+
+          <div
+            class="flex flex-col gap-2 items-start justify-start flex-1 text-start"
+          >
+            <span class="text-[#344054] text-base font-normal">{{
+              summary.name
+            }}</span>
+            <span
+              class="font-semibold text-base"
+              [ngClass]="
+                currentSummary && !summary.active
+                  ? 'text-gray-600'
+                  : getTextColor(summary.color)
+              "
+            >
+              {{ summary.totalCount || 0 }} Tasks
+            </span>
+          </div>
+        </div>
+      </button>
+      } }@else { @for (i of [0,1,2,3,4,5]; track i) {
+      <div class="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-2">
+        <p-skeleton width="10rem" height="3rem" />
+      </div>
+      } }
+    </div>
+
+    <div class="col-span-12 lg:col-span-4">
+      @if(tasksCategories.length){
+      <div class="categories-container">
+        @for (category of tasksCategories ; track $index) {
+        <button
+          (click)="changeTaskCategory(category)"
+          class="flex justify-start items-center rounded-md py-2.5 px-3.5 gap-2 w-full text-[#667085] category"
+          [ngClass]="{ active: currentTaskCategory === category }"
+        >
+          @if(category?.icon){
+          <div class="icon">
+            <i class="text-xl" [class]="category?.icon"></i>
+          </div>
+          }
+          <h3 class="flex-1 font-medium text-base text-start">
+            {{ category?.name }}
+          </h3>
+        </button>
+        }
+      </div>
+      }@else {
+      <p-skeleton styleClass="w-full" height="25rem"></p-skeleton>
+
+      }
+    </div>
+    <div class="col-span-12 lg:col-span-8">
+      @if(currentTaskCategory){
+      <!-- <lib-shared-ui
+        [entityID_Name]="'businessTaskID'"
+        (openModal)="openViewModal($event)"
+        [filter_id_input]="4"
+        [selected_profile_column]="selected_profile_column"
+        (filter_emitter)="handleFilter($event)"
+        [action_items]="items"
+        (sortEmiter)="handleSort($event)"
+        [total_items_input]="total_items_input"
+        (selected_emiter)="setSelected($event)"
+        [badge_name]="'items'"
+        [table_name]="currentTaskCategory.name"
+        [loadingState]="loading"
+        (paginationEvent)="getTasksData($event)"
+        (showDeleteEvent)="handleShowDelete($event)"
+        [view_entityRouter]="'viewModal=true'"
+        [dataList]="tasksData"
+        [defultprofile]="defultProfile"
+        [profilesList]="profiles"
+      >
+      </lib-shared-ui> -->
+       <lib-new-table
+    [loading]="loading"
+    [table_data]="tasksData"
+   [badge_title]="'items'"
+        [table_title]="currentTaskCategory.name"
+    [dataViewId]="4"
+    [entityID_Name]="'businessTaskID'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="items"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+    (openModal)="openViewModal($event)"
+    [table_actions_permissions]="{module:'MANAGEMENT' , feature:'TASKS' , action:'VIEW'}"
+  >
+       </lib-new-table>
+
+      }@else {
+      <p-skeleton styleClass="w-full" height="25rem"></p-skeleton>
+
+      }
+    </div>
+  </main>
+</section>

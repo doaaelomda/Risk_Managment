@@ -1,0 +1,17 @@
+<div class="">
+  @if(loadingData){
+  <p-skeleton width="150px" height="20px" borderRadius="8px"></p-skeleton>
+  }
+  @else {
+  <span class="text-gray-700 text-2xl font-medium"> {{data?.questionnaireInstanceName}}</span>
+  @if(data?.questionnaireQuestionText){
+  <h6 class="text-primary font-bold text-2xl mt-4 mx-4">
+    └─{{ data?.questionnaireQuestionText}}
+  </h6>
+}
+  }
+</div>
+<lib-shared-tabs [permissionFeature]="{module:moduleName , feature:featureName}"
+></lib-shared-tabs>
+
+<router-outlet></router-outlet>

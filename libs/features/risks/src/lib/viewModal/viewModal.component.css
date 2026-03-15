@@ -1,0 +1,193 @@
+::ng-deep .action_dailog {
+  .p-dialog-header {
+    padding: 1rem;
+  }
+  .p-dialog-header .p-dialog-header-icons {
+    display: none;
+  }
+}
+
+.active_tab {
+  @apply border-b-2 border-primary;
+  @apply bg-primary/10 text-primary font-medium;
+}
+
+::ng-deep .actionsBtn {
+  border: 1px solid #7a5af8;
+  background-color: #7a5af8;
+  color: #fff;
+  box-shadow: 0px 1px 2px 0px #1018280d;
+  padding: 10px 16px;
+}
+
+::ng-deep .actionsBtn .p-button-label {
+  font-size: 14px;
+  font-weight: 500 !important;
+}
+
+::ng-deep .actionsBtn .p-button-icon {
+  display: flex;
+  align-items: center;
+}
+
+::ng-deep .actionBtn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  box-shadow: 0px 1px 2px 0px #1018280d;
+  /* color: #fff;
+  background-color: #6938EF; */
+  font-size: 14px;
+  font-weight: 500;
+}
+
+::ng-deep .actionBtn.danger {
+  border: 1px solid #f04438;
+  background-color: #f04438;
+}
+
+::ng-deep .actionBtn.success {
+  border: 1px solid #12b76a;
+  background-color: #12b76a;
+}
+
+.expandBtn {
+  color: #5925dc;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+::ng-deep .taskViewDialog .p-dialog-header-icon {
+  display: none;
+}
+
+::ng-deep .taskViewDialog .p-dialog-header {
+  padding: 32px;
+  padding-bottom: 24px;
+}
+
+::ng-deep .taskViewDialog .p-dialog-content {
+  padding: 32px;
+  padding-top: 0;
+}
+
+.description {
+  font-size: 16px;
+  font-weight: 400;
+  white-space: pre-line !important;
+}
+
+.description.success {
+  color: #12b76a;
+}
+
+.user__card_title {
+  color: #667085;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.user__card_position {
+  color: #344054;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.user__card_position.dark {
+  color: #101828;
+}
+
+.user__card_name {
+  color: #667085;
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.card {
+  border: 1px solid #eaecf0;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.card h2 {
+  color: #101828;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.card .description {
+  color: #4a1fb8;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.card.action_card {
+  box-shadow: 0px 1px 2px 0px #1018280f, 0px 1px 3px 0px #1018281a;
+}
+
+.card.status_card {
+  box-shadow: 0px 1px 2px 0px #1018280d;
+}
+
+.user__card .img {
+  width: 28px;
+  height: 28px;
+  overflow: hidden;
+}
+
+.user__card .img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.status_value_wrapper {
+  border-radius: 12px;
+}
+
+.progress_bar {
+  height: 8px;
+  border-radius: 8px;
+}
+h1.dialog-header {
+  color: #101828;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+span.dialog-label,
+span.value {
+  color: #667085;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+span.value {
+  color: #101828;
+}
+
+::ng-deep .actionsBtn {
+  border: 1px solid #7a5af8;
+  background-color: #7a5af8;
+  color: #fff;
+  box-shadow: 0px 1px 2px 0px #1018280d;
+  padding: 10px 16px;
+}
+
+::ng-deep .actionsBtn .p-button-label {
+  font-size: 14px;
+  font-weight: 500 !important;
+}
+
+::ng-deep .actionsBtn .p-button-icon {
+  display: flex;
+  align-items: center;
+}
+::ng-deep .attach_dailog .p-dialog-header{
+  padding: 1rem 0;
+
+
+}
+::ng-deep .attach_dailog .p-dialog-header .p-dialog-header-icon {
+  display: none;
+}

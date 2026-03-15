@@ -1,0 +1,210 @@
+<section>
+
+
+  <lib-new-table
+  [table_actions_permissions]="{ module: 'THIRDPARTIES', feature: 'THIRDPARTYCONTRACT', action: 'VIEW' }"
+
+    [loading]="loadingTable"
+    [table_data]="dataTable"
+    [table_title]="'THIRD_PARTY.' + FEATURE_LIST_NAME | translate"
+    [badge_title]="'THIRD_PARTY.' + FEATURE_PLURAL_NAME | translate"
+    [dataViewId]="DATA_VIEW_ID"
+    [entityID_Name]="ENTITY_ID_NAME"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="items"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+  >
+  @if(_PermissionSystemService.can('THIRDPARTIES' , 'THIRDPARTYCONTRACT' , 'ADD')
+){
+        <button
+      (click)="visible_save_dialog = true"
+      addition_action
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+    >
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'THIRD_PARTY.ADD_NEW_' + FEATURE_NAME | translate }}</span>
+    </button>
+  }
+  </lib-new-table>
+</section>
+
+<p-dialog
+  (onHide)="resetForm()"
+  [header]="
+    (current_row_selected ? 'THIRD_PARTY.UPDATE_' : 'THIRD_PARTY.ADD_NEW_') + FEATURE_NAME
+      | translate
+  "
+  [modal]="true"
+  [(visible)]="visible_save_dialog"
+  styleClass="w-[50rem]"
+>
+  @if(form){
+  <form [formGroup]="form">
+    <div class="grid grid-cols-12 gap-6 mb-6">
+            <div class="md:col-span-6 col-span-12">
+        <lib-input-text
+          [placeholder]="'CONTENT.PLACEHOLDERS.NAME' | translate"
+          [inputLabel]="'CONTENT.NAME' | translate"
+          [control]="form.get('name')!"
+          [controlNameInput]="'name'"
+        >
+        </lib-input-text>
+      </div>
+      <!-- 🆔 Contract Number -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-text
+          [placeholder]="'THIRD_PARTY.CONTRACT_NUMBER_PLACEHOLDER' | translate"
+          [inputLabel]="'THIRD_PARTY.CONTRACT_NUMBER' | translate"
+          [control]="form.get('contractNumber')!"
+          [controlNameInput]="'contractNumber'"
+        >
+        </lib-input-text>
+      </div>
+
+      <!-- 📅 Start Date -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-date-packer
+          [placeholder]="'THIRD_PARTY.START_DATE_PLACEHOLDER' | translate"
+          [inputLabel]="'THIRD_PARTY.START_DATE' | translate"
+          [control]="form.get('startDate')!"
+          [controlNameInput]="'startDate'"
+        >
+        </lib-date-packer>
+      </div>
+
+      <!-- 📅 End Date -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-date-packer
+          [placeholder]="'THIRD_PARTY.END_DATE_PLACEHOLDER' | translate"
+          [inputLabel]="'THIRD_PARTY.END_DATE' | translate"
+          [control]="form.get('endDate')!"
+          [controlNameInput]="'endDate'"
+        >
+        </lib-date-packer>
+      </div>
+
+      <!-- 🔁 Auto Renewal -->
+      <div class="md:col-span-6 col-span-12 flex items-center gap-2">
+        <label for="autoRenewal">
+          {{ 'THIRD_PARTY.AUTO_RENEWAL' | translate }}
+        </label>
+        <p-inputSwitch inputId="autoRenewal" formControlName="autoRenewal" />
+      </div>
+
+      <!-- ⏱️ Termination Notice Days -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-number
+          [placeholder]="
+            'THIRD_PARTY.TERMINATION_NOTICE_DAYS_PLACEHOLDER' | translate
+          "
+          [inputLabel]="'THIRD_PARTY.TERMINATION_NOTICE_DAYS' | translate"
+          [control]="form.get('terminationNoticeDays')!"
+          [controlNameInput]="'terminationNoticeDays'"
+        >
+        </lib-input-number>
+      </div>
+
+      <!-- 💰 Contract Value -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-number
+          [placeholder]="'THIRD_PARTY.CONTRACT_VALUE_PLACEHOLDER' | translate"
+          [inputLabel]="'THIRD_PARTY.CONTRACT_VALUE' | translate"
+          [control]="form.get('contractValue')!"
+          [controlNameInput]="'contractValue'"
+        >
+        </lib-input-number>
+      </div>
+
+      <!-- 💵 Currency -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-text
+          [placeholder]="'THIRD_PARTY.CURRENCY_PLACEHOLDER' | translate"
+          [inputLabel]="'THIRD_PARTY.CURRENCY' | translate"
+          [control]="form.get('currency')!"
+          [controlNameInput]="'currency'"
+        >
+        </lib-input-text>
+      </div>
+
+      <!-- 🔖 Contract Status (dropdown) -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-ui-dropdown
+          [placeholder]="'THIRD_PARTY.CONTRACT_STATUS_PLACEHOLDER' | translate"
+          [label]="'THIRD_PARTY.CONTRACT_STATUS' | translate"
+          [control]="form.get('thirdPartyContractStatusTypeID')!"
+          [formControlNameInput]="'thirdPartyContractStatusTypeID'"
+          [options]="contractStatusList"
+          [optionLabel]="'label'"
+          [optionValue]="'id'"
+        >
+        </lib-ui-dropdown>
+      </div>
+
+      @if(!thirdPartyId){
+              <div class="md:col-span-6 col-span-12">
+        <lib-ui-dropdown
+          [placeholder]="'THIRD_PARTY.THIRD_PARTY_NAME' | translate"
+          [label]="'THIRD_PARTY.THIRD_PARTY_NAME' | translate"
+          [control]="form.get('thirdPartyID')!"
+          [formControlNameInput]="'thirdPartyID'"
+          [options]="thirdPartiesList"
+          [optionLabel]="'label'"
+          [optionValue]="'id'"
+        >
+        </lib-ui-dropdown>
+      </div>
+      }
+
+      <!-- 🗒️ Notes -->
+      <div class="col-span-12">
+        <lib-textarea-ui
+          [placeholder]="'THIRD_PARTY.NOTES_PLACEHOLDER' | translate"
+          [inputLabel]="'THIRD_PARTY.NOTES' | translate"
+          [control]="form.get('notes')!"
+          [controlNameInput]="'notes'"
+        >
+        </lib-textarea-ui>
+      </div>
+    </div>
+  </form>
+  }
+
+  <ng-template pTemplate="footer">
+    <p-button
+      styleClass="default_btn cancel"
+      (onClick)="resetForm()"
+      [label]="'BUTTONS.CANCEL' | translate"
+    ></p-button>
+    <p-button
+      [disabled]="form.invalid"
+      styleClass="default_btn ms-4"
+      (onClick)="add()"
+      [loading]="addLoading"
+      [label]="'BUTTONS.SAVE' | translate"
+    ></p-button>
+  </ng-template>
+</p-dialog>
+
+<lib-delete-confirm-popup
+  [titleDelete]="`THIRD_PARTY.${FEATURE_NAME}_DELETE_TITLE` | translate"
+  [descriptionDelete]="`THIRD_PARTY.${FEATURE_NAME}_DELETE_DESC` | translate"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="handleClosedDelete()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="delete()"
+        [loading]="loadDeleted"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

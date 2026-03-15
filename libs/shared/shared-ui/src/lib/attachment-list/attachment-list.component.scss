@@ -1,0 +1,13 @@
+.icon{
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  @apply bg-primary/10 text-primary flex items-center justify-center;
+}
+
+
+.details h2{
+          white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

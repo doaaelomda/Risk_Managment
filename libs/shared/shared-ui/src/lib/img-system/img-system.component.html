@@ -1,0 +1,11 @@
+<div class="relative w-10 h-10">
+  <!-- Skeleton -->
+  @if(isLoading){
+  <p-skeleton shape="circle" width="40px" height="40px">
+  </p-skeleton>
+  }
+  @else{
+  <!-- Image -->
+  <img class="w-10 h-10 rounded-full" [secureSrc]="data ? data : 'images/Avatar2.svg'" alt="profile-user" />
+  }
+</div>

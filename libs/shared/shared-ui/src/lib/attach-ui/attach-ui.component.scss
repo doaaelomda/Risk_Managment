@@ -1,0 +1,17 @@
+.icon{
+  width: 2.5rem ;
+  height: 2.5rem ;
+}
+
+.btn_upload{
+  @apply text-primary font-semibold;
+
+  &:disabled{
+    @apply text-gray_light;
+  }
+}
+
+
+.attach_container.drag-over{
+  @apply border-primary bg-primary/15;
+}

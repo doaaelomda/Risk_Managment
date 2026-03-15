@@ -1,0 +1,480 @@
+@if(_PermissionSystemService.can('GOVERNANCE' , 'GOVDOCUMENTSTACKHOLDERS' ,
+'VIEW')){
+<section class="main_info p-6 rounded-lg bg-sec_color my-8">
+  <div class="header border-b border-gray_light pb-6">
+    <h2 class="text-lg font-semibold">
+      {{ 'Selectors.Stakeholder' | translate }}
+    </h2>
+  </div>
+
+  <form [formGroup]="mainForm" class="grid grid-cols-12 gap-6 pt-6">
+    <!-- DocumentOwnerRole Dropdown -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-ui-dropdown
+        [disabled]="
+          !_PermissionSystemService.can(
+            'GOVERNANCE',
+            'GOVDOCUMENTSTACKHOLDERS',
+            'ADD'
+          ) &&
+          !_PermissionSystemService.can(
+            'GOVERNANCE',
+            'GOVDOCUMENTSTACKHOLDERS',
+            'EDIT'
+          )
+        "
+        [label]="'Selectors.DocumentOwnerRole' | translate"
+        [placeholder]="'Selectors.DocumentOwnerRole' | translate"
+        [control]="mainForm.get('ownerRoleID')!"
+        [options]="roles"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+        [formControlNameInput]="'ownerRoleID'"
+      >
+      </lib-ui-dropdown>
+    </div>
+
+    <!-- DocumentCoordinator Dropdown -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-ui-dropdown
+        [disabled]="
+          !_PermissionSystemService.can(
+            'GOVERNANCE',
+            'GOVDOCUMENTSTACKHOLDERS',
+            'ADD'
+          ) &&
+          !_PermissionSystemService.can(
+            'GOVERNANCE',
+            'GOVDOCUMENTSTACKHOLDERS',
+            'EDIT'
+          )
+        "
+        [label]="'Selectors.DocumentCoordinator' | translate"
+        [placeholder]="'Selectors.DocumentCoordinator' | translate"
+        [control]="mainForm.get('coordinatorUserID')!"
+        [options]="users"
+        [optionLabel]="'name'"
+        [optionValue]="'id'"
+        [formControlNameInput]="'coordinatorUserID'"
+      >
+      </lib-ui-dropdown>
+    </div>
+  </form>
+  @if(_PermissionSystemService.can('GOVERNANCE' , 'GOVDOCUMENTSTACKHOLDERS' ,
+  'ADD') || _PermissionSystemService.can('GOVERNANCE' ,
+  'GOVDOCUMENTSTACKHOLDERS' , 'EDIT')){
+  <div class="col-span-12 flex items-center gap-4 justify-end py-6">
+    <div class="action_btn">
+      <p-button
+        [disabled]="mainForm.invalid"
+        [label]="'RISK_MANAGMENT.SaveChanges' | translate"
+        [loading]="isSavingDocument"
+        (onClick)="saveDocument()"
+      >
+      </p-button>
+    </div>
+  </div>
+  }
+</section>
+} @if(_PermissionSystemService.can('GOVERNANCE' ,
+'GOVDOCUMENTSTACKHOLDERSREVIEWERS' , 'VIEW')){
+<section class="main_info p-6 rounded-lg bg-sec_color my-8">
+  <div
+    class="header border-b border-gray_light pb-6 flex justify-between items-center"
+  >
+    <h2 class="text-lg font-semibold">
+      {{ 'Selectors.ReviewerType' | translate }}
+    </h2>
+    @if(_PermissionSystemService.can('GOVERNANCE' ,
+    'GOVDOCUMENTSTACKHOLDERSREVIEWERS' , 'ADD') ||
+    _PermissionSystemService.can('GOVERNANCE' ,
+    'GOVDOCUMENTSTACKHOLDERSREVIEWERS' , 'EDIT')){
+    <button
+      addition_action
+      (click)="openReviewerModal()"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+    >
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'Selectors.AddNewReviewers' | translate }} </span>
+    </button>
+    }
+  </div>
+
+  @if(reviewers.length>0){
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    @for(item of reviewers; track $index){
+    <lib-user-card
+      [canEdit]="
+       _PermissionSystemService.can(
+          'GOVERNANCE',
+          'GOVDOCUMENTSTACKHOLDERSREVIEWERS',
+          'EDIT'
+        )
+
+      "
+          [canDelete]="
+       _PermissionSystemService.can(
+          'GOVERNANCE',
+          'GOVDOCUMENTSTACKHOLDERSREVIEWERS',
+          'DELETE'
+        )
+
+      "
+      [avatar]="item?.reviewerUserID"
+      [name]="item?.reviewerUserName"
+      [role]="item?.reviewerRoleName"
+      [scope]="item?.scope"
+      (actionEmitter)="handleUserAction($event, item, 'reviewer')"
+    >
+    </lib-user-card>
+    }
+  </div>
+  } @else if(reviewers.length ===0){
+  <lib-empty-state [loading]="isLoadingData"></lib-empty-state>
+  } @else {
+
+  <lib-loader></lib-loader>
+  }
+</section>
+} @if (_PermissionSystemService.can('GOVERNANCE' ,
+'GOVDOCUMENTSTACKHOLDERSAPPROVERS' , 'VIEW')) {
+<section class="main_info p-6 rounded-lg bg-sec_color my-8">
+  <div
+    class="header border-b border-gray_light pb-6 flex justify-between items-center"
+  >
+    <h2 class="text-lg font-semibold">
+      {{ 'Selectors.Approvers' | translate }}
+    </h2>
+    @if(_PermissionSystemService.can('GOVERNANCE' ,
+    'GOVDOCUMENTSTACKHOLDERSAPPROVERS' , 'ADD') ||
+    _PermissionSystemService.can('GOVERNANCE' ,
+    'GOVDOCUMENTSTACKHOLDERSAPPROVERS' , 'EDIT')){
+    <button
+      addition_action
+      (click)="openApproverModal()"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+    >
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'Selectors.AddNewApprover' | translate }} </span>
+    </button>
+
+    }
+  </div>
+
+  @if(approvers.length>0){
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    @for(item of approvers; track $index){
+    <lib-user-card
+      [canEdit]="
+        _PermissionSystemService.can(
+          'GOVERNANCE',
+          'GOVDOCUMENTSTACKHOLDERSAPPROVERS',
+          'EDIT'
+        )
+
+      "
+            [canDelete]="
+        _PermissionSystemService.can(
+          'GOVERNANCE',
+          'GOVDOCUMENTSTACKHOLDERSAPPROVERS',
+          'DELETE'
+        )
+
+      "
+      [avatar]="item?.approverUserID"
+      [name]="item?.approverUserName"
+      [role]="item?.approverRoleName"
+      [NotRequiredData]="item?.isRequired"
+      (actionEmitter)="handleUserAction($event, item, 'approver')"
+    >
+    </lib-user-card>
+    }
+  </div>
+  } @else if(approvers.length ===0){
+  <lib-empty-state [loading]="isLoadingData"></lib-empty-state>
+  } @else {
+
+  <lib-loader></lib-loader>
+  }
+</section>
+}
+
+<p-dialog
+  [visible]="visibleApproverModal"
+  [modal]="true"
+  [dismissableMask]="true"
+  (onHide)="resetData()"
+  [draggable]="false"
+  styleClass="w-[50rem]"
+  [position]="'center'"
+>
+  <h3 class="text-gray-800 font-bold text-1xl">
+    {{
+      (isEditingItem ? 'Selectors.UPDATE_APPROVER' : 'Selectors.AddNewApprover')
+        | translate
+    }}
+  </h3>
+  <div class="border-b border-gray_light my-4"></div>
+
+  <h6 class="header-para mb-2.5">
+    {{ 'Selectors.ApproverType' | translate }}
+  </h6>
+
+  <form [formGroup]="approversForm">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      @for (type of types; track $index) {
+      <button
+        (click)="setType(type.value, 'approver')"
+        [disabled]="isEditingItem"
+        class="flex align-items-center justify-between radio_selectors outline-none"
+      >
+        <div class="flex gap-2 items-center">
+          <img [src]="type.img" alt="" width="30px" height="30px" />
+
+          <label
+            class="text-base font-medium text-gray-800"
+            [for]="`${type.name}_${type.id}`"
+          >
+            {{ type.label }}
+          </label>
+        </div>
+
+        <p-radioButton
+          [disabled]="isEditingItem"
+          [value]="type.value"
+          formControlName="govDocumentApproverTypeID"
+          [inputId]="`${type.name}_${type.id}`"
+        >
+        </p-radioButton>
+      </button>
+      }
+    </div>
+    <div class="field flex flex-wrap items-center py-4">
+      @if(approversForm.get('govDocumentApproverTypeID')?.value === 1){
+      <label for="" class="font-bold w-1/4">
+        {{ 'SETTING.USER' | translate }}
+      </label>
+      <div class="w-3/4" [ngClass]="{ disabled: isEditingItem }">
+        <lib-user-dropdown
+          [placeholder]="'SETTING.USER' | translate"
+          [control]="approversForm.get('approverUserID')!"
+          [formControlNameInput]="'approverUserID'"
+          [validations]="[]"
+          [options]="users"
+          [optionLabel]="'name'"
+          [optionValue]="'id'"
+        >
+        </lib-user-dropdown>
+      </div>
+      }@else {
+      <label for="" class="font-bold w-1/4">
+        {{ 'SETTING.ROLES' | translate }}
+      </label>
+      <div class="w-3/4" [ngClass]="{ disabled: isEditingItem }">
+        <lib-role-dropdown
+          [placeholder]="'SETTING.ROLES' | translate"
+          [control]="approversForm.get('approverRoleID')!"
+          [formControlNameInput]="'approverRoleID'"
+          [validations]="[]"
+          [options]="roles"
+          [optionLabel]="'label'"
+          [optionValue]="'id'"
+        >
+        </lib-role-dropdown>
+      </div>
+      }
+    </div>
+
+    <div class="field flex flex-wrap items-center py-4">
+      <label for="" class="font-bold w-1/4">{{
+        'QUESTION_ANSWER.REQUIRED' | translate
+      }}</label>
+      <div class="w-3/4">
+        <lib-ui-dropdown
+          [placeholder]="'QUESTION_ANSWER.REQUIRED' | translate"
+          [control]="approversForm.get('isRequired')!"
+          [formControlNameInput]="'isRequired'"
+          [validations]="[]"
+          [options]="requiredOptions"
+          [optionLabel]="'label'"
+          [optionValue]="'id'"
+        >
+        </lib-ui-dropdown>
+      </div>
+    </div>
+  </form>
+  <ng-template pTemplate="footer">
+    <div
+      class="col-span-12 flex items-center gap-4 justify-end py-6 border-t border-gray_light"
+    >
+      <div class="cancel_btn">
+        <button (click)="visibleApproverModal = false">
+          {{ 'RISK_MANAGMENT.Cancel' | translate }}
+        </button>
+      </div>
+      <div class="action_btn">
+        <p-button
+          [label]="'RISK_MANAGMENT.SaveChanges' | translate"
+          [loading]="isSavingItem"
+          [disabled]="approversForm.invalid || cannotSaveApprover()"
+          (onClick)="saveApprover()"
+        >
+        </p-button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [visible]="visibleReviewerModal"
+  [modal]="true"
+  [dismissableMask]="true"
+  (onHide)="resetData()"
+  [draggable]="false"
+  styleClass="w-[50rem]"
+  [position]="'center'"
+>
+  <h3 class="text-gray-800 font-bold text-1xl">
+    {{
+      (isEditingItem
+        ? 'Selectors.UPDATE_REVIEWER'
+        : 'Selectors.AddNewReviewers'
+      ) | translate
+    }}
+  </h3>
+  <div class="border-b border-gray_light my-4"></div>
+
+  <h6 class="header-para mb-2.5">
+    {{ 'Selectors.ReviewerType' | translate }}
+  </h6>
+
+  <form [formGroup]="reviewersForm">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      @for (type of types; track $index) {
+      <button
+        [disabled]="isEditingItem"
+        (click)="setType(type.value, 'reviewer')"
+        class="flex align-items-center justify-between radio_selectors outline-none"
+      >
+        <div class="flex gap-2 items-center">
+          <img [src]="type.img" alt="" width="30px" height="30px" />
+
+          <label
+            class="text-base font-medium text-gray-800"
+            [for]="`${type.name}_${type.id}`"
+          >
+            {{ type.label }}
+          </label>
+        </div>
+
+        <p-radioButton
+          [disabled]="isEditingItem"
+          [value]="type.value"
+          formControlName="govDocumentReviewerTypeID"
+          [inputId]="`${type.name}_${type.id}`"
+        >
+        </p-radioButton>
+      </button>
+      }
+    </div>
+    <div class="field flex flex-wrap items-center py-4">
+      @if(reviewersForm.get('govDocumentReviewerTypeID')?.value === 1){
+      <label for="" class="font-bold w-1/4">
+        {{ 'SETTING.USER' | translate }}
+      </label>
+      <div class="w-3/4" [ngClass]="{ disabled: isEditingItem }">
+        <lib-user-dropdown
+          [placeholder]="'SETTING.USER' | translate"
+          [control]="reviewersForm.get('reviewerUserID')!"
+          [formControlNameInput]="'reviewerUserID'"
+          [validations]="[]"
+          [options]="users"
+          [optionLabel]="'name'"
+          [optionValue]="'id'"
+        >
+        </lib-user-dropdown>
+      </div>
+      }@else {
+      <label for="" class="font-bold w-1/4">
+        {{ 'SETTING.ROLES' | translate }}
+      </label>
+      <div class="w-3/4" [ngClass]="{ disabled: isEditingItem }">
+        <lib-role-dropdown
+          [placeholder]="'SETTING.ROLES' | translate"
+          [control]="reviewersForm.get('reviewerRoleID')!"
+          [formControlNameInput]="'reviewerRoleID'"
+          [validations]="[]"
+          [options]="roles"
+          [optionLabel]="'label'"
+          [optionValue]="'id'"
+        >
+        </lib-role-dropdown>
+      </div>
+      }
+    </div>
+    <div class="field flex flex-wrap items-start py-4">
+      <label for="" class="font-bold w-1/4">{{
+        'ASSESSMENT_RISK.SCOPE_DESC' | translate
+      }}</label>
+      <div class="w-3/4">
+        <lib-textarea-ui
+          [placeholder]="'ASSESSMENT_RISK.EN_SCOPE_DESC' | translate"
+          [control]="reviewersForm.get('scope')!"
+          [controlNameInput]="'scope'"
+        >
+        </lib-textarea-ui>
+      </div>
+    </div>
+  </form>
+  <ng-template pTemplate="footer">
+    <div
+      class="col-span-12 flex items-center gap-4 justify-end py-6 border-t border-gray_light"
+    >
+      <div class="cancel_btn">
+        <button (click)="visibleReviewerModal = false">
+          {{ 'RISK_MANAGMENT.Cancel' | translate }}
+        </button>
+      </div>
+      <div class="action_btn">
+        <p-button
+          [disabled]="reviewersForm.invalid || cannotSaveReviewer()"
+          [label]="'RISK_MANAGMENT.SaveChanges' | translate"
+          [loading]="isSavingItem"
+          (onClick)="saveReviewer()"
+        >
+        </p-button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<lib-delete-confirm-popup
+  [titleDelete]="
+    this.selectedItem?.type === 'approver'
+      ? 'Selectors.DELETE_APPROVER_TITLE'
+      : 'Selectors.DELETE_REVIEWER_TITLE'
+  "
+  [descriptionDelete]="
+    this.selectedItem?.type === 'approver'
+      ? 'Selectors.DELETE_APPROVER_DESCRIPTION'
+      : 'Selectors.DELETE_REVIEWER_DESCRIPTION'
+  "
+  [visibleInput]="actionDeleteVisible"
+  (hideEmiter)="onHideDelete()"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="onHideDelete()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteItem()"
+        [loading]="isDeleting"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

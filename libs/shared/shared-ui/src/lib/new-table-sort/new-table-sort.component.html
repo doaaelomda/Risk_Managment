@@ -1,0 +1,59 @@
+<p-overlayPanel (onShow)="fixPosition(sortable)" (onHide)="searchTermSort = '';handleSearchColumnsFilter();" styleClass="w-[304px]" #sortable>
+  <div class="h-96 overflow-y-auto">
+    <div class="search flex items-center gap-2">
+      <div class="input_adon_search flex-1">
+        <input (keyup)="handleSearchColumnsFilter()" type="text" pInputText placeholder="Search ..."
+          [(ngModel)]="searchTermSort" />
+        <i class="fi fi-rr-search"></i>
+      </div>
+
+      <!-- <button (click)="searchTermSort = ''; selected_sort = null ; selected_sort_direction = 1  ;sortEmiter.emit({
+          direction: null,
+          field: null
+        });sortable.toggle(0)" class="icon_btn reqular">
+        <i class="fi fi-rr-cross"></i>
+      </button> -->
+    </div>
+
+    <div class="content py-3">
+      @for(col of ColumnsFilter ; track $index){
+      <div class="flex items-center gap-4 mb-4 pl-2">
+        <p-radioButton [inputId]="col.id" name="sort" [value]="col.filed" (onClick)="handleSortEmiter()"
+          [(ngModel)]="selected_sort" />
+        <label [for]="col?.id" class="ml-2">
+          {{ col?.displayName ?? col.label }}
+        </label>
+      </div>
+      }
+    </div>
+  </div>
+  <div class="py-3 border-t border-gray_light flex flex-col gap-2">
+    <button (click)="
+        selected_sort_direction = 1;
+        sortEmiter.emit({
+          direction: selected_sort_direction,
+          field: selected_sort
+        })
+      " [ngClass]="{
+        'bg-primary/15': selected_sort_direction === 1,
+        'text-primary': selected_sort_direction === 1
+      }" class="flex px-4 py-3 items-center gap-4">
+      <i class="fi fi-rr-arrow-small-up"></i>
+      <span>{{ 'CUSTOM_COLUMNS.LOWEST_TO_HIGHEST' | translate }}</span>
+    </button>
+
+    <button (click)="
+        selected_sort_direction = 2;
+        sortEmiter.emit({
+          direction: selected_sort_direction,
+          field: selected_sort
+        })
+      " [ngClass]="{
+        'bg-primary/15': selected_sort_direction === 2,
+        'text-primary': selected_sort_direction === 2
+      }" class="flex px-4 py-3 items-center gap-4">
+      <i class="fi fi-rr-arrow-small-down"></i>
+      <span>{{ 'CUSTOM_COLUMNS.HIGHEST_TO_LOWEST' | translate }}</span>
+    </button>
+  </div>
+</p-overlayPanel>

@@ -1,0 +1,228 @@
+<section>
+  <p-dialog [(visible)]="viewingItem" (onHide)="viewingItem=false" [modal]="true" [dismissableMask]="true"
+    [draggable]="false" styleClass="w-[45rem] action_dailog">
+
+    <div class="container space-y-6">
+      <div class="container space-y-6">
+        <h2 class="font-medium text-gray-800 text-lg mb-2">
+          {{ viewed_data?.indicatorName }}
+        </h2>
+        <div class="grid grid-cols-12 gap-4 border-b border-gray_light py-3">
+          <div class="col-span-12 lg:col-span-6">
+            <h3 class="header-item mb-1">{{ 'INDICATORS.NOTE' | translate }}</h3>
+            <p class="font-medium text-gray-800 whitespace-pre-line">
+              @if (!loadingViewedData) {
+              {{ viewed_data?.note }} }
+              @else {
+              <p-skeleton width="2rem" styleClass="mb-2" />
+              }
+            </p>
+          </div>
+          <div class="col-span-12 lg:col-span-6">
+            <h3 class="header-item mb-1">{{ 'INDICATORS.EXPRESSION' | translate }}</h3>
+            <p class="font-medium text-gray-800 whitespace-pre-line">@if (!loadingViewedData) {
+              {{ viewed_data?.formulaExpression }}
+
+              }
+              @else {
+              <p-skeleton width="2rem" styleClass="mb-2" />
+              }
+            </p>
+          </div>
+          <div class="col-span-12 lg:col-span-6">
+            <h3 class="header-item mb-1">{{ 'ASSET.EFFECTIVE_FROM' | translate }}</h3>
+            <p class="font-medium text-gray-800 gap-2 flex"> <img src="images/icons/calendar.svg" alt="">{{
+              viewed_data?.effectiveDateFrom
+              | date: 'MMM d, y' }}</p>
+          </div>
+          <div class="col-span-12 lg:col-span-6">
+            <h3 class="header-item mb-1">{{ 'ASSET.EFFECTIVE_TO' | translate }}</h3>
+            <p class="font-medium text-gray-800 gap-2 flex"> <img src="images/icons/calendar.svg" alt="">{{
+              viewed_data?.effectiveDateTo
+              | date: 'MMM d, y' }}</p>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </p-dialog>
+  <lib-new-table [loading]="loadingTable" [table_data]="dataTable"
+    [table_title]="'INDICATORS.INDICATOR_FORMULAS_LIST' | translate" [badge_title]="'INDICATORS.FORMULAS' | translate"
+    [dataViewId]="38" [entityID_Name]="'indicatorFormulaID'" [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)" [action_items]="items" (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{ module: 'INDICATORS', feature: 'INDICATORFORMULAS', action: 'VIEW' }">
+    @if(_PermissionSystemService.can('INDICATORS' , 'INDICATORFORMULAS' , 'ADD')){
+    <button addition_action (click)="formulaActionVisible = true"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'INDICATORS.ADD_NEW_FORMULA' | translate }}</span>
+    </button>
+    }
+
+  </lib-new-table>
+</section>
+
+<!-- Delete Confirmation -->
+<lib-delete-confirm-popup [titleDelete]="'INDICATORS.DELETE_INDICATOR_FORMULA_TITLE'"
+  [descriptionDelete]="'INDICATORS.DELETE_INDICATOR_FORMULA_DESC'" (hideEmiter)="handleClosedDelete()"
+  [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button (onClick)="deleteIndicatorFormula()" [loading]="loadDeleted" [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+<!-- Add / Edit Dialog -->
+<p-dialog (onHide)="initForm(); update_flag = false" [(visible)]="formulaActionVisible" [modal]="true"
+  [dismissableMask]="true" [draggable]="false" styleClass="w-[55rem]" [position]="'center'">
+
+  <ng-template pTemplate="header">
+    <h3 class="text-gray-800 font-bold text-1xl">
+      {{ update_flag ? ('INDICATORS.UPDATE_FORMULA' | translate) : ('INDICATORS.ADD_NEW_FORMULA' | translate) }}
+    </h3>
+  </ng-template>
+
+  <div class="border-b border-gray_light my-4"></div>
+
+  <ng-template pTemplate="content">
+    <form [formGroup]="formulaForm" class="grid grid-cols-12 gap-6 mb-6" (ngSubmit)="submit()">
+
+      <!-- Name -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-text [placeholder]="'INDICATORS.NAME_PLACEHOLDER_FORMULA' | translate"
+          [inputLabel]="'INDICATORS.NAME_FORMULA' | translate" [control]="formulaForm.get('name')!"
+          [controlNameInput]="'name'">
+        </lib-input-text>
+      </div>
+
+      <!-- Formula Expression -->
+      <div class="col-span-12">
+           <div class="col-span-12 flex flex-col gap-3">
+      <div class="flex gap-2 items-center">
+        <label for="">{{ 'FORMULA.EXPRESSION' | translate }}</label>
+        <div class="icon_btn">
+          <button
+            type="button"
+            [pTooltip]="'METHODOLOGY.BUTTON_TOOLTIP' | translate"
+            (click)="handleShowFactor()"
+            class="btn"
+          >
+            <i class="fi fi-rr-record-vinyl"></i>
+          </button>
+        </div>
+      </div>
+      <p>{{formulaForm.get('formulaExpression')?.value}}</p>
+    </div>
+
+
+
+      </div>
+
+      <!-- Note -->
+      <div class="col-span-12">
+        <lib-textarea-ui [placeholder]="'INDICATORS.NOTE_PLACEHOLDER_FORMULA' | translate"
+          [inputLabel]="'INDICATORS.NOTE_FORMULA' | translate" [control]="formulaForm.get('note')!"
+          [controlNameInput]="'note'">
+        </lib-textarea-ui>
+      </div>
+
+      <!-- Effective Date From -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-date-packer [placeholder]="'INDICATORS.EFFECTIVE_DATE_FROM_PLACEHOLDER' | translate"
+          [inputLabel]="'INDICATORS.EFFECTIVE_DATE_FROM' | translate" [control]="formulaForm.get('effectiveDateFrom')!"
+          [controlNameInput]="'effectiveDateFrom'">
+        </lib-date-packer>
+      </div>
+
+      <!-- Effective Date To -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-date-packer [placeholder]="'INDICATORS.EFFECTIVE_DATE_TO_PLACEHOLDER' | translate"
+          [inputLabel]="'INDICATORS.EFFECTIVE_DATE_TO' | translate" [control]="formulaForm.get('effectiveDateTo')!"
+          [controlNameInput]="'effectiveDateTo'">
+        </lib-date-packer>
+      </div>
+
+
+    <p-dialog
+      [modal]="true"
+      [dismissableMask]="true"
+      [(visible)]="isFactorsShowing"
+      styleClass="w-[80rem]"
+      styleClass="tagsDialog"
+    >
+      <ng-template pTemplate="header">
+        <div class="icon_head flex items-center justify-center">
+          <i class="fi fi-rr-tags text-xl font-semibold"></i>
+        </div>
+      </ng-template>
+      <div class="flex justify-between items-center mb-4">
+        <div class="flex flex-col gap-1">
+          <h2 class="text-gray-900 text-lg font-medium">
+            {{ 'NOTIFICATION_SETTING.ADD_EVENT_FIELD' | translate }}
+          </h2>
+          <span class="text-gray-600 text-sm">
+            {{ 'METHODOLOGY.EXPRESSION_TIP' | translate }}
+          </span>
+        </div>
+      </div>
+      <div class="flex gap-3 items-center flex-wrap mb-4">
+        @for (factor of factors; track $index) {
+
+        <button type="button" class="var_btn" (click)="handleFactorClick(factor)">
+          {{ factor.name }}
+        </button>
+
+        }
+      </div>
+      <lib-input-text
+        [placeholder]="'Factor 1*Factor2/Factor3'"
+        [inputLabel]="'FORMULA.EXPRESSION_PLACEHOLDER'"
+        [control]="formulaForm.get('formulaExpression')!"
+        [controlNameInput]="'formulaExpression'"
+        [validations]="[]"
+      >
+      </lib-input-text>
+      @if(formulaForm.get('formulaExpression')?.errors?.['pattern']){
+      <span class="text-danger_text">
+        "{{formulaForm.get('formulaExpression')?.errors?.['pattern']?.actualValue}}" Isn't a valid expression </span
+      >}
+
+      <div class="mt-3">
+        <h2 class="text-gray-900 text-lg font-medium">
+          {{ 'METHODOLOGY.EXAMPLES' | translate }}
+        </h2>
+        <div class="flex gap-2 items-center flex-wrap">
+          @for (example of expressionExamples; track $index) {
+          <span class="example"> {{ example }} </span>
+          }
+        </div>
+      </div>
+    </p-dialog>
+    </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <div class="flex flex-wrap justify-end gap-2">
+      <p-button (onClick)="formulaActionVisible =false" pButton
+        class="bg-white_color text-gray-700 text-sm border border-gray_light rounded-lg"
+        [label]="'BUTTONS.CANCEL' | translate" icon="pi pi-times" />
+
+      <p-button pButton class="bg-primary text-white text-sm rounded-lg" [label]="'BUTTONS.SAVE' | translate"
+        [loading]="loadingBtn" icon="pi pi-check" (click)="submit()" />
+    </div>
+  </ng-template>
+</p-dialog>
+
+
+
+

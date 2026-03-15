@@ -1,0 +1,42 @@
+<section>
+
+  <lib-cards-list [loadingState]="loading_state" [list_title]="'NOTIFICATION_SETTING.MESSAGES' |translate"
+    [badge_title]="'NOTIFICATION_SETTING.TEMPLATE' | translate" [data_list]="data_list" [total_items]="data_list.length"
+    [items_actions]="items" [entityID_Name]="'notificationTemplateID'"
+    [view_entityRouter]="`/gfw-portal/setting/notification-settings/${current_notification}/view-template/`"
+    (selected_item_emiter)="setSelectedItem($event)"
+    [table_actions_permissions]="{ module: 'NOTIFICATIONS', feature: 'TEMPLATE', action: 'VIEW' }">
+
+    <div actions class="flex gap-2 items-center">
+      <lib-input-search (searchTermEmiter)="handleEmitSearchTerm($event)"></lib-input-search>
+      @if(_PermissionSystemService.can( 'NOTIFICATIONS',
+      'TEMPLATE' , 'ADD')){
+      <button [routerLink]="`/gfw-portal/setting/notification-settings/${current_notification}/add-template`"
+        class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+        <i class="fi fi-br-plus w-5 h-5 "></i>
+        <span>{{'NOTIFICATION_SETTING.ADD_NEW_MESSAGE' | translate}}</span>
+      </button>
+      }
+    </div>
+  </lib-cards-list>
+</section>
+
+
+
+
+<lib-delete-confirm-popup [titleDelete]="'NOTIFICATION_SETTING.DELETE_TEMPLATE_TITLE' | translate"
+  [descriptionDelete]="'NOTIFICATION_SETTING.DELETE_TEMPLATE_DESC' | translate"
+  (hideEmiter)="handleClosedDelete($event)" [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="handleClosedDelete()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button (onClick)="deleteMessageTemplate()" [loading]="loadDelted" [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

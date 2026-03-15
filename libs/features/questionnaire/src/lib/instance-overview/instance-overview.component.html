@@ -1,0 +1,10 @@
+<section class="grid grid-cols-12">
+  <div [ngClass]="hasActions ? 'col-span-8' : 'col-span-12'">
+
+    <lib-shared-overview [dataLoading]="loadingData"[data]="data" [entries]="entries"></lib-shared-overview>
+  </div>
+
+  <div [hidden]="!hasActions" class="lg:col-span-4 col-span-12">
+    <lib-system-actions (foundActionEmitter)="onFoundAction($event)" [entityId]="+instanceId" [dataEntityTypeId]="65" ></lib-system-actions>
+  </div>
+</section>

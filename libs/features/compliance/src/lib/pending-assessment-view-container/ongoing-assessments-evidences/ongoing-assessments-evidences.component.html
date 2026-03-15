@@ -1,0 +1,188 @@
+<div class="w-full flex items-center justify-end mb-4">
+  @if(mode()!=='readonly'){
+    <button (click)="isLinkingEvidence = true" class="default_btn btn">
+    {{ 'ON_GOING_ASSESSMENTS.LINK_EVIDENCE' | translate }}
+  </button>
+  }
+</div>
+@if(!linkedEvidences.length){
+
+<lib-empty-state [loading]="loadingLinkedEvidences"></lib-empty-state>
+} @else { @if(!loadingLinkedEvidences){
+<p-accordion [(activeIndex)]="activeEvidenceIndex">
+  @for (evidence of linkedEvidences; track $index) {
+  <p-accordionTab
+    (selectedChange)="selectedAccordionChange($event, evidence.id)"
+
+  >
+  <ng-template pTemplate="header" >
+    <div class="flex-1 flex items-center justify-between">
+
+      <h5>{{evidence?.name || "--"}}</h5>
+
+
+
+      <button (click)="deleteLinkedEvidanceType(evidence?.id)" class="text-danger_color_text">
+        <i class="fi fi-rr-trash"></i>
+      </button>
+    </div>
+  </ng-template>
+    <div class="flex items-center justify-between mb-4">
+      <p class="text-lg font-medium">Evidance Version</p>
+      @if(mode() !== 'readonly'){
+        @if(!loadingSelectedVersionData){
+
+          @if(!current_selected_evidance_version_data){
+
+            <div class="flex items-center gap-3">
+              <button (click)="isLinkingVersion = true" class="default_btn btn">
+                Link Evidance Version
+              </button>
+              <button
+                (click)="isAddingNewVersion = true; evidenceVersionForm.reset()"
+                class="default_btn btn"
+              >
+                Add New Version
+              </button>
+            </div>
+          }@else {
+                <div class="delete_btn w-40">
+        <p-button
+          (onClick)="deletelinkedversion()"
+          [label]="'BUTTONS.DELETE' | translate"
+        />
+      </div>
+          }
+        }
+
+      }
+    </div>
+
+    <div class="version_content_data my-3">
+      @if(!isAddingNewVersion){
+      @if(current_selected_evidance_version_data||
+      loadingSelectedVersionData){
+      <lib-shared-overview
+        [dataLoading]="loadingSelectedVersionData"
+        [entries]="viewEntries"
+        [data]="current_selected_evidance_version_data"
+      ></lib-shared-overview>
+
+
+      <div class="py-3">
+        <h4 class="mb-3 font-medium text-lg">Version File </h4>
+        <lib-shared-file-viewer
+          [file]="current_selected_evidance_version_data_file"
+        ></lib-shared-file-viewer>
+      </div>
+
+
+    }@else {
+      <lib-empty-state [loading]="false"></lib-empty-state>
+      } } @if(isAddingNewVersion){
+      <section class="form_sec">
+        <div class="header border-b border-gray_light pb-6 mb-6">
+          <h2 class="text-lg font-medium text-[#101828]">
+            {{ 'HEARDE_TABLE.ADD_NEW_EVIDENCE_VERSION' | translate }}
+          </h2>
+        </div>
+        <form
+          [formGroup]="evidenceVersionForm"
+          class="grid grid-cols-12 gap-6 mb-6"
+        >
+          <!-- Version Number -->
+          <div class="md:col-span-6 col-span-12">
+            <lib-input-number
+              [placeholder]="'EVIDENCE_VERSION.VERSION_NUMBER' | translate"
+              [inputLabel]="'EVIDENCE_VERSION.VERSION_NUMBER' | translate"
+              [control]="evidenceVersionForm.get('versionNumber')!"
+              [controlNameInput]="'versionNumber'"
+            >
+            </lib-input-number>
+          </div>
+
+          <!-- Expiry Date -->
+          <div class="md:col-span-6 col-span-12">
+            <lib-date-packer
+              [placeholder]="'EVIDENCE_VERSION.EXPIRY_DATE' | translate"
+              [inputLabel]="'EVIDENCE_VERSION.EXPIRY_DATE' | translate"
+              [control]="evidenceVersionForm.get('expiryDate')!"
+              [controlNameInput]="'expiryDate'"
+            >
+            </lib-date-packer>
+          </div>
+
+
+
+          <div class="col-span-12">
+            <label class="text-base font-medium text-gray-800" for="typeFile">
+              {{ 'ATTACHMENT.FILE' | translate }}
+            </label>
+            <lib-view-attachment-single-modal
+              [dataEnityId]="evidenceId"
+              (fileSelectedEmitter)="handleFileSelected($event)"
+            ></lib-view-attachment-single-modal>
+          </div>
+        </form>
+
+        <div
+          class="col-span-12 flex items-center gap-4 justify-end py-6 border-t border-gray_light"
+        >
+          <div class="cancel_btn">
+            <button (click)="isAddingNewVersion = false">
+              {{ 'RISK_MANAGMENT.Cancel' | translate }}
+            </button>
+          </div>
+          <div class="action_btn">
+            <p-button
+              [disabled]="evidenceVersionForm.invalid"
+              [label]="'RISK_MANAGMENT.SaveChanges' | translate"
+              [loading]="loadingSaveNewVersion"
+              (onClick)="submit()"
+            >
+            </p-button>
+          </div>
+        </div>
+      </section>
+      }
+    </div>
+  </p-accordionTab>
+  }
+</p-accordion>
+} @else {
+<div class="flex flex-col gap-2">
+  <p-skeleton height="4rem" />
+  <p-skeleton height="4rem" />
+  <p-skeleton height="4rem" />
+  <p-skeleton height="4rem" />
+</div>
+} }
+
+
+
+
+@if(assessmentItemResultID()){
+
+  <lib-link-evidence-table
+    (handleEvidenceTypesDataEmitter)="handleEvidenceTypesData($event)"
+    (hideEmitter)="onEvidenceTableHide($event)"
+    (showDialogEmitter)="onShowEvidenceTableDialog($event)"
+    [isLinkingEvidence]="isLinkingEvidence"
+    [assessmentItemResultID]="assessmentItemResultID()"
+    (saveEvidenceEmitter)="onSaveEvidenceLink($event)"
+    [loadingEvidencesTypes]="loadingEvidencesTypes"
+    [linked_evidancesIDS]="linked_evidancesIDS"
+    [evidencesTypes]="evidencesTypes"
+  ></lib-link-evidence-table>
+
+  <lib-link-version-table
+    [current_selected_evidance_version_data]="current_selected_evidance_version_data"
+    [isLinkingVersion]="isLinkingVersion"
+    [assessmentItemResultID]="assessmentItemResultID()"
+    [evidenceId]="evidenceId"
+    (hideDialogEmitter)="isLinkingVersion=false"
+    (linkVersionEmitter)="onLinkEvidenceVersions()"
+    (currentEvidenceVersionIdEmitter)="handleSelectedEvidanceVersion($event)"
+
+  ></lib-link-version-table>
+}

@@ -1,0 +1,24 @@
+
+<div class="header mb-6">
+  <div class="title flex items-center justify-between">
+    @if(loadingData){
+    <p-skeleton width="15rem" styleClass="mb-2" />
+    }@else {
+    <h2 class="text-2xl font-semibold text-gray-800 ">{{ data?.name }}</h2>
+    }
+
+    @if(data?.questionnaireTemplateName ){
+    <div class="flex items-center gap-2">
+      <p class="text-base font-medium text-gray_color">
+        {{ 'TABS.questionnaireTemplateName' | translate }}:
+      </p>
+      <span class="text-base font-semibold text-gray-800">{{
+        data?.questionnaireTemplateName
+        }}</span>
+    </div>
+    }
+  </div>
+
+</div>
+<lib-shared-tabs [permissionFeature]="{module:'QUESTIONNAIRES' , feature:'TEMPLATESSECTIONS'}" [tabs]="tabs"[hasComments]="false" [hasAttachments]="false"></lib-shared-tabs>
+  <router-outlet></router-outlet>

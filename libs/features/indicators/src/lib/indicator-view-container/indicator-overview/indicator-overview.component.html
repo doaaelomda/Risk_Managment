@@ -1,0 +1,209 @@
+<lib-delete-confirm-popup
+  [titleDelete]="'INDICATORS.DELETE_INDICATOR_TITLE'"
+  [descriptionDelete]="'INDICATORS.DELETE_INDICATOR_DESC'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteIndicator()"
+        [loading]="loadDelted"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+<p-overlayPanel #actionMenu>
+  <div class="flex gap-2 flex-col">
+    @for (action of actions; track $index) {
+    <button (click)="(action?.command())" class="flex gap-2 items-center">
+      <i [class]="action?.icon"></i> <span> {{ action?.label }}</span>
+    </button>
+    }
+  </div>
+</p-overlayPanel>
+<section class="info p-4 rounded-lg bg-primary/5">
+  <div
+    class="header flex items-center justify-between pb-4 mb-8 border-b border-gray_light"
+  >
+    <h3 class="font-medium text-lg">
+      {{ 'WORKFLOW_VIEW.OVERVIEW' | translate }}
+    </h3>
+
+    <button
+      (click)="actionMenu.toggle($event)"
+      class="default_btn flex gap-2 items-center"
+    >
+      <span>{{ 'RISK_MANAGMENT.ACTIONS' | translate }}</span>
+      <i class="fi fi-rr-angle-small-down"></i>
+    </button>
+  </div>
+  <div class="content">
+    <div class="names grid grid-cols-12 gap-6">
+      <!-- 🧾 Code -->
+      <div class="name col-span-12 lg:col-span-6 ">
+        <p class="text-sm font-medium text-gray_color">
+          {{ 'INDICATORS.CODE' | translate }}
+        </p>
+        @if(isLoading) {
+        <p-skeleton width="70%"></p-skeleton>
+        } @else {
+        <p class="text-[#344054] font-medium text-base">
+          {{ current_indicator_data?.code ?? '-' }}
+        </p>
+        }
+      </div>
+
+      <!-- 📛 Name -->
+      <div class="name col-span-12 lg:col-span-6">
+        <p class="text-sm font-medium text-gray_color">
+          {{ 'INDICATORS.NAME' | translate }}
+        </p>
+        @if(isLoading) {
+        <p-skeleton width="70%"></p-skeleton>
+        } @else {
+        <p class="text-[#344054] font-medium text-base">
+          {{ current_indicator_data?.name ?? '-' }}
+        </p>
+        }
+      </div>
+
+      <!-- 📝 Description -->
+      <div class="name w-full col-span-12">
+        <p class="text-sm font-medium text-gray_color">
+          {{ 'INDICATORS.DESCRIPTION' | translate }}
+        </p>
+        @if(isLoading) {
+        <p-skeleton width="90%"></p-skeleton>
+        } @else {
+        <p style="white-space: pre-line;" class="text-[#344054] font-medium text-base">
+          {{ current_indicator_data?.description ?? '-' }}
+        </p>
+        }
+      </div>
+
+      <!-- 📊 Indicator Type -->
+      <div class="name col-span-12 lg:col-span-6 ">
+        <p class="text-sm font-medium text-gray_color">
+          {{ 'INDICATORS.INDICATOR_TYPE_ID' | translate }}
+        </p>
+        @if(isLoading) {
+        <p-skeleton width="60%"></p-skeleton>
+        } @else {
+        <p class="text-[#344054] font-medium text-base">
+          {{ current_indicator_data?.indicatorTypeName ?? '-' }}
+        </p>
+        }
+      </div>
+
+      <!-- 💰 Unit Type -->
+      <div class="name col-span-12 lg:col-span-6">
+        <p class="text-sm font-medium text-gray_color">
+          {{ 'INDICATORS.INDICATOR_UNIT_TYPE_ID' | translate }}
+        </p>
+        @if(isLoading) {
+        <p-skeleton width="60%"></p-skeleton>
+        } @else {
+        <p class="text-[#344054] font-medium text-base">
+          {{ current_indicator_data?.indicatorUnitTypeName ?? '-' }}
+        </p>
+        }
+      </div>
+
+      <!-- 🗓️ Aggregation Period -->
+      <div class="name col-span-12 lg:col-span-6 ">
+        <p class="text-sm font-medium text-gray_color">
+          {{ 'INDICATORS.INDICATOR_AGGREGATION_PERIOD_TYPE_ID' | translate }}
+        </p>
+        @if(isLoading) {
+        <p-skeleton width="60%"></p-skeleton>
+        } @else {
+        <p class="text-[#344054] font-medium text-base">
+          {{
+            current_indicator_data?.indicatorAggregationPeriodTypeName ?? '-'
+          }}
+        </p>
+        }
+      </div>
+
+      <!-- 🔄 Calculation Direction -->
+      <div class="name col-span-12 lg:col-span-6">
+        <p class="text-sm font-medium text-gray_color">
+          {{ 'INDICATORS.INDICATOR_CALCULATION_DIRECTION_TYPE_ID' | translate }}
+        </p>
+        @if(isLoading) {
+        <p-skeleton width="60%"></p-skeleton>
+        } @else {
+        <p class="text-[#344054] font-medium text-base">
+          {{
+            current_indicator_data?.indicatorCalculationDirectionTypeName ?? '-'
+          }}
+        </p>
+        }
+      </div>
+
+      <!-- 📈 Evaluation Method -->
+      <div class="name col-span-12 lg:col-span-6 ">
+        <p class="text-sm font-medium text-gray_color">
+          {{ 'INDICATORS.INDICATOR_EVALUATION_METHOD_TYPE_ID' | translate }}
+        </p>
+        @if(isLoading) {
+        <p-skeleton width="60%"></p-skeleton>
+        } @else {
+        <p class="text-[#344054] font-medium text-base">
+          {{ current_indicator_data?.indicatorEvaluationMethodTypeName ?? '-' }}
+        </p>
+        }
+      </div>
+
+      <!-- 🎯 Target Value -->
+      <div class="name col-span-12 lg:col-span-6">
+        <p class="text-sm font-medium text-gray_color">
+          {{ 'INDICATORS.TARGET_VALUE' | translate }}
+        </p>
+        @if(isLoading) {
+        <p-skeleton width="60%"></p-skeleton>
+        } @else {
+        <p class="text-[#344054] font-medium text-base">
+          {{ current_indicator_data?.targetValue ?? '-' }}
+        </p>
+        }
+      </div>
+
+      <!-- 👤 Owner Role -->
+      <div class="name col-span-12 lg:col-span-6 ">
+        <p class="text-sm font-medium text-gray_color">
+          {{ 'INDICATORS.OWNER_ROLE_ID' | translate }}
+        </p>
+        @if(isLoading) {
+        <p-skeleton width="60%"></p-skeleton>
+        } @else {
+        <p class="text-[#344054] font-medium text-base">
+          {{ current_indicator_data?.ownerRoleName ?? '-' }}
+        </p>
+        }
+      </div>
+
+      <!-- 🏢 Organizational Unit -->
+      <div class="name col-span-12 lg:col-span-6">
+        <p class="text-sm font-medium text-gray_color">
+          {{ 'INDICATORS.ORGANIZATIONAL_UNIT_ID' | translate }}
+        </p>
+        @if(isLoading) {
+        <p-skeleton width="60%"></p-skeleton>
+        } @else {
+        <p class="text-[#344054] font-medium text-base">
+          {{ current_indicator_data?.organizationalUnitName ?? '-' }}
+        </p>
+        }
+      </div>
+    </div>
+  </div>
+</section>

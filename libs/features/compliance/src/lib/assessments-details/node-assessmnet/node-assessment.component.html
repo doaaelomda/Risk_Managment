@@ -1,0 +1,127 @@
+<p-accordionTab iconPos="end" tabStyleClass="subchild-tab"   [headerStyleClass]="level === 0 ? 'header-parent-tab' : 'header-child-tab'"
+>
+
+@if(level === 0){
+    <ng-template pTemplate="header">
+        <div class="flex justify-between w-full">
+          <div class="flex gap-3 items-center">
+            <div class="flex justify-center items-center p-2 bg-white_color rounded-lg">
+              <i class="fi fi-rr-layers text-gray-400"></i>
+            </div>
+            <p class="text-gray-500 font-semibold text-xl">{{ node.name }}</p>
+          </div>
+          <div class="flex gap-3 items-center">
+            @if(node.statusName){
+            <div class="flex gap-2 items-center">
+              <span class="badge {{ node.statusColor }}">
+                <span class="small_doted"></span> {{ node.statusName }}
+              </span>
+            </div>
+            }
+
+
+          </div>
+        </div>
+      </ng-template>
+}@else {
+
+  <ng-template pTemplate="header">
+    <div class="flex justify-between w-full">
+
+      <div class="flex gap-3 items-center">
+
+        @if(node?.code){
+        <div class="flex justify-center items-center p-2 border text-gray-500 border-primaryColor-500 rounded-lg">
+          {{ node.code }}
+        </div>
+        }
+
+        <p class="text-gray-500 font-semibold text-xl">
+          {{ node.name }}
+        </p>
+
+      </div>
+
+      <div class="flex gap-3 items-center">
+        @if(node.statusName){
+        <span class="badge {{ node.statusColor }}">
+          <span class="small_doted"></span>
+          {{ node.statusName }}
+        </span>
+        }
+      </div>
+
+    </div>
+  </ng-template>
+}
+
+  <!-- objective -->
+  @if(node.objective){
+  <div class="flex flex-col gap-2 rounded-xl bg-gray-50 p-3 border mb-2 border-gray_light">
+    <p class="text-gray-700 font-bold text-xl">{{"ASSESSMENTS_DETAILS.objective" | translate}}</p>
+    <p class="text-gray-500 text-base">
+      {{ node.objective }}
+    </p>
+  </div>
+  }
+
+  <!-- notes / risks / findings -->
+  @if(node.notes || node.risks || node.recommendations || node.findings){
+<div class="grid grid-cols-12 gap-2">
+            @if(node.notes){
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              <div class="rounded-lg border-[1px] border-gray_light bg-gray-50 h-full p-3">
+                <h3 class="text-gray-700 font-bold text-xl">{{"ASSESSMENTS_DETAILS.notes"|translate}}</h3>
+                <p class="text-gray-500 font-normal text-base">
+                  {{ node.notes }}
+                </p>
+              </div>
+            </div>
+
+            } @if(node.risks){
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              <div class="rounded-lg border-[1px] border-gray_light bg-gray-50 h-full p-3">
+                <h3 class="text-gray-700 font-bold text-xl">{{"ASSESSMENTS_DETAILS.risks"|translate}}</h3>
+                <p class="text-gray-500 font-normal text-base">
+                  {{ node.risks }}
+                </p>
+              </div>
+            </div>
+            }
+            @if(node.recommendations){
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              <div class="rounded-lg border-[1px] border-gray_light bg-gray-50 h-full p-3">
+                <h3 class="text-gray-700 font-bold text-xl">{{"ASSESSMENTS_DETAILS.recommendations" | translate}}</h3>
+                <p class="text-gray-500 font-normal text-base">
+                  {{ node.recommendations }}
+                </p>
+              </div>
+            </div>
+            }
+            @if(node.findings){
+            <div class="col-span-12 lg:col-span-4 md:col-span-6">
+              <div class="rounded-lg border-[1px] border-gray_light bg-gray-50 h-full p-3">
+                <h3 class="text-gray-700 font-bold text-xl">{{"ASSESSMENTS_DETAILS.findings" | translate}}</h3>
+                <p class="text-gray-500 font-normal text-base">
+                  {{ node.findings }}
+                </p>
+              </div>
+            </div>
+            }
+          </div>
+  }
+
+  <!-- recursive children -->
+  @if(node.children?.length){
+
+  <p-accordion [multiple]="true">
+
+    @for(child of node.children; track child.id){
+      <lib-node-assessment [node]="child" [level]="level + 1"></lib-node-assessment>
+    }
+
+  </p-accordion>
+
+  }
+
+</p-accordionTab>

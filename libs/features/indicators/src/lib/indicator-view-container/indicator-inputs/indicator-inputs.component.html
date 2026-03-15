@@ -1,0 +1,145 @@
+<!-- handle new table -->
+<section>
+  <lib-new-table [loading]="loadingTable" [table_data]="dataTable"
+    [table_title]="'INDICATORS.INDICATOR_INPUTS_LIST' | translate" [badge_title]="'INDICATORS.INPUTS' | translate"
+    [dataViewId]="36" [entityID_Name]="'indicatorInputTypeID'" [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)" [action_items]="items" (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{ module: 'INDICATORS', feature: 'INDICATORINPUTS', action: 'VIEW' }">
+    @if(_PermissionSystemService.can('INDICATORS' , 'INDICATORINPUTS' , 'ADD')){
+    <button addition_action (click)="inputActionVisible = true"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'INDICATORS.ADD_NEW_IN_INPUT' | translate }}</span>
+    </button>
+    }
+  </lib-new-table>
+</section>
+
+<!-- View Data Popup -->
+<p-dialog [(visible)]="viewingItem" (onHide)="viewingItem=false" [modal]="true" [dismissableMask]="true"
+  [draggable]="false" styleClass="w-[45rem] action_dailog">
+
+  <div class="container space-y-6">
+    <div class="container space-y-6">
+      <h2 class="font-medium text-gray-800 text-lg mb-2">
+        {{ viewed_data?.name }}
+      </h2>
+      <div class="grid grid-cols-12 gap-4  py-3">
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-item mb-1">{{ 'INDICATORS.DESCRIPTION' | translate }}</h3>
+          <p class="font-medium text-gray-800 whitespace-pre-line">
+            @if (!loadingViewedData) {
+            {{ viewed_data?.description }} }
+            @else {
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+          </p>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-item mb-1">{{ 'INDICATORS.CODE' | translate }}</h3>
+          <p class="font-medium text-gray-800 whitespace-pre-line">@if (!loadingViewedData) {
+            {{ viewed_data?.code }}
+
+            }
+            @else {
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+          </p>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</p-dialog>
+
+<!-- Delete Popup -->
+<lib-delete-confirm-popup [titleDelete]="'INDICATORS.DELETE_INDICATOR_INPUT_TITLE'"
+  [descriptionDelete]="'INDICATORS.DELETE_INDICATOR_INPUT_DESC'" (hideEmiter)="handleClosedDelete()"
+  [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button (onClick)="deleteIndicatorInput()" [loading]="loadDelted" [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+<!-- Quick Add -->
+<p-dialog (onHide)="initForm(); update_flag = false" [(visible)]="inputActionVisible" [modal]="true"
+  [dismissableMask]="true" [draggable]="false" styleClass="w-[50rem]" [position]="'center'">
+  <ng-template pTemplate="header">
+    <h3 class="text-gray-800 font-bold text-1xl ">{{ update_flag ? ('INDICATORS.UPDATE_INPUT' | translate)
+      :('INDICATORS.ADD_NEW_IN_INPUT' | translate)}}</h3>
+  </ng-template>
+
+  <div class="border-b border-gray_light my-4"></div>
+
+  <ng-template pTemplate="content">
+    <form [formGroup]="inputForm" class="grid grid-cols-12 gap-6 mb-6" (ngSubmit)="submit()">
+
+      <!-- Code -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-text [placeholder]="'INDICATORS.CODE_PLACEHOLDER_INPUT' | translate"
+          [inputLabel]="'INDICATORS.CODE_INPUT' | translate" [control]="inputForm.get('code')!"
+          [controlNameInput]="'code'">
+        </lib-input-text>
+      </div>
+
+      <!-- Name -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-text [placeholder]="'INDICATORS.NAME_PLACEHOLDER_INPUT' | translate"
+          [inputLabel]="'INDICATORS.NAME_INPUT' | translate" [control]="inputForm.get('name')!"
+          [controlNameInput]="'name'">
+        </lib-input-text>
+      </div>
+
+      <!-- Description -->
+      <div class="col-span-12">
+        <lib-textarea-ui [placeholder]="'INDICATORS.DESCRIPTION_PLACEHOLDER_INPUT' | translate"
+          [inputLabel]="'INDICATORS.DESCRIPTION_INPUT' | translate" [control]="inputForm.get('description')!"
+          [controlNameInput]="'description'">
+        </lib-textarea-ui>
+      </div>
+
+      <!-- Effective Date From -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-date-packer [placeholder]="'INDICATORS.EFFECTIVE_DATE_FROM_PLACEHOLDER' | translate"
+          [inputLabel]="'INDICATORS.EFFECTIVE_DATE_FROM' | translate" [control]="inputForm.get('effectiveDateFrom')!"
+          [controlNameInput]="'effectiveDateFrom'">
+        </lib-date-packer>
+      </div>
+
+      <!-- Effective Date To -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-date-packer [placeholder]="'INDICATORS.EFFECTIVE_DATE_TO_PLACEHOLDER' | translate"
+          [inputLabel]="'INDICATORS.EFFECTIVE_DATE_TO' | translate" [control]="inputForm.get('effectiveDateTo')!"
+          [controlNameInput]="'effectiveDateTo'">
+        </lib-date-packer>
+      </div>
+
+    </form>
+  </ng-template>
+
+
+
+  <ng-template pTemplate="footer">
+    <div class="flex flex-wrap justify-end gap-2">
+      <p-button (onClick)="inputActionVisible = false" pButton
+        class="bg-white_color text-gray-700 text-sm border border-gray_light rounded-lg"
+        [label]="'BUTTONS.CANCEL' | translate" icon="pi pi-times" />
+
+      <p-button pButton class="bg-primary text-white text-sm rounded-lg" [label]="'BUTTONS.SAVE' | translate"
+        [loading]="loadingBtn" icon="pi pi-check" (click)="submit()" />
+
+    </div>
+
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,55 @@
+<section>
+  <lib-new-table
+    [loading]="loadingState"
+    [table_data]="dataList"
+    [table_title]="'SETTING.CONTROL_MANAGEMENT_LIST' | translate"
+    [badge_title]="'SETTING.CONTROL_MANAGEMENT_BADGE' | translate"
+    [dataViewId]="18"
+    [entityID_Name]="'govControlID'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="action_items"
+    (currentActionRow)="setSelectedRow($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{
+      module: 'GOVERNANCE',
+      feature: 'CONTROL',
+      action: 'VIEW'
+    }"
+  >
+  @if(_PermissionSystemService.can('GOVERNANCE' , 'CONTROL' , 'ADD')){
+        <button
+      (click)="newControls()"
+      addition_action
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+    >
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'SETTING.ADD_NEW_CONTROL' | translate }}</span>
+    </button>
+  }
+
+  </lib-new-table>
+</section>
+
+<lib-delete-confirm-popup
+  [titleDelete]="'SETTING.DELETE_CONTROL_DESC'"
+  [descriptionDelete]="'SETTING.DELETE_CONTROL_TITLE'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteControls()"
+        [loading]="loadDelted"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

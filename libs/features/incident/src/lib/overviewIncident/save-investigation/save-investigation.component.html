@@ -1,0 +1,308 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<section class="form_sec">
+  <div class="header border-b border-gray_light pb-6 mb-6">
+    <h2 class="text-lg font-medium text-[#101828]">
+      {{
+        id
+          ? (FEATURE_KEY + '.UPDATE_' + FEATURE_NAME | translate)
+          : (FEATURE_KEY + '.ADD_NEW_' + FEATURE_NAME | translate)
+      }}
+    </h2>
+  </div>
+
+
+         <div class="STEPER_MEASURMENT">
+        <div class="flex mb-8 justify-between items-center">
+          @for (step of steps; track $index) {
+          <div class="flex flex-col gap-3 items-center flex-1 stepContainer">
+            <div
+              class="stepIcoContainer relative w-full flex justify-center items-center"
+            >
+              <div
+                class="step_line absolute"
+                [ngClass]="{
+                  full_width: $index !== 0 && $index !== steps.length - 1,
+                  last_step: $index === steps.length - 1
+                }"
+              ></div>
+              <button
+                class="stepIco z-50"
+                (click)="step?.command()"
+                [disabled]="step?.disabled"
+                [ngClass]="{ active_step: step?.id === currentStep }"
+              >
+                <i [class]="step?.icon"></i>
+              </button>
+            </div>
+
+            <div class="stepTxt flex flex-col gap-2 items-center">
+              <h3 [ngClass]="{ active_step: step?.id === currentStep }">
+                {{ step?.name }}
+              </h3>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+
+  @switch (currentStep) { @case (1) {
+      @if(main_form){
+          <form [formGroup]="main_form" class="grid grid-cols-12 gap-6 mb-6">
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'LOOKUP.NAME_PLACEHOLDER' | translate"
+        [inputLabel]="'LOOKUP.NAME' | translate"
+        [control]="main_form.get('name')!"
+        [controlNameInput]="'name'"
+      ></lib-input-text>
+    </div>
+
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'INVESTIGATIONS.TYPE_PLACEHOLDER' | translate"
+        [label]="'INVESTIGATIONS.TYPE' | translate"
+        [control]="main_form.get('incidentInvestigationTypeID')!"
+        [formControlNameInput]="'incidentInvestigationTypeID'"
+        [options]="types"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      >
+      </lib-ui-dropdown>
+    </div>
+
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'INVESTIGATIONS.STATUS_TYPE_PLACEHOLDER' | translate"
+        [label]="'INVESTIGATIONS.STATUS_TYPE' | translate"
+        [control]="main_form.get('incidentInvestigationStatusTypeID')!"
+        [formControlNameInput]="'incidentInvestigationStatusTypeID'"
+        [options]="statusTypes"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      >
+      </lib-ui-dropdown>
+    </div>
+
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="
+          'INVESTIGATIONS.THREAD_ACTOR_TYPE_PLACEHOLDER' | translate
+        "
+        [label]="'INVESTIGATIONS.THREAD_ACTOR_TYPE' | translate"
+        [control]="main_form.get('incidentThreatActorTypeID')!"
+        [formControlNameInput]="'incidentThreatActorTypeID'"
+        [options]="actorTypes"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      >
+      </lib-ui-dropdown>
+    </div>
+
+    <div class="md:col-span-6 col-span-12">
+      <lib-user-dropdown
+        [placeholder]="'INVESTIGATIONS.LEAD_USER_PLACEHOLDER' | translate"
+        [label]="'INVESTIGATIONS.LEAD_USER' | translate"
+        [control]="main_form.get('leadInvestigatorUserID')!"
+        [formControlNameInput]="'leadInvestigatorUserID'"
+        [options]="users"
+        [optionLabel]="'name'"
+        [optionValue]="'id'"
+      >
+      </lib-user-dropdown>
+    </div>
+
+    <div class="md:col-span-6 col-span-12">
+      <lib-date-packer
+        [placeholder]="'INVESTIGATIONS.STARTED_AT_PLACEHOLDER' | translate"
+        [inputLabel]="'INVESTIGATIONS.STARTED_AT' | translate"
+        [control]="main_form.get('startedAt')!"
+        [controlNameInput]="'startedAt'"
+      >
+      </lib-date-packer>
+    </div>
+    <div class="col-span-12">
+      <lib-textarea-ui
+        [placeholder]="'INVESTIGATIONS.SCOPE_PLACEHOLDER' | translate"
+        [inputLabel]="'INVESTIGATIONS.SCOPE' | translate"
+        [control]="main_form.get('investigationScope')!"
+        [controlNameInput]="'investigationScope'"
+      >
+      </lib-textarea-ui>
+    </div>
+
+    <div class="col-span-12">
+      <lib-textarea-ui
+        [placeholder]="'LOOKUP.DESCRIPTION_PLACEHOLDER' | translate"
+        [inputLabel]="'LOOKUP.DESCRIPTION' | translate"
+        [control]="main_form.get('description')!"
+        [controlNameInput]="'description'"
+      ></lib-textarea-ui>
+    </div>
+
+    <div class="col-span-12 flex justify-end gap-4 py-4">
+      <div class="default_btn cancel">
+        <a [routerLink]="LIST_ROUTE">{{ 'BUTTONS.CANCEL' | translate }}</a>
+      </div>
+      <div class="action_btn">
+        <p-button
+          [label]="
+            id ? ('BUTTONS.UPDATE' | translate) : ('BUTTONS.SAVE' | translate)
+          "
+          [outlined]="true"
+
+          [loading]="isSaving"
+          severity="secondary"
+          (onClick)="save()"
+        ></p-button>
+      </div>
+    </div>
+  </form>
+      }
+  } @case (2) {
+
+@if(technical_form){
+<form [formGroup]="technical_form" class="grid grid-cols-12 gap-6 mb-6">
+
+  <!-- Investigation Scope -->
+  <div class="col-span-12">
+    <lib-textarea-ui
+      [placeholder]="'INVESTIGATIONS.SCOPE_PLACEHOLDER' | translate"
+      [inputLabel]="'INVESTIGATIONS.SCOPE' | translate"
+      [control]="technical_form.get('investigationScope')!"
+      [controlNameInput]="'investigationScope'"
+    ></lib-textarea-ui>
+  </div>
+
+  <!-- Attack Vector -->
+  <div class="col-span-12">
+    <lib-textarea-ui
+      [placeholder]="'INVESTIGATIONS.ATTACK_VECTOR_PLACEHOLDER' | translate"
+      [inputLabel]="'INVESTIGATIONS.ATTACK_VECTOR' | translate"
+      [control]="technical_form.get('attackVector')!"
+      [controlNameInput]="'attackVector'"
+    ></lib-textarea-ui>
+  </div>
+
+  <!-- Detection Source -->
+  <div class="col-span-12">
+    <lib-textarea-ui
+      [placeholder]="'INVESTIGATIONS.DETECTION_SOURCE_PLACEHOLDER' | translate"
+      [inputLabel]="'INVESTIGATIONS.DETECTION_SOURCE' | translate"
+      [control]="technical_form.get('detectionSource')!"
+      [controlNameInput]="'detectionSource'"
+    ></lib-textarea-ui>
+  </div>
+
+  <!-- IoCs -->
+  <div class="col-span-12">
+    <lib-textarea-ui
+      [placeholder]="'INVESTIGATIONS.IOCS_PLACEHOLDER' | translate"
+      [inputLabel]="'INVESTIGATIONS.IOCS' | translate"
+      [control]="technical_form.get('ioCs')!"
+      [controlNameInput]="'ioCs'"
+    ></lib-textarea-ui>
+  </div>
+
+  <!-- Affected Assets -->
+  <div class="col-span-12">
+    <lib-textarea-ui
+      [placeholder]="'INVESTIGATIONS.AFFECTED_ASSETS_PLACEHOLDER' | translate"
+      [inputLabel]="'INVESTIGATIONS.AFFECTED_ASSETS' | translate"
+      [control]="technical_form.get('affectedAssets')!"
+      [controlNameInput]="'affectedAssets'"
+    ></lib-textarea-ui>
+  </div>
+
+  <!-- Containment Actions -->
+  <div class="col-span-12">
+    <lib-textarea-ui
+      [placeholder]="'INVESTIGATIONS.CONTAINMENT_ACTIONS_PLACEHOLDER' | translate"
+      [inputLabel]="'INVESTIGATIONS.CONTAINMENT_ACTIONS' | translate"
+      [control]="technical_form.get('containmentActions')!"
+      [controlNameInput]="'containmentActions'"
+    ></lib-textarea-ui>
+  </div>
+
+  <!-- Eradication Actions -->
+  <div class="col-span-12">
+    <lib-textarea-ui
+      [placeholder]="'INVESTIGATIONS.ERADICATION_ACTIONS_PLACEHOLDER' | translate"
+      [inputLabel]="'INVESTIGATIONS.ERADICATION_ACTIONS' | translate"
+      [control]="technical_form.get('eradicationActions')!"
+      [controlNameInput]="'eradicationActions'"
+    ></lib-textarea-ui>
+  </div>
+
+  <!-- Recovery Actions -->
+  <div class="col-span-12">
+    <lib-textarea-ui
+      [placeholder]="'INVESTIGATIONS.RECOVERY_ACTIONS_PLACEHOLDER' | translate"
+      [inputLabel]="'INVESTIGATIONS.RECOVERY_ACTIONS' | translate"
+      [control]="technical_form.get('recoveryActions')!"
+      [controlNameInput]="'recoveryActions'"
+    ></lib-textarea-ui>
+  </div>
+
+  <!-- Impact Assessment -->
+  <div class="col-span-12">
+    <lib-textarea-ui
+      [placeholder]="'INVESTIGATIONS.IMPACT_ASSESSMENT_PLACEHOLDER' | translate"
+      [inputLabel]="'INVESTIGATIONS.IMPACT_ASSESSMENT' | translate"
+      [control]="technical_form.get('impactAssessment')!"
+      [controlNameInput]="'impactAssessment'"
+    ></lib-textarea-ui>
+  </div>
+
+  <!-- Data Exposure Flag -->
+  <div class="md:col-span-6 col-span-12 flex items-center gap-3">
+    <label class="text-sm font-medium text-gray_color">
+      {{ 'INVESTIGATIONS.DATA_EXPOSURE_FLAG' | translate }}
+    </label>
+    <p-inputSwitch
+      formControlName="dataExposureFlag"
+    ></p-inputSwitch>
+  </div>
+
+  <!-- Reported To Authority Flag -->
+  <div class="md:col-span-6 col-span-12 flex items-center gap-3">
+
+    <label class="text-sm font-medium text-gray_color">
+      {{ 'INVESTIGATIONS.REPORTED_TO_AUTHORITY_FLAG' | translate }}
+    </label>
+    <p-inputSwitch
+      formControlName="reportedToAuthorityFlag"
+    ></p-inputSwitch>
+  </div>
+
+  <!-- Report Reference Number -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-input-number
+      [placeholder]="'INVESTIGATIONS.REPORT_REFERENCE_NUMBER_PLACEHOLDER' | translate"
+      [inputLabel]="'INVESTIGATIONS.REPORT_REFERENCE_NUMBER' | translate"
+      [control]="technical_form.get('reportReferenceNumber')!"
+      [controlNameInput]="'reportReferenceNumber'"
+    ></lib-input-number>
+  </div>
+
+  <div class="col-span-12 flex justify-end gap-4 py-4">
+    <div class="default_btn cancel">
+      <a [routerLink]="LIST_ROUTE">{{ 'BUTTONS.CANCEL' | translate }}</a>
+    </div>
+    <div class="action_btn">
+      <p-button
+        [label]="id ? ('BUTTONS.UPDATE' | translate) : ('BUTTONS.SAVE' | translate)"
+        [outlined]="true"
+        [loading]="isSaving"
+        severity="secondary"
+        (onClick)="saveTechnical()"
+      ></p-button>
+    </div>
+  </div>
+
+</form>
+}
+
+
+
+  } }
+</section>

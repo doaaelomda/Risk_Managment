@@ -1,0 +1,53 @@
+<section>
+
+  <div class="header mb-8">
+    <div class="title flex items-center gap-4 flex-wrap mb-8">
+      @if(loadDataAssests){
+      <p-skeleton width="15rem" styleClass="mb-2" />
+      }@else {
+      <h2 class="text-2xl font-semibold text-gray-800">{{ AssetsData?.shortName }}</h2>
+      <p class="text-gray_color m-0">
+        {{ AssetsData?.purpose  }}
+      </p>
+      }
+    </div>
+    <div class="content flex flex-wrap items-center gap-4">
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">
+          {{ 'ASSETS.LOCATION' | translate }}
+        </p>
+        @if(loadDataAssests){
+        <p-skeleton width="15rem" styleClass="mb-2" />
+        }
+        @else{
+        <span class="badge">{{
+          AssetsData?.location ?? '-'
+          }}</span> }
+      </div>
+
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">
+          {{ 'ASSETS.MANUFACTURER' | translate }}
+        </p>
+        <span class="font-semibold badge">{{
+          AssetsData?.manufacturer ?? '-'
+          }}</span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">
+          {{ 'ASSETS.ASSET_STATUS_TYPE_ID' | translate }}
+        </p>
+        <span class="font-semibold badge">{{
+          AssetsData?.assetStatusTypeName ?? '-'
+          }}</span>
+      </div>
+
+
+    </div>
+  </div>
+
+<lib-shared-tabs  [permissionFeature]="{module:'ASSETS' , feature:'ASSETS'}"></lib-shared-tabs>
+
+  <router-outlet></router-outlet>
+</section>

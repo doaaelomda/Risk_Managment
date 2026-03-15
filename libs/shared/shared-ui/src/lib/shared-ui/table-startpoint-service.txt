@@ -1,0 +1,51 @@
+  private readonly searchEndpoint = '';
+  private readonly deleteEndpoint = '';
+  private readonly saveEndpoint = '';
+private readonly updateEndpoint = '';
+  private readonly getByIdEndpoint = '';
+  private readonly idKey = '';
+
+
+  constructor(private _http: HttpClient) {}
+
+
+  findAll(
+    sortData: any = null,
+    pageNumber: number = 1,
+    perPage: number = 10,
+    filters: any[] = [],
+    extraFields: any = {}
+  ): Observable<any> {
+    const req = {
+      search: '',
+      pageNumber,
+      pageSize: perPage,
+      filters,
+      sortField: sortData?.field,
+      sortDirection: sortData?.direction,
+      ...extraFields,
+    };
+    return this._http.post(`${enviroment.API_URL}${this.searchEndpoint}`, req);
+  }
+
+  save(
+    data: any,
+    id?: any
+  ): Observable<any> {
+    const method = id ? 'put' : 'post';
+    const endpoint = id ? this.updateEndpoint : this.saveEndpoint
+    return this._http[method](`${enviroment.API_URL}${endpoint}`, payload);
+
+  }
+
+  delete(
+    id: any
+  ): Observable<any> {
+    return this._http.delete(`${enviroment.API_URL}${this.deleteEndpoint}/${id}`);
+  }
+
+  getById(
+    id: any
+  ): Observable<any> {
+    return this._http.get(`${enviroment.API_URL}${this.getByIdEndpoint}/${id}`);
+  }

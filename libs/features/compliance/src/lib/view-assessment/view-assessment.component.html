@@ -1,0 +1,28 @@
+<div class="header flex justify-between items-center gap-3 py-2">
+  <div class="flex gap-3 items-center">
+    <h2 class="text-xl font-semibold">
+      {{dataAssessmnetCompliance?.name || '-'}}
+    </h2>
+  </div>
+  <div class="flex gap-4">
+    @if(dataAssessmnetCompliance?.startDate){
+    <div class="flex gap-1 font-semibold">
+      <span class="text-gray_color">{{'TABS.Expiry_Date' | translate}} :</span>
+      <span class="text-dark"> {{dataAssessmnetCompliance?.startDate  | date:'MMM d y'}} </span>
+    </div>
+  }
+  @if(dataAssessmnetCompliance?.complianceAssessmentStatusTypeName){
+    <div class="flex gap-1 font-semibold">
+      <span class="text-gray_color">{{'RISK_MANAGMENT.STATUS' | translate}} :</span>
+      <span class="badge">
+        {{dataAssessmnetCompliance?.complianceAssessmentStatusTypeName || '-'}}
+      </span>
+    </div>
+  }
+  </div>
+</div>
+
+<lib-shared-tabs [permissionFeature]="{module:'COMPLIANCE' , feature:'ASSESSMENT'}" [tabs]="tabs"></lib-shared-tabs>
+<div >
+  <router-outlet></router-outlet>
+</div>

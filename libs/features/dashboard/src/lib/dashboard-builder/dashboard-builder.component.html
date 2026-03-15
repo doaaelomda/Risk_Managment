@@ -1,0 +1,178 @@
+@if(mode() === 'edit'){
+  <div
+  class="  dashboard_container"
+  cdkDropList
+  (cdkDropListDropped)="drop($event)"
+>
+  @for(part of dashboard_data?.dashboard_Widgets ; track part ){
+    <div
+   [ngClass]="getWidthClass(part.width)"
+
+      class="dashboard-item"
+      cdkDrag
+               [cdkDragData]="part"
+    >
+
+      @switch (part?.type?.trim()) {
+        @case ('tabs_cards') {
+          <lib-cards-tabs [mode]="mode()"  (actionEmitter)="handleWidgetEvents($event)" [chart_config_input]="{title:'Vulnerability By Status' , data:part}"></lib-cards-tabs>
+        }
+        @case('bar'){
+          <lib-chart-bar [mode]="mode()" (actionEmitter)="handleWidgetEvents($event)" [chart_config_input]="{title:'Corrective Procedures By Status' , data:part}"></lib-chart-bar>
+        }
+        @case('dounght'){
+          <lib-dounghnut-chart  [mode]="mode()" (actionEmitter)="handleWidgetEvents($event)" [chart_config_input]="{title:'Vulnerability By Status' , data:part}"></lib-dounghnut-chart>
+        }
+        @case ('line') {
+          <lib-line-chart  [mode]="mode()" (actionEmitter)="handleWidgetEvents($event)" [chart_config_input]="{title:'Vulnerability By Status' , data:part}"></lib-line-chart>
+        }
+        @case('table'){
+          <lib-table-dashboard  [mode]="mode()" (actionEmitter)="handleWidgetEvents($event)" [chart_config_input]="{title:'Vulnerability By Status' , data:part}" ></lib-table-dashboard>
+        }
+        @case('list'){
+          <lib-list-dashboard [mode]="mode()" (actionEmitter)="handleWidgetEvents($event)" [chart_config_input]="{title:'Vulnerability By Status' , data:part}" ></lib-list-dashboard>
+        }
+        @case('text'){
+          <lib-text-dashboard [formSettingData]="textForm.value" (settingEmitter)="handleSettingText($event)" [mode]="mode()" (actionEmitter)="handleWidgetEvents($event)" [chart_config_input]="{title:'Vulnerability By Status' , data:part}" ></lib-text-dashboard>
+        }
+        @case('doughnut'){
+                    <lib-dounghnut-chart  [mode]="mode()" (actionEmitter)="handleWidgetEvents($event)" [chart_config_input]="{title:'Vulnerability By Status' , data:part}"></lib-dounghnut-chart>
+
+        }
+           @case('customComplianceSummaryStatus'){
+            <lib-compliance-status-chart [mode]="mode()"  (actionEmitter)="handleWidgetEvents($event)"  [chart_config_input]="{title:'Summary Status' , data:part}" ></lib-compliance-status-chart>
+          }
+          @case('customComplianceAssessmentSummaryReport'){
+            <lib-compliance-assessment-chart [mode]="mode()"  (actionEmitter)="handleWidgetEvents($event)"  [chart_config_input]="{title:'Assessment Summary Report' , data:part}" ></lib-compliance-assessment-chart>
+          }
+          @case('customComplianceStatusDistributionByOU'){
+            <lib-custom-compliance-chart-by-ou [mode]="mode()"    [chart_config_input]="{title:'Assessment Summary Report' , data:part}" ></lib-custom-compliance-chart-by-ou>
+          }
+
+              @case('customComplianceAssessmentTreeReport'){
+            <lib-assessments-details [mode]="mode()"    [chart_config_input]="{title:'Assessment Summary Report' , data:part}" ></lib-assessments-details>
+          }
+      }
+    </div>
+  }
+</div>
+
+}@else {
+
+    <div
+    class="   dashboard_container"
+  >
+    @for(part of dashboard_data?.dashboard_Widgets ; track $index){
+      <div
+   [ngClass]="getWidthClass(part.width)"
+
+      class="dashboard-item"
+
+      >
+
+        @switch (part?.type) {
+          @case ('tabs_cards') {
+            <lib-cards-tabs [mode]="mode()"  (actionEmitter)="handleWidgetEvents($event)" [chart_config_input]="{title:'Vulnerability By Status' , data:part}"></lib-cards-tabs>
+          }
+          @case('bar'){
+            <lib-chart-bar [mode]="mode()" (actionEmitter)="handleWidgetEvents($event)" [chart_config_input]="{title:'Corrective Procedures By Status' , data:part}"></lib-chart-bar>
+          }
+          @case('kri'){
+            <lib-chart-kri [mode]="mode()" (actionEmitter)="handleWidgetEvents($event)" [chart_config_input]="{title:'Kri Chart Title Test' , data:part}"></lib-chart-kri>
+          }
+          @case('dounght'){
+            <lib-dounghnut-chart  [mode]="mode()" (actionEmitter)="handleWidgetEvents($event)" [chart_config_input]="{title:'Vulnerability By Status' , data:part}"></lib-dounghnut-chart>
+          }
+          @case ('line') {
+            <lib-line-chart  [mode]="mode()" (actionEmitter)="handleWidgetEvents($event)" [chart_config_input]="{title:'Vulnerability By Status' , data:part}"></lib-line-chart>
+          }
+          @case('table'){
+            <lib-table-dashboard  [mode]="mode()" (actionEmitter)="handleWidgetEvents($event)" [chart_config_input]="{title:'Vulnerability By Status' , data:part}" ></lib-table-dashboard>
+          }
+          @case('list'){
+            <lib-list-dashboard [mode]="mode()" (actionEmitter)="handleWidgetEvents($event)" [chart_config_input]="{title:'Vulnerability By Status' , data:part}" ></lib-list-dashboard>
+          }
+          @case('text'){
+            <lib-text-dashboard [mode]="mode()" (actionEmitter)="handleWidgetEvents($event)" [chart_config_input]="{title:'Vulnerability By Status' , data:part}" ></lib-text-dashboard>
+          }
+          @case('customComplianceSummaryStatus'){
+            <lib-compliance-status-chart [mode]="mode()" (actionEmitter)="handleWidgetEvents($event)" [chart_config_input]="{title:'Summary Status' , data:part}" ></lib-compliance-status-chart>
+          }
+          @case('customComplianceAssessmentSummaryReport'){
+            <lib-compliance-assessment-chart [mode]="mode()"  (actionEmitter)="handleWidgetEvents($event)" [chart_config_input]="{title:'Assessment Summary Report' , data:part}" ></lib-compliance-assessment-chart>
+          }
+
+          @case('customComplianceStatusDistributionByOU'){
+            <lib-custom-compliance-chart-by-ou [mode]="mode()"    [chart_config_input]="{title:'Assessment Summary Report' , data:part}" ></lib-custom-compliance-chart-by-ou>
+          }
+
+          @case('customComplianceAssessmentTreeReport'){
+            <lib-assessments-details [mode]="mode()"    [chart_config_input]="{title:'Assessment Summary Report' , data:part}" ></lib-assessments-details>
+          }
+        }
+
+      </div>
+    }
+  </div>
+}
+
+
+
+
+
+<div class="action_dailog cursor-auto">
+  <p-dialog [draggable]="false" [position]="'right'" header="Edit Profile" [modal]="false" [(visible)]="setting_visible"
+   styleClass="max-w-[45rem] min-h-[20rem]">
+
+    <ng-template pTemplate="header">
+    </ng-template>
+
+    <div class="content">
+      <form [formGroup]="textForm" action="
+      ">
+
+        <div class="mb-6">
+          <lib-input-text [inputLabel]="'Title'" [control]="textForm.get('title')!" [placeholder]="'Enter Title'  "
+            [controlNameInput]="'title' "></lib-input-text>
+        </div>
+           <div class="mb-6">
+          <lib-input-text [inputLabel]="'TitleAr'" [control]="textForm.get('titleAr')!" [placeholder]="'Enter Title Ar'  "
+            [controlNameInput]="'titleAr' "></lib-input-text>
+        </div>
+
+        <div class="mb-6">
+          <p class="mb-2 text-[#344054] font-medium">Content En</p>
+          <lib-editor [height]="'250px'" [controlNameInput]="'content' " [control]="textForm.get('content')!"></lib-editor>
+        </div>
+
+
+
+        <div class="mb-6">
+          <p class="mb-2 text-[#344054] font-medium">Content Ar</p>
+          <lib-editor [height]="'250px'" [controlNameInput]="'contentAr' " [control]="textForm.get('contentAr')!"></lib-editor>
+        </div>
+
+
+
+
+        <div class="flex items-center justify-end gap-4">
+          <div>
+            <button (click)="setting_visible = false" class="px-3 py-2 rounded-lg border border-gray_light font-medium">
+              Cancel
+            </button>
+          </div>
+          <div class="action_btn">
+
+            <button (click)="saveSetting()"  class="btn ">
+              Save
+            </button>
+          </div>
+        </div>
+
+
+
+      </form>
+    </div>
+
+  </p-dialog>
+</div>

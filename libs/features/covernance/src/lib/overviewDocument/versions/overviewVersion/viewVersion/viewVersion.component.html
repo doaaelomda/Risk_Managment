@@ -1,0 +1,82 @@
+<div class="grid grid-cols-12 gap-4">
+  <div [ngClass]="hasActions ? 'col-span-8' : 'col-span-12'">
+      <h3 class="text-progress">{{ 'RISK_VIEW.MAIN_INFORMATION' | translate }}</h3>
+      <div class="status my-3">
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          @if(versionData?.name?.length){
+          <div class=" py-3 px-6">
+            <div [ngClass]="versionData?.govDocumentContentTypes?.length? 'border-Assessment' : ''">
+              <h3 class="text-gray-800 font-medium text[16px]  mb-2">{{ 'VERSIONS.VersionName' | translate }}</h3>
+              <div class="flex gap-4">
+                <span class="paraggarpStauts"> {{versionData?.name || '-'}}</span>
+              </div>
+            </div>
+          </div>
+          }
+          @if(versionData?.govDocumentContentTypes?.length){
+          <div class=" py-3">
+            <div [ngClass]="versionData?.govDocumentVersionTypeStatusName?.length ? 'border-Assessment' : ''">
+              <h3 class="text-gray-800 font-medium text[16px]  mb-2">{{ 'GOV_DOC.govDocumentVersionTypeName' | translate
+                }}</h3>
+              <div class="flex gap-4">
+                @for(type of versionData?.govDocumentContentTypes ; track type){
+                <span class="badge">{{type?.name}}</span>
+                }
+              </div>
+            </div>
+          </div>
+          }
+          @if(versionData?.govDocumentVersionTypeStatusName?.length){
+          <div class=" py-3 px-6">
+            <h3 class="text-gray-800 font-medium text[16px]  mb-2">{{ 'GOV_DOC.versionStatus' | translate }}</h3>
+            <div class="flex gap-4">
+              <span class="badge" [ngClass]="versionData?.govDocumentVersionTypeStatusColor">{{versionData?.govDocumentVersionTypeStatusName }}</span>
+            </div>
+
+          </div>
+          }
+        </div>
+
+      </div>
+    <div class="">
+      <h3 class="text-progress ">{{ 'MAIN_INFO.effectiveDate' | translate }}</h3>
+
+      <div class="status my-3">
+
+        <div class="grid grid-cols-12">
+          @if(versionData?.effectiveDateFrom){
+          <div class="col-span-6 py-3 px-6">
+            <div class="border-Assessment">
+              <h3 class="text-gray-800 font-medium text[16px]  mb-2 ">{{'VERSIONS.From' | translate}}</h3>
+              <div class="flex gap-4 items-center">
+                <div class="text-gray-800 font-medium text[16px]  mb-2 gap-2 flex">
+                  <img src="images/icons/calendar.svg" alt="">
+                  <span class="paraggarpStauts">{{versionData?.effectiveDateFrom | date: 'MMM d, y' }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          }
+          @if(versionData?.effectiveDateTo){
+          <div class="col-span-6 py-3">
+            <h3 class="text-gray-800 font-medium text[16px]  mb-2">{{'VERSIONS.To' | translate}}</h3>
+            <div class="flex gap-4 items-center">
+              <div class="text-gray-800 font-medium text[16px]  mb-2 gap-2 flex"> <img src="images/icons/calendar.svg"
+                  alt="">
+                <span class="paraggarpStauts">{{versionData?.effectiveDateTo | date: 'MMM d, y' }}</span>
+
+              </div>
+            </div>
+          </div>
+          }
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div [hidden]="!hasActions" class="col-span-4 ">
+      <lib-system-actions (foundActionEmitter)="onFoundAction($event)" [dataEntityTypeId]="87" [isWF]="false" [entityId]="docId">
+      </lib-system-actions>
+  </div>
+</div>

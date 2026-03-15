@@ -1,0 +1,109 @@
+{
+  "name": "gfw-portal",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/gfw-portal/src",
+  "tags": [],
+  "targets": {
+  "build": {
+  "executor": "@angular-builders/custom-webpack:browser",
+  "outputs": ["{options.outputPath}"],
+  "options": {
+    "customWebpackConfig": {
+      "path": "apps/gfw-portal/webpack.config.js"
+    },
+    "outputPath": "dist/apps/gfw-portal",
+    "index": "apps/gfw-portal/src/index.html",
+    "main": "apps/gfw-portal/src/main.ts",
+    "polyfills": ["zone.js"],
+    "tsConfig": "apps/gfw-portal/tsconfig.app.json",
+    "inlineStyleLanguage": "scss",
+    "assets": [
+      {
+        "glob": "**/*",
+        "input": "apps/gfw-portal/public"
+      }
+    ],
+    "styles": [
+      "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
+      "node_modules/primeng/resources/primeng.min.css",
+      "apps/gfw-portal/src/styles.scss"
+    ],
+    "scripts": []
+  },
+  "configurations": {
+    "production": {
+      "budgets": [
+        {
+          "type": "initial",
+          "maximumWarning": "10mb",
+          "maximumError": "10mb"
+        },
+        {
+          "type": "anyComponentStyle",
+          "maximumWarning": "5mb",
+          "maximumError": "5mb"
+        }
+      ],
+      "outputHashing": "all",
+       "fileReplacements": [
+            {
+              "replace": "apps/gfw-portal/env/dev.env.ts",
+              "with": "apps/gfw-portal/env/prod.env.ts"
+            }
+          ],
+          "optimization": true,
+          "aot": true,
+      "buildOptimizer": true
+    },
+
+    "development": {
+        "fileReplacements": [
+            {
+              "replace": "apps/gfw-portal/env/prod.env.ts",
+              "with": "apps/gfw-portal/env/dev.env.ts"
+            }
+          ],
+      "buildOptimizer": false,
+      "optimization": false,
+      "vendorChunk": true,
+      "extractLicenses": false,
+      "sourceMap": true,
+      "namedChunks": true
+    }
+  },
+  "defaultConfiguration": "production"
+},
+    "serve": {
+      "continuous": true,
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "gfw-portal:build:production"
+        },
+        "development": {
+          "buildTarget": "gfw-portal:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "gfw-portal:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "serve-static": {
+      "continuous": true,
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "gfw-portal:build",
+        "spa": true
+      }
+    }
+  }
+}

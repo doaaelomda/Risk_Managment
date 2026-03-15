@@ -1,0 +1,39 @@
+.cdk-drag {
+  cursor: grabbing !important;
+}
+
+.cdk-drag.cdk-drag-dragging {
+  cursor: grabbing !important;
+}
+
+.dashboard_container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 18px;
+    --dashboard-gap: 18px;
+}
+
+.dashboard-item {
+  box-sizing: border-box;
+}
+
+/* 3 columns */
+.w-33 {
+  width: calc(33.3333% - (2 * var(--dashboard-gap) / 3));
+}
+
+/* 2 columns */
+.w-50 {
+  width: calc(50% - (1 * var(--dashboard-gap) / 2));
+}
+
+/* 1.5 columns */
+.w-66 {
+  width: calc(66.6667% - (1 * var(--dashboard-gap) / 1.5));
+}
+
+/* full width */
+.w-100 {
+  width: 100%;
+}

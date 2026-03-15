@@ -1,0 +1,28 @@
+.view_container{
+  @apply p-4 rounded-lg border border-gray_light;
+}
+
+.label {
+  color: #667085;
+  font-size: 14px;
+  font-weight: 500;
+}
+.value {
+  color: #344054;
+  font-size: 16px;
+  font-weight: 500;
+}
+.notf_content {
+  color: #475467;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid #D0D5DD;
+  padding: 26px 16px;
+  background-color: #FCFCFD;
+  border-radius: 10px;
+}
+.item {
+  flex: 0 0 calc(25% - 0.75rem);   
+}
+
+

@@ -1,0 +1,55 @@
+@if(!loading){
+  @if(items.length){
+  <p-tree
+  styleClass="node_wrapper p-0"
+  class="w-full"
+  [value]="items"
+  [draggableNodes]="true"
+  [droppableNodes]="true"
+  draggableScope="self"
+  droppableScope="self"
+  (onNodeDrop)="handleDrop($event)"
+>
+  <ng-template let-node pTemplate="default">
+    <button
+      class="flex gap-2 items-start w-full link"
+      [ngClass]="{
+        selected_node: node?.id === selectedNode?.id || node.active
+      }"
+      (click)="handleNodeClick(node)"
+    >
+      <p class="nodeName flex-1 text-start" [title]="node?.name">
+        <i class="fi fi-rr-layers layers-ico"></i>
+        {{ node?.name }}
+      </p>
+      <div class="flex items-center gap-2">
+        @if(node?.children?.length){
+        <button (click)="toggleNode($event, node)" class="iconActionWrapper">
+          <i
+            class="fi fi-rr-angle-small-{{ node.expanded ? 'up' : 'down' }}"
+          ></i>
+        </button>
+        }
+      </div>
+    </button>
+  </ng-template>
+</p-tree>
+
+}@else{
+    <div class="flex flex-col gap-2 items-center">
+    <img src="images/no-document.svg" alt="empty-state" />
+        <p class="text-gray-900 font-semibold text-[18px] mb-1">{{'ATTACHMENT.NOTUPLOADED' |translate}}</p>
+    <p class="text-gray-500 font-normal text-[16px] mb-1">{{'ATTACHMENT.UPLOADFILES' |translate}}</p>
+  </div>
+}
+}@else {
+  <div class="flex flex-col gap-4">
+    <p-skeleton height="4rem"></p-skeleton>
+    <p-skeleton height="4rem"></p-skeleton>
+    <p-skeleton height="4rem"></p-skeleton>
+    <p-skeleton height="4rem"></p-skeleton>
+    <p-skeleton height="4rem"></p-skeleton>
+    <p-skeleton height="4rem"></p-skeleton>
+    <p-skeleton height="4rem"></p-skeleton>
+  </div>
+}

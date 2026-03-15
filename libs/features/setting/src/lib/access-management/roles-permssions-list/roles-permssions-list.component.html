@@ -1,0 +1,51 @@
+<section>
+  <lib-new-table
+    [loading]="loadingState"
+    [table_data]="dataList"
+    [table_title]="table_name"
+    [badge_title]="badge_name"
+    [dataViewId]="7"
+    [entityID_Name]="'roleId'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="action_items"
+    (currentActionRow)="setSelectedRow($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{ module: 'ACCESSMANAGEMNET', feature: 'ROLES', action: 'VIEW' }"
+  >
+   @if(_PermissionSystemService.can('ACCESSMANAGEMNET' , 'ROLES' , 'ADD')){
+    <button
+      [routerLink]="'addrole'"
+      addition_action
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+    >
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'SETTING.ADD_NEW_ROLE' | translate }}</span>
+    </button>
+  }
+  </lib-new-table>
+</section>
+
+<p-menu #menu [model]="itemsMenu" [appendTo]="'body'" [popup]="true" />
+<lib-delete-confirm-popup
+  [titleDelete]="'SETTING.DELETE_ROLE_TITLE'"
+  [descriptionDelete]="'SETTING.DELETE_ROLE_DESC'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteRole()"
+        [loading]="loadDelted"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

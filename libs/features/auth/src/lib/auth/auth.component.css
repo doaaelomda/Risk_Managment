@@ -1,0 +1,84 @@
+:host ::ng-deep .p-carousel-indicator {
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: #d1d5db;
+  border-radius: 50%;
+  margin: 0 0.25rem;
+  opacity: 0.7;
+}
+:host ::ng-deep .p-carousel-indicator.p-highlight {
+  background-color: #d1d5db;
+  opacity: 1;
+}
+::ng-deep .custom-carousel .p-carousel-indicators {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+::ng-deep .custom-carousel .p-carousel-prev {
+  position: absolute;
+  bottom: 1rem;
+  right: 30%;
+  color: white;
+  width: 0.5rem;
+}
+::ng-deep .custom-carousel .p-carousel-next {
+  position: absolute;
+  bottom: 1rem;
+  right: 19%;
+  color: white;
+  width: 0.5rem;
+}
+::ng-deep .card-small >div {
+  width: 17.9375rem;
+  height: 5.875rem;
+  border-bottom-right-radius: 0.625rem;
+  border-bottom-left-radius: 0.625rem;
+  background-color: rgba(247, 250, 252, 1) !important;
+}
+::ng-deep p-carousel .p-card-body {
+  padding: 0;
+}
+::ng-deep p-carousel .p-card-content {
+  padding: 0.9375rem;
+}
+
+.-right-0\.2 {
+  right: 0px;
+}
+
+form input,
+::ng-deep p-password input,
+::ng-deep p-button form .p-button {
+  width: 22.5rem;
+  height: 2.75rem;
+  box-shadow: 0rem 0.0625rem 0.125rem 0rem rgba(16, 24, 40, 0.05);
+  border: 0.0625rem solid rgba(208, 213, 221, 1);
+}
+form .form_group {
+  margin-bottom: 20px;
+}
+::ng-deep p-button .p-button {
+  width: 11.75rem;
+  height: 2.75rem;
+  margin-bottom: 1.1875rem;
+}
+.login_form input:focus {
+  border: 0.0625rem solid rgba(189, 180, 254, 1) !important;
+  box-shadow: 0rem 0rem 0rem 0.25rem rgba(244, 235, 255, 1);
+  outline: none !important;
+}
+:host ::ng-deep .p-password input:focus {
+  border: 0.0625rem solid rgba(189, 180, 254, 1) !important;
+  box-shadow: 0rem 0rem 0rem 0.25rem rgba(244, 235, 255, 1);
+  outline: none !important;
+}
+
+input:not(:placeholder-shown) {
+  background-color: #fff !important;
+}
+
+:host ::ng-deep .p-password input:not(:placeholder-shown) {
+  background-color: #fff !important;
+}

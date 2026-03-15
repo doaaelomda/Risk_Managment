@@ -1,0 +1,26 @@
+<div class="header mb-6">
+  <div class="title flex items-center justify-between">
+    @if(loadingData){
+    <p-skeleton width="15rem" styleClass="mb-2" />
+    }@else {
+    <h2 class="text-2xl font-semibold text-gray-900 ">{{ data?.name }}</h2>
+    }
+
+    @if(data?.isActive ){
+    <div class="flex items-center gap-2">
+      <p class="m-0 font-medium text-gray_color">
+        {{ 'NOTIFICATION_SETTING.ACTIVE' | translate }}:
+      </p>
+      <span class="badge">{{
+        data?.isActive ? ('NOTIFICATION_SETTING.ACTIVE' | translate) : ('NOTIFICATION_SETTING.INACTIVE' | translate)
+        }}</span>
+    </div>
+    }
+  </div>
+
+</div>
+
+<lib-shared-tabs [tabs]="tabs" [permissionFeature]="{module:'QUESTIONNAIRES' , feature:'TEMPLATES'}"
+  [hasAttachments]="false" [hasComments]="false"></lib-shared-tabs>
+
+<router-outlet></router-outlet>

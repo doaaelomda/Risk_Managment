@@ -1,0 +1,581 @@
+<section>
+  <div class="action_section mb-6">
+    <p-accordion class="w-full" [activeIndex]="0">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div class="flex items-center gap-4">
+            <h2>{{ 'RISK_MANAGMENT.MAIN_INFO' | translate }}</h2>
+            <!-- @if(showErrorResponsbility){
+            <i pTooltip="Please complete all required fields." tooltipPosition="top"
+              class="fi text-danger_color fi-rr-info"></i>
+            } -->
+          </div>
+        </ng-template>
+
+        <form [formGroup]="controlInformation" class="grid grid-cols-12 gap-6">
+          <div class="col-span-12 lg:col-span-6">
+            <lib-input-text [placeholder]="'MAIN_INFO.Code' | translate"
+              [control]="controlInformation.get('controlCode')!" [inputLabel]="'MAIN_INFO.Code' | translate"
+              [controlNameInput]="'controlCode'">
+            </lib-input-text>
+          </div>
+          <div class="col-span-12 lg:col-span-6">
+            <lib-input-text [placeholder]="'MAIN_INFO.NameEnglish' | translate" [validations]="validationsTitle"
+              [control]="controlInformation.get('name')!" [inputLabel]="'MAIN_INFO.NameEnglish' | translate"
+              [controlNameInput]="'name'">
+            </lib-input-text>
+          </div>
+
+          <div class="col-span-12 lg:col-span-6">
+            <lib-input-text [placeholder]="'MAIN_INFO.Arname' | translate" [control]="controlInformation.get('nameAr')!"
+              [inputLabel]="'MAIN_INFO.Arname' | translate" [controlNameInput]="'nameAr'">
+            </lib-input-text>
+          </div>
+
+          <!-- <div class="col-span-12 lg:col-span-6">
+            <lib-input-text [placeholder]="'MAIN_INFO.Objective' | translate"
+              [control]="controlInformation.get('objective')!" [inputLabel]="'MAIN_INFO.Objective' | translate"
+              [controlNameInput]="'objective'">
+            </lib-input-text>
+          </div> -->
+
+          <!-- <div class="col-span-12">
+            <lib-textarea-ui [placeholder]="'MAIN_INFO.DescriptionArabic' | translate"
+              [control]="controlInformation.get('fullControlTextAr')!"
+              [inputLabel]="'MAIN_INFO.DescriptionArabic' | translate" [controlNameInput]="'fullControlTextAr'">
+            </lib-textarea-ui>
+            {{ 'RISK_ACTION.CHARACTERS_LEFT' | translate:{ count: 275-
+            controlInformation.get('fullControlTextAr')?.value?.length } }}
+          </div>
+
+          <div class="col-span-12">
+            <lib-textarea-ui [placeholder]="'MAIN_INFO.DescriptionEnglish' | translate"
+              [control]="controlInformation.get('fullControlText')!"
+              [inputLabel]="'MAIN_INFO.DescriptionEnglish' | translate" [controlNameInput]="'fullControlText'">
+            </lib-textarea-ui>
+            {{ 'RISK_ACTION.CHARACTERS_LEFT' | translate:{ count: 275-
+            controlInformation.get('fullControlText')?.value?.length } }}
+          </div> -->
+
+          <!-- <div class="col-span-12">
+            <lib-textarea-ui [placeholder]="'MAIN_INFO.EvidenceDescription' | translate"
+              [control]="controlInformation.get('evidenceDescription')!"
+              [inputLabel]="'MAIN_INFO.EvidenceDescription' | translate" [controlNameInput]="'evidenceDescription'">
+            </lib-textarea-ui>
+            {{ 'RISK_ACTION.CHARACTERS_LEFT' | translate:{ count: 275-
+            controlInformation.get('evidenceDescription')?.value?.length } }}
+          </div> -->
+
+          <div class="col-span-12 lg:col-span-6">
+            <lib-input-text [placeholder]="'MAIN_INFO.Reference' | translate"
+              [control]="controlInformation.get('referenceNumber')!" [inputLabel]="'MAIN_INFO.Reference' | translate"
+              [controlNameInput]="'referenceNumber'">
+            </lib-input-text>
+          </div>
+
+          <!-- <div class="col-span-12 lg:col-span-6">
+            <lib-input-text [placeholder]="'MAIN_INFO.Scope' | translate" [control]="controlInformation.get('scope')!"
+              [inputLabel]="'MAIN_INFO.Scope' | translate" [controlNameInput]="'scope'">
+            </lib-input-text>
+          </div> -->
+
+          <!-- <div class="col-span-12 lg:col-span-6">
+            <lib-ui-dropdown [placeholder]="'MAIN_INFO.GovRegulatorID' | translate"
+              [label]="'MAIN_INFO.GovRegulatorID'|translate" [control]="controlInformation.get('govRegulatorID')!"
+              [options]="govRegulator" [optionLabel]="'label'" [optionValue]="'id'"
+              [formControlNameInput]="'govRegulatorID'">
+            </lib-ui-dropdown>
+          </div> -->
+          <!-- <div class="col-span-12 lg:col-span-6">
+            <lib-ui-dropdown [placeholder]="'MAIN_INFO.DocumentType' | translate"
+              [label]="'MAIN_INFO.DocumentType' | translate" [control]="controlInformation.get('govDocumentTypeID')!"
+              [options]="DocumentTypeOptions" [optionLabel]="'label'" [optionValue]="'id'"
+              [formControlNameInput]="'govDocumentTypeID'">
+            </lib-ui-dropdown>
+          </div> -->
+          <!-- <div class="col-span-12 lg:col-span-6">
+            <lib-ui-dropdown [placeholder]="'MAIN_INFO.DocumentName' | translate"
+              [label]="'MAIN_INFO.DocumentName' | translate" [control]="controlInformation.get('govDocumentID')!"
+              [options]="DocumentNames" [optionLabel]="'label'" [optionValue]="'id'"
+              [formControlNameInput]="'govDocumentID'">
+            </lib-ui-dropdown>
+          </div> -->
+
+          <div class="col-span-12 lg:col-span-6">
+            <lib-ui-dropdown [placeholder]="
+                'NEW_CONTROL.fields.GovControlTypeID.placeholder' | translate
+              " [label]="'NEW_CONTROL.fields.GovControlTypeID.label' | translate"
+              [control]="controlInformation.get('govControlTypeId')!" [options]="govControlTypeOptions"
+              [optionLabel]="'label'" [optionValue]="'id'" [formControlNameInput]="'govControlTypeId'">
+            </lib-ui-dropdown>
+          </div>
+
+          <div class="col-span-12 lg:col-span-6">
+            <lib-ui-dropdown [placeholder]="
+                'NEW_CONTROL.fields.ControlCategoryID.placeholder' | translate
+              " [label]="'NEW_CONTROL.fields.ControlCategoryID.label' | translate"
+              [control]="controlInformation.get('govControlCategoryId')!" [options]="categories"
+              [optionLabel]="'label'" [optionValue]="'id'" [formControlNameInput]="'govControlCategoryId'">
+            </lib-ui-dropdown>
+          </div>
+
+          <div class="col-span-12 lg:col-span-6 flex items-center gap-4">
+            <p>{{"NEW_CONTROL.fields.IsApplicable.label"|translate}}</p>
+            <p-inputSwitch formControlName="isApplicable" />
+          </div>
+        </form>
+      </p-accordionTab>
+    </p-accordion>
+  </div>
+
+  <div class="action_section mb-6">
+    <p-accordion class="w-full" [activeIndex]="0">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div class="flex items-center gap-4">
+            <h2>{{ 'NEW_CONTROL.sections.TEXT_SCOPE' | translate }}</h2>
+            <!-- @if(showErrorResponsbility){
+            <i pTooltip="Please complete all required fields." tooltipPosition="top"
+              class="fi text-danger_color fi-rr-info"></i>
+            } -->
+          </div>
+        </ng-template>
+
+        <form [formGroup]="scopeTextForm" class="grid grid-cols-12 gap-6">
+
+          <div class="col-span-12">
+            <lib-textarea-ui [placeholder]="'NEW_CONTROL.fields.FullControlText.placeholder' | translate"
+              [control]="scopeTextForm.get('fullControlText')!"
+              [inputLabel]="'NEW_CONTROL.fields.FullControlText.label' | translate"
+              [controlNameInput]="'fullControlText'">
+            </lib-textarea-ui>
+            {{ 'RISK_ACTION.CHARACTERS_LEFT' | translate:{ count: 275-
+            scopeTextForm.get('fullControlText')?.value?.length } }}
+          </div>
+          <div class="col-span-12">
+            <lib-textarea-ui [placeholder]="'NEW_CONTROL.fields.FullControlTextAr.placeholder' | translate"
+              [control]="scopeTextForm.get('fullControlTextAr')!"
+              [inputLabel]="'NEW_CONTROL.fields.FullControlTextAr.label' | translate"
+              [controlNameInput]="'fullControlTextAr'">
+            </lib-textarea-ui>
+            {{ 'RISK_ACTION.CHARACTERS_LEFT' | translate:{ count: 275-
+            scopeTextForm.get('fullControlText')?.value?.length } }}
+          </div>
+          <div class="col-span-12">
+            <lib-textarea-ui [placeholder]="'NEW_CONTROL.fields.EvidenceDescription.placeholder' | translate"
+              [control]="scopeTextForm.get('evidenceDescription')!"
+              [inputLabel]="'NEW_CONTROL.fields.EvidenceDescription.label' | translate"
+              [controlNameInput]="'evidenceDescription'">
+            </lib-textarea-ui>
+            {{ 'RISK_ACTION.CHARACTERS_LEFT' | translate:{ count: 275-
+            scopeTextForm.get('evidenceDescription')?.value?.length } }}
+          </div>
+          <div class="col-span-12 lg:col-span-6">
+            <lib-input-text [placeholder]="'NEW_CONTROL.fields.Objective.placeholder' | translate"
+              [control]="scopeTextForm.get('objective')!"
+              [inputLabel]="'NEW_CONTROL.fields.Objective.label' | translate" [controlNameInput]="'objective'">
+            </lib-input-text>
+          </div>
+          <div class="col-span-12 lg:col-span-6">
+            <lib-input-text [placeholder]="'NEW_CONTROL.fields.ObjectiveAr.placeholder' | translate"
+              [control]="scopeTextForm.get('objectiveAr')!"
+              [inputLabel]="'NEW_CONTROL.fields.ObjectiveAr.label' | translate" [controlNameInput]="'objectiveAr'">
+            </lib-input-text>
+          </div>
+          <div class="col-span-12 lg:col-span-6">
+            <lib-input-text [placeholder]="'NEW_CONTROL.fields.Scope.placeholder' | translate"
+              [control]="scopeTextForm.get('scope')!" [inputLabel]="'NEW_CONTROL.fields.Scope.label' | translate"
+              [controlNameInput]="'scope'">
+            </lib-input-text>
+          </div>
+
+
+
+
+
+
+
+        </form>
+      </p-accordionTab>
+    </p-accordion>
+  </div>
+
+
+
+  <div class="action_section mb-6">
+    <p-accordion class="w-full" [activeIndex]="0">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div class="flex items-center gap-4">
+            <h2>{{ 'NEW_CONTROL.sections.DOCUMENTS' | translate }}</h2>
+            <!-- @if(showErrorResponsbility){
+            <i pTooltip="Please complete all required fields." tooltipPosition="top"
+              class="fi text-danger_color fi-rr-info"></i>
+            } -->
+          </div>
+        </ng-template>
+
+        <form [formGroup]="documentRefrenceForm" class="grid grid-cols-12 gap-6">
+
+          @if(controlInformation.get('govControlTypeId')?.value === 1){
+
+            <div class="col-span-12 lg:col-span-6">
+              <lib-ui-dropdown [placeholder]="'NEW_CONTROL.fields.GovRegulatorID.placeholder' | translate"
+                [label]="'NEW_CONTROL.fields.GovRegulatorID.label'|translate"
+                [control]="documentRefrenceForm.get('govRegulatorID')!" [options]="govRegulator" [optionLabel]="'label'"
+                [optionValue]="'id'" [formControlNameInput]="'govRegulatorID'">
+              </lib-ui-dropdown>
+            </div>
+
+            <div class="col-span-12 lg:col-span-6">
+              <lib-ui-dropdown [placeholder]="'NEW_CONTROL.fields.ComplianceDocumentID.placeholder' | translate"
+                [label]="'NEW_CONTROL.fields.ComplianceDocumentID.label' | translate"
+                [control]="documentRefrenceForm.get('complianceDocumentID')!" [options]="complianceDocuments"
+                [optionLabel]="'label'" [optionValue]="'id'" [formControlNameInput]="'complianceDocumentID'">
+              </lib-ui-dropdown>
+            </div>
+          }@else {
+
+            <div class="col-span-12 lg:col-span-6">
+              <lib-ui-dropdown [placeholder]="'NEW_CONTROL.fields.GovDocumentID.placeholder' | translate"
+                [label]="'NEW_CONTROL.fields.GovDocumentID.label' | translate"
+                [control]="documentRefrenceForm.get('govDocumentID')!" [options]="DocumentNames" [optionLabel]="'label'"
+                [optionValue]="'id'" [formControlNameInput]="'govDocumentID'">
+              </lib-ui-dropdown>
+            </div>
+
+
+
+            <div class="col-span-12 lg:col-span-6">
+              <lib-ui-dropdown [placeholder]="'NEW_CONTROL.fields.GovDocumentTypeID.placeholder' | translate"
+                [label]="'NEW_CONTROL.fields.GovDocumentTypeID.label' | translate"
+                [control]="documentRefrenceForm.get('govDocumentTypeID')!" [options]="DocumentTypeOptions"
+                [optionLabel]="'label'" [optionValue]="'id'" [formControlNameInput]="'govDocumentTypeID'">
+              </lib-ui-dropdown>
+            </div>
+          }
+
+
+
+
+
+
+
+
+        </form>
+      </p-accordionTab>
+    </p-accordion>
+  </div>
+
+  <div class="action_section mb-6">
+    <p-accordion class="w-full" [activeIndex]="0">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div class="flex items-center gap-4">
+            <h2>{{ 'RISK_MANAGMENT.Responsibility_Ownership' | translate }}</h2>
+            <!-- @if(showErrorResponsbility){
+            <i
+              pTooltip="Please complete all required fields."
+              tooltipPosition="top"
+              class="fi text-danger_color fi-rr-info"
+            ></i>
+            } -->
+          </div>
+        </ng-template>
+
+        <form [formGroup]="Responsibility_Ownership" class="grid grid-cols-12 gap-6">
+          <div class="col-span-12 lg:col-span-6">
+            <lib-role-dropdown [placeholder]="'ASSESSMENT_RISK.REVIEWR'" [label]="'RISK_MANAGMENT.ResponsibleRole'"
+              [control]="Responsibility_Ownership.get('responsibleRoleID')!" [options]="Roles" [optionLabel]="'label'"
+              [optionValue]="'id'" [formControlNameInput]="'responsibleRoleID'">
+            </lib-role-dropdown>
+          </div>
+
+          <div class="col-span-12 lg:col-span-6">
+            <lib-user-dropdown [placeholder]="'ASSESSMENT_RISK.REVIEWR'" [label]="'RISK_MANAGMENT.ResponsibleUser'"
+              [control]="Responsibility_Ownership.get('responsibleUserID')!" [options]="manger" optionLabel="name"
+              optionValue="id" [formControlNameInput]="'responsibleUserID'">
+            </lib-user-dropdown>
+          </div>
+          <div class="col-span-12 lg:col-span-6">
+            <lib-tree-select-ui [nodes_input]="organizationUnitOptions"
+              [placeholder]="'NEW_CONTROL.fields.OrganizationalUnitID.placeholder' | translate"
+              [label]="'NEW_CONTROL.fields.OrganizationalUnitID.label' | translate"
+              [control]="Responsibility_Ownership.get('organizationalUnitID')!"
+              [formControlNameInput]="'organizationalUnitID'">
+            </lib-tree-select-ui>
+          </div>
+        </form>
+      </p-accordionTab>
+    </p-accordion>
+  </div>
+
+
+  <!-- compliance ststuis -->
+  <div class="action_section mb-6">
+    <p-accordion class="w-full" [activeIndex]="0">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div class="flex items-center gap-4">
+            <h2>{{ 'NEW_CONTROL.sections.COMPLIANCE' | translate }}</h2>
+            <!-- @if(showErrorResponsbility){
+            <i
+              pTooltip="Please complete all required fields."
+              tooltipPosition="top"
+              class="fi text-danger_color fi-rr-info"
+            ></i>
+            } -->
+          </div>
+        </ng-template>
+
+        <form [formGroup]="complianceStatusForm" class="grid grid-cols-12 gap-6">
+
+          <div class="col-span-12 lg:col-span-6">
+            <lib-ui-dropdown [placeholder]="'NEW_CONTROL.fields.ComplianceStatusTypeID.placeholder' | translate"
+              [label]="'NEW_CONTROL.fields.ComplianceStatusTypeID.label'|translate"
+              [control]="complianceStatusForm.get('complianceStatusTypeID')!" [options]="ControlComplianceStatusType"
+              [optionLabel]="'label'" [optionValue]="'id'" [formControlNameInput]="'complianceStatusTypeID'">
+            </lib-ui-dropdown>
+          </div>
+
+          <div class="col-span-12 lg:col-span-6">
+            <lib-date-packer [placeholder]="'NEW_CONTROL.fields.ComplianceNextTestDate.placeholder' | translate"
+              [inputLabel]="'NEW_CONTROL.fields.ComplianceNextTestDate.label'|translate"
+              [control]="complianceStatusForm.get('complianceNextTestDate')!"
+              [controlNameInput]="'complianceNextTestDate'">
+            </lib-date-packer>
+          </div>
+          <div class="col-span-12 lg:col-span-6">
+            <lib-date-packer [placeholder]="'NEW_CONTROL.fields.ComplianceExpiryDate.placeholder' | translate"
+              [inputLabel]="'NEW_CONTROL.fields.ComplianceExpiryDate.label'|translate"
+              [control]="complianceStatusForm.get('complianceExpiryDate')!" [controlNameInput]="'complianceExpiryDate'">
+            </lib-date-packer>
+          </div>
+
+
+
+        </form>
+      </p-accordionTab>
+    </p-accordion>
+  </div>
+  <!-- effectiviness -->
+  <div class="action_section mb-6">
+    <p-accordion class="w-full" [activeIndex]="0">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div class="flex items-center gap-4">
+            <h2>{{ 'NEW_CONTROL.sections.EFFECTIVENESS' | translate }}</h2>
+            <!-- @if(showErrorResponsbility){
+            <i
+              pTooltip="Please complete all required fields."
+              tooltipPosition="top"
+              class="fi text-danger_color fi-rr-info"
+            ></i>
+            } -->
+          </div>
+        </ng-template>
+
+        <form [formGroup]="effectivinessStatusForm" class="grid grid-cols-12 gap-6">
+
+          <div class="col-span-12 lg:col-span-6">
+            <lib-ui-dropdown [placeholder]="'NEW_CONTROL.fields.EffectivenessStatusTypeID.placeholder' | translate"
+              [label]="'NEW_CONTROL.fields.EffectivenessStatusTypeID.label'|translate"
+              [control]="effectivinessStatusForm.get('effectivenessStatusTypeID')!" [options]="effectivnessStatusTypes"
+              [optionLabel]="'label'" [optionValue]="'id'" [formControlNameInput]="'effectivenessStatusTypeID'">
+            </lib-ui-dropdown>
+          </div>
+
+          <div class="col-span-12 lg:col-span-6">
+            <lib-date-packer [placeholder]="'NEW_CONTROL.fields.EffectivenessNextTestDate.placeholder' | translate"
+              [inputLabel]="'NEW_CONTROL.fields.EffectivenessNextTestDate.label'|translate"
+              [control]="effectivinessStatusForm.get('effectivenessNextTestDate')!"
+              [controlNameInput]="'effectivenessNextTestDate'">
+            </lib-date-packer>
+          </div>
+
+
+
+
+        </form>
+      </p-accordionTab>
+    </p-accordion>
+  </div>
+  <!-- Maturity -->
+  <div class="action_section mb-6">
+    <p-accordion class="w-full" [activeIndex]="0">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div class="flex items-center gap-4">
+            <h2>{{ 'NEW_CONTROL.sections.MATURITY' | translate }}</h2>
+            <!-- @if(showErrorResponsbility){
+            <i
+              pTooltip="Please complete all required fields."
+              tooltipPosition="top"
+              class="fi text-danger_color fi-rr-info"
+            ></i>
+            } -->
+          </div>
+        </ng-template>
+
+        <form [formGroup]="maturityForm" class="grid grid-cols-12 gap-6">
+
+          <div class="col-span-12 lg:col-span-6">
+            <lib-ui-dropdown [placeholder]="'NEW_CONTROL.fields.MaturityLevelTypeID.placeholder' | translate"
+              [label]="'NEW_CONTROL.fields.MaturityLevelTypeID.label'|translate"
+              [control]="maturityForm.get('maturityLevelTypeID')!" [options]="maturityLevelTypes"
+              [optionLabel]="'label'" [optionValue]="'id'" [formControlNameInput]="'maturityLevelTypeID'">
+            </lib-ui-dropdown>
+          </div>
+
+          <div class="col-span-12 lg:col-span-6">
+            <lib-date-packer [placeholder]="'NEW_CONTROL.fields.MaturityNextTestDate.placeholder' | translate"
+              [inputLabel]="'NEW_CONTROL.fields.MaturityNextTestDate.label'|translate"
+              [control]="maturityForm.get('maturityNextTestDate')!" [controlNameInput]="'maturityNextTestDate'">
+            </lib-date-packer>
+          </div>
+
+
+
+
+        </form>
+      </p-accordionTab>
+    </p-accordion>
+  </div>
+  <!-- implementation -->
+  <div class="action_section mb-6">
+    <p-accordion class="w-full" [activeIndex]="0">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div class="flex items-center gap-4">
+            <h2>{{ 'NEW_CONTROL.sections.IMPLEMENTATION' | translate }}</h2>
+            <!-- @if(showErrorResponsbility){
+            <i
+              pTooltip="Please complete all required fields."
+              tooltipPosition="top"
+              class="fi text-danger_color fi-rr-info"
+            ></i>
+            } -->
+          </div>
+        </ng-template>
+
+        <form [formGroup]="implementationForm" class="grid grid-cols-12 gap-6">
+
+
+          <div class="col-span-12">
+            <lib-textarea-ui [placeholder]="'NEW_CONTROL.fields.ImplementationGuidance.placeholder' | translate"
+              [control]="implementationForm.get('implementationGuidance')!"
+              [inputLabel]="'NEW_CONTROL.fields.ImplementationGuidance.label' | translate"
+              [controlNameInput]="'implementationGuidance'">
+            </lib-textarea-ui>
+            {{ 'RISK_ACTION.CHARACTERS_LEFT' | translate:{ count: 275-
+            implementationForm.get('implementationGuidance')?.value?.length } }}
+          </div>
+
+          <div class="col-span-12 lg:col-span-6 flex items-center gap-4">
+            <!-- <lib-ui-dropdown [placeholder]="'NEW_CONTROL.fields.IsActive.placeholder' | translate"
+              [label]="'NEW_CONTROL.fields.IsActive.label'|translate" [control]="implementationForm.get('isActive')!"
+              [options]="complianceStatusTypes" [optionLabel]="'label'" [optionValue]="'id'"
+              [formControlNameInput]="'isActive'">
+            </lib-ui-dropdown> -->
+
+            <p>{{"NEW_CONTROL.fields.IsActive.label"|translate}}</p>
+            <p-inputSwitch formControlName="isActive" />
+          </div>
+
+          <div class="col-span-12 lg:col-span-6">
+            <lib-date-packer [placeholder]="'NEW_CONTROL.fields.ImplementationNextTestDate.placeholder' | translate"
+              [inputLabel]="'NEW_CONTROL.fields.ImplementationNextTestDate.label'|translate"
+              [control]="implementationForm.get('implementationNextTestDate')!"
+              [controlNameInput]="'implementationNextTestDate'">
+            </lib-date-packer>
+          </div>
+
+
+
+
+        </form>
+      </p-accordionTab>
+    </p-accordion>
+  </div>
+
+
+
+
+
+
+
+
+  <!-- Cap -->
+  <div class="action_section mb-6">
+    <p-accordion [activeIndex]="" class="custome_cap w-full"
+      [class]="capForm.get('applyCap')?.value ? 'capApplied' : ''">
+      <p-accordionTab tabStyleClass="capAccordion">
+        <ng-template pTemplate="header">
+          <div class="flex items-center gap-4 w-full">
+            <div class="flex gap-4 justify-between items-center w-full">
+              <h2>{{ 'CONTROL.APPLY_CAP' | translate }}</h2>
+              @if(capForm){
+              <form [formGroup]="capForm">
+                <p-inputSwitch formControlName="applyCap" />
+              </form>
+              }
+            </div>
+            <!-- @if(showErrorResponsbility){
+            <i
+              pTooltip="Please complete all required fields."
+              tooltipPosition="top"
+              class="fi text-danger_color fi-rr-info"
+            ></i>
+            } -->
+          </div>
+        </ng-template>
+
+        @if(capForm && capForm.get('applyCap')?.value){
+        <form [formGroup]="capForm" class="grid grid-cols-12 gap-6">
+          <!-- Min Cap -->
+          <div class="md:col-span-6 col-span-12">
+            <lib-input-number [inputLabel]="'EFFECTIVENESS_FORMULA.MIN_CAP' | translate"
+              [control]="capForm.get('minCap')!" [controlNameInput]="'minCap'"
+              [placeholder]="'EFFECTIVENESS_FORMULA.MIN_CAP' | translate">
+            </lib-input-number>
+          </div>
+
+          <!-- Max Cap -->
+          <div class="md:col-span-6 col-span-12">
+            <lib-input-number [inputLabel]="'EFFECTIVENESS_FORMULA.MAX_CAP' | translate"
+              [control]="capForm.get('maxCap')!" [controlNameInput]="'maxCap'"
+              [placeholder]="'EFFECTIVENESS_FORMULA.MAX_CAP' | translate">
+            </lib-input-number>
+          </div>
+
+          <!-- Cap Behavior -->
+          <div class="md:col-span-6 col-span-12">
+            <lib-ui-dropdown [label]="'EFFECTIVENESS_FORMULA.CAP_BEHAVIOR' | translate"
+              [control]="capForm.get('govControlCapBehaviorTypeID')!"
+              [formControlNameInput]="'govControlCapBehaviorTypeID'" [options]="capBehaviorTypes"
+              [placeholder]="'EFFECTIVENESS_FORMULA.CAP_BEHAVIOR' | translate" [optionLabel]="'label'"
+              [optionValue]="'id'">
+            </lib-ui-dropdown>
+          </div>
+        </form>
+        }
+      </p-accordionTab>
+    </p-accordion>
+  </div>
+
+  <div class="flex justify-end gap-4 py-4">
+    <div class="cancel_btn">
+      <button [routerLink]="'/gfw-portal/governance/control-management/list'">
+        {{ 'RISK_ACTION.CANCEL' | translate }}
+      </button>
+    </div>
+    <div class="action_btn">
+      <p-button [label]="
+          id
+            ? ('BUTTONS.UPDATE' | translate)
+            : ('RISK_MANAGMENT.SAVE_CHANGES' | translate)
+        " [outlined]="true" severity="secondary" [loading]="saveDataLoader" (onClick)="submit()">
+      </p-button>
+    </div>
+  </div>
+</section>

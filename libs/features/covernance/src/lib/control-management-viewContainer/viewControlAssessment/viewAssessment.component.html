@@ -1,0 +1,104 @@
+<div class="action_dailog">
+  <p-dialog
+    [dismissableMask]="true"
+    [closeOnEscape]="true"
+    (onHide)="onHideDialog()"
+    [(visible)]="show_prop"
+    [modal]="true"
+    [draggable]="false"
+    styleClass="w-[70rem]">
+
+    <div class="container_view">
+      <div class="grid grid-cols-5 gap-6">
+
+        <div class="div_body respon_div">
+          <h6 class="mb-2">{{ 'assessmentGov.STATUS' | translate }}</h6>
+          <ng-container *ngIf="!loadingData; else statusSkeleton">
+            <div class="badge">{{ DataAssessment?.controlComplianceStatusTypeName ||
+            DataAssessment?.govControlImplementationStatusTypeName ||
+            DataAssessment?.govControlEffectivenessStatusTypeName ||
+            DataAssessment?.govControlImplementationStatusTypeName
+
+          }}</div>
+          </ng-container>
+          <ng-template #statusSkeleton>
+            <p-skeleton width="6rem" height="1.5rem"></p-skeleton>
+          </ng-template>
+        </div>
+
+        <div class="div_body respon_div">
+          <h6 class="mb-2">{{ 'assessmentGov.ASSESSMENT_PHASE' | translate }}</h6>
+          <ng-container *ngIf="!loadingData; else phaseSkeleton">
+            <div class="header-para">{{ DataAssessment?.govControlAssessmentPhaseTypeName || '-' }}</div>
+          </ng-container>
+          <ng-template #phaseSkeleton>
+            <p-skeleton width="8rem" height="1.5rem"></p-skeleton>
+          </ng-template>
+        </div>
+
+        <div class="div_body">
+          <h6 class="mb-2">{{ 'assessmentGov.ASSESSMENT_WORKFLOW' | translate }}</h6>
+          <ng-container *ngIf="!loadingData; else workflowSkeleton">
+            <div class="header-para">{{ DataAssessment?.govControlAssessmentWorkflowStageName || '-' }}</div>
+          </ng-container>
+          <ng-template #workflowSkeleton>
+            <p-skeleton width="7rem" height="1.5rem"></p-skeleton>
+          </ng-template>
+        </div>
+
+        <div class="div_body respon_div">
+                           <lib-owner-user [title]="'assessmentGov.ASSESSED_BY'"
+                [roleOrUser]="'user'" [postionOwner]="DataAssessment?.assessedByPosition  "
+          [loading]="loadingData" [subtitle]="DataAssessment?.assessedByTitle">
+        </lib-owner-user>
+        </div>
+
+        <div class="div_body">
+          <h6 class="mb-2">{{ 'assessmentGov.ASSESSMENT_DATE' | translate }}</h6>
+          <ng-container *ngIf="!loadingData; else dateSkeleton">
+            <div class="flex gap-2">
+              <img alt="" [src]="'images/icons/calendar.svg'" />
+              <div class="header-para">{{ DataAssessment?.assessmentDate | date:'MMM d, y'}}</div>
+            </div>
+          </ng-container>
+          <ng-template #dateSkeleton>
+            <p-skeleton width="6rem" height="1.5rem"></p-skeleton>
+          </ng-template>
+        </div>
+
+      </div>
+
+      <div class="my-3">
+        <div class="mb-3">
+          <h5 class="text-progress mb-2">{{ 'assessmentGov.Reports' | translate }}</h5>
+          <ng-container *ngIf="!loadingData; else findingSkeleton">
+            <p class="welcome">{{ DataAssessment?.reports || '-' }}</p>
+          </ng-container>
+          <ng-template #findingSkeleton>
+            <p-skeleton width="90%" height="1.5rem"></p-skeleton>
+          </ng-template>
+        </div>
+
+        <!-- <div class="mb-3">
+          <h5 class="text-progress mb-2">{{ 'assessmentGov.RISK' | translate }}</h5>
+          <ng-container *ngIf="!loadingData; else riskSkeleton">
+            <p class="welcome">{{ DataAssessment?.risks || '-' }}</p>
+          </ng-container>
+          <ng-template #riskSkeleton>
+            <p-skeleton width="85%" height="1.5rem"></p-skeleton>
+          </ng-template>
+        </div>
+
+        <div class="mb-3">
+          <h5 class="text-progress mb-2">{{ 'assessmentGov.RECOMMENDATION' | translate }}</h5>
+          <ng-container *ngIf="!loadingData; else recommendationSkeleton">
+            <p class="welcome">{{ DataAssessment?.recommendations || '-' }}</p>
+          </ng-container>
+          <ng-template #recommendationSkeleton>
+            <p-skeleton width="80%" height="1.5rem"></p-skeleton>
+          </ng-template>
+        </div> -->
+      </div>
+    </div>
+  </p-dialog>
+</div>

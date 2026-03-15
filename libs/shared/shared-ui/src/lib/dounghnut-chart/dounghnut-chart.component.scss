@@ -1,0 +1,35 @@
+.chart_widget {
+  @apply w-full h-full py-7 px-6 border border-gray_light rounded-2xl
+}
+
+
+
+::ng-deep .labels_table {
+  .p-datatable .p-datatable-thead>tr>th {
+    background-color: transparent;
+    padding: 6px 8px;
+    border-bottom: 1px solid;
+    @apply border-gray_light;
+    color: #737373;
+    text-align: center;
+  }
+
+  .p-datatable .p-datatable-tbody>tr>td {
+    padding: 6px 8px;
+    text-align: center;
+  }
+}
+
+
+.custom_doted{
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+}
+
+.dounght_chart {
+  width: 100%;
+  height: 350px;
+  position: relative;
+  display: block;
+}

@@ -1,0 +1,169 @@
+<lib-new-table
+  [loading]="loading"
+  [table_data]="tableData"
+  [table_title]="labels.table | translate"
+  [badge_title]="labels.badge | translate"
+  [dataViewId]="dataEntityId"
+  [entityID_Name]="entityIdField"
+  [isShownAction]="true"
+  (payload_emiter)="handleDataTable($event)"
+  [action_items]="actionItems"
+  (currentActionRow)="setSelected($event)"
+  [columnControl]="columnControl"
+  [table_actions_permissions]="{ module: 'RISKS', feature: 'METHODOLOGYIMPACT', action: 'VIEW' }"
+
+>
+  <!-- ➕ Add Button -->
+   @if(_PermissionSystemService.can('RISKS' , 'METHODOLOGYIMPACT' , 'ADD')
+){
+  <button
+    (click)="handleAddClick()"
+    addition_action
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+  >
+    <i class="fi fi-br-plus w-5 h-5"></i>
+    <span>{{ labels.add | translate }}</span>
+  </button>
+}
+
+</lib-new-table>
+
+<!-- 🔸 Delete Confirmation Popup -->
+<lib-delete-confirm-popup
+  [titleDelete]="labels.titleDelete | translate"
+  [descriptionDelete]="labels.descDelete | translate"
+  [visibleInput]="deleteModalVisible"
+  (hideEmiter)="toggleDeleteModal(false)"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <!-- Cancel -->
+    <div class="cancel_btn">
+      <button class="w-40" (click)="toggleDeleteModal(false)">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <!-- Confirm Delete -->
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="delete()"
+        [loading]="loadingDelete"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+<p-dialog
+  (onHide)="onDialogClose()"
+  [header]="
+    (selectedRow ? 'METHODOLOGY.UPDATE_IMPACT' : 'METHODOLOGY.ADD_NEW_IMPACT')
+      | translate
+  "
+  [modal]="true"
+  [(visible)]="actionDialogVisible"
+>
+  <form [formGroup]="form" class="grid grid-cols-12 gap-6 mb-6">
+    <!-- Name (English) -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'CONTENT.PLACEHOLDERS.NAME' | translate"
+        [inputLabel]="'CONTENT.NAME' | translate"
+        [control]="form.get('name')!"
+        [controlNameInput]="'name'"
+      ></lib-input-text>
+    </div>
+
+    <!-- Name (Arabic) -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'CONTENT.PLACEHOLDERS.NAME_AR' | translate"
+        [inputLabel]="'CONTENT.NAME_AR' | translate"
+        [control]="form.get('nameAr')!"
+        [controlNameInput]="'nameAr'"
+      ></lib-input-text>
+    </div>
+
+    <!-- Formula Expression -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-number
+        [placeholder]="'CONTENT.PLACEHOLDERS.WEIGHT' | translate"
+        [inputLabel]="'CONTENT.WEIGHT' | translate"
+        [control]="form.get('weight')!"
+        [controlNameInput]="'weight'"
+      ></lib-input-number>
+    </div>
+
+    <!-- Formula Expression -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-color-dropdown
+        [placeholder]="'CONTENT.PLACEHOLDERS.COLOR' | translate"
+        [inputLabel]="'CONTENT.COLOR' | translate"
+        [control]="form.get('color')!"
+        [controlNameInput]="'color'"
+      ></lib-color-dropdown>
+    </div>
+    <!-- From -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-number
+        [placeholder]="'VERSIONS.From' | translate"
+        [inputLabel]="'VERSIONS.From' | translate"
+        [control]="form.get('from')!"
+        [controlNameInput]="'from'"
+      ></lib-input-number>
+    </div>
+    <!-- To -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-number
+        [placeholder]="'VERSIONS.To' | translate"
+        [inputLabel]="'VERSIONS.To' | translate"
+        [control]="form.get('to')!"
+        [controlNameInput]="'to'"
+      ></lib-input-number>
+    </div>
+
+    <!-- Description (English) -->
+    <div class="col-span-12">
+      <lib-textarea-ui
+        [placeholder]="'CONTENT.PLACEHOLDERS.DESCRIPTION' | translate"
+        [inputLabel]="'CONTENT.DESCRIPTION' | translate"
+        [control]="form.get('description')!"
+        [controlNameInput]="'description'"
+      ></lib-textarea-ui>
+    </div>
+
+    <!-- Description (Arabic) -->
+    <div class="col-span-12">
+      <lib-textarea-ui
+        [placeholder]="'CONTENT.PLACEHOLDERS.DESCRIPTION_AR' | translate"
+        [inputLabel]="'CONTENT.DESCRIPTION_AR' | translate"
+        [control]="form.get('descriptionAr')!"
+        [controlNameInput]="'descriptionAr'"
+      ></lib-textarea-ui>
+    </div>
+  </form>
+  <ng-template pTemplate="footer">
+    <div class="col-span-12 flex justify-end gap-4 py-4">
+      <div class="default_btn cancel">
+        <button (click)="onDialogClose()">
+          {{ 'BUTTONS.CANCEL' | translate }}
+        </button>
+      </div>
+      <div class="action_btn">
+        <p-button
+          [label]="
+            selectedRow
+              ? ('BUTTONS.UPDATE' | translate)
+              : ('BUTTONS.SAVE' | translate)
+          "
+          [outlined]="true"
+          [disabled]="form.invalid"
+          [loading]="isSaving"
+          severity="secondary"
+          (onClick)="save()"
+        >
+        </p-button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>

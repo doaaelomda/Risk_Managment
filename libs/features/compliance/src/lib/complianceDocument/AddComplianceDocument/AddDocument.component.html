@@ -1,0 +1,181 @@
+<section>
+  <!-- ===== Action Section ===== -->
+  <div class="action_section mb-6">
+    <p-accordion class="w-full" [activeIndex]="0">
+      <p-accordionTab>
+        <!-- Accordion Header -->
+        <ng-template pTemplate="header">
+          <div class="flex items-center gap-4">
+            <!-- Main Info Title -->
+            <h2>{{"RISK_MANAGMENT.MAIN_INFO" | translate}}</h2>
+
+            <!-- Error icon shown if required fields are missing -->
+            @if(showErrorResponsibility){
+            <i pTooltip="Please complete all required fields." tooltipPosition="top"
+              class="fi text-danger_color fi-rr-info"></i>
+            }
+          </div>
+        </ng-template>
+
+        <!-- Form Section -->
+        @if(ComplianceDocument){
+        <form [formGroup]="ComplianceDocument" class="grid grid-cols-12 gap-6">
+
+          <!-- Name (English) -->
+          <div class="col-span-12 lg:col-span-6">
+            <lib-input-text [placeholder]="'MAIN_INFO.Name' | translate" [control]="ComplianceDocument.get('name')!"
+              [inputLabel]="'MAIN_INFO.Name' | translate" [controlNameInput]="'name'" [validations]="validationsTitle">
+            </lib-input-text>
+          </div>
+
+          <!-- Name (Arabic) -->
+          <div class="col-span-12 lg:col-span-6">
+            <lib-input-text [placeholder]="'MAIN_INFO.Arname' | translate" [control]="ComplianceDocument.get('nameAr')!"
+              [inputLabel]="'MAIN_INFO.Arname' | translate" [controlNameInput]="'nameAr'">
+            </lib-input-text>
+          </div>
+
+          <!-- Version -->
+          <div class="col-span-12 lg:col-span-6">
+            <lib-input-text [placeholder]="'MAIN_INFO.version' | translate"
+              [control]="ComplianceDocument.get('version')!" [inputLabel]="'MAIN_INFO.version' | translate"
+              [controlNameInput]="'version'">
+            </lib-input-text>
+          </div>
+
+          <!-- Short Name -->
+          <div class="col-span-12 lg:col-span-6">
+            <lib-input-text [placeholder]="'MAIN_INFO.shortName' | translate"
+              [control]="ComplianceDocument.get('shortName')!" [inputLabel]="'MAIN_INFO.shortName' | translate"
+              [controlNameInput]="'shortName'">
+            </lib-input-text>
+          </div>
+
+          <!-- Description (English) -->
+          <div class="col-span-12 ">
+            <lib-textarea-ui [inputLabel]="'Dashboard.DIALOG.DESCRIPTION' | translate"
+              [placeholder]="'Dashboard.PLACEHOLDERS.ENTER_DESCRIPTION' | translate"
+              [control]="ComplianceDocument.get('description')!" [controlNameInput]="'description'">
+            </lib-textarea-ui>
+          </div>
+
+          <!-- Description (Arabic) -->
+          <div class="col-span-12">
+            <lib-textarea-ui [inputLabel]="'Dashboard.DIALOG.DESCRIPTION_AR' | translate"
+              [placeholder]="'Dashboard.PLACEHOLDERS.ENTER_DESCRIPTION' | translate"
+              [control]="ComplianceDocument.get('descriptionAr')!" [controlNameInput]="'descriptionAr'">
+            </lib-textarea-ui>
+          </div>
+
+          <!-- Document Code -->
+          <div class="col-span-12 lg:col-span-6">
+            <lib-input-text [placeholder]="'MAIN_INFO.documentCode' | translate"
+              [control]="ComplianceDocument.get('documentCode')!" [inputLabel]="'MAIN_INFO.documentCode' | translate"
+              [controlNameInput]="'documentCode'">
+            </lib-input-text>
+          </div>
+
+          <!-- Language Dropdown -->
+          <div class="col-span-12 lg:col-span-6">
+            <lib-ui-dropdown [placeholder]="'MAIN_INFO.languageCode' | translate"
+              [label]="'MAIN_INFO.languageCode'|translate" [control]="ComplianceDocument.get('languageCode')!"
+              [options]="languageCode" [optionLabel]="'label'" [optionValue]="'value'"
+              [formControlNameInput]="'languageCode'">
+            </lib-ui-dropdown>
+          </div>
+
+          <!-- Publication Date -->
+          <div class="col-span-12 lg:col-span-6">
+            <lib-date-packer [placeholder]="'PLACEHOLDERS.Select_Date' | translate"
+              [inputLabel]="'MAIN_INFO.publicationDate'|translate"
+              [control]="ComplianceDocument.get('nextComplianceAssessmentDate')!"
+              [controlNameInput]="'nextComplianceAssessmentDate'">
+            </lib-date-packer>
+          </div>
+
+          <!-- Effective Date -->
+          <div class="col-span-12 lg:col-span-6">
+            <lib-date-packer [placeholder]="'PLACEHOLDERS.Select_Date' | translate"
+              [inputLabel]="'MAIN_INFO.effectiveDate'|translate"
+              [control]="ComplianceDocument.get('fromEffectiveDate')!" [controlNameInput]="'fromEffectiveDate'">
+            </lib-date-packer>
+          </div>
+
+          <!-- End of Compliance Date -->
+          <div class="col-span-12 lg:col-span-6">
+            <lib-date-packer [placeholder]="'PLACEHOLDERS.Select_Date' | translate"
+              [inputLabel]="'MAIN_INFO.endOfComplianceDate'|translate"
+              [control]="ComplianceDocument.get('lastComplianceAssessmentDate')!"
+              [controlNameInput]="'lastComplianceAssessmentDate'">
+            </lib-date-packer>
+          </div>
+
+          <!-- Compliance Document Status Dropdown -->
+          <div class="col-span-12 lg:col-span-6">
+            <lib-ui-dropdown [placeholder]="'MAIN_INFO.complianceDocumentStatusTypeID' | translate"
+              [label]="'MAIN_INFO.complianceDocumentStatusTypeID'|translate"
+              [control]="ComplianceDocument.get('complianceDocumentStatusTypeID')!"
+              [options]="complianceDocumentStatusTypeID" [optionLabel]="'label'" [optionValue]="'id'"
+              [formControlNameInput]="'complianceDocumentStatusTypeID'">
+            </lib-ui-dropdown>
+          </div>
+
+          <!-- Compliance State Dropdown -->
+          <div class="col-span-12 lg:col-span-6">
+            <lib-ui-dropdown [placeholder]="'MAIN_INFO.complianceStateTypeID' | translate"
+              [label]="'MAIN_INFO.complianceStateTypeID'|translate"
+              [control]="ComplianceDocument.get('complianceStateTypeID')!" [options]="complianceStateTypeID"
+              [optionLabel]="'label'" [optionValue]="'id'" [formControlNameInput]="'complianceStateTypeID'">
+            </lib-ui-dropdown>
+          </div>
+
+          <!-- Gov Regulator Dropdown (conditional) -->
+          @if (!regularId) {
+          <div class="col-span-12 lg:col-span-6">
+            <lib-ui-dropdown [placeholder]="'MAIN_INFO.GovRegulatorID' | translate"
+              [label]="'MAIN_INFO.GovRegulatorID'|translate" [control]="ComplianceDocument.get('govRegulatorID')!"
+              [options]="GovControls" [optionLabel]="'label'" [optionValue]="'id'"
+              [formControlNameInput]="'govRegulatorID'" [validations]="validationsTitle">
+            </lib-ui-dropdown>
+          </div>
+          }
+          <div class="md:col-span-6 col-span-12">
+            <lib-ui-dropdown [placeholder]="'WORKFLOW_STEPS.FIELDS.MATURITY_TYPE_PLACEHOLDER' | translate"
+              [label]="'WORKFLOW_STEPS.FIELDS.MATURITY_TYPE_LABEL' | translate"
+              [control]="ComplianceDocument.get('govControlMaturityLevelTypeID')!"
+              [formControlNameInput]="'govControlMaturityLevelTypeID'" [options]="GovControlMaturityLevelType"
+              [optionLabel]="'label'" [optionValue]="'id'">
+            </lib-ui-dropdown>
+          </div>
+          <div class="md:col-span-6 col-span-12">
+            <lib-ui-dropdown [placeholder]="'MAIN_INFO.DOC_ELE_CLASSFICATION_PROFILE' | translate"
+              [label]="'MAIN_INFO.DOC_ELE_CLASSFICATION_PROFILE'|translate"
+              [control]="ComplianceDocument.get('grcDocumentElementClassificationProfileID')!"
+              [options]="clafficaions_profiles" [optionLabel]="'label'" [optionValue]="'id'"
+              [formControlNameInput]="'grcDocumentElementClassificationProfileID'">
+            </lib-ui-dropdown>
+          </div>
+        </form>
+        }
+      </p-accordionTab>
+    </p-accordion>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="flex justify-end gap-4 py-4">
+    <!-- Cancel Button -->
+    <div class="cancel_btn">
+      <button
+        [routerLink]=" regularId ? `/gfw-portal/compliance/competent_authorities/${regularId}` :`/gfw-portal/compliance/complianceDocuments`">
+        {{ 'RISK_ACTION.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <!-- Save / Update Button -->
+    <div class="action_btn">
+      <p-button [label]="id ? ('BUTTONS.UPDATE' | translate) : ('RISK_MANAGMENT.SAVE_CHANGES' | translate)"
+        [outlined]="true" severity="secondary" [loading]="saveDataLoader" (onClick)="submit()">
+      </p-button>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,50 @@
+<section>
+  <div class="header flex items-center justify-between flex-wrap mb-3">
+    <div class="title flex items-center gap-4 flex-wrap">
+      @if(loading_data){
+        <p-skeleton width="15rem" styleClass="mb-2" />
+        <p-skeleton width="10rem" styleClass="mb-2" />
+      }@else {
+        <h2 class="text-2xl font-semibold text-gray-800">{{current_risk_data?.riskTitle}}</h2>
+        <p class="text-gray_color m-0">{{'('+current_risk_data?.riskCode+')'}}</p>
+      }
+    </div>
+
+    <div class="content flex flex-wrap items-center gap-4">
+      @if(current_risk_data?.riskImpactName){
+            <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">{{ 'TABS.RISK_RATING' | translate }}</p>
+        <span class="badge Red">{{current_risk_data?.riskImpactName ?? '-'}}</span>
+      </div>
+      }
+      @if(current_risk_data?.riskResponseTypeName){
+     <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">{{ 'TABS.MITIGATION' | translate }}</p>
+        <span  class="font-semibold badge" [ngClass]="current_risk_data?.riskResponseTypeColor">{{current_risk_data?.riskResponseTypeName ?? '-' }}</span>
+      </div>
+      }
+      @if(current_risk_data?.riskStatusType){
+             <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">{{ 'TABS.STATUS' | translate }}</p>
+        <span  class="font-semibold">{{current_risk_data?.riskStatusType ?? '-'}}</span>
+      </div>
+      }
+      @if(current_risk_data?.organizationalUnit){
+            <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">{{ 'TABS.DEPARTMENT' | translate }}</p>
+        <span  class="font-semibold">{{current_risk_data?.organizationalUnit ?? '-'}}</span>
+      </div>
+      }
+  
+    </div>
+  </div>
+ <h6 class="text-primary font-bold text-2xl mb-9 mx-4">└─{{ nameSubRisk ? `${nameSubRisk} (${assesmentCode})` : '-'}}</h6>
+
+
+  <lib-shared-tabs [permissionFeature]="{module:'RISKS' , feature:'ASSESSMENT'}" [tabs]="tabs"></lib-shared-tabs>
+
+
+
+
+   <router-outlet></router-outlet>
+</section>

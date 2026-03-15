@@ -1,0 +1,83 @@
+/* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+@use '../../gfw-portal/src/variable.scss';
+@use '@flaticon/flaticon-uicons/css/all/all';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap');
+@import '~perfect-scrollbar/css/perfect-scrollbar.css';
+body {
+  font-family: 'IBM Plex Sans Arabic';
+  font-weight: 500;
+}
+i {
+  @apply flex items-center justify-center;
+}
+
+.btn {
+  background-color: #6938ef;
+  border: 1px solid #6938ef;
+  box-shadow: 0px 1px 2px 0px #1018280d;
+  padding: 10px 18px;
+  &:focus {
+    box-shadow: 0;
+  }
+  &.cancel {
+    box-shadow: 0px 1px 2px 0px #1018280D;
+    border: 1px solid #D0D5DD;
+    @apply bg-[#FFFFFF] text-[#344054]
+  }
+  @apply w-full flex justify-center items-center font-medium text-base text-[#fff] rounded-lg;
+}
+.p-checkbox-box,
+.p-radiobutton-box {
+  border: 1px solid #d0d5dd;
+}
+
+.container_card {
+  @apply py-8 px-9 border-[1px] border-[#BDB4FE] rounded-2xl w-full
+}
+
+label {
+  @apply text-[#344054] text-sm font-medium;
+}
+
+input,
+textarea {
+  &.search-input {
+    background: url('../public/images/search-icon.svg') no-repeat left 12px center;
+    padding-left: 40px;
+    background-size: 18px;
+  }
+  border: 1px solid #bdb4fe;
+  &:enabled:focus {
+    box-shadow: 0 0 0 0.2rem #f4ebff;
+  }
+  &::placeholder {
+    color: #667085;
+  }
+
+  @apply py-2.5 px-3.5 rounded-lg text-[16px] text-[#101828] font-normal w-full;
+}
+textarea {
+  &:focus-visible {
+    outline: none;
+  }
+
+  @apply w-full border p-4 border-gray_light rounded-lg;
+  resize: none;
+
+  &.ng-invalid.ng-touched {
+    border: 1px solid red;
+  }
+}
+
+p-inputnumber {
+  @apply w-full;
+
+  .p-inputnumber {
+    @apply w-full;
+  }
+}

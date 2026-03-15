@@ -1,0 +1,144 @@
+<div class="w-full h-full border border-gray_light rounded-xl ">
+  <div class="header flex items-center justify-between  py-5 px-6 ">
+    <div class="table_title flex flex-wrap items-start gap-4">
+      <h3 class="table_title_header">Risk Level</h3>
+
+      <span class="badge_small_table">5 Risks</span>
+    </div>
+
+      <div class="filters flex items-center gap-4">
+
+        @if(mode() === 'edit'){
+
+          <div class="filters cursor-auto flex items-center gap-4">
+
+
+
+
+              <div class="flex items-center gap-4 flex-row-reverse">
+                  <button (click)="filter_visible = true" class="filter_dashboard_action-btn">
+                  <i class="fi fi-rr-filter"></i>
+                </button>
+                  <button class="filter_dashboard_action-btn">
+                  <i class="fi fi-rr-settings"></i>
+                </button>
+                            <button (click)="actionEmitter.emit({widget:chart_config_input()?.data , event:'delete' , value:chart_config_input()?.data})" class="filter_dashboard_action-btn danger">
+            <i class="fi fi-rr-trash"></i>
+          </button>
+              </div>
+
+                 <div class="form_group flex-1">
+                      <p-dropdown
+                        [options]="widthOptions"
+                        [(ngModel)]="selectedWidth"
+                        optionValue="value"
+                        optionLabel="value"
+                        [placeholder]="'Select Width'"
+                        (onChange)="actionEmitter.emit({widget:chart_config_input()?.data , event:'resize' , value:selectedWidth})"
+                      >
+                      </p-dropdown>
+                    </div>
+
+          </div>
+        }
+
+  </div>
+  </div>
+
+
+  <div class="container px-7 py-4">
+
+    <div class="single_row flex items-center gap-6 pb-2 border-b border-gray_light mb-2">
+      <div class="flex items-center gap-3">
+        <div class="icon_list">
+          <i class="fi fi-rr-file"></i>
+        </div>
+          <p class="text-sm font-medium">Phoenix Baker</p>
+      </div>
+        <p class="text-gray_color">24 likes</p>
+        <p class="text-gray_color">24 likes</p>
+    </div>
+
+    <div class="single_row flex items-center gap-6 pb-2 border-b border-gray_light mb-2">
+      <div class="flex items-center gap-3">
+        <div class="icon_list">
+          <i class="fi fi-rr-file"></i>
+        </div>
+          <p class="text-sm font-medium">Phoenix Baker</p>
+      </div>
+        <p class="text-gray_color">24 likes</p>
+        <p class="text-gray_color">24 likes</p>
+    </div>
+
+    <div class="single_row flex items-center gap-6 pb-2 border-b border-gray_light mb-2">
+      <div class="flex items-center gap-3">
+        <div class="icon_list">
+          <i class="fi fi-rr-file"></i>
+        </div>
+          <p class="text-sm font-medium">Phoenix Baker</p>
+      </div>
+        <p class="text-gray_color">24 likes</p>
+        <p class="text-gray_color">24 likes</p>
+    </div>
+
+    <div class="single_row flex items-center gap-6 pb-2 border-b border-gray_light mb-2">
+      <div class="flex items-center gap-3">
+        <div class="icon_list">
+          <i class="fi fi-rr-file"></i>
+        </div>
+          <p class="text-sm font-medium">Phoenix Baker</p>
+      </div>
+        <p class="text-gray_color">24 likes</p>
+        <p class="text-gray_color">24 likes</p>
+    </div>
+
+    <div class="single_row flex items-center gap-6 pb-2 border-b border-gray_light mb-2">
+      <div class="flex items-center gap-3">
+        <div class="icon_list">
+          <i class="fi fi-rr-file"></i>
+        </div>
+          <p class="text-sm font-medium">Phoenix Baker</p>
+      </div>
+        <p class="text-gray_color">24 likes</p>
+        <p class="text-gray_color">24 likes</p>
+    </div>
+    <div class="single_row flex items-center gap-6 pb-2 border-b border-gray_light mb-2">
+      <div class="flex items-center gap-3">
+        <div class="icon_list">
+          <i class="fi fi-rr-file"></i>
+        </div>
+          <p class="text-sm font-medium">Phoenix Baker</p>
+      </div>
+        <p class="text-gray_color">24 likes</p>
+        <p class="text-gray_color">24 likes</p>
+    </div>
+  </div>
+
+</div>
+
+
+
+@if(filter_visible){
+
+  <div class="action_dailog">
+  <p-dialog
+
+  [draggable]="false"
+  [position]="'right'"
+  header="Edit Profile"
+  [modal]="false"
+  [(visible)]="filter_visible"
+  styleClass="min-w-[25rem] min-h-[20rem]"
+>
+
+   <ng-template pTemplate="header">
+    </ng-template>
+
+
+
+    <lib-filter-dashboard  ></lib-filter-dashboard>
+</p-dialog>
+
+</div>
+
+}

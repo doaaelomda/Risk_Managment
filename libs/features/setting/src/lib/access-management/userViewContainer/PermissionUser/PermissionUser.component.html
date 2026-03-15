@@ -1,0 +1,37 @@
+<div class="grid grid-cols-12 gap-8 px-6">
+   <div class="col-span-12 lg:col-span-6">
+     <lib-input-search
+  (searchTermEmiter)="handleSearch($event)"
+></lib-input-search>
+
+   </div>
+   <div class="col-span-12 lg:col-span-6" [formGroup]="filterForm">
+
+    <lib-ui-dropdown [placeholder]="'PERMISSIONS.SELECT_PERMISSION_TYPE'" [options]="permissionTypes" [optionLabel]="'label'" [optionValue]="'label'"
+        [formControlNameInput]="'selectedRegulator'" [control]="filterForm.get('selectedRegulator')!">
+    </lib-ui-dropdown>
+
+   </div>
+</div>
+<section class="table_roles my-6 py-4 px-8">
+    <div class="grid grid-cols-12 gap-4 my-6">
+  @for (item of permissions; track $index) {
+    <div class="card-permission py-4 px-5 col-span-12 md:col-span-6 lg:col-span-4 ">
+      <div class="flex flex-wrap items-center justify-start gap-3">
+        <div class="w-[40px] h-[40px] rounded-full flex flex-wrap  justify-center items-center bg-[#EBE9FE] text-xl text-[#6938EF]">
+          <i class="fi fi-rr-document"></i>
+        </div>
+        <div class="flex flex-wrap  items-center justify-between gap-0.5 flex-1 ms-2">
+          <h2 class=" text-[#344054] font-medium name_permission ">{{ item?.name }}</h2>
+          <span class="badge text-xs font-medium text-[#5925DC] inline-block whitespace-nowrap">{{ item?.badge }}</span>
+        </div>
+      </div>
+    </div>
+  }
+</div>
+
+</section>
+
+@if(permissions.length === 0){
+  <lib-empty-state [loading]="isLoadingData"></lib-empty-state>
+}

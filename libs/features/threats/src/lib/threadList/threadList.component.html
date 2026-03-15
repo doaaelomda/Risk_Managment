@@ -1,0 +1,49 @@
+<section>
+    <lib-new-table
+    [loading]="loadingTable"
+    [table_data]="dataTable"
+    [table_title]="'BREAD_CRUMB_TITLES.THREAT_LIST' | translate"
+    [badge_title]="'HEARDE_TABLE.THREATS' | translate"
+    [dataViewId]="62"
+    [entityID_Name]="'threatID'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="items"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{ module: 'THREATS', feature: 'THREATS', action: 'VIEW' }"
+  >
+  @if(_PermissionSystemService.can('THREATS' ,'THREATS' , 'ADD')){
+    <button
+      addition_action
+      [routerLink]="'/gfw-portal/Threats-management/add'"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+    >
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'HEARDE_TABLE.ADD_NEW_THREAT' | translate }}</span>
+    </button>
+  }
+    </lib-new-table>
+</section>
+
+<lib-delete-confirm-popup
+  [titleDelete]="'THREAT.DELETE_TITLE'"
+  [descriptionDelete]="'THREAT.DELETE_DESC'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteThreat()"
+        [loading]="loadDeleted"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

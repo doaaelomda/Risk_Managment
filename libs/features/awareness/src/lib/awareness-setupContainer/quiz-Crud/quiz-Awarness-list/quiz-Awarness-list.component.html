@@ -1,0 +1,134 @@
+<section>
+     <lib-new-table
+    [loading]="loadingTable"
+    [table_data]="dataTable"
+    [table_title]="quizTitle"
+    [badge_title]="'QUIZ.TITLE' | translate"
+    [dataViewId]="70"
+    [entityID_Name]="'awarenessQuizID'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="items"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{ module: 'AWARNESS', feature: 'QUIZ', action: 'VIEW' }"
+  >
+      @if(_PermissionSystemService.can('AWARNESS', 'QUIZ' , 'ADD')){
+    <button addition_action (click)="showQuizPopup = true"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'QUIZ.ADD_NEW' | translate }}</span>
+    </button>
+  }
+ </lib-new-table>
+</section>
+
+<lib-delete-confirm-popup [titleDelete]="'QUIZ.DELETE_TITLE' | translate"
+  [descriptionDelete]="'QUIZ.DELETE_DESC' | translate" (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible">
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-47" (click)="handleClosedDelete(false)">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-47">
+      <p-button (onClick)="deleteQuiz()" [loading]="loadDeleted" [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+
+<div class="action_dailog">
+  <p-dialog header="{{ current_update_id ? ('QUIZ.UPDATE' | translate) : ('QUIZ.ADD_NEW' | translate) }}"
+    [(visible)]="showQuizPopup" (onHide)="onModalClose()" [modal]="true" [dismissableMask]="true" [draggable]="false"
+    styleClass="w-[50%]" [closable]="false">
+
+    <div class="container p-4">
+
+      <!-- Form -->
+<form [formGroup]="quiz_form" class="grid grid-cols-12 gap-6 mb-6">
+
+  <!-- Quiz Name (English) -->
+  <div class="col-span-12 md:col-span-6">
+    <lib-input-text
+      [placeholder]="'CONTENT.NAME' | translate"
+      [inputLabel]="'CONTENT.NAME' | translate"
+      [control]="quiz_form.get('name')!"
+      [controlNameInput]="'name'" [validations]="validationsRequired">
+    </lib-input-text>
+  </div>
+
+  <!-- Quiz Name (Arabic) -->
+  <div class="col-span-12 md:col-span-6">
+    <lib-input-text
+      [placeholder]="'CONTENT.NAME_AR' | translate"
+      [inputLabel]="'CONTENT.NAME_AR' | translate"
+      [control]="quiz_form.get('nameAr')!"
+      [controlNameInput]="'nameAr'">
+    </lib-input-text>
+  </div>
+
+  <!-- Quiz Description (English) -->
+  <div class="col-span-12">
+    <lib-textarea-ui
+      [inputLabel]="'CONTENT.DESCRIPTION' | translate"
+      [placeholder]="'CONTENT.DESCRIPTION' | translate"
+      [control]="quiz_form.get('description')!"
+      [controlNameInput]="'description'">
+    </lib-textarea-ui>
+  </div>
+
+  <!-- Quiz Description (Arabic) -->
+  <div class="col-span-12">
+    <lib-textarea-ui
+      [inputLabel]="'CONTENT.DESCRIPTION_AR' | translate"
+      [placeholder]="'CONTENT.DESCRIPTION_AR' | translate"
+      [control]="quiz_form.get('descriptionAr')!"
+      [controlNameInput]="'descriptionAr'">
+    </lib-textarea-ui>
+  </div>
+
+  <!-- Randomize Questions -->
+  <div class="col-span-12 md:col-span-6">
+    <lib-ui-dropdown
+      [placeholder]="'QUIZ.RANDOMIZE_QUESTIONS' | translate"
+      [label]="'QUIZ.RANDOMIZE_QUESTIONS' | translate"
+      [control]="quiz_form.get('randomizeQuestions')!"
+      [formControlNameInput]="'randomizeQuestions'"
+      [options]="[{id: true, label: 'Yes'}, {id: false, label: 'No'}]"
+      [optionLabel]="'label'"
+      [optionValue]="'id'" [validations]="validationsRequired">
+    </lib-ui-dropdown>
+  </div>
+
+  <!-- Pass Score -->
+  <div class="col-span-12 md:col-span-6">
+    <lib-input-number
+      [placeholder]="'QUIZ.PASS_SCORE' | translate"
+      [inputLabel]="'QUIZ.PASS_SCORE' | translate"
+      [control]="quiz_form.get('passScore')!"
+      [controlNameInput]="'passScore'" [validations]="validationsRequired">
+    </lib-input-number>
+  </div>
+
+</form>
+
+
+
+      <!-- Actions -->
+      <div class="col-span-12 flex items-center gap-4 justify-end py-6 border-t border-gray_light">
+  <div class="cancel_btn">
+    <button (click)="showQuizPopup=false">{{"RISK_MANAGMENT.Cancel"|translate}}</button>
+  </div>
+  <div class="action_btn">
+    <p-button [label]="'RISK_MANAGMENT.SaveChanges' | translate " [loading]="isLoading" (onClick)="submit()">
+    </p-button>
+  </div>
+</div>
+
+    </div>
+
+  </p-dialog>
+</div>

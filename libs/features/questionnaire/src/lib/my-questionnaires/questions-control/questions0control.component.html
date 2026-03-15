@@ -1,0 +1,298 @@
+<section class="border border-gray_light rounded-lg">
+  @if(!loading){ @if(current_question_data){
+  <div class="header px-5 py-3 border-b border-gray_light">
+    <h2 class="text-[#344054] mb-2 text-lg font-semibold">
+      {{ current_question_data.title }}
+    </h2>
+    <!-- <p class="text-[#667085] mb-2 font-normal">
+      {{ current_question_data.section_desc }}
+    </p> -->
+
+    <div class="number_container flex items-center gap-3 flex-wrap">
+      @for(question of current_question_data.questions; track $index ; let i =
+      $index){
+
+      <button
+        [ngClass]="{
+          active: current_selection_question.questionId === question.questionId
+        }"
+        class="Q_num cursor-default"
+      >
+        <span>{{ i + 1 }}</span>
+      </button>
+      }
+    </div>
+  </div>
+
+  @if(current_question_data.questions.length){
+  <div class="question_answer-sec p-4">
+    <div class="question_info flex items-start justify-between mb-6">
+      <div class="question flex items-center gap-3">
+        <div class="icon_question flex items-center justify-center">
+          <img src="/images/question-icon.svg" alt="question__icon" />
+        </div>
+        <div class="content flex items-center gap-3">
+          <h3 class="text-lg font-semibold text-[#344054]">
+            {{ current_selection_question.questionText }}
+          </h3>
+          <button (click)="actionDeleteVisible=true" class="default_btn">
+            <i class="fi fi-rs-circle-xmark text-lg"></i>
+          </button>
+          <!-- <p class="text-[#98A2B3] font-normal">Select all that apply</p> -->
+        </div>
+      </div>
+
+      <!-- <div class="weight_badge flex items-center justify-center">
+        <span>{{ current_selection_question.weight | number }}</span>
+      </div> -->
+    </div>
+
+    <div class="flex mb-6 justify-between items-center">
+      @for (step of steps; track $index) {
+      <div class="flex flex-col gap-3 items-center flex-1 stepContainer">
+        <div
+          class="stepIcoContainer relative w-full flex justify-center items-center"
+        >
+          <div
+            class="step_line absolute"
+            [ngClass]="{
+              full_width: $index !== 0 && $index !== steps.length - 1,
+              last_step: $index === steps.length - 1
+            }"
+          ></div>
+          <button
+            [disabled]="!current_selection_question.answer"
+            (click)="handleStepChange(step)"
+            class="stepIco z-50"
+            [ngClass]="{ active_step: step?.id === currentStep }"
+          >
+            <i [class]="step?.icon"></i>
+          </button>
+        </div>
+
+        <div class="stepTxt flex flex-col gap-2 items-center">
+          <h3 [ngClass]="{ active_step: step?.id === currentStep }">
+            {{ step?.name }}
+          </h3>
+          <span></span>
+        </div>
+      </div>
+      }
+    </div>
+
+    @switch (currentStep) { @case (1) { @if
+    (multiSelectTypes.includes(current_selection_question.answerType)) { @for
+    (answer of current_selection_question.answers; track $index; let i = $index)
+    {
+
+    <div class="answer_muilti_card mb-3">
+      <p-checkbox
+        [(ngModel)]="current_selection_question.answer"
+        [value]="answer.answerOptionId"
+        [inputId]="'answer-' + i"
+      ></p-checkbox>
+
+      <label class="font-normal" [for]="'answer-' + i">
+        {{ answer.answerText }}
+      </label>
+    </div>
+
+    } } @else if
+    (singleSelectTypes.includes(current_selection_question.answerType)) { @if
+    (current_selection_question.answerType !== 'Yes / No') { @for (answer of
+    current_selection_question.answers; track $index; let i = $index) {
+
+    <div class="answer_muilti_card mb-3">
+      <p-radioButton
+        name="answerRadio-{{ current_question_data.id }}-{{
+          current_selection_question.questionId
+        }}"
+        [value]="answer.answerOptionId"
+        [(ngModel)]="current_selection_question.answer"
+        [inputId]="`answer-${current_selection_question.questionId}_${$index}`"
+      ></p-radioButton>
+
+      <label
+        class="ml-2 font-normal"
+        [for]="`answer-${current_selection_question.questionId}_${$index}`"
+      >
+        {{ answer.answerText }}
+      </label>
+    </div>
+
+    } } @else { @for (answer of yesNoOptions; track $index; let i = $index) {
+
+    <div class="answer_muilti_card mb-3">
+      <p-radioButton
+        name="answerRadio-{{ current_question_data.id }}-{{
+          current_selection_question.questionId
+        }}"
+        [value]="answer.value"
+        [(ngModel)]="current_selection_question.answer"
+        [inputId]="'answer-' + current_selection_question.questionId + '-' + i"
+      ></p-radioButton>
+
+      <label
+        class="ml-2 font-normal"
+        [for]="'answer-' + current_selection_question.questionId + '-' + i"
+      >
+        {{ answer.answer_Text }}
+      </label>
+    </div>
+
+    } } } @else if
+    (textAnswerTypes.includes(current_selection_question.answerType)) {
+
+    <div class="form_group">
+      <textarea
+        rows="5"
+        [placeholder]="'Write Answer Here ... !'"
+        pInputText
+        [(ngModel)]="current_selection_question.answer"
+      ></textarea>
+    </div>
+
+    } @else if
+    (numberAnswerTypes.includes(current_selection_question.answerType)) {
+    <div class="form_group">
+      <p-inputNumber
+        [(ngModel)]="current_selection_question.answer"
+        mode="decimal"
+        placeholder="Write Answer Here..."
+      />
+    </div>
+    } @else if (dateAnswerTypes.includes(current_selection_question.answerType))
+    {
+    <div class="form_group">
+      <p-calendar
+        [appendTo]="'body'"
+        [iconDisplay]="'input'"
+        [showIcon]="true"
+        dateFormat="mm-dd-yy"
+        [placeholder]="'pick a date'"
+        [(ngModel)]="current_selection_question.answer"
+        inputId="icondisplay"
+      />
+    </div>
+    } } @case (2) {
+
+    <div class="">
+      <lib-new-attach-list
+        [loadingSatate]="loadingState"
+        (action_emiter)="handleActionSingleFile($event)"
+        (add_emiter)="handleShowAdd($event)"
+        [files]="attachments"
+      >
+      </lib-new-attach-list>
+    </div>
+
+    <lib-attachments-ui
+      [hasExistFile]="false"
+      [dataEntityId]="FEAT_ID"
+      [dataEntityTypeId]="67"
+      [fileUsageTypeID]="'67'"
+      [show_add_dailog]="show_add_dailog"
+      (added)="handleAdded($event)"
+    ></lib-attachments-ui>
+
+    <lib-view-attachement
+      (modelVisibleEmiter)="handleHideView($event)"
+      [modelVisible]="displayModal"
+      [selected_file_Input$]="selected_file_show"
+    ></lib-view-attachement>
+
+    <lib-edit-attachment
+      [visible]="edit_file_name"
+      [title]="current_title_update"
+      [loading]="loadUpdate"
+      (save)="handleUpdateTitle($event)"
+      (cancel_Modal)="edit_file_name = false"
+    ></lib-edit-attachment>
+
+    } @case (3) {
+    <lib-comment-section
+      (deleteCommentEvent)="deleteComment($event)"
+      (updateCommentEvent)="updateMessage($event.newContent, $event.message)"
+      [action_items]="items"
+      [relatedColumnId]="FEAT_ID"
+      [relatedEntityId]="'67'"
+      [isExternal]="true"
+    ></lib-comment-section>
+
+    }}
+
+    <div class="actions_buttons flex pt-4 items-center justify-between">
+      @if(!isAtFirstQuestion()){
+      <div class="cancel_btn">
+        <button (click)="handlePrevious()">
+          {{ 'BUTTONS.PREVIOUS' | translate }}
+        </button>
+      </div>
+      } @if(!isAtLastQuestion()){
+
+      <div class="flex gap-3 items-center ms-auto">
+        <p-button
+          [disabled]="!current_selection_question.answer"
+          class="btn action_btn_question ms-auto"
+          styleClass="w-full justify-center"
+          (onClick)="handleSave()"
+        >
+          {{ 'BUTTONS.SAVE_AND_CONTINUE' | translate }}
+        </p-button>
+
+        <button
+          class="btn action_btn_question skip"
+          (click)="moveStepForward()"
+        >
+          {{ 'BUTTONS.SKIP' | translate }}
+        </button>
+      </div>
+      }@else {
+      <p-button
+        [loading]="saving"
+        [disabled]="!current_selection_question.answer"
+        class="btn action_btn_question ms-auto"
+        styleClass="w-full justify-center"
+        (onClick)="handleSave(true)"
+      >
+        {{ 'BUTTONS.SAVE' | translate }}
+      </p-button>
+
+      }
+    </div>
+  </div>
+  }@else {
+  <div class="flex flex-col gap-4 items-center py-2">
+    <img src="/images/empty-state.svg" alt="no-questions__img" />
+    <h2>{{ 'EMPTY_STATE.QUESTIONS_NOT_FOUND' | translate }}</h2>
+  </div>
+  } } }@else {
+  <p-skeleton height="500px" width="100%"></p-skeleton>
+  }
+
+
+
+  
+</section>
+<lib-delete-confirm-popup
+  [titleDelete]="'QUESTIONNAIRE.CLOSE_QUESTIONNAIRE_TITLE'"
+  [descriptionDelete]="'QUESTIONNAIRE.CLOSE_QUESTIONNAIRE_DESCRIPTION'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="actionDeleteVisible=false">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="close()"
+        [loading]="closing"
+        [label]="'BUTTONS.CLOSE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

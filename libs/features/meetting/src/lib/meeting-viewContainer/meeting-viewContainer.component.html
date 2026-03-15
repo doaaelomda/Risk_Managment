@@ -1,0 +1,28 @@
+<section>
+  <div class="header flex items-center justify-between flex-wrap mb-8">
+    <div class="flex items-center gap-2.5">
+      @if (loadData) {
+      <p-skeleton width="15rem" styleClass="mb-2" />
+      <p-skeleton width="2" styleClass="mb-2" />
+      } @else {
+      <h2 class="text-2xl font-semibold text-[#101828]">
+        {{ data?.name }}
+      </h2>
+      <span class="font-semibold badge {{data?.meetingStatusTypeColor}}">
+        {{ data?.meetingStatusTypeName }}
+      </span>
+      }
+    </div>
+  </div>
+
+  <div class="px-6">
+      <lib-shared-tabs
+    [hasAttachments]="false"
+    [hasComments]="false"
+    [tabs]="tabs"
+    [permissionFeature]="{module:'MEETING' , feature:'MEETING'}"
+  ></lib-shared-tabs>
+  </div>
+
+  <router-outlet></router-outlet>
+</section>

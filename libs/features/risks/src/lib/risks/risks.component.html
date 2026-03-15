@@ -1,0 +1,230 @@
+<section>
+  <lib-new-table
+    [loading]="loading"
+    [table_data]="dataTale"
+    [table_title]="'BREAD_CRUMB_TITLES.RISK_LIST' | translate"
+    [badge_title]="'HEARDE_TABLE.Risk' | translate"
+    [dataViewId]="1"
+    [entityID_Name]="'riskID'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="items"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{ module: 'RISKS', feature: 'RISK', action: 'VIEW' }"
+  >
+  @if(_PermissionSystemService.can('RISKS' , 'RISK' , 'ADD')){
+
+    <button
+      addition_action
+      (click)="menu.toggle($event)"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+    >
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'HEARDE_TABLE.Add_New_Level_Risk' | translate }}</span>
+      <i class="fi fi-rr-angle-small-down"></i>
+    </button>
+  }
+  </lib-new-table>
+</section>
+
+<p-menu #menu [model]="itemsMenu" [appendTo]="'body'" [popup]="true" />
+<p-dialog
+  [draggable]="false"
+  [dismissableMask]="true"
+  [modal]="true"
+  [position]="'right'"
+  [(visible)]="visible"
+  styleClass="w-[0rem] h-[100%]"
+>
+  <ng-template pTemplate="header">
+    <div class="head">
+      <h3>Filters</h3>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<lib-delete-confirm-popup
+  [titleDelete]="'RISK_MANAGMENT.DELETE_RISK_TITLE'"
+  [descriptionDelete]="'RISK_MANAGMENT.DELETE_RISK_DESC'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteRisk()"
+        [loading]="loadDelted"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+<p-dialog
+  header="'RISK_VIEW.MAIN_INFORMATION'"
+  [(visible)]="quickAddVisible"
+  [modal]="true"
+  [dismissableMask]="true"
+  [draggable]="false"
+  styleClass="w-[50rem]"
+  [position]="'center'"
+  (onHide)="closeQuickAddModal()"
+>
+  <ng-template pTemplate="header">
+    <h3 class="text-gray-800 font-bold text-1xl">
+      {{ 'RISK_VIEW.MAIN_INFORMATION' | translate }}
+    </h3>
+  </ng-template>
+  <h6>{{ 'RISK_VIEW.UPDATE_PHOTO' | translate }}</h6>
+
+  <div class="border-b border-gray_light my-4"></div>
+
+  <ng-template pTemplate="content">
+    <div class="p-fluid" [formGroup]="form">
+      <!-- Code -->
+      <div
+        class="field flex flex-wrap items-center border-b border-gray_light py-4"
+      >
+        <label class="font-bold w-1/4" for="code">{{
+          'RISK_MANAGMENT.CODE' | translate
+        }}</label>
+        <div class="w-3/4">
+          <lib-input-text
+            [placeholder]="'PLACEHOLDERS.enter_risk_code'"
+            [control]="form.get('riskCode')!"
+            [controlNameInput]="'riskCode'"
+          >
+          </lib-input-text>
+        </div>
+      </div>
+
+      <!-- Risk Title -->
+      <div
+        class="field flex flex-wrap items-center border-b border-gray_light py-4"
+      >
+        <label class="font-bold w-1/4" for="title">{{
+          'RISK_MANAGMENT.RISK_TITLE' | translate
+        }}</label>
+        <div class="w-3/4">
+          <lib-input-text
+            [placeholder]="'PLACEHOLDERS.enter_risk_title'"
+            [validations]="validations"
+            [control]="form.get('riskTitle')!"
+            [controlNameInput]="'riskTitle'"
+          >
+          </lib-input-text>
+        </div>
+      </div>
+
+      <!-- Risk Description -->
+      <div class="field flex flex-wrap border-b border-gray_light py-4">
+        <div class="w-1/4">
+          <label class="font-bold block mb-1" for="Des1">{{
+            'RISK_MANAGMENT.RISK_DESCRIPTION' | translate
+          }}</label>
+          <p class="text-xs text-gray_color">
+            {{ 'hint.Writeashortintroduction' | translate }}
+          </p>
+        </div>
+        <div class="w-3/4">
+          <lib-textarea-ui
+            [placeholder]="'PLACEHOLDERS.Enter_Description'"
+            [control]="form.get('riskDescription')!"
+            [controlNameInput]="'riskDescription'"
+          >
+          </lib-textarea-ui>
+        </div>
+      </div>
+
+      <!-- Identified Date -->
+      <div
+        class="field flex flex-wrap items-center border-b border-gray_light py-4"
+      >
+        <label class="font-bold w-1/4" for="IdentifiedDate">{{
+          'RISK_MANAGMENT.IDENTIFIED_DATE' | translate
+        }}</label>
+        <div class="w-3/4">
+          <lib-date-packer
+            [placeholder]="'PLACEHOLDERS.Select_Date'"
+            [control]="form.get('identifiedDate')!"
+            [controlNameInput]="'identifiedDate'"
+          >
+          </lib-date-packer>
+        </div>
+      </div>
+
+      <!-- Show Asset Switch & Dropdown -->
+      <div
+        class="field flex items-center flex-wrap border-b border-gray_light py-4"
+      >
+        <div class="w-1/4 gap-2 items-start">
+          <!-- <lib-switch-ui [controlNameInput]="'show_asset'" [control]="form.get('show_asset')!">
+        </lib-switch-ui> -->
+          <div class="text-sm">
+            <p class="font-bold block">
+              {{ 'RISK_MANAGMENT.ASSET' | translate }}
+            </p>
+          </div>
+        </div>
+
+        <div class="w-3/4">
+          <lib-tree-multiselect
+            [multiChoose]="true"
+            [nodes_input]="assets"
+            [placeholder]="'PLACEHOLDERS.Select_Assets'"
+            [validations]="validationsStatus"
+            [control]="form.get('assets')!"
+            [formControlNameInput]="'assets'"
+          >
+          </lib-tree-multiselect>
+        </div>
+      </div>
+
+      <!-- Organizational Unit -->
+      <div class="field flex flex-wrap items-center py-4">
+        <label class="font-bold w-1/4" for="OrganizationalUnit">{{
+          'RISK_MANAGMENT.ORG_UNIT' | translate
+        }}</label>
+        <div class="w-3/4">
+          <lib-tree-multiselect
+            [multiChoose]="true"
+            [nodes_input]="units"
+            [placeholder]="'PLACEHOLDERS.Select_Organizational_Unit'"
+            [validations]="validationsStatus"
+            [control]="form.get('organizationalUnitIDs')!"
+            [formControlNameInput]="'organizationalUnitIDs'"
+          >
+          </lib-tree-multiselect>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <div class="flex flex-wrap justify-end gap-2">
+      <p-button
+        pButton
+        class="bg-white_color text-gray-700 text-sm border border-gray_light rounded-lg"
+        [label]="'BUTTONS.CANCEL' | translate"
+        icon="pi pi-times"
+        (click)="closeQuickAddModal()"
+      />
+
+      <p-button
+        pButton
+        class="bg-primary text-white text-sm rounded-lg"
+        [label]="'BUTTONS.SAVE' | translate"
+        [loading]="loadingBtn"
+        icon="pi pi-check"
+        (click)="submit()"
+      />
+    </div>
+  </ng-template>
+</p-dialog>

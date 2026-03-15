@@ -1,0 +1,59 @@
+@if(!isAddingAction && !isUpdatingAction){
+  <lib-cards-list
+  (selected_item_emiter)="setSelected($event)"
+  [items_actions]="item_actions"
+  [data_list]="data_list"
+  [badge_title]="'WORKFLOW_STEPS.TITLES.ACTIONS' | translate"
+  [list_title]="'WORKFLOW_STEPS.TITLES.ACTIONS' | translate"
+  [total_items]="total_items"
+  [table_actions_permissions]="{ module: 'WORKFLOW', feature: 'DEFINEACTIONS', action: 'VIEW' }"
+
+>
+@if(_PermissionSystemService.can('WORKFLOW' , 'DEFINEACTIONS' , 'ADD')){
+  <button
+    actions
+    (click)="handleActionRoute()"
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+  >
+    <i class="fi fi-br-plus w-5 h-5"></i>
+    <span> {{ 'WORKFLOW_STEPS.BUTTONS.ADD_NEW_ACTION' | translate }} </span>
+  </button>
+}
+</lib-cards-list>
+}
+@if(isAddingAction || isUpdatingAction) {
+  <div class="flex flex-col gap-3">
+    <button class="default_btn w-fit ms-auto" (click)="returnToList()"> {{ 'WORKFLOW_STEPS.BUTTONS.BACK_TO_LIST' | translate }} </button>
+     <lib-action [data]="singleActionData" [isUpdating]="isUpdatingAction" (handleCancel)="onCancel($event)" (handleSave)="onSave($event)"></lib-action>
+  </div>
+}
+<lib-delete-confirm-popup
+  [titleDelete]="titleDelete"
+  [descriptionDelete]="descriptionDelete"
+  [visibleInput]="deletingActionDialog"
+  (hideEmiter)="handleCloseDelete($event)"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <!-- Cancel Button -->
+    <div class="cancel_btn">
+      <button class="w-40" (click)="handleCloseDelete(false)">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <!-- Delete Button -->
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteAction()"
+        [loading]="isDeletingAction"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+<lib-shared-workflow-view
+  [(isViewing)]="isViewingAction"
+  [view_data]="view_data"
+  [title]="title"
+  [desc]="desc"
+></lib-shared-workflow-view>

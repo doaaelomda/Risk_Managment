@@ -1,0 +1,562 @@
+@if(!loading){ @if(!items.length){
+<div class="flex justify-center items-center flex-col gap-2 py-4">
+  <div class="flex flex-col gap-2 items-center empty_state_wrapper">
+    <img src="images/no-document.svg" alt="empty-state" />
+    <p class="text-gray-900 font-semibold text-[18px] mb-1">
+      {{ 'ATTACHMENT.NOTUPLOADED' | translate }}
+    </p>
+    <p class="text-gray-500 font-normal text-[16px] mb-1">
+      {{ 'ATTACHMENT.UPLOADFILES' | translate }}
+    </p>
+  </div>
+  @if(_PermissionSystemService.can('LIBRARY' , 'STANDARDDOCUMENTS_CONTROLS' , 'ADD')){
+      <button
+    class="add-btn"
+    (click)="setModifiedItem(null, null, $event); isModifing = true"
+  >
+    {{ 'CONTENT.ADD_BUTTON' | translate }}
+  </button>
+  }
+</div>
+}@else {
+<div class="header flex items-center justify-between mb-8">
+  <div>
+    <h2 class="text-2xl font-medium mb-3">
+      {{ 'CONTENT.STANDARD_STRUCTURED_CONTENT' | translate }}
+    </h2>
+    <p class="text-gray_light">{{ 'CONTENT.SUB_HERDER' | translate }}</p>
+  </div>
+  @if(_PermissionSystemService.can('LIBRARY' , 'STANDARDDOCUMENTS_CONTROLS' , 'ADD')){
+      <button
+    (click)="setModifiedItem(null, null, $event); isModifing = true"
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+  >
+    <i class="fi fi-br-plus w-5 h-5"></i>
+    <span>{{ 'CONTENT.ADD_NEW_CONTENT_ITEM' | translate }}</span>
+  </button>
+  }
+</div>
+<div class="grid grid-cols-12 gap-x-3">
+  <div class="col-span-12 lg:col-span-6">
+    <p-tree
+      styleClass="node_wrapper p-0"
+      class="w-full"
+      [value]="items"
+      [draggableNodes]="true"
+      [droppableNodes]="true"
+      draggableScope="self"
+      droppableScope="self"
+      (onNodeDrop)="handleDrop($event)"
+    >
+      <ng-template let-node pTemplate="default">
+        <button
+          class="flex gap-2 items-start w-full link"
+              [ngClass]="{
+            selected_node:
+              node?.id === selectedNode?.governanceStandardControlID ||
+              node.active
+          }"
+          [ngStyle]="
+            node?.id === selectedNode?.governanceStandardControlID
+              ? {
+
+                  backgroundColor: node?.backColor || '#f4f3ff'
+                }
+              : {}
+          "
+          (click)="handleNodeClick(node, $event)"
+        >
+          <p class="nodeName  flex-1 text-start" [title]="node?.name" [ngStyle]="{
+              color: node?.foreColor || '#6938ef',
+          }">
+            <i class="fi fi-rr-layers layers-ico text-xl" [ngStyle]="{
+              color: node?.foreColor || '#6938ef',
+          }"></i>
+            {{ node?.name }}
+          </p>
+          <div class="flex items-center gap-2">
+            <button
+              class="iconActionWrapper"
+              (click)="onMenuClick($event, node)"
+            >
+              <i class="fi fi-br-menu-dots" [ngStyle]="{
+              color: node?.foreColor || '#6938ef',
+          }"></i>
+            </button>
+            @if(node?.children?.length){
+            <button
+              (click)="toggleNode($event, node)"
+              class="iconActionWrapper"
+            >
+              <i
+                class="fi fi-rr-angle-small-{{ node.expanded ? 'up' : 'down' }}"
+               [ngStyle]="{
+              color: node?.foreColor || '#6938ef',
+          }"></i>
+            </button>
+            }
+          </div>
+        </button>
+      </ng-template>
+    </p-tree>
+  </div>
+  <div
+    class="col-span-12 lg:col-span-6 flex flex-col gap-3 view_data_container"
+  >
+    @if(selectedNode) {
+    <div class="flex flex-col view_data">
+      <span>{{
+        'GOVERNANCE_STANDARDS.GOVERNANCE_STANDARD_CODE' | translate
+      }}</span>
+      <p class="content_txt">
+        {{ selectedNode.governanceStandardControlCode || '-' }}
+      </p>
+    </div>
+
+    <div class="flex flex-col view_data">
+      <span>{{ 'LOOKUP.NAME' | translate }}</span>
+      <p class="content_txt">
+        {{
+          currentLang === 'en' ? selectedNode.name : selectedNode.nameAr || '-'
+        }}
+      </p>
+    </div>
+    <div class="flex flex-col view_data">
+      <span>{{ 'CONTENT.CLASSFICATIONS' | translate }}</span>
+      <span
+        class="content_txt badge {{
+          selectedNode.grcDocumentElementClassificationColor
+        }}"
+      >
+        {{ selectedNode.grcDocumentElementClassificationName || '-' }}
+      </span>
+    </div>
+
+@if(selectedNode?.foreColor){
+    <div class="flex flex-col view_data">
+      <span>{{ 'CONTENT.TEXTCOLOR' | translate }}</span>
+      <span class="content_txt">
+        {{ selectedNode.foreColor || '-' }}
+      </span>
+    </div>
+    } @if(selectedNode?.backColor){
+    <div class="flex flex-col view_data">
+      <span>{{ 'CONTENT.BGCOLOR' | translate }}</span>
+      <span class="content_txt">
+        {{ selectedNode.backColor || '-' }}
+      </span>
+    </div>
+    }
+
+    <div class="flex flex-col view_data">
+      <span>{{ 'GOVERNANCE_STANDARDS.CONTROL_MATURITY_LEVEL' | translate }}</span>
+      <span
+        class="content_txt badge {{
+          selectedNode.govControlMaturityLevelColor
+        }}"
+      >
+        {{ selectedNode.govControlMaturityLevelName || '-' }}
+      </span>
+    </div>
+
+    <div class="flex flex-col view_data">
+      <span>{{ 'GOVERNANCE_STANDARDS.OBJECTIVE' | translate }}</span>
+      <p style="white-space: pre-line" class="content_txt">
+        {{
+          currentLang === 'en'
+            ? selectedNode.objective
+            : selectedNode.objectiveAr || '-'
+        }}
+      </p>
+    </div>
+
+    <!--
+    <div class="flex flex-col view_data">
+      <span>{{ 'GOVERNANCE_STANDARDS.TOOLS' | translate }}</span>
+      <p class="content_txt whitespace-pre-wrap">{{ selectedNode.tools || '-' }}</p>
+    </div> -->
+
+    <!-- <div class="flex flex-col view_data">
+      <span>{{ 'GOVERNANCE_STANDARDS.PRACTICES' | translate }}</span>
+      <p class="content_txt whitespace-pre-wrap">{{ selectedNode.practices || '-' }}</p>
+    </div> -->
+
+    <div class="flex flex-col view_data">
+      <span class="block mb-3">
+        {{ 'GOVERNANCE_STANDARDS.GUIDES' | translate }}
+      </span>
+      <p style="white-space: pre-line" class="content_txt whitespace-pre-wrap">
+        {{ selectedNode.guides || '-' }}
+      </p>
+    </div>
+    <div class="flex flex-col view_data">
+      <span class="block mb-3">{{
+        'GOVERNANCE_STANDARDS.GUIDES_AR' | translate
+      }}</span>
+      <p style="white-space: pre-line" class="content_txt whitespace-pre-wrap">
+        {{ selectedNode.guidesAr || '-' }}
+      </p>
+    </div>
+
+    <div class="flex flex-col view_data">
+      <span>{{ 'GOVERNANCE_STANDARDS.NOTES' | translate }}</span>
+      <p class="content_txt whitespace-pre-wrap">
+        {{ selectedNode.notes || '-' }}
+      </p>
+    </div>
+
+    <!-- <div class="flex flex-col view_data">
+      <span> {{ 'GOVERNANCE_STANDARDS.CONTENT' | translate }} </span>
+      @if(currentLang === 'en'){
+      <p class="content_txt" [innerHTML]="selectedNode?.elementText || '-'"></p>
+      }@else {
+      <p
+        class="content_txt"
+        [innerHTML]="selectedNode?.elementTextAr || '-'"
+      ></p>
+      }
+    </div> -->
+    } @else {
+    <div class="text-gray-500 text-center py-6">
+      {{ 'GOVERNANCE_STANDARDS.SELECT_NODE_TO_SHOW' | translate }}
+    </div>
+    }
+  </div>
+</div>
+
+} }@else {
+<div class="header flex flex-col my-4">
+  <p-skeleton height="2rem" width="18rem" styleClass="mb-2" />
+  <p-skeleton height="1.5rem" width="13rem" />
+</div>
+<div class="grid grid-cols-12 gap-x-3">
+  <div class="col-span-12 lg:col-span-6 flex flex-col gap-3">
+    <p-skeleton height="3rem" />
+    <p-skeleton height="3rem" />
+    <p-skeleton height="3rem" />
+    <p-skeleton height="3rem" />
+    <p-skeleton height="3rem" />
+  </div>
+  <div class="col-span-12 lg:col-span-6 flex flex-col gap-3">
+    <p-skeleton height="5rem" />
+    <p-skeleton height="5rem" />
+    <p-skeleton height="5rem" />
+    <p-skeleton height="5rem" />
+  </div>
+</div>
+}
+
+<div class="action_dailog">
+  <p-dialog
+  [dismissableMask]="true"
+  [header]="dialogHeaderText"
+  [modal]="true"
+  [(visible)]="isModifing"
+  styleClass="w-[50rem] h-[40rem]"
+>
+  @if(modifiedItem){
+  <div
+    [formGroup]="modifiedItem"
+    class="flex flex-col justify-center form_group"
+  >
+    <div class="inputs_wrap flex flex-col gap-4">
+      <label for="">
+        {{ 'CONTENT.CLASSFICATIONS' | translate }}
+      </label>
+      <div class="flex item-center gap-4 flex-wrap">
+        @for (option of elementOptions; track $index) {
+        <button
+          (click)="setElementOption(option)"
+          class=" flex justify-center items-center gap-2 border-[1px] {{
+            modifiedItem.get('grcDocumentElementClassificationID')?.value ===
+            option.id
+              ? 'border-primary_custom'
+              : 'border-gray_light'
+          }} rounded-md p-3 cursor-pointer"
+        >
+          <p-radioButton
+            [inputId]="`${option?.label}__${option?.id}_${$index}`"
+            [value]="option?.id"
+            formControlName="grcDocumentElementClassificationID"
+          />
+          <label
+            [for]="`${option?.label}__${option?.id}_${$index}`"
+            class="ml-2"
+          >
+            {{ option?.label }}
+          </label>
+        </button>
+        }
+      </div>
+      <!-- <div class="col-span-8">
+        <lib-ui-dropdown
+          [control]="modifiedItem.get('grcDocumentElementClassificationID')!"
+          [formControlNameInput]="'grcDocumentElementClassificationID'"
+          [options]="elementOptions"
+          [optionLabel]="'label'"
+          [optionValue]="'id'"
+          [placeholder]="'CONTENT.SELECT_ELEMENT_TYPE' | translate"
+        ></lib-ui-dropdown>
+      </div> -->
+    </div>
+    <!-- 🔹 Code -->
+    <div class="inputs_wrap grid grid-cols-12">
+      <label class="col-span-4" for="">
+        {{ 'GOVERNANCE_STANDARDS.CODE' | translate }}
+      </label>
+      <div class="col-span-8">
+        <lib-input-text
+          [placeholder]="'GOVERNANCE_STANDARDS.PLACEHOLDERS.CODE' | translate"
+          [inputLabel]=""
+          [control]="modifiedItem.get('governanceStandardControlCode')!"
+          [controlNameInput]="'governanceStandardControlCode'"
+        >
+        </lib-input-text>
+      </div>
+    </div>
+
+    <!-- 🔹 Name (EN) -->
+
+    <div class="inputs_wrap">
+      <lib-textarea-ui
+        [inputLabel]="'GOVERNANCE_STANDARDS.NAME' | translate"
+        [placeholder]="'GOVERNANCE_STANDARDS.PLACEHOLDERS.NAME' | translate"
+        [control]="modifiedItem.get('name')!"
+        [controlNameInput]="'name'"
+      >
+      </lib-textarea-ui>
+    </div>
+
+    <!-- 🔹 Name (AR) -->
+    <div class="inputs_wrap">
+      <lib-textarea-ui
+        [inputLabel]="'GOVERNANCE_STANDARDS.NAME_AR' | translate"
+        [placeholder]="'GOVERNANCE_STANDARDS.PLACEHOLDERS.NAME_AR' | translate"
+        [control]="modifiedItem.get('nameAr')!"
+        [controlNameInput]="'nameAr'"
+      >
+      </lib-textarea-ui>
+    </div>
+
+      <div class="inputs_wrap grid grid-cols-12">
+        <label for="" class="col-span-4"> {{'GOVERNANCE_STANDARDS.CONTROL_MATURITY_LEVEL' | translate}} </label>
+        <div class="col-span-8">
+              <lib-ui-dropdown
+      [placeholder]="'GOVERNANCE_STANDARDS.CONTROL_MATURITY_LEVEL' | translate"
+      [label]=""
+      [control]="modifiedItem.get('GovControlMaturityLevelID')!"
+      [formControlNameInput]="'GovControlMaturityLevelID'" [validations]="[]"
+      [options]="controlMaturityLevels"
+      [optionLabel]="'label'"
+      [optionValue]="'id'">
+    </lib-ui-dropdown>
+
+        </div>
+  </div>
+
+       <div class="inputs_wrap grid grid-cols-12">
+      <label for="" class="col-span-4">{{
+        'CONTENT.WEIGHT' | translate
+      }}</label>
+      <div class="col-span-8">
+        <input
+          [placeholder]="'CONTENT.PLACEHOLDERS.WEIGHT' | translate"
+          type="number"
+          pInputText
+          formControlName="wieght"
+        />
+      </div>
+    </div>
+
+  
+      <div class="inputs_wrap grid grid-cols-12">
+        <label class="col-span-4" for="">
+          {{ 'CONTENT.TEXTCOLOR' | translate }}
+        </label>
+        <div class="col-span-8">
+          <lib-input-text
+            [placeholder]="'CONTENT.TEXTCOLOR' | translate"
+            [control]="modifiedItem.get('foreColor')!"
+            [controlNameInput]="'foreColor'"
+          >
+          </lib-input-text>
+        </div>
+      </div>
+
+      <div class="inputs_wrap grid grid-cols-12">
+        <label class="col-span-4" for="">
+          {{ 'CONTENT.BGCOLOR' | translate }}
+        </label>
+        <div class="col-span-8">
+          <lib-input-text
+            [placeholder]="'CONTENT.BGCOLOR' | translate"
+            [control]="modifiedItem.get('backColor')!"
+            [controlNameInput]="'backColor'"
+          >
+          </lib-input-text>
+        </div>
+      </div>
+    <!-- 🔹 Objective (EN) -->
+    <div class="inputs_wrap">
+      <lib-textarea-ui
+        [inputLabel]="'GOVERNANCE_STANDARDS.OBJECTIVE' | translate"
+        [placeholder]="
+          'GOVERNANCE_STANDARDS.PLACEHOLDERS.OBJECTIVE' | translate
+        "
+        [control]="modifiedItem.get('objective')!"
+        [controlNameInput]="'objective'"
+      >
+      </lib-textarea-ui>
+    </div>
+
+    <!-- 🔹 Objective (AR) -->
+    <div class="inputs_wrap">
+      <lib-textarea-ui
+        [inputLabel]="'GOVERNANCE_STANDARDS.OBJECTIVE_AR' | translate"
+        [placeholder]="
+          'GOVERNANCE_STANDARDS.PLACEHOLDERS.OBJECTIVE_AR' | translate
+        "
+        [control]="modifiedItem.get('objectiveAr')!"
+        [controlNameInput]="'objectiveAr'"
+      >
+      </lib-textarea-ui>
+    </div>
+
+    <!-- 🔹 Guides -->
+    <div class="inputs_wrap">
+      <lib-textarea-ui
+        [inputLabel]="'GOVERNANCE_STANDARDS.GUIDES' | translate"
+        [placeholder]="'GOVERNANCE_STANDARDS.PLACEHOLDERS.GUIDES' | translate"
+        [control]="modifiedItem.get('guides')!"
+        [controlNameInput]="'guides'"
+      >
+      </lib-textarea-ui>
+    </div>
+
+    <!-- 🔹 Guides Ar -->
+    <div class="inputs_wrap">
+      <lib-textarea-ui
+        [inputLabel]="'GOVERNANCE_STANDARDS.GUIDES_AR' | translate"
+        [placeholder]="
+          'GOVERNANCE_STANDARDS.PLACEHOLDERS.GUIDES_AR' | translate
+        "
+        [control]="modifiedItem.get('guidesAr')!"
+        [controlNameInput]="'guidesAr'"
+      >
+      </lib-textarea-ui>
+    </div>
+
+    <!-- 🔹 Notes -->
+    <div class="inputs_wrap">
+      <lib-textarea-ui
+        [inputLabel]="'GOVERNANCE_STANDARDS.NOTES' | translate"
+        [placeholder]="'GOVERNANCE_STANDARDS.PLACEHOLDERS.NOTES' | translate"
+        [control]="modifiedItem.get('notes')!"
+        [controlNameInput]="'notes'"
+      >
+      </lib-textarea-ui>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end w-full py-2">
+      <p-button
+        (onClick)="addNewItem()"
+        [loading]="isCreating"
+        [disabled]="modifiedItem.invalid"
+        [label]="'BUTTONS.SAVE' | translate"
+        styleClass="default_btn"
+      >
+      </p-button>
+    </div>
+  </ng-template>
+  }
+</p-dialog>
+</div>
+
+<p-menu #menu [model]="actions" [popup]="true" />
+@if(dragNode){
+<p-dialog
+  [draggable]="false"
+  [dismissableMask]="false"
+  [modal]="true"
+  [(visible)]="isShowingDragDropModal"
+  styleClass="w-[50rem] h-[40rem]"
+>
+  <ng-template pTemplate="header">
+    <div class="border-b-[1px] border-gray_light pb-3 w-full">
+      <h2 class="text-[#101828] text-lg font-medium">
+        {{ 'CONTENT.ELEMENT_TYPE' | translate }}
+      </h2>
+    </div>
+  </ng-template>
+  <div class="mb-3">
+    <div class="flex item-center gap-4 flex-wrap">
+      @for (option of elementOptions; track $index) {
+      <button
+        (click)="setDragNodeElement(option.id)"
+        class="flex justify-center items-center gap-2 border-[1px] border-gray_light rounded-md py-5 px-6 cursor-pointer"
+        [ngClass]="{
+          active_border: dragNode?.grcDocumentElementClassificationID === option.id
+        }"
+      >
+        <span class="text-[#344054] font-medium text-lg">
+          {{ option?.label }}
+        </span>
+      </button>
+      }
+    </div>
+  </div>
+  <div
+    class="flex items-center gap-4 border-[1px] border-[#D0D5DD] rounded-lg py-3 px-6 w-full flex-wrap"
+  >
+    <div class="flex flex-col gap-2 justify-start items-start">
+      <span class="text-[#667085] text-sm font-medium">
+        {{ 'VERSIONS.From' | translate }}
+      </span>
+      <span class="text-[#344054] font-medium text-base">
+        {{ dragNode?.name }}
+      </span>
+    </div>
+    <i class="fi fi-rr-angle-right text-[#98A2B3] text-lg"></i>
+    <div class="flex flex-col gap-2 justify-start items-start">
+      @if(dropNode){
+      <span class="text-[#667085] text-sm font-medium">
+        {{ 'VERSIONS.To' | translate }}
+      </span>
+      <span class="text-[#344054] font-medium text-base">
+        {{ dropNode?.name }}
+      </span>
+      }@else {
+      <span class="text-[#667085] text-sm font-medium">
+        {{ 'GOVERNANCE_STANDARDS.OTHER_CATEGORY' | translate }}
+      </span>
+      }
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="flex items-center justify-between">
+              <p-button
+        pButton
+        class="bg-white_color text-[#344054] text-sm border border-gray_light rounded-lg"
+        [label]="'BUTTONS.CANCEL' | translate"
+        icon="pi pi-times"
+        (click)="isShowingDragDropModal = false; getDocsContent()"
+      />
+      <div class="flex justify-end items-center gap-4">
+        @if(dragContext && dragContext.canMerge){
+
+          <p-button (onClick)="handleMergeActionElement()" [label]="'Merge'" styleClass="btn default_btn transparent"></p-button>
+        }
+        @if(dragContext && dragContext.canMove){
+          <p-button (onClick)="handleMoveActionElement()" [label]="'Move'" styleClass="btn default_btn"></p-button>
+        }
+      </div>
+
+
+
+
+    </div>
+  </ng-template>
+</p-dialog>
+}

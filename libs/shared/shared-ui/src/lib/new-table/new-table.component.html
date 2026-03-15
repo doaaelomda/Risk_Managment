@@ -1,0 +1,463 @@
+<section>
+  <div class="header border lg:flex sm:block rounded-t-lg border-b-0 items-center justify-between py-5 px-6">
+    <div class="table_title flex flex-wrap items-start gap-4">
+      <h3 class="table_title_header">{{ table_title() }}</h3>
+
+      <span class="badge_small_table">{{ total_items }} {{ badge_title() }}</span>
+    </div>
+
+    <div class="table_actions flex flex-wrap items-center gap-4">
+
+
+      <button (click)="sort_event = {isShow:true , event:$event}" class="icon_btn primary">
+        <img src="images/filter-lines.svg" alt="">
+      </button>
+      <button (click)="handleColumnsView($event)" class="icon_btn reqular">
+        <img src="images/columns-03.svg" alt="">
+      </button>
+      @if(filiter_visible()){
+        <div  class="custom_filter_btn" >
+          <button [ngClass]="{'btn_filter_flex':filter_count}" class="my_filter" (click)="handleFilterView($event)" >
+            <i class="fi fi-rr-filter text-primaryColor-500"></i>
+            @if(filter_count){
+              <div class="flex-1 flex items-center gap-2">
+                <span class="text-sm text-primaryColor-500 font-medium">{{filter_count}}</span>
+                <span class="text-sm text-primaryColor-500 font-medium">Filter</span>
+
+                <button (click)="handleClearFilter($event)" >
+                  <i class="fi fi-rr-cross-small text-primaryColor-500"></i>
+                </button>
+              </div>
+            }
+          </button>
+        </div>
+      }
+      <ng-content select="[addition_action]"></ng-content>
+    </div>
+  </div>
+
+
+
+
+  <div [class]="is_ar ? 'rtl_dir' : 'ltr_dir'" class="table_container">
+    <p-table
+    (onColResize)="handledColumnResizeListner($event)"
+
+     [(selection)]="selected_items"  (selectionChange)="onSelectionChange($event)"  [dataKey]="entityID_Name()" [value]="table_data()" class="m-2 lg:m-0" styleClass="custom_table"
+      columnResizeMode="expand" [resizableColumns]="true"   [scrollable]="true" [tableStyle]="{ 'min-width': '50' }">
+      <ng-template pTemplate="header">
+        <tr>
+
+          @if(table_config()?.type === 'singleSelect'){
+            <th style="width: 4rem"></th>
+          }
+
+            @if(table_config()?.type === 'multiSelect'){
+            <th  style="width: 4rem"></th>
+
+          }
+          @for(col of columns; track $index){
+          @if(col.isShown && col.isResizable ){
+          <th  pResizableColumn>
+            <div class="flex items-center gap-2">
+              <span>{{ col.displayName ?? col.label }}</span>
+              @if(col.filed === selected_sort?.field){
+              @if(selected_sort?.direction === 1){
+
+              <i class="fi fi-rr-sort-amount-up text-primary"></i>
+              }@else {
+              <i class="fi fi-rr-sort-amount-down-alt text-primary"></i>
+              }
+              }
+            </div>
+          </th>
+          }
+          @else if (col.isShown && col.isFixed) {
+          <th [alignFrozen]="is_ar ? 'right' : 'left'" pFrozenColumn>
+            <div class="flex items-center gap-2">
+              <span>{{ col.displayName ?? col.label }}</span>
+              @if(col.filed === selected_sort?.field){
+              @if(selected_sort?.direction === 1){
+
+              <i class="fi fi-rr-sort-amount-up text-primary"></i>
+              }@else {
+              <i class="fi fi-rr-sort-amount-down-alt text-primary"></i>
+              }
+              }
+            </div>
+          </th>
+          }
+          }
+          @if(isShownAction()){
+
+          <th class="w-fit" [class]="is_ar ? 'th_left':''" pFrozenColumn [alignFrozen]="is_ar ? 'left' : 'right'">{{'LOOKUP.ACTIONS' |translate}}</th>
+          }
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr>
+
+          @if(table_config()?.type === 'singleSelect'){
+               <td>
+                    <p-tableRadioButton  [value]="row" />
+                </td>
+          }
+
+               @if(table_config()?.type === 'multiSelect'){
+                         <td>
+                    <p-tableCheckbox class="check-native" [value]="row" />
+                </td>
+          }
+          @for(col of columns; track $index; let i=$index){ @if(col.isShown){
+          @switch (col.type){
+          @case('text'){
+          @if(col.isFixed){
+          <td (click)="handleColumnClick(row,i)" pFrozenColumn>
+            @if(row[getValueProperty('text' , col)]){
+            <span class="text-">{{ row[getValueProperty('text', col)] }}</span>
+            }@else {
+            <span>-</span>
+            }
+          </td>
+          }@else {
+          <td (click)="handleColumnClick(row,i)">
+            @if(col?.label === 'RiskSourceID' && row[getValueProperty('text' , col)]){
+            <span>{{row['riskSourceName']}}</span>
+            }
+            @if(col?.label === 'RiskDomainID' && row[getValueProperty('text' , col)]){
+            <span class="badge" [ngClass]="row['riskDomainColor']">{{ row[getValueProperty('text' , col)]}}</span>
+            }
+            @else if(row[getValueProperty('text' , col)]){ @let x =
+            row[getValueProperty('text' , col)];
+            <span class="text-">{{
+              x&&x?.length > 50 ? x?.split('')?.slice(0, 40)?.join('') + ' ...' : x
+              }}</span>
+            }
+            @else {
+            <span>-</span>
+            }
+          </td>
+          }
+          }
+          @case('number'){
+          @if(col.isFixed){
+          <td (click)="handleColumnClick(row,i)" pFrozenColumn>
+            @if(row[getValueProperty('number' , col)] || row[getValueProperty('number' , col)] === 0){
+            <span class="text-">{{ row[getValueProperty('number', col)] | number }}</span>
+            }@else {
+            <span>-</span>
+            }
+          </td>
+          }@else {
+          <td (click)="handleColumnClick(row,i)">
+            @if(row[getValueProperty('number' , col)] || row[getValueProperty('number' , col)] === 0){
+            <span class="text-">{{ row[getValueProperty('number', col)] | number }}</span>
+            }@else {
+            <span>-</span>
+            }
+          </td>
+          }
+          }
+          @case('currency'){
+          @if(col.isFixed){
+          <td (click)="handleColumnClick(row,i)" pFrozenColumn>
+            @if(row[getValueProperty('currency' , col)]){
+            <span class="text-">{{ row[getValueProperty('currency', col)] | currency }}</span>
+            }@else {
+            <span>-</span>
+            }
+          </td>
+          }@else {
+          <td (click)="handleColumnClick(row,i)">
+            @if(row[getValueProperty('currency' , col)]){
+            <span class="text-">{{ row[getValueProperty('currency', col)] | currency }}</span>
+            }@else {
+            <span>-</span>
+            }
+          </td>
+          }
+          }
+          @case('multiline'){ @if(col.isFixed){
+          <td (click)="handleColumnClick(row,i)" pFrozenColumn class="flex items-center gap-1">
+            @if(row[getValueProperty('notes' , col)]?.length){ @for(line of
+            row[getValueProperty('notes' , col)]?.slice(0,2) ; track $index){
+            <span class="multilines_single">{{ line?.label }}</span>
+            } @if(row[getValueProperty('notes' , col)]?.length > 2){
+            <div class="number_badge">
+              <span>+ {{ row[getValueProperty('notes', col)]?.length - 2 }}</span>
+            </div>
+            } }@else {
+            <span>-</span>
+            }
+          </td>
+          }@else {
+          <td (click)="handleColumnClick(row,i)" class="flex items-center gap-1">
+            @if(row[getValueProperty('notes' , col)]?.length){ @for(line of
+            row[getValueProperty('notes' , col)]?.slice(0,2) ; track $index){
+            <span class="multilines_single">{{ line?.label }}</span>
+            } @if(row[getValueProperty('notes' , col)]?.length > 2){
+            <div class="number_badge">
+              <span>+ {{ row[getValueProperty('notes', col)]?.length - 2 }}</span>
+            </div>
+            } }@else {
+            <span>-</span>
+            }
+          </td>
+          } } @case('userCard'){ @if(col.isFixed){
+          <td pFrozenColumn>
+            <div class="flex items-center gap-4">
+              @if (row[getValueProperty('image' , col)]) {
+              <div class="avatar">
+                <!-- <img width="40" [src]="row[getValueProperty('image' , col)]" alt=""> -->
+                <img width="40" src="images/Avatar2.svg" alt="" />
+              </div>
+              }
+
+              <div class="content">
+                <h2 class="tex-base font-medium">
+                  {{
+                  row[getValueProperty('title', col)] || '-'
+                  }}
+                </h2>
+                <p class="text-sm text-gray_color">
+                  {{
+                  row[getValueProperty('description', col)]
+                  }}
+                </p>
+              </div>
+            </div>
+          </td>
+          }@else {
+          <td (click)="handleColumnClick(row,i)">
+            <div class="flex items-center gap-4">
+              @if (row[getValueProperty('image' , col)]) {
+              <div class="avatar">
+                <!-- <img width="40" [src]="row[getValueProperty('image' , col)]" alt=""> -->
+                <img width="40" src="images/Avatar2.svg" alt="" />
+              </div>
+              }
+
+              <div class="content">
+                <h2 class="tex-base font-medium">
+                  {{
+                  col.label === 'RiskOwnerRolesID'
+                  ? row['riskOwnerRole']
+                  : col.filed === 'Manager'
+                  ? row['riskManagerRole']
+                  : row[getValueProperty('title', col)] || '-'
+                  }}
+                </h2>
+                <p class="text-sm text-gray_color">
+                  {{
+                  col.filed === 'Manager'
+                  ? row['riskManagerUser']
+                  : row[getValueProperty('description', col)]
+                  }}
+                </p>
+              </div>
+            </div>
+          </td>
+          } } @case('roleCard'){ @if(col.isFixed){
+          <td (click)="handleColumnClick(row,i)" pFrozenColumn>
+            @if(row[getValueProperty('text' , col)]){
+
+            <div class="flex items-center gap-4">
+              <div class="avatar">
+                <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="0.800781" y="0.601562" width="28.8" height="28.8" rx="14.4" fill="#F4F3FF" />
+                  <path
+                    d="M22.2012 21.3031V19.9031C22.2012 18.5984 21.3088 17.5022 20.1012 17.1913M17.6512 8.90666C18.6773 9.32203 19.4012 10.328 19.4012 11.5031C19.4012 12.6782 18.6773 13.6842 17.6512 14.0996M18.7012 21.3031C18.7012 19.9985 18.7012 19.3462 18.488 18.8316C18.2039 18.1455 17.6588 17.6004 16.9727 17.3163C16.4581 17.1031 15.8058 17.1031 14.5012 17.1031H12.4012C11.0965 17.1031 10.4442 17.1031 9.92966 17.3163C9.24358 17.6004 8.69849 18.1455 8.41431 18.8316C8.20117 19.3462 8.20117 19.9985 8.20117 21.3031M16.2512 11.5031C16.2512 13.0495 14.9976 14.3031 13.4512 14.3031C11.9048 14.3031 10.6512 13.0495 10.6512 11.5031C10.6512 9.95673 11.9048 8.70312 13.4512 8.70312C14.9976 8.70312 16.2512 9.95673 16.2512 11.5031Z"
+                    stroke="#6938EF" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </div>
+              <div class="content">
+                <h2 class="tex-base font-medium">
+                  {{ row[getValueProperty('text', col)] }}
+                </h2>
+              </div>
+            </div>
+            }@else {
+            <span>-</span>
+            }
+          </td>
+          }@else {
+          <td (click)="handleColumnClick(row,i)">
+            @if(row[getValueProperty('text' , col)]){
+
+            <div class="flex items-center gap-4">
+              <div class="avatar">
+                <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="0.800781" y="0.601562" width="28.8" height="28.8" rx="14.4" fill="#F4F3FF" />
+                  <path
+                    d="M22.2012 21.3031V19.9031C22.2012 18.5984 21.3088 17.5022 20.1012 17.1913M17.6512 8.90666C18.6773 9.32203 19.4012 10.328 19.4012 11.5031C19.4012 12.6782 18.6773 13.6842 17.6512 14.0996M18.7012 21.3031C18.7012 19.9985 18.7012 19.3462 18.488 18.8316C18.2039 18.1455 17.6588 17.6004 16.9727 17.3163C16.4581 17.1031 15.8058 17.1031 14.5012 17.1031H12.4012C11.0965 17.1031 10.4442 17.1031 9.92966 17.3163C9.24358 17.6004 8.69849 18.1455 8.41431 18.8316C8.20117 19.3462 8.20117 19.9985 8.20117 21.3031M16.2512 11.5031C16.2512 13.0495 14.9976 14.3031 13.4512 14.3031C11.9048 14.3031 10.6512 13.0495 10.6512 11.5031C10.6512 9.95673 11.9048 8.70312 13.4512 8.70312C14.9976 8.70312 16.2512 9.95673 16.2512 11.5031Z"
+                    stroke="#6938EF" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </div>
+              <div class="content">
+                <h2 class="tex-base font-medium">
+                  {{ row[getValueProperty('text', col)] }}
+                </h2>
+              </div>
+            </div>
+            }@else {
+            <span>-</span>
+            }
+          </td>
+          } } @case('badge'){ @if(col.isFixed){
+          <td (click)="handleColumnClick(row,i)" pFrozenColumn>
+            @if(row[getValueProperty('text' , col)]){
+
+            <span [class]="row[getValueProperty('color', col)]" class="badge">
+              <div class="small_doted"></div>
+
+              <span>{{ row[getValueProperty('text', col)] }}</span>
+            </span>
+            }@else {
+            <span>-</span>
+            }
+          </td>
+          }@else {
+          <td (click)="handleColumnClick(row,i)">
+            @if(row[getValueProperty('text' , col)]){
+
+            <span [class]="row[getValueProperty('color', col)]" class="badge">
+              <div class="small_doted"></div>
+              <span>{{ row[getValueProperty('text', col)] }}</span>
+            </span>
+            }@else {
+            <span>-</span>
+            }
+          </td>
+
+          }
+        }
+          @case('bool'){ @if(col.isFixed){
+          <td (click)="handleColumnClick(row,i)" pFrozenColumn>
+            @if(row[getValueProperty('bool' , col)]){
+
+            <span class="badge green">
+              <div class="small_doted"></div>
+
+              <span>Active</span>
+            </span>
+            }@else {
+            <span class="badge red">
+              <div class="small_doted"></div>
+
+              <span>InActive</span>
+            </span>
+            }
+          </td>
+          }@else {
+          <td (click)="handleColumnClick(row,i)">
+            @if(row[getValueProperty('bool' , col)]){
+
+            <span class="badge green">
+              <div class="small_doted"></div>
+
+              <span>Active</span>
+            </span>
+            }@else {
+            <span class="badge red">
+              <div class="small_doted"></div>
+
+              <span>InActive</span>
+            </span>
+            }
+          </td>
+
+          } } @case('date'){ @if(col.isFixed){
+
+          <td (click)="handleColumnClick(row,i)" pFrozenColumn>
+            @if(row[getValueProperty('date' , col)]){
+            <span>{{
+              row[getValueProperty('date', col)] | date : 'dd , MMM yy h:m a'
+              }}</span>
+            }@else {
+            <span>-</span>
+            }
+          </td>
+          }@else {
+          <td (click)="handleColumnClick(row,i)">
+            @if(row[getValueProperty('date' , col)]){
+            <span>{{
+              row[getValueProperty('date', col)] | date : 'dd , MMM yy h:m a'
+              }}</span>
+            }@else {
+            <span>-</span>
+            }
+          </td>
+          } }
+          @case('progress'){ @if(col.isFixed){
+          <td (click)="handleColumnClick(row,i)" pFrozenColumn>
+            <div class="progress_outer">
+              <div [style.width]="row[getValueProperty('progress', col)] + '%'" class="inner"></div>
+            </div>
+          </td>
+          }@else
+          {
+          <td (click)="handleColumnClick(row,i)">
+            <div class="progress_outer">
+              <div [style.width]="row[getValueProperty('progress', col)] + '%'" class="inner"></div>
+            </div>
+          </td>
+          } } } } }
+
+          @if(this.isShownAction()){
+          <td [class]="is_ar ? 'td_left':''" pFrozenColumn [alignFrozen]="is_ar ? 'left' : 'right'">
+            <div class="flex items-center justify-start">
+              <button (click)="menu.toggle($event); currentActionRow.emit(row[`${entityID_Name()}`]); " class="icon">
+                <i class="fi fi-rr-menu-dots-vertical text-gray_color"></i>
+              </button>
+            </div>
+          </td>
+          }
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td [attr.colspan]="columns?.length">
+            <lib-empty-state [loading]="loading()"></lib-empty-state>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+
+  <lib-pagination (paginationChanged)="handleChangePage($event)"></lib-pagination>
+
+
+
+
+
+
+</section>
+
+
+
+
+
+<p-menu class="update-menu" #menu [model]="action_items()" [popup]="true" >
+<ng-template pTemplate="item" let-item>
+  @if(item?.visible()){
+    <button  (click)="item.command()" class="p-menuitem-link w-full flex items-center gap-3 px-4 py-2 hover:bg-gray_color-100">
+      <i [class]="item.icon"></i>
+      <span class="p-menuitem-text">{{ item.label | translate }}</span>
+    </button>
+  }
+</ng-template>
+</p-menu>
+
+
+<lib-new-table-columns [columns_afterResize]="resizableRef" (columns_data_emiter)="handleColumnsDisplay($event)" [dataViewId]="dataViewId()"
+  [show_overlay]="cloumns_event"></lib-new-table-columns>
+
+
+
+  <lib-new-table-filter (filter_visibsle)="handlefilterVisible($event)" [clearFilter]="clearAllFilter" (filter_emitter)="handleFilterEvent($event)" [data_viewid]="dataViewId()" [show_overlay]="filter_event" ></lib-new-table-filter>
+
+
+  <lib-new-table-sort [show_overlay]="sort_event" (sortEmiter)="handleSelectedSort($event)" [columnsInput]="columns" ></lib-new-table-sort>
+

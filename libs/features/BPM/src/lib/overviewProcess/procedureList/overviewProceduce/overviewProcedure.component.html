@@ -1,0 +1,17 @@
+<div class="name_process">
+  @if(loadDataProcess){
+  <p-skeleton width="150px" height="20px" borderRadius="8px"></p-skeleton>
+  }
+  @else {
+
+  <h4 class="header-para"> {{dataProcess?.name || '-'}}</h4>
+  <h6 class="text-primary font-bold text-2xl mt-4 mb-9 mx-4">
+    └─{{ dataProcedure?.referenceCode ?? '-' }}
+  </h6>
+  }
+</div>
+
+
+<lib-shared-tabs [permissionFeature]="{module:'BUSINESSPROCESS' , feature:'PROCEDURE'}"></lib-shared-tabs>
+
+<router-outlet></router-outlet>

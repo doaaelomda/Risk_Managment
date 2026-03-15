@@ -1,0 +1,131 @@
+<section class="form_sec">
+  <div class="header border-b border-gray_light pb-6 mb-6">
+    <h2 class="text-lg font-medium text-[#101828]">
+      {{
+        standardId
+          ? ('GOVERNANCE_STANDARDS.UPDATE_DOCUMENT' | translate)
+          : ('GOVERNANCE_STANDARDS.ADD_NEW_DOCUMENT' | translate)
+      }}
+    </h2>
+  </div>
+
+  <form [formGroup]="form" class="grid grid-cols-12 gap-6 mb-6">
+
+    <!-- Name (EN) -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'LOOKUP.NAME_PLACEHOLDER' | translate"
+        [inputLabel]="'LOOKUP.NAME' | translate"
+        [control]="form.get('name')!"
+        [controlNameInput]="'name'">
+      </lib-input-text>
+    </div>
+
+    <!-- Name (AR) -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'LOOKUP.NAME_AR_PLACEHOLDER' | translate"
+        [inputLabel]="'LOOKUP.NAME_AR' | translate"
+        [control]="form.get('nameAr')!"
+        [controlNameInput]="'nameAr'">
+      </lib-input-text>
+    </div>
+
+    <!-- Short Name -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'GOVERNANCE_STANDARDS.SHORT_NAME_PLACEHOLDER' | translate"
+        [inputLabel]="'GOVERNANCE_STANDARDS.SHORT_NAME' | translate"
+        [control]="form.get('shortName')!"
+        [controlNameInput]="'shortName'">
+      </lib-input-text>
+    </div>
+
+    <!-- Version -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-input-text
+        [placeholder]="'GOVERNANCE_STANDARDS.VERSION_PLACEHOLDER' | translate"
+        [inputLabel]="'GOVERNANCE_STANDARDS.VERSION' | translate"
+        [control]="form.get('version')!"
+        [controlNameInput]="'version'">
+      </lib-input-text>
+    </div>
+
+    <!-- Description (EN) -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-textarea-ui
+        [placeholder]="'LOOKUP.DESCRIPTION_PLACEHOLDER' | translate"
+        [inputLabel]="'LOOKUP.DESCRIPTION' | translate"
+        [control]="form.get('description')!"
+        [controlNameInput]="'description'">
+      </lib-textarea-ui>
+    </div>
+
+    <!-- Description (AR) -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-textarea-ui
+        [placeholder]="'LOOKUP.DESCRIPTION_AR_PLACEHOLDER' | translate"
+        [inputLabel]="'LOOKUP.DESCRIPTION_AR' | translate"
+        [control]="form.get('descriptionAr')!"
+        [controlNameInput]="'descriptionAr'">
+      </lib-textarea-ui>
+    </div>
+
+    <!-- Governance Standard Type -->
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'GOVERNANCE_STANDARDS.TYPE_PLACEHOLDER' | translate"
+        [label]="'GOVERNANCE_STANDARDS.TYPE' | translate"
+        [control]="form.get('governanceStandardTypeID')!"
+        [formControlNameInput]="'governanceStandardTypeID'"
+        [options]="standardTypeList"
+        [optionLabel]="'label'"
+        [optionValue]="'id'">
+      </lib-ui-dropdown>
+    </div>
+    <div class="md:col-span-6 col-span-12">
+      <lib-ui-dropdown
+        [placeholder]="'WORKFLOW_STEPS.FIELDS.MATURITY_TYPE_PLACEHOLDER' | translate"
+        [label]="'WORKFLOW_STEPS.FIELDS.MATURITY_TYPE_LABEL' | translate"
+        [control]="form.get('govControlMaturityLevelTypeID')!"
+        [formControlNameInput]="'govControlMaturityLevelTypeID'"
+        [options]="GovControlMaturityLevelType"
+        [optionLabel]="'label'"
+        [optionValue]="'id'">
+      </lib-ui-dropdown>
+    </div>
+
+            <div class="md:col-span-6 col-span-12">
+            <lib-ui-dropdown [placeholder]="'MAIN_INFO.DOC_ELE_CLASSFICATION_PROFILE' | translate"
+              [label]="'MAIN_INFO.DOC_ELE_CLASSFICATION_PROFILE'|translate"
+              [control]="form.get('grcDocumentElementClassificationProfileID')!"
+              [options]="classificationProfiles" [optionLabel]="'label'" [optionValue]="'id'"
+              [formControlNameInput]="'grcDocumentElementClassificationProfileID'">
+            </lib-ui-dropdown>
+          </div>
+
+    <!-- Footer Buttons -->
+    <div class="col-span-12 flex justify-end gap-4 py-4">
+      <div class="default_btn cancel">
+        <a [routerLink]="'/gfw-portal/library/standard-docs'">
+          {{ 'BUTTONS.CANCEL' | translate }}
+        </a>
+      </div>
+
+      <div class="action_btn">
+        <p-button
+          [label]="
+            standardId
+              ? ('BUTTONS.UPDATE' | translate)
+              : ('BUTTONS.SAVE' | translate)
+          "
+          [outlined]="true"
+          [disabled]="form.invalid"
+          [loading]="isSavingStandard"
+          severity="secondary"
+          (onClick)="save()">
+        </p-button>
+      </div>
+    </div>
+  </form>
+</section>

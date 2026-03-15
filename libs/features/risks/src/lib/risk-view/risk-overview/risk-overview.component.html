@@ -1,0 +1,277 @@
+<section class="grid grid-cols-12 gap-4">
+  <div class="col-span-12 lg:col-span-8">
+    <div class="flex flex-col gap-4">
+      <div>
+        <h2 class="overview-header"> {{'RISK_MANAGMENT.MAIN_INFO' |translate}} </h2>
+        <div class="overview-container">
+          <lib-shared-overview
+            [data]="Data"
+            [entries]="mainInfoEntries"
+            [dataLoading]="loadingData"
+          ></lib-shared-overview>
+        </div>
+      </div>
+      <div>
+        <h2 class="overview-header">{{'RISK_MANAGMENT.CLASSIFICATIONS' |translate}} </h2>
+        <div class="overview-container">
+          <lib-shared-overview
+            [data]="Data"
+            [entries]="classificationsEntries"
+            [dataLoading]="loadingData"
+          ></lib-shared-overview>
+        </div>
+      </div>
+      <div>
+        <h2 class="overview-header">{{'RISK_MANAGMENT.Responsibilities' |translate}}</h2>
+        <div class="overview-container">
+          <lib-shared-overview
+            [data]="Data"
+            [entries]="responsibilitiesEntries"
+            [dataLoading]="loadingData"
+          ></lib-shared-overview>
+        </div>
+      </div>
+      <div>
+        <h2 class="overview-header">{{'RISK_MANAGMENT.Timelines' |translate}}</h2>
+        <div class="overview-container">
+          <lib-shared-overview
+            [data]="Data"
+            [entries]="timelineEntries"
+            [dataLoading]="loadingData"
+          ></lib-shared-overview>
+        </div>
+      </div>
+      <div>
+        <h2 class="overview-header">{{'RISK_MANAGMENT.STATUS_AND_IMPLEMENTATION' |translate}}</h2>
+        <div class="overview-container">
+          <lib-shared-overview
+            [data]="Data"
+            [entries]="statusAndImplemenationsEntries"
+            [dataLoading]="loadingData"
+          ></lib-shared-overview>
+        </div>
+      </div>
+      <div>
+        <h2 class="overview-header">{{'RISK_MANAGMENT.METHODOLOGY_APPETITE_HEADER' |translate}}</h2>
+        <div class="overview-container">
+          <lib-shared-overview
+            [data]="Data"
+            [entries]="methodologyAndAppetiteEntries"
+            [dataLoading]="loadingData"
+          ></lib-shared-overview>
+        </div>
+      </div>
+            <div>
+        <h2 class="overview-header">{{'RISK_VIEW.SWOT_Analysis' |translate}}</h2>
+        <div class="overview-container">
+          <lib-shared-overview
+            [data]="Data"
+            [entries]="strategicAnalysis"
+            [dataLoading]="loadingData"
+          ></lib-shared-overview>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-span-12 lg:col-span-4 mt-5">
+    <div class="mb-4">
+      <lib-system-actions
+        [dataEntityTypeId]="1"
+        [isWF]="true"
+        [entityId]="idValue"
+      ></lib-system-actions>
+    </div>
+
+    <div class="risk_rating p-4 mb-4">
+      <h2 class="current_risk mb-2">
+        {{ 'RISK_VIEW.CURRENT_RISK_RATING' | translate }}
+      </h2>
+      <h3 class="high_header">
+        {{ 'RISK_VIEW.High' | translate }}
+      </h3>
+
+      <button
+        class="focus:outline-none absolute ltr:right-12 rtl:left-12"
+        aria-label="Toggle risk details"
+      >
+        <svg
+          width="25"
+          height="17"
+          viewBox="0 0 25 17"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M15.0762 15.249L24.4922 0.5L0.551189 0.499999L10.0002 15.243C10.27 15.6722 10.6441 16.026 11.0876 16.2714C11.5311 16.5168 12.0296 16.6459 12.5365 16.6465C13.0434 16.6471 13.5422 16.5192 13.9863 16.2748C14.4305 16.0304 14.8054 15.6775 15.0762 15.249Z"
+            fill="#667085"
+          />
+        </svg>
+      </button>
+      <div class="progress-container py-8">
+        @for (progress of progressValues; track progress) {
+        <div
+          class="progress-segment"
+          [style.width.%]="progress.value"
+          [style.background]="progress.background"
+          [style.transform]="progress.transform || 'none'"
+        ></div>
+        }
+      </div>
+
+      <div class="space-y-2 mb-4">
+        <h6 class="text-progress">
+          {{ 'RISK_VIEW.RESIDUAL_RISK' | translate }}
+        </h6>
+
+        <div class="flex  gap-0 lg:gap-[55px] badge_progress">
+          <span>
+            {{ 'RISK_VIEW.IMPACT' | translate }}
+            @if (!loadingData) {
+            <button
+              class="py-1 my-2 flex items-center badge"
+              [ngClass]="Data?.residualRiskImpactColor"
+            >
+              {{ Data?.residualRiskImpactName || '-' }}
+            </button>
+            } @else {
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+          </span>
+
+          <span class="border-l pl-3 border-gray_light">
+            {{ 'RISK_VIEW.LIKELIHOOD' | translate }}
+            @if (!loadingData) {
+            <button
+              class="my-2 py-1 flex items-center badge"
+              [ngClass]="Data?.residualRiskLikelihoodColor"
+            >
+              {{ Data?.residualRiskLikelihoodName || '-' }}
+            </button>
+            } @else {
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+          </span>
+
+          <span class="border-l pl-3 border-gray_light">
+            {{ 'RISK_VIEW.RATING' | translate }}
+            @if (!loadingData) {
+            <button
+              class="my-2 py-1 flex items-center badge"
+              [ngClass]="Data?.residualRiskLeveColor"
+            >
+              {{ Data?.residualRiskLeveName || '-' }}
+            </button>
+            } @else {
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+          </span>
+        </div>
+
+        <div class="w-100 border h-[1px] border-gray_light"></div>
+      </div>
+
+      <div class="space-y-2 mb-8">
+        <h6 class="text-progress">{{ 'RISK_VIEW.INHERATE_RISK' | translate }}</h6>
+
+        <div class="flex  gap-0 lg:gap-[55px] badge_progress">
+          <span>
+            {{ 'RISK_VIEW.IMPACT' | translate }}
+            @if (!loadingData) {
+            <button
+              class="py-1 my-2 flex items-center badge"
+              [ngClass]="Data?.inherentRiskImpactColor"
+            >
+              {{ Data?.inherentRiskImpactName || '-' }}
+            </button>
+            } @else {
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+          </span>
+
+          <span class="border-l pl-3 border-gray_light">
+            {{ 'RISK_VIEW.LIKELIHOOD' | translate }}
+            @if (!loadingData) {
+            <button
+              class="my-2 py-1 flex items-center badge"
+              [ngClass]="Data?.inherentRiskLikelihoodColor"
+            >
+              {{ Data?.inherentRiskLikelihoodName || '-' }}
+            </button>
+            } @else {
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+          </span>
+
+          <span class="border-l pl-3 border-gray_light">
+            {{ 'RISK_VIEW.RATING' | translate }}
+            @if (!loadingData) {
+            <button
+              class="my-2 py-1 flex items-center badge"
+              [ngClass]="Data?.inherentRiskLevelColor"
+            >
+              {{ Data?.inherentRiskLevelName || '-' }}
+            </button>
+            } @else {
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+          </span>
+        </div>
+         <div class="w-100 border h-[1px] border-gray_light"></div>
+      </div>
+
+      <div class="space-y-2 mb-8">
+        <h6 class="text-progress">{{ 'RISK_VIEW.TARGET_RISK' | translate }}</h6>
+
+        <div class="flex flex-wrap gap-0 lg:gap-[55px] badge_progress">
+          <span>
+            {{ 'RISK_VIEW.IMPACT' | translate }}
+            @if (!loadingData) {
+            <button
+              class="py-1 my-2 flex items-center badge"
+              [ngClass]="Data?.targetRiskImpactColor"
+            >
+              {{ Data?.targetRiskImpactName || '-' }}
+            </button>
+            } @else {
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+          </span>
+
+          <span class="border-l pl-3 border-gray_light">
+            {{ 'RISK_VIEW.LIKELIHOOD' | translate }}
+            @if (!loadingData) {
+            <button
+              class="my-2 py-1 flex items-center badge"
+              [ngClass]="Data?.targetRiskLikelihoodColor"
+            >
+              {{ Data?.targetRiskLikelihoodName || '-' }}
+            </button>
+            } @else {
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+          </span>
+
+          <span class="border-l pl-3 border-gray_light">
+            {{ 'RISK_VIEW.RATING' | translate }}
+            @if (!loadingData) {
+            <button
+              class="my-2 py-1 flex items-center badge"
+              [ngClass]="Data?.targetRiskLevelColor"
+            >
+              {{ Data?.targetRiskLevelName || '-' }}
+            </button>
+            } @else {
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+          </span>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="chart_matrex">
+      <lib-risk-matrex-chart [riksData]="Data" [methodology_id]="Data?.riskMethodologyID"></lib-risk-matrex-chart>
+    </div>
+  </div>
+</section>

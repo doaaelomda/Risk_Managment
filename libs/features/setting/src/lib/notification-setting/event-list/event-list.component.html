@@ -1,0 +1,122 @@
+<section>
+  <div class="events_group mb-6">
+    <div class="head mb-6">
+      <h1 class="font-semibold text-gray-800  text-2xl">
+        {{ 'NOTIFICATION_SETTING.EVENT_GROUP' | translate }}
+      </h1>
+    </div>
+
+    <div class="events flex justify-start items-center gap-6 overflow-x-auto">
+      @if(groups.length){ @for(group of groups ; track $index ){
+      <button
+      [title]="group?.name || '-'"
+        [ngClass]="{
+          active:
+            selected_event_group.notificationEventGroupID ===
+            group.notificationEventGroupID
+        }"
+        (click)="selected_event_group = group; this.getNotificationList()"
+        class="event_item"
+      >
+        <div class="icon">
+          <i [class]="group?.iconName || 'fi fi-rr-bell'"></i>
+        </div>
+        <p class="name">
+          {{  currentLang() === 'en' ? group?.name :group?.nameAr }}
+        </p>
+      </button>
+      } }@else {
+      <p-skeleton size="10rem" />
+      <p-skeleton size="10rem" />
+      <p-skeleton size="10rem" />
+      <p-skeleton size="10rem" />
+      <p-skeleton size="10rem" />
+      <p-skeleton size="10rem" />
+      }
+    </div>
+  </div>
+
+  <div class="list_container rounded-lg">
+    <div
+      class="header mb-6 flex items-center justify-between border-b border-gray_light"
+    >
+      <div class="title flex items-center gap-4">
+        <h2 class="text-lg text-[#101828] font-medium">
+          {{  currentLang() === 'en' ? selected_event_group?.name :selected_event_group?.nameAR}}
+        </h2>
+        <span class="badge_small_table"
+          >{{ data_list.length }}
+          {{ 'NOTIFICATION_SETTING.NOTFICATION' | translate }}
+        </span>
+      </div>
+
+      <div class="actions flex items-center gap-4">
+        <div class="search md:w-80 sm:w-50">
+          <lib-input-search
+            (searchTermEmiter)="handleEmitSearchTerm($event)"
+          ></lib-input-search>
+        </div>
+      </div>
+    </div>
+
+    <div class="list">
+      @if(loading_list && !data_list.length){
+      <lib-loader></lib-loader>
+      }@else if (!loading_list && !data_list.length) {
+      <div class="flex flex-col gap-2 items-center empty_state_wrapper">
+        <lib-empty-state [loading]="loading_list"></lib-empty-state>
+      </div>
+      }@else{ @for(item of data_list ; track $index ){
+      <button
+        (click)="viewNotfication(item.notificationEventID)"
+        class="single_item flex mb-4 items-center justify-between py-3 px-5 border border-gray_light rounded-lg w-full"
+      >
+        <div class="content_container flex items-center gap-4">
+          <div
+            class="w-10 h-10 rounded-md text-2xl font-bold bg-[#F2F4F7] text-primary flex items-center justify-center"
+          >
+            <i [class]="item?.icon"></i>
+          </div>
+          <div class=" ">
+            <p class="text-[#475467] font-semibold text-lg mb-1 text-start">
+              {{ item.title || item.name }}
+            </p>
+            <div class="flex items-center gap-3">
+              <p class="text-[#667085] text-sm">{{ item.sub }}</p>
+              <span
+                [ngClass]="{ green: item?.isActive, red: !item?.isActive }"
+                class="badge"
+              >
+                <div class="small_doted"></div>
+
+                <span>{{
+                  (item?.isActive
+                    ? 'NOTIFICATION_SETTING.ACTIVE'
+                    : 'NOTIFICATION_SETTING.INACTIVE'
+                  ) | translate
+                }}</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions flex items-center gap-4">
+          <p-inputSwitch
+          (click)="$event.stopPropagation()"
+            (onChange)="handelToggleActivate(item)"
+            [(ngModel)]="item.isActive"
+          />
+          <button
+            (click)="menu.toggle($event); selected_notfication_action = item;$event.stopPropagation()"
+            class="w-8 h-8 bg-[#F4F3FF] flex items-center rounded-md justify-center text-primary ac_ic"
+          >
+            <i class="fi fi-bs-menu-dots"></i>
+          </button>
+        </div>
+      </button>
+      } }
+    </div>
+  </div>
+</section>
+
+<p-menu #menu [model]="items" [popup]="true" />

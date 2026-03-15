@@ -1,0 +1,180 @@
+<section class="grid grid-cols-12 gap-8 ">
+
+  <div [ngClass]="hasActions ? 'col-span-12 lg:col-span-8' : 'col-span-12'" class="flex flex-col gap-4">
+  <div class="flex flex-col gap-4">
+
+    <!-- Main Informations -->
+    <div>
+      <h2 class="overview-header">
+        {{ 'GOV_CONTROL.MAIN_INFORMATIONS' | translate }}
+      </h2>
+      <div class="overview-container">
+        <lib-shared-overview
+          [data]="Data"
+          [entries]="mainInformationsEntries"
+          [dataLoading]="loadingState"
+        ></lib-shared-overview>
+      </div>
+    </div>
+
+    <!-- Text & Scope -->
+    <div>
+      <h2 class="overview-header">
+        {{ 'GOV_CONTROL.TEXT_AND_SCOPE' | translate }}
+      </h2>
+      <div class="overview-container">
+        <lib-shared-overview
+          [data]="Data"
+          [entries]="textAndScopeEntries"
+          [dataLoading]="loadingState"
+        ></lib-shared-overview>
+      </div>
+    </div>
+
+    <!-- Documents & Reference -->
+    <div>
+      <h2 class="overview-header">
+        {{ 'GOV_CONTROL.DOCUMENTS_AND_REFERENCE' | translate }}
+      </h2>
+      <div class="overview-container">
+        <lib-shared-overview
+          [data]="Data"
+          [entries]="documentsAndReferenceEntries"
+          [dataLoading]="loadingState"
+        ></lib-shared-overview>
+      </div>
+    </div>
+
+    <!-- Responsibility & Ownership -->
+    <div>
+      <h2 class="overview-header">
+        {{ 'GOV_CONTROL.RESPONSIBILITY_AND_OWNERSHIP' | translate }}
+      </h2>
+      <div class="overview-container">
+        <lib-shared-overview
+          [data]="Data"
+          [entries]="responsibilityAndOwnershipEntries"
+          [dataLoading]="loadingState"
+        ></lib-shared-overview>
+      </div>
+    </div>
+
+    <!-- Compliance Status -->
+    <div>
+      <h2 class="overview-header">
+        {{ 'GOV_CONTROL.COMPLIANCE_STATUS' | translate }}
+      </h2>
+      <div class="overview-container">
+        <lib-shared-overview
+          [data]="Data"
+          [entries]="complianceStatusEntries"
+          [dataLoading]="loadingState"
+        ></lib-shared-overview>
+      </div>
+    </div>
+
+    <!-- Effectiveness -->
+    <div>
+      <h2 class="overview-header">
+        {{ 'GOV_CONTROL.EFFECTIVENESS' | translate }}
+      </h2>
+      <div class="overview-container">
+        <lib-shared-overview
+          [data]="Data"
+          [entries]="effectivenessEntries"
+          [dataLoading]="loadingState"
+        ></lib-shared-overview>
+      </div>
+    </div>
+
+    <!-- Maturity -->
+    <div>
+      <h2 class="overview-header">
+        {{ 'GOV_CONTROL.MATURITY' | translate }}
+      </h2>
+      <div class="overview-container">
+        <lib-shared-overview
+          [data]="Data"
+          [entries]="maturityEntries"
+          [dataLoading]="loadingState"
+        ></lib-shared-overview>
+      </div>
+    </div>
+
+    <!-- Implementation -->
+    <div>
+      <h2 class="overview-header">
+        {{ 'GOV_CONTROL.IMPLEMENTATION' | translate }}
+      </h2>
+      <div class="overview-container">
+        <lib-shared-overview
+          [data]="Data"
+          [entries]="implementationEntries"
+          [dataLoading]="loadingState"
+        ></lib-shared-overview>
+      </div>
+    </div>
+
+    <!-- Apply CAP -->
+    <div>
+      <h2 class="overview-header">
+        {{ 'GOV_CONTROL.APPLY_CAP' | translate }}
+      </h2>
+      <div class="overview-container">
+        <lib-shared-overview
+          [data]="Data"
+          [entries]="applyCapEntries"
+          [dataLoading]="loadingState"
+        ></lib-shared-overview>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+  <div [hidden]="!hasActions"  class="col-span-12 lg:col-span-4">
+
+    <lib-system-actions (foundActionEmitter)="onFoundAction($event)" [dataEntityTypeId]="10" [entityId]="id"></lib-system-actions>
+    <div class="status pt-4 px-4">
+      <div class="flex justify-between">
+        <p class="text-progress">{{'Control_view.MY_STATUS' |translate}}</p>
+        <i class="fi fi-rr-menu-dots-vertical"></i>
+      </div>
+      <div class="grid grid-cols-1 pt-6 pb-3">
+        @for (card of statusCards; track $index) {
+        <div class="card-status my-4">
+          <div class="paraggarpStauts flex gap-2 items-center">
+            <i class="@if(card.icon) { {{card.icon}} } color_icon"></i>
+            {{ card.title | translate }}
+          </div>
+
+          @if(Data) {
+          <div class="flex items-center justify-between">
+            <span [class]="card.spanClass + ' flex gap-2 p-4 items-center'">
+              {{ Data[card.value] || '-' }}
+            </span>
+
+            <div class="p-2 welcome_par">
+              <p class="flex items-center text-gray-500 text-sm font-medium mb-2">
+                {{ 'Control_view.UPDATED' | translate }} :
+                <span class="text-gray-700 text-sm font-normal">{{ (Data[card.lastUpdated] | date:'MMM d y') || "-" }}</span>
+              </p>
+              <p class="flex items-center text-gray-500 text-sm font-medium">
+                {{ 'Control_view.NEXT_DATE' | translate }} :
+                <span class="text-gray-700 text-sm font-normal">{{ (Data[card.nextDate] | date:'MMM d y') || "-" }}</span>
+              </p>
+            </div>
+          </div>
+          } @else {
+          <p-skeleton width="8rem"></p-skeleton>
+          }
+        </div>
+        }
+      </div>
+
+
+    </div>
+  </div>
+
+</section>

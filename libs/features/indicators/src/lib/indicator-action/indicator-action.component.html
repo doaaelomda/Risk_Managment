@@ -1,0 +1,174 @@
+<!-- add Indicators -->
+<section class="form_sec">
+  <div class="header border-b border-gray_light pb-6 mb-6">
+    <h2 class="text-lg font-medium text-gray-900">{{current_update_id ? ("INDICATORS.UPDATE_INDICATORL"|translate)
+      :("INDICATORS.ADD_NEW_INDICATOR"|translate)}}</h2>
+  </div>
+
+
+<form [formGroup]="indicator_form" class="grid grid-cols-12 gap-6 mb-6">
+
+  <!-- Code -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-input-text
+      [placeholder]="'INDICATORS.CODE_PLACEHOLDER' | translate"
+      [inputLabel]="'INDICATORS.CODE' | translate"
+      [control]="indicator_form.get('code')!"
+      [controlNameInput]="'code'">
+    </lib-input-text>
+  </div>
+
+  <!-- Name -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-input-text
+      [placeholder]="'INDICATORS.NAME_PLACEHOLDER' | translate"
+      [inputLabel]="'INDICATORS.NAME' | translate"
+      [control]="indicator_form.get('name')!"
+      [controlNameInput]="'name'">
+    </lib-input-text>
+  </div>
+
+  <!-- Description -->
+<div class="col-span-12">
+  <lib-textarea-ui
+    [placeholder]="'INDICATORS.DESCRIPTION_PLACEHOLDER' | translate"
+    [inputLabel]="'INDICATORS.DESCRIPTION' | translate"
+    [validations]="[]"
+    [control]="indicator_form.get('description')!"
+    [controlNameInput]="'description'">
+  </lib-textarea-ui>
+</div>
+
+  <!-- Indicator Type -->
+  <!-- <div class="md:col-span-6 col-span-12">
+    <lib-ui-dropdown
+      [placeholder]="'INDICATORS.INDICATOR_TYPE_ID_PLACEHOLDER' | translate"
+      [label]="'INDICATORS.INDICATOR_TYPE_ID' | translate"
+      [control]="indicator_form.get('indicatorTypeID')!"
+      [formControlNameInput]="'indicatorTypeID'"
+      [options]="indicatorTypes"
+      [optionLabel]="'label'"
+      [optionValue]="'id'">
+    </lib-ui-dropdown>
+  </div> -->
+
+  <!-- Indicator Unit Type -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-ui-dropdown
+      [placeholder]="'INDICATORS.INDICATOR_UNIT_TYPE_ID_PLACEHOLDER' | translate"
+      [label]="'INDICATORS.INDICATOR_UNIT_TYPE_ID' | translate"
+      [control]="indicator_form.get('indicatorUnitTypeID')!"
+      [formControlNameInput]="'indicatorUnitTypeID'"
+      [options]="indicatorUnitTypes"
+      [optionLabel]="'label'"
+      [optionValue]="'id'">
+    </lib-ui-dropdown>
+  </div>
+
+  <!-- Aggregation Period -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-ui-dropdown
+      [placeholder]="'INDICATORS.INDICATOR_AGGREGATION_PERIOD_TYPE_ID_PLACEHOLDER' | translate"
+      [label]="'INDICATORS.INDICATOR_AGGREGATION_PERIOD_TYPE_ID' | translate"
+      [control]="indicator_form.get('indicatorAggregationPeriodTypeID')!"
+      [formControlNameInput]="'indicatorAggregationPeriodTypeID'"
+      [options]="aggregationPeriods"
+      [optionLabel]="'label'"
+      [optionValue]="'id'">
+    </lib-ui-dropdown>
+  </div>
+
+  <!-- Calculation Direction -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-ui-dropdown
+      [placeholder]="'INDICATORS.INDICATOR_CALCULATION_DIRECTION_TYPE_ID_PLACEHOLDER' | translate"
+      [label]="'INDICATORS.INDICATOR_CALCULATION_DIRECTION_TYPE_ID' | translate"
+      [control]="indicator_form.get('indicatorCalculationDirectionTypeID')!"
+      [formControlNameInput]="'indicatorCalculationDirectionTypeID'"
+      [options]="calculationDirections"
+      [optionLabel]="'label'"
+      [optionValue]="'id'">
+    </lib-ui-dropdown>
+  </div>
+
+  <!-- Evaluation Method -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-ui-dropdown
+      [placeholder]="'INDICATORS.INDICATOR_EVALUATION_METHOD_TYPE_ID_PLACEHOLDER' | translate"
+      [label]="'INDICATORS.INDICATOR_EVALUATION_METHOD_TYPE_ID' | translate"
+      [control]="indicator_form.get('indicatorEvaluationMethodTypeID')!"
+      [formControlNameInput]="'indicatorEvaluationMethodTypeID'"
+      [options]="evaluationMethods"
+      [optionLabel]="'label'"
+      [optionValue]="'id'">
+    </lib-ui-dropdown>
+  </div>
+
+  <!-- Target Value -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-input-number
+      [placeholder]="'INDICATORS.TARGET_VALUE_PLACEHOLDER' | translate"
+      [inputLabel]="'INDICATORS.TARGET_VALUE' | translate"
+      [control]="indicator_form.get('targetValue')!"
+      [controlNameInput]="'targetValue'">
+    </lib-input-number>
+  </div>
+
+  <!-- Owner User -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-user-dropdown
+      [placeholder]="'INDICATORS.OWNER_USER_ID_PLACEHOLDER' | translate"
+      [label]="'INDICATORS.OWNER_USER_ID' | translate"
+      [control]="indicator_form.get('ownerUserID')!"
+      [formControlNameInput]="'ownerUserID'"
+      [options]="userList"
+      [optionLabel]="'name'"
+      [optionValue]="'id'">
+    </lib-user-dropdown>
+  </div>
+
+  <!-- Owner Role -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-role-dropdown
+      [placeholder]="'INDICATORS.OWNER_ROLE_ID_PLACEHOLDER' | translate"
+      [label]="'INDICATORS.OWNER_ROLE_ID' | translate"
+      [control]="indicator_form.get('ownerRoleID')!"
+      [options]="roleList"
+      optionLabel="label"
+      optionValue="id"
+      [formControlNameInput]="'ownerRoleID'">
+    </lib-role-dropdown>
+  </div>
+
+  <!-- Organizational Unit -->
+  <div class="md:col-span-6 col-span-12">
+    <lib-tree-select-ui
+      [nodes_input]="organizationalUnits || []"
+      [placeholder]="'INDICATORS.ORGANIZATIONAL_UNIT_ID_PLACEHOLDER' | translate"
+      [label]="'INDICATORS.ORGANIZATIONAL_UNIT_ID' | translate"
+      [control]="indicator_form.get('organizationalUnitID')!"
+      [validations]="[]"
+      optionLabel="label"
+      [formControlNameInput]="'organizationalUnitID'">
+    </lib-tree-select-ui>
+  </div>
+
+</form>
+
+
+
+  <!-- Buttons -->
+<div class="col-span-12 flex items-center gap-4 justify-end py-6 border-t border-gray_light">
+  <div class="cancel_btn">
+    <button (click)="closeAddPage()"
+      routerLinkActive="router-link-active">{{"RISK_MANAGMENT.Cancel"|translate}}</button>
+  </div>
+  <div class="action_btn">
+    <p-button [label]="'RISK_MANAGMENT.SaveChanges' | translate " [loading]="isLoading" (onClick)="submit()">
+    </p-button>
+  </div>
+</div>
+
+
+
+</section>

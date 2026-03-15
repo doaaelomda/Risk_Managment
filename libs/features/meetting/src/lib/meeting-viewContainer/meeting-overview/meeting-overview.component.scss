@@ -1,0 +1,17 @@
+.data-container {
+  .item {
+    .icon {
+      @apply text-[#7A5AF8] text-xl;
+    }
+    .label {
+      @apply text-[#667085] text-base font-medium;
+    }
+    .value {
+        &.link {
+          @apply  text-[#6938EF]
+        }
+      @apply text-[#1D2939] text-base font-medium;
+    }
+  }
+  @apply py-4 px-6 rounded-2xl border-[1px] border-[#D0D5DD] bg-[#FAFAFF];
+}

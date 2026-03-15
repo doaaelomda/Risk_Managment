@@ -1,0 +1,85 @@
+@if(!loading){
+  @if(!items.length){
+<div class="flex justify-center items-center flex-col gap-2 py-4">
+   <div class="translate-y-[100px]">
+  <lib-empty-state-files></lib-empty-state-files>
+   </div>
+</div>
+}@else {
+
+<div class="header flex items-center justify-between my-4">
+
+  <div>
+    <h2 class="text-2xl font-medium mb-3">
+      {{ 'CONTENT.Covernance_Strctured_Content' | translate }}
+    </h2>
+    <p class="text-gray_light">{{ 'CONTENT.SUB_HERDER' | translate }}</p>
+  </div>
+</div>
+
+
+<div class="grid grid-cols-12 gap-x-3">
+  <div class="col-span-12">
+    <p-tree
+      styleClass="node_wrapper p-0"
+      class="w-full"
+      [value]="items"
+      [draggableNodes]="true"
+      [droppableNodes]="true"
+      draggableScope="self"
+      droppableScope="self"
+      (onNodeDrop)="handleDrop($event)"
+    >
+      <ng-template let-node pTemplate="default">
+        <button
+        (click)="toggleNode($event , node)"
+          class="flex gap-2 items-start w-full link"
+          [ngClass]="{
+            selected_node:
+              node?.id === selectedNode?.id ||
+              node.active
+          }"        >
+          <p class="nodeName flex-1 text-start" [title]="node?.name">
+            <i class="fi fi-rr-layers layers-ico"></i>
+            {{ node?.name }}
+          </p>
+          <div class="flex items-center gap-2">
+            @if(node?.children?.length){
+            <button
+
+              class="iconActionWrapper"
+            >
+              <i
+                class="fi fi-rr-angle-small-{{ node.expanded ? 'up' : 'down' }}"
+              ></i>
+            </button>
+            }
+          </div>
+        </button>
+      </ng-template>
+    </p-tree>
+  </div>
+
+</div>
+}
+}@else {
+  <div class="flex flex-col gap-4">
+    <p-skeleton height="4rem"></p-skeleton>
+    <p-skeleton height="4rem"></p-skeleton>
+    <p-skeleton height="4rem"></p-skeleton>
+    <p-skeleton height="4rem"></p-skeleton>
+    <p-skeleton height="4rem"></p-skeleton>
+    <p-skeleton height="4rem"></p-skeleton>
+    <p-skeleton height="4rem"></p-skeleton>
+  </div>
+}
+
+
+
+
+
+
+
+
+
+

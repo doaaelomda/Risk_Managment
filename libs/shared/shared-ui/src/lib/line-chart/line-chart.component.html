@@ -1,0 +1,151 @@
+<div  class="w-full border border-gray_light h-full py-7 px-6   rounded-2xl ">
+  <div class="head mb-8 flex justify-between items-center">
+
+    <h4 class="text-lg font-semibold ">{{current_lang === 'en' ? setting_form.get('title')?.value : setting_form.get('titleAr')?.value}}</h4>
+
+    @if(mode() === 'edit'){
+
+      <div class="filters flex items-center gap-4">
+
+
+
+
+          <div class="flex items-center gap-4 flex-row-reverse">
+                     <div class="">
+          <button (click)="filter_visible = true" class="filter_dashboard_action-btn flex items-center " [ngClass]="{ 'gap-0': current_widget_applied_filters.length === 0, 'gap-2': current_widget_applied_filters.length > 0 }">
+            <div class="icon">
+              <i [ngClass]="{
+                'text-primary': current_widget_applied_filters.length === 0,
+                'text-primary': current_widget_applied_filters.length > 0
+              }" class="fi fi-rr-filter w-5 h-5"></i>
+            </div>
+            <span [ngClass]="{
+              'text-white_color': current_widget_applied_filters.length > 0,
+              'gap-1': current_widget_applied_filters.length > 0,
+              'text-primary': current_widget_applied_filters.length > 0
+            }" class="flex items-center justify-center font-medium text-lg">
+              @if(current_widget_applied_filters.length){
+              <div class="count_badge text-primary">
+                <span>{{ current_widget_applied_filters.length }}</span>
+              </div>
+              <span class="text-primary">{{
+                'HEARDE_TABLE.FILTER' | translate
+                }}</span>
+              }
+            </span>
+            @if(current_widget_applied_filters.length > 0){
+
+            <button (click)="current_widget_applied_filters = [] ; handleDataFilter([])" >
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9.16634 0.833252L0.833008 9.16659M0.833008 0.833252L9.16634 9.16659" stroke="#7A5AF8"
+                  stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+            }
+          </button>
+        </div>
+            <button (click)="setting_visible = true" class="filter_dashboard_action-btn">
+              <i class="fi fi-rr-settings"></i>
+            </button>
+                        <button (click)="actionEmitter.emit({widget:chart_config_input()?.data , event:'delete' , value:chart_config_input()?.data})" class="filter_dashboard_action-btn danger">
+            <i class="fi fi-rr-trash"></i>
+          </button>
+          </div>
+
+          <div class="form_group flex-1">
+            <p-dropdown [options]="widthOptions" optionValue="value" [(ngModel)]="selectedWidth" optionLabel="value"
+              [placeholder]="'Select Width'"
+              (onChange)="actionEmitter.emit({widget:chart_config_input()?.data , event:'resize' , value:selectedWidth})">
+            </p-dropdown>
+          </div>
+
+      </div>
+    }
+
+  </div>
+
+
+  <div class="chart" [hidden]="!dataSet.length">
+    <p-chart #chart width="100%" [type]="chart_config?.chart_type || 'line'" height="300px" [data]="accountDataBar"
+      [options]="opptionsAccountBar" />
+  </div>
+  @if(!dataSet.length){
+  <lib-empty-state-dashbourd [loading]="isLoader"></lib-empty-state-dashbourd>
+  }
+</div>
+
+
+
+
+<div class="action_dailog">
+  <p-dialog [draggable]="false" [position]="'right'" header="Edit Profile" [modal]="false" [(visible)]="filter_visible"
+     styleClass="min-w-[25rem] min-h-[20rem]">
+
+    <ng-template pTemplate="header">
+    </ng-template>
+
+
+
+    <lib-filter-dashboard [current_filters]="current_widget_applied_filters" (filter_emiter)="handleDataFilter($event)" [data_viewId]="chart_config_input()?.data?.dataViewID"
+      [reportId]="chart_config_input()?.data?.id"></lib-filter-dashboard>
+  </p-dialog>
+
+</div>
+
+
+
+
+
+<div class="">
+  <p-dialog [draggable]="false" [position]="'right'" header=" Widget Setting " [modal]="false"
+    [(visible)]="setting_visible"  styleClass="min-w-[40rem] min-h-[20rem]">
+
+    <ng-template pTemplate="header">
+      <h2>Widget Setting </h2>
+    </ng-template>
+
+
+    <form [formGroup]="setting_form" action="">
+      <div class="field flex flex-wrap items-center border-b border-gray_light py-4">
+        <label class="font-bold w-1/4" for="code">Widget Title</label>
+        <div class="w-3/4">
+          <lib-input-text [placeholder]="'Enter Title'" [control]="setting_form.get('title')!"
+            [controlNameInput]="'title'">
+          </lib-input-text>
+        </div>
+      </div>
+      <div class="field flex flex-wrap items-center border-b border-gray_light py-4">
+        <label class="font-bold w-1/4" for="code">Widget Title Ar</label>
+        <div class="w-3/4">
+          <lib-input-text [placeholder]="'Enter Title Ar'" [control]="setting_form.get('titleAr')!"
+            [controlNameInput]="'titleAr'">
+          </lib-input-text>
+        </div>
+      </div>
+
+      <div class="field flex flex-wrap items-center border-b border-gray_light py-4">
+        <div class="w-1/4">
+          <label class="font-bold " for="code">Show Label</label>
+
+        </div>
+        <div class="w-3/4">
+                      <lib-switch-ui [controlNameInput]="'show_label'" [control]="setting_form.get('show_label')!">
+        </lib-switch-ui>
+        </div>
+      </div>
+    </form>
+
+
+
+    <ng-template pTemplate="footer">
+      <div class="action_btn">
+        <p-button (onClick)="handleSaveSetting()" [loading]="loading_setting_save" [label]="'Save'" />
+      </div>
+    </ng-template>
+
+
+
+
+
+  </p-dialog>
+</div>

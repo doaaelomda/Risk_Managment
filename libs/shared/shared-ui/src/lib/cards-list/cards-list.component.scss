@@ -1,0 +1,29 @@
+.table_title_header{
+  color: rgba(16, 24, 40, 1);
+  font-size: 18px;
+  font-weight: 500;
+}
+
+
+
+.ac_ic{
+  box-shadow: 0px 0.87px 1.74px 0px #1018280D;
+
+}
+.single_item {
+  background: none;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+}
+
+.single_item:focus {
+  outline: none;
+}
+
+
+.action_btn{
+  &.has-label {
+    @apply w-fit p-3
+  }
+  @apply w-10 h-10 bg-[#F4F3FF] flex items-center rounded-md justify-center text-primary ac_ic
+}

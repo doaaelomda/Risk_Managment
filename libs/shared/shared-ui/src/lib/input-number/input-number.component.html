@@ -1,0 +1,20 @@
+<div class="form_group">
+  <label class=" mb-2" for="
+  "><span>{{label | translate}}</span> @if(toolTip){<i class="fi fi-rr-comment-info inline" [pTooltip]="toolTip"></i>} </label>
+  <p-inputNumber
+    [placeholder]="currentPlaceHolder|translate"
+    [formControlName]="controlName"
+    [mode]="'decimal'"
+  inputId="withoutgrouping"
+    [minFractionDigits]="0"
+  [maxFractionDigits]="0"
+  [useGrouping]="false"
+    [maxlength]="maxLength" />
+  @if(currentControl.errors &&  currentControl.touched && currentValidations.length){
+    @for(val of currentValidations ; track val){
+      @if(currentControl.getError(val.key)){
+        <p class="text-sm p-1 text-danger_color">{{val.message | translate}}</p>
+      }
+    }
+  }
+</div>

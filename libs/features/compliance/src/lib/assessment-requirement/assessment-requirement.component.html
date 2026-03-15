@@ -1,0 +1,359 @@
+@if(!loadControls && controls.length === 0){
+<div
+  class="flex flex-col gap-2 items-center empty_state_wrapper ng-star-inserted"
+>
+  <img width="" src="images/no-document.svg" alt="empty-state" />
+  <h2> {{'WORKFLOW_STEPS.TEXTS.NO_CONTENT_YET' | translate}} </h2>
+  <p>{{'WORKFLOW_STEPS.TEXTS.NO_CONTENT_FOUND' | translate}}</p>
+</div>
+}@else if(!loadControls && controls.length > 0){
+
+<p-accordion>
+  @for (control of controls; track $index) {
+  <p-accordionTab
+    tabStyleClass="border-[#D0D5DD] border-[1px] p-4 rounded-lg mb-3"
+    (selectedChange)="setActiveControl($event, control)"
+  >
+    <ng-template pTemplate="header">
+      <div class="flex flex-col gap-[21px] w-full">
+        <div class="flex justify-between items-start">
+          <h1 class="text-[#475467] text-base font-medium">
+            {{ control?.requirementText }}
+          </h1>
+          <div class="flex items-center gap-3">
+            @if(_PermissionSystemService.can('COMPLIANCE' , 'ONGOINGASSSESSMENT_CONTROLS_REQUIREMENTCONTROL' , 'ADD')){
+                     <button
+              (click)="addNewAssessment($event, control)"
+              class="default_btn flex items-center gap-2"
+            >
+              <i class="fi fi-rr-plus-small text-xl"></i>
+              <span>{{ 'HEARDE_TABLE.ADD_NEW_RISK_ASSESS' | translate }}</span>
+            </button>
+            }
+            <button
+              class="bg-[#F4F3FF] w-[40px] h-[40px] flex items-center justify-center text-[#6938EF] rounded-lg flex-1"
+            >
+              <i
+                [ngClass]="{
+                  'fi-rr-angle-small-up': control.isExpand,
+                  'fi-rr-angle-small-down': !control.isExpand
+                }"
+                class="fi"
+              ></i>
+            </button>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-8 items-center">
+          <div
+            class="flex flex-col gap-2 flex-1 status-wrap border-r-[1px] border-gray_light"
+          >
+            <span class="label"> {{'ASSESSMENT_REQUIREMENT.STATUS' |translate}} </span>
+            <span
+              class="badge-custom-{{
+                control.govControlRequirementComplianceStatusTypeColor
+              }} text-sm font-normal"
+            >
+              {{ control.govControlRequirementComplianceStatusTypeName }}
+            </span>
+          </div>
+          <div
+            class="flex flex-col flex-1 gap-2 border-r-[1px] border-gray_light"
+          >
+            <span class="label"> {{'ASSESSMENT_REQUIREMENT.ASSESSOR' |translate}} </span>
+            <div class="flex gap-2 items-center">
+              <div
+                class="w-[25px] h-[25px] flex items-center justify-center rounded-full"
+              >
+                <img
+                  class="w-full h-full"
+                  src="images/Avatar2.svg"
+                  alt="user-img"
+                />
+              </div>
+              <span class="value_txt">
+                {{ control.assessedByUserName ?? '-' }}
+              </span>
+            </div>
+          </div>
+          <div class="flex flex-col flex-1 gap-2">
+            <span class="label"> {{'ASSESSMENT_REQUIREMENT.ORG_UNIT' |translate}} </span>
+            <span class="value_txt">
+              {{ control.organizationalUnitName ?? '-' }}
+            </span>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </ng-template>
+    @if( !loading &&cuurentRequirmentControlAssessment.length > 0) {
+    <div class="flex flex-col items-center gap-2 w-full mt-3">
+      @for (assessment of cuurentRequirmentControlAssessment; track $index) {
+      <div
+        class="flex flex-col gap-1 w-full rounded-[10px] border-[1px] border-gray_light p-3.5"
+      >
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <h2 class="text-[#344054] font-semibold text-lg">
+              {{ assessment.title ?? 'No Title' }}
+            </h2>
+
+            <div class="actions flex items-center gap-3">
+              @if(_PermissionSystemService.can('COMPLIANCE' , 'ONGOINGASSSESSMENT_CONTROLS_REQUIREMENTCONTROL' , 'EDIT')){
+                      <button
+                (click)="handleEdit(control, assessment)"
+                class="text-primary"
+              >
+                <i class="fi fi-rr-edit"></i>
+              </button>
+              }
+
+              @if(_PermissionSystemService.can('COMPLIANCE' , 'ONGOINGASSSESSMENT_CONTROLS_REQUIREMENTCONTROL' , 'DELETE')){
+                    <button
+                (click)="handleDelete(control, assessment)"
+                class="text-error-600"
+              >
+                <i class="fi fi-rr-trash"></i>
+              </button>
+              }
+            </div>
+          </div>
+
+          <div class="w-80">
+            <lib-system-actions
+              [dataEntityTypeId]="101"
+              [entityId]="assessment?.govControlRequirementComplianceID"
+            ></lib-system-actions>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-8 items-center">
+          <div
+            class="flex flex-col gap-2 flex-1 status-wrap border-r-[1px] border-gray_light"
+          >
+            <span class="label"> {{'ASSESSMENT_REQUIREMENT.STATUS' |translate}} </span>
+            <span
+              class="badge {{
+                assessment.controlRequirementComplianceStatusTypeColor
+              }}"
+            >
+              {{ assessment.controlRequirementComplianceStatusTypeName }}
+            </span>
+          </div>
+          <div
+            class="flex flex-col flex-1 gap-2 border-r-[1px] border-gray_light"
+          >
+            <span class="label"> {{'ASSESSMENT_REQUIREMENT.DATE' |translate}} </span>
+            <span class="value_txt">
+              {{ assessment.assessmentDate | date }}
+            </span>
+          </div>
+          <div class="flex flex-col flex-1 gap-2">
+            <span class="label"> {{'ASSESSMENT_REQUIREMENT.ASSESSOR' |translate}} </span>
+            <div class="flex gap-2 items-center">
+              <div
+                class="w-[25px] h-[25px] flex items-center justify-center rounded-full"
+              >
+                <img
+                  class="w-full h-full"
+                  src="images/Avatar2.svg"
+                  alt="user-img"
+                />
+              </div>
+              <span class="value_txt"> {{ assessment?.assessedByUserName || '-' }} </span>
+            </div>
+          </div>
+        </div>
+        @if(assessment.attachments?.length){
+        <div>
+          <span class="label"> {{'ASSESSMENT_REQUIREMENT.ATTACHMENTS' |translate}}  </span>
+          @for (attachment of assessment.attachments; track $index) {}
+        </div>
+        }
+      </div>
+      }
+    </div>
+    }@else if(cuurentRequirmentControlAssessment.length === 0 && !loading) {
+    <div
+      class="flex flex-col gap-2 items-center empty_state_wrapper ng-star-inserted"
+    >
+      <img width="" src="images/no-document.svg" alt="empty-state" />
+  <h2> {{'WORKFLOW_STEPS.TEXTS.NO_CONTENT_YET' | translate}} </h2>
+  <p>{{'WORKFLOW_STEPS.TEXTS.NO_CONTENT_FOUND' | translate}}</p>
+    </div>
+    }@else {
+    <lib-loader></lib-loader>
+    }
+  </p-accordionTab>
+  }
+</p-accordion>
+}@else {
+<lib-loader></lib-loader>
+}
+
+<p-dialog
+  [header]="(edit_flag ? 'ASSESSMENT_REQUIREMENT.EDIT'  : 'ASSESSMENT_REQUIREMENT.ADD')|translate"
+  [modal]="true"
+  [(visible)]="isSavingAssessment"
+  styleClass="w-[60rem]"
+  (onHide)="edit_flag = false"
+>
+    <div class="steps ">
+    @for (step of steps; track $index) {
+
+    <div
+      class="stepContainer "
+      [ngClass]="{
+        'justify-start': $index === 0,
+        'justify-center': $index > 0 && $index < steps.length - 1,
+        'justify-end': $index === steps.length - 1
+      }"
+    >
+      <div
+        class="middle-line {{currentLanguage}}"
+        [ngClass]="{
+          'first-line': $index === 0,
+          'last-line': $index === steps.length - 1
+        }"
+      ></div>
+      <div class="step">
+        <button
+          class="step_icon"
+          (click)="step?.command()"
+          [ngClass]="{ active: step?.id === currentStep }"
+        >
+          <i [class]="step?.icon"></i>
+        </button>
+
+        <h3 class="step_name" [ngClass]="{ active: step?.id === currentStep }">
+          {{ step?.name || '-' }}
+        </h3>
+        <span class="step_desc"> {{ step?.description || '-' }} </span>
+      </div>
+    </div>
+    }
+  </div>
+  @switch (currentStep) { @case (1) { @if(asssesmentForm){
+  <form [formGroup]="asssesmentForm">
+    <div class="grid grid-cols-12 gap-4">
+      <!-- <div class="col-span-12 lg:col-span-6">
+        <lib-date-packer [placeholder]="'Date'" [inputLabel]="'Assessment Date'"
+          [control]="asssesmentForm.get('assessmentDate')!" [controlNameInput]="'assessmentDate'">
+        </lib-date-packer>
+      </div> -->
+      <!-- <div class="col-span-12 lg:col-span-6">
+        <lib-user-dropdown
+          [placeholder]="'Pick assessor'"
+          [label]="'Assessor'"
+          [control]="asssesmentForm.get('assessedByUserID')!"
+          [formControlNameInput]="'assessedByUserID'"
+          [options]="users"
+          [optionLabel]="'name'"
+          [optionValue]="'id'"
+        >
+        </lib-user-dropdown>
+      </div> -->
+      <div class="col-span-12 lg:col-span-6">
+        <lib-ui-dropdown
+          [placeholder]="'ASSESSMENT_REQUIREMENT.STATUS_PLACEHOLDER' |translate"
+          [label]="'ASSESSMENT_REQUIREMENT.STATUS'|translate"
+          [control]="
+            asssesmentForm.get('govControlRequirementComplianceStatusTypeID')!
+          "
+          [formControlNameInput]="'govControlRequirementComplianceStatusTypeID'"
+          [options]="statuses"
+          [optionLabel]="'label'"
+          [optionValue]="'id'"
+        >
+        </lib-ui-dropdown>
+      </div>
+      <div class="col-span-12">
+        <lib-textarea-ui
+          [inputLabel]="'ASSESSMENT_REQUIREMENT.COMMENT' |translate"
+          [placeholder]="'ASSESSMENT_REQUIREMENT.COMMENT_PLACEHOLDER' |translate"
+          [control]="asssesmentForm.get('comments')!"
+          [controlNameInput]="'comments'"
+        >
+        </lib-textarea-ui>
+      </div>
+    </div>
+  </form>
+  } } @case (2) {
+  <div class="">
+    <lib-new-attach-list
+      [loadingSatate]="loadingState"
+      (action_emiter)="handleActionSingleFile($event)"
+      (add_emiter)="handleShowAdd($event)"
+      [files]="attachments"
+    >
+    </lib-new-attach-list>
+  </div>
+
+  <lib-attachments-ui
+    [dataEntityId]="FEAT_ID"
+    [dataEntityTypeId]="dataEntityTypeId"
+    [fileUsageTypeID]="fileGroupType"
+    [show_add_dailog]="show_add_dailog"
+    (added)="handleAdded($event)"
+  ></lib-attachments-ui>
+
+  <lib-view-attachement
+    (modelVisibleEmiter)="handleHideView($event)"
+    [modelVisible]="displayModal"
+    [selected_file_Input$]="selected_file_show"
+  ></lib-view-attachement>
+
+  <lib-edit-attachment
+    [visible]="edit_file_name"
+    [title]="current_title_update"
+    [loading]="loadUpdate"
+    (save)="handleUpdateTitle($event)"
+    (cancel_Modal)="edit_file_name = false"
+  ></lib-edit-attachment>
+
+  } }
+  <ng-template pTemplate="footer">
+    @switch (currentStep) { @case (1) {
+    <div class="w-full flex justify-end items-center gap-3">
+      <p-button
+        (onClick)="isSavingAssessment = false; asssesmentForm.reset()"
+        styleClass="default_btn cancel"
+      >
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </p-button>
+      @if(_PermissionSystemService.can('COMPLIANCE' , 'ONGOINGASSSESSMENT_CONTROLS_REQUIREMENTCONTROL' , 'ADD')){
+             <p-button
+        (onClick)="save()"
+        [loading]="loadAction"
+        styleClass="default_btn"
+      >
+        {{ 'BUTTONS.SAVE' | translate }}
+      </p-button>
+      }
+    </div>
+    } }
+  </ng-template>
+</p-dialog>
+
+<lib-delete-confirm-popup
+  [titleDelete]="'ASSESSMENT_REQUIREMENT.DELETE_REQUIRMENET' |translate"
+  [descriptionDelete]="
+    'DELETE_REQUIREMENT_PLACEHOLDER' | translate
+  "
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteRequirmentAssessment()"
+        [loading]="loadDelted"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

@@ -1,0 +1,218 @@
+<section class="border border-[#EAECF0] rounded-lg">
+  <div class="header flex justify-between items-center py-4 px-6 border-b border-[#EAECF0] mb-6 ">
+    <h1 class="text-lg font-medium">{{'MAIN_INFO.Gov_Document' | translate}}</h1>
+
+    <button (click)="addNewDocument()"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+      <i class="fi fi-br-plus w-5 h-5 "></i>
+      <span>{{'MAIN_INFO.ButtonDoc' | translate}}</span>
+    </button>
+  </div>
+
+
+
+<div class="list_container p-4 grid grid-cols-12 gap-4">
+
+
+  <!-- Loading Skeleton -->
+  @if(loading){
+  @for(i of skeletonArray; track $index){
+  <div class="col-span-6 shadow-sm doc_card">
+    <div class="header mb-3 flex items-center justify-between">
+      <div class="img_title flex items-center gap-3">
+        <p-skeleton width="2rem" height="2rem" />
+        <p-skeleton width="10rem" styleClass="mb-2" />
+      </div>
+      <div class="actions_btns flex items-center gap-3">
+        <p-skeleton width="2rem" height="2rem" />
+        <p-skeleton width="2rem" height="2rem" />
+        <p-skeleton width="2rem" height="2rem" />
+      </div>
+    </div>
+    <div class="info mb-3 gap-5">
+      <p-skeleton width="5rem" styleClass="mb-2" />
+      <p-skeleton width="5rem" styleClass="mb-2" />
+      <p-skeleton width="5rem" styleClass="mb-2" />
+    </div>
+    <div class="status mb-3">
+      <p-skeleton width="5rem" styleClass="mb-2" />
+      <p-skeleton width="5rem" styleClass="mb-2" />
+    </div>
+  </div>
+  }
+  }
+
+  <!-- Data -->
+  @else {
+
+  @if(dataDocList?.length > 0) {
+
+  @for(doc of dataDocList; track doc){
+  <div class="col-span-12 lg:col-span-6 shadow-sm doc_card">
+
+    <!-- Header -->
+    <div class="header mb-3 flex items-center justify-between">
+      <div class="img_title flex items-center gap-3">
+        <img src="images/image-53.svg" alt="">
+        <h1 class="text-[#101828] text-xl font-semibold">
+          {{ doc.complianceDocumentName || '-' }}
+        </h1>
+      </div>
+      <div class="actions_btns flex items-center gap-3">
+        <button class="btn" (click)="editDocument(doc?.complianceDocumentID)">
+          <i class="fi fi-rr-edit w-5 h-5"></i>
+        </button>
+        <button class="btn" (click)="viewDocument(doc?.complianceDocumentID)">
+          <i class="fi fi-rr-eye w-5 h-5"></i>
+        </button>
+        <button class="btn" (click)="openPoup(doc?.complianceDocumentID)">
+          <i class="fi fi-rr-trash w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Info -->
+    <div class="info mb-3 gap-5">
+      <div class="flex items-center">
+        <span>{{ 'GOVERNANCE_STANDARDS.DOCUMENT' | translate }}:</span>
+        <p>{{ doc.complianceDocumentName || '-' }}</p>
+      </div>
+      <div class="flex items-center">
+        <span>{{ 'GOVERNANCE_STANDARDS.CODE' | translate }}:</span>
+        <p>{{ doc.documentCode || '-' }}</p>
+      </div>
+      <div class="flex items-center">
+        <span>{{ 'GOVERNANCE_STANDARDS.VERSION' | translate }}:</span>
+        <p>{{ doc.version || '-' }}</p>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="status mb-3">
+      <h4 class="font-semibold text-lg text-[#101828] mb-2">{{ 'STATUS.TITLE' | translate }}</h4>
+      <div class="flex items-center gap-4">
+        <div class="case_bo flex-1 flex items-center justify-between">
+          <div class="title_icon flex-1 flex items-center gap-1">
+            <i class="text-xl text-primary font-semibold fi fi-rr-bank"></i>
+            <h5 class="text-[#475467] font-semibold text-sm">
+              {{ 'TABS.Compliance_Status' | translate }}
+            </h5>
+          </div>
+          <div [ngClass]="doc.complianceStatusTypeColor">
+            <span class="bordered_badge" [ngClass]="doc.complianceStatusTypeColor">
+              {{ doc.complianceStatusName || '-' }}
+            </span>
+          </div>
+        </div>
+
+        <div class="case_bo flex-1 flex items-center justify-between">
+          <div class="title_icon flex-1 flex items-center gap-1">
+            <i class="text-xl text-primary font-semibold fi fi-rr-stats"></i>
+            <h5 class="text-[#475467] font-semibold text-sm">
+              {{ 'Control_view.MATURITY_STATUS' | translate }}
+            </h5>
+          </div>
+          <div class="bordered_badge" [ngClass]="doc.maturityStatusColor">
+            <span>{{ doc.maturityStatus || '-' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analysis -->
+    <div class="grid grid-cols-12 gap-4">
+      <div class="col-span-12 anaiysis_card">
+        <div class="flex justify-between">
+          <div>
+            <p class="header_Manger">{{ 'HEARDE_TABLE.CONTROL' | translate }}: {{ doc?.totalControls || 0 }}</p>
+            <div class="flex gap-3">
+              <p class="flex header_Manger">{{ 'ANALYSIS.PARTIALLY' | translate }}:
+                <span class="badge">{{ doc?.partiallyCompliantControls || 0 }}</span>
+              </p>
+              <p class="flex header_Manger">{{ 'ANALYSIS.NON_COMPLIANT' | translate }}:
+                <span class="badge">{{ doc?.nonCompliantControls || 0 }}</span>
+              </p>
+              <p class="flex header_Manger">{{ 'ANALYSIS.NOT_APPLICABLE' | translate }}:
+                <span class="badge">{{ doc?.notApplicableControls || 0 }}</span>
+              </p>
+            </div>
+          </div>
+          <div class="inner_card_analysis">
+            <div class="knob">
+              <p-knob [(ngModel)]="value" [disabled]="true" [size]="122" [rangeColor]="'white'" [valueColor]="'#7A5AF8'"
+                valueTemplate="{value}%">
+              </p-knob>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Compliance Dates -->
+      <div class="col-span-12 anaiysis_card items-center">
+        <p class="header_Manger mb-2.5">{{ 'ANALYSIS.COMPLIANCE_DATES' | translate }} :</p>
+        <div class="grid grid-cols-12 gap-4">
+          <p class="header_Manger col-span-6 flex items-center">
+            {{ 'ANALYSIS.START_DATE' | translate }}:
+            <span class="welcome flex"><img src="images/icons/calendar.svg" alt="">
+              {{ doc?.startOfComplianceDate ? (doc.startOfComplianceDate | date:'yyyy-MM-dd') : '-' }}
+            </span>
+          </p>
+          <p class="header_Manger col-span-6 flex items-center">
+            {{ 'ANALYSIS.END_DATE' | translate }}:
+            <span class="welcome flex"><img src="images/icons/calendar.svg" alt="">
+              {{ doc?.endOfComplianceDate ? (doc.endOfComplianceDate | date:'yyyy-MM-dd') : '-' }}
+            </span>
+          </p>
+          <p class="header_Manger col-span-6 flex items-center">
+            {{ 'ANALYSIS.NEXT_DATE' | translate }}:
+            <span class="welcome flex"><img src="images/icons/calendar.svg" alt="">
+              {{ doc?.nextComplianceAssessmentDate ? (doc.nextComplianceAssessmentDate | date:'yyyy-MM-dd') : '-' }}
+            </span>
+          </p>
+          <p class="header_Manger col-span-6 flex items-center">
+            {{ 'ANALYSIS.LAST_DATE' | translate }}:
+            <span class="welcome flex"><img src="images/icons/calendar.svg" alt="">
+              {{ doc?.lastComplianceAssessmentDate ? (doc.lastComplianceAssessmentDate | date:'yyyy-MM-dd') : '-' }}
+            </span>
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  }
+
+  } @else {
+
+  <!-- No Data To Display -->
+  <div class="col-span-12 flex items-center justify-center min-h-[300px]">
+    <div class="text-center text-gray-500">
+      <i class="fi fi-rr-folder-open text-4xl mb-3 block"></i>
+      <p class="text-lg font-medium">No Data To Display</p>
+    </div>
+  </div>
+
+  }
+
+  }
+
+</div>
+<lib-pagination (paginationChanged)="getDocument($event)"></lib-pagination>
+</section>
+
+
+<lib-delete-confirm-popup [titleDelete]="'RISK_MANAGMENT.DELETE_DOC_TITLE'"
+  [descriptionDelete]="'RISK_MANAGMENT.DELETE_DOC_DESC'" (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible">
+  <div class="flex flex-wrap items-center gap-4  justify-end" actions>
+    <div class="cancel_btn ">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button (onClick)="deleteDocument()" [loading]="loadDelted" [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

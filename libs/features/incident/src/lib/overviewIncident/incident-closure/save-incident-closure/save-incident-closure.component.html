@@ -1,0 +1,232 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<section class="form_sec">
+  <div class="header border-b border-gray_light pb-6 mb-6">
+    <h2 class="text-lg font-medium text-[#101828]">
+      {{
+        id
+          ? (FEATURE_KEY + '.UPDATE_' + FEATURE_NAME | translate)
+          : (FEATURE_KEY + '.ADD_NEW_' + FEATURE_NAME | translate)
+      }}
+    </h2>
+  </div>
+
+  @if(form){
+  <form [formGroup]="form" class="grid grid-cols-12 gap-6 mb-6">
+    <!-- Closed By User -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-user-dropdown
+        [placeholder]="'INCIDENT.CLOSED_BY_PLACEHOLDER' | translate"
+        [label]="'INCIDENT.CLOSED_BY' | translate"
+        [control]="form.get('closedByUserID')!"
+        [formControlNameInput]="'closedByUserID'"
+        [options]="userList"
+        [optionLabel]="'name'"
+        [optionValue]="'id'"
+      ></lib-user-dropdown>
+    </div>
+
+    <!-- Closure Date -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-date-packer
+        [placeholder]="'INCIDENT.CLOSURE_DATE_PLACEHOLDER' | translate"
+        [inputLabel]="'INCIDENT.CLOSURE_DATE' | translate"
+        [control]="form.get('closureDate')!"
+        [controlNameInput]="'closureDate'"
+      ></lib-date-packer>
+    </div>
+
+    <!-- Closure Method -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-input-text
+        [placeholder]="'INCIDENT.CLOSURE_METHOD_PLACEHOLDER' | translate"
+        [inputLabel]="'INCIDENT.CLOSURE_METHOD' | translate"
+        [control]="form.get('closureMethod')!"
+        [controlNameInput]="'closureMethod'"
+      ></lib-input-text>
+    </div>
+
+    <!-- Incident Closure Status -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-ui-dropdown
+        [placeholder]="'INCIDENT.CLOSURE_STATUS_PLACEHOLDER' | translate"
+        [label]="'INCIDENT.CLOSURE_STATUS' | translate"
+        [control]="form.get('incidentClosureStatusTypeID')!"
+        [options]="closureStatusOptions"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+        [formControlNameInput]="'incidentClosureStatusTypeID'"
+      ></lib-ui-dropdown>
+    </div>
+
+    <!-- Verification Date -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-date-packer
+        [placeholder]="'INCIDENT.VERIFICATION_DATE_PLACEHOLDER' | translate"
+        [inputLabel]="'INCIDENT.VERIFICATION_DATE' | translate"
+        [control]="form.get('verificationDate')!"
+        [controlNameInput]="'verificationDate'"
+      ></lib-date-packer>
+    </div>
+
+    <!-- Monitoring Period -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-input-number
+        [placeholder]="'INCIDENT.MONITORING_PERIOD_PLACEHOLDER' | translate"
+        [inputLabel]="'INCIDENT.MONITORING_PERIOD' | translate"
+        [control]="form.get('monitoringPeriod')!"
+        [controlNameInput]="'monitoringPeriod'"
+      ></lib-input-number>
+    </div>
+
+    <!-- Closure Approval Date -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-date-packer
+        [placeholder]="'INCIDENT.CLOSURE_APPROVAL_DATE_PLACEHOLDER' | translate"
+        [inputLabel]="'INCIDENT.CLOSURE_APPROVAL_DATE' | translate"
+        [control]="form.get('closureApprovalDate')!"
+        [controlNameInput]="'closureApprovalDate'"
+      ></lib-date-packer>
+    </div>
+
+    <!-- Incident Solution Effectiveness -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-ui-dropdown
+        [placeholder]="'INCIDENT.SOLUTION_EFFECTIVENESS_PLACEHOLDER' | translate"
+        [label]="'INCIDENT.SOLUTION_EFFECTIVENESS' | translate"
+        [control]="form.get('incidentSolutionEffectivenessEvaluationID')!"
+        [options]="solutionEffectivenessOptions"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+        [formControlNameInput]="'incidentSolutionEffectivenessEvaluationID'"
+      ></lib-ui-dropdown>
+    </div>
+
+    <!-- Incident Reoccurrence Risk Level -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-ui-dropdown
+        [placeholder]="'INCIDENT.REOCCURRENCE_RISK_LEVEL_PLACEHOLDER' | translate"
+        [label]="'INCIDENT.REOCCURRENCE_RISK_LEVEL' | translate"
+        [control]="form.get('incidentReoccurrenceRiskLevelTypeID')!"
+        [options]="riskLevelOptions"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+        [formControlNameInput]="'incidentReoccurrenceRiskLevelTypeID'"
+      ></lib-ui-dropdown>
+    </div>
+
+    <!-- Incident Residual Impact Level -->
+    <div class="col-span-12 lg:col-span-6">
+      <lib-ui-dropdown
+        [placeholder]="'INCIDENT.RESIDUAL_IMPACT_LEVEL_PLACEHOLDER' | translate"
+        [label]="'INCIDENT.RESIDUAL_IMPACT_LEVEL' | translate"
+        [control]="form.get('incidentResidualImpactLevelTypeID')!"
+        [options]="residualImpactOptions"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+        [formControlNameInput]="'incidentResidualImpactLevelTypeID'"
+      ></lib-ui-dropdown>
+    </div>
+
+    <!-- Booleans -->
+    <div class="col-span-12 lg:col-span-4 flex items-center gap-3">
+      <label>{{ 'INCIDENT.RISK_REASSESSED' | translate }}</label>
+      <p-inputSwitch formControlName="isRiskReassessed"></p-inputSwitch>
+    </div>
+
+    <div class="col-span-12 lg:col-span-4 flex items-center gap-3">
+      <label>{{ 'INCIDENT.SLA_COMPLIANCE_STATUS' | translate }}</label>
+      <p-inputSwitch formControlName="slaComplianceStatus"></p-inputSwitch>
+    </div>
+
+    <div class="col-span-12 lg:col-span-4 flex items-center gap-3">
+      <label>{{ 'INCIDENT.IS_FINAL_CLOSURE' | translate }}</label>
+      <p-inputSwitch formControlName="isFinalClosure"></p-inputSwitch>
+    </div>
+
+    <!-- Numeric Fields -->
+    <div class="col-span-12 lg:col-span-3">
+      <lib-input-number
+        [placeholder]="'INCIDENT.TIME_TO_DETECT_PLACEHOLDER' | translate"
+        [inputLabel]="'INCIDENT.TIME_TO_DETECT' | translate"
+        [control]="form.get('timeToDetect')!"
+        [controlNameInput]="'timeToDetect'"
+      ></lib-input-number>
+    </div>
+
+    <div class="col-span-12 lg:col-span-3">
+      <lib-input-number
+        [placeholder]="'INCIDENT.TIME_TO_RESOLVE_PLACEHOLDER' | translate"
+        [inputLabel]="'INCIDENT.TIME_TO_RESOLVE' | translate"
+        [control]="form.get('timeToResolve')!"
+        [controlNameInput]="'timeToResolve'"
+      ></lib-input-number>
+    </div>
+
+    <div class="col-span-12 lg:col-span-3">
+      <lib-input-number
+        [placeholder]="'INCIDENT.TIME_TO_CLOSE_PLACEHOLDER' | translate"
+        [inputLabel]="'INCIDENT.TIME_TO_CLOSE' | translate"
+        [control]="form.get('timeToClose')!"
+        [controlNameInput]="'timeToClose'"
+      ></lib-input-number>
+    </div>
+
+    <div class="col-span-12 lg:col-span-3">
+      <lib-input-number
+        [placeholder]="'INCIDENT.COST_OF_INCIDENT_PLACEHOLDER' | translate"
+        [inputLabel]="'INCIDENT.COST_OF_INCIDENT' | translate"
+        [control]="form.get('costOfIncident')!"
+        [controlNameInput]="'costOfIncident'"
+      ></lib-input-number>
+    </div>
+
+    <!-- Textarea Fields (Full Width, at the end) -->
+    <div class="col-span-12">
+      <lib-textarea-ui
+        [placeholder]="'INCIDENT.RESOLUTION_SUMMARY_PLACEHOLDER' | translate"
+        [inputLabel]="'INCIDENT.RESOLUTION_SUMMARY' | translate"
+        [control]="form.get('resolutionSummary')!"
+        [controlNameInput]="'resolutionSummary'"
+      ></lib-textarea-ui>
+    </div>
+
+    <div class="col-span-12">
+      <lib-textarea-ui
+        [placeholder]="'INCIDENT.CLOSURE_APPROVAL_COMMENT_PLACEHOLDER' | translate"
+        [inputLabel]="'INCIDENT.CLOSURE_APPROVAL_COMMENT' | translate"
+        [control]="form.get('closureApprovalComment')!"
+        [controlNameInput]="'closureApprovalComment'"
+      ></lib-textarea-ui>
+    </div>
+
+    <div class="col-span-12">
+      <lib-textarea-ui
+        [placeholder]="'INCIDENT.NOTES_PLACEHOLDER' | translate"
+        [inputLabel]="'INCIDENT.NOTES' | translate"
+        [control]="form.get('notes')!"
+        [controlNameInput]="'notes'"
+      ></lib-textarea-ui>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="col-span-12 flex justify-end gap-4 py-4">
+      <div class="default_btn cancel">
+        <a [routerLink]="LIST_ROUTE">{{ 'BUTTONS.CANCEL' | translate }}</a>
+      </div>
+      <div class="action_btn">
+        <p-button
+          [label]="
+            id ? ('BUTTONS.UPDATE' | translate) : ('BUTTONS.SAVE' | translate)
+          "
+          [outlined]="true"
+          [disabled]="form.invalid"
+          [loading]="isSaving"
+          severity="secondary"
+          (onClick)="save()"
+        ></p-button>
+      </div>
+    </div>
+  </form>
+
+  }
+</section>

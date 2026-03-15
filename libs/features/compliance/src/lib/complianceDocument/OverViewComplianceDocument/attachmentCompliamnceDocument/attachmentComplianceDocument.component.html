@@ -1,0 +1,34 @@
+<div class="">
+  <!-- New attachments list -->
+  <lib-new-attach-list
+    [loadingSatate]="loadingState"
+    (action_emiter)="handleActionSingleFile($event)"
+    (add_emiter)="handleShowAdd($event)"
+    [files]="attachments">
+  </lib-new-attach-list>
+</div>
+
+<!-- Attachments management UI -->
+<lib-attachments-ui
+  [dataEntityId]="current_id"
+  [dataEntityTypeId]="17"
+  [fileUsageTypeID]="'17'"
+  [show_add_dailog]="show_add_dailog"
+  (added)="handleAdded($event)"
+></lib-attachments-ui>
+
+<!-- View attachment modal -->
+<lib-view-attachement
+  (modelVisibleEmiter)="handleHideView($event)"
+  [modelVisible]="displayModal"
+  [selected_file_Input$]="selected_file_show"
+></lib-view-attachement>
+
+<!-- Edit attachment modal -->
+<lib-edit-attachment
+  [visible]="edit_file_name"
+  [title]="current_title_update"
+  [loading]="loadUpdate"
+  (save)="handleUpdateTitle($event)"
+  (cancel_Modal)="edit_file_name = false"
+></lib-edit-attachment>

@@ -1,0 +1,49 @@
+<section>
+  <div class="header flex justify-between mb-8">
+    <div class="title flex items-center gap-4 flex-wrap mb-4">
+      <h2 class="text-2xl font-semibold text-gray-800">{{current_data?.name || '-' }}</h2>
+      <p class="text-gray_color m-0">{{'('+current_data?.controlCode+')' || '(-)'}}</p>
+      <span class="badge"> {{current_data?.govDocumentTypeName || '-'}}</span>
+    </div>
+    <h6 class="text-primary font-bold text-2xl my-2 mx-4">
+      └─{{ controlRequirementData?.requirementText ?? '-' }}
+    </h6>
+    <div class="content flex flex-wrap items-center gap-4">
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">{{ 'TABS.Expiry_Date' | translate }} :</p>
+        <span class="font-semibold ">{{ (current_data?.complianceExpiryDate )| date:'MMM d, y' }}</span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">{{ 'TABS.Compliance_Status' | translate }}:</p>
+        <span class="font-semibold badge" [ngClass]="current_data?.complianceStatusTypeColor">
+          {{ current_data?.complianceStatusTypeName ?? '-' }}</span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">{{ 'TABS.Unit' | translate }}:</p>
+        <span class="font-semibold badge" [ngClass]="current_riskID?.implementationStatusTypeColor">
+          {{current_data?.implementationStatusTypeName ?? '-' }}</span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">{{ 'TABS.Effective' | translate }}:</p>
+        <span class="font-semibold badge" [ngClass]="current_riskID?.effectivenessStatusTypeColor">
+          {{current_data?.effectivenessStatusTypeName ?? '-' }}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">{{ 'TABS.RiskLevel' | translate }}:</p>
+        <span class="font-semibold">{{ current_data?.riskLevelName ?? '-' }}</span>
+
+      </div>
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">{{ 'TABS.RegulatorName' | translate }}:</p>
+        <span class="font-semibold">{{ current_data?.govRegulatorName ?? '-' }}</span>
+
+      </div>
+    </div>
+
+  </div>
+
+  <lib-shared-tabs></lib-shared-tabs>
+  <router-outlet></router-outlet>

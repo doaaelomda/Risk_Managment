@@ -1,0 +1,38 @@
+aside {
+  border: 1px solid #eaecf0;
+  box-shadow: 0px 4px 4px 0px #0000001a;
+}
+
+::ng-deep .progress-outer {
+  height: 24px;
+  .p-progressbar {
+    height: 8px;
+  
+  }
+    .p-progressbar-value {
+      background-color: #6938EF;
+      border-radius: 4px;
+    }
+  .p-progressbar-determinate .p-progressbar-label {
+    display: none;
+  }
+}
+
+.question_section {
+  .section {
+    color: #667085;
+    &.active_sec {
+      background-color: #f4f3ff;
+      color: #6938ef !important;
+      .question_badge {
+        background-color: #7a5af8;
+      }
+    }
+    .question_badge {
+      background-color: #d0d5dd;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+    }
+  }
+}

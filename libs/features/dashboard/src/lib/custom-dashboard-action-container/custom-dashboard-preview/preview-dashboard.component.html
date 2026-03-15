@@ -1,0 +1,35 @@
+<!-- handle dashboard Builder -->
+<div class="contaoner">
+  @if(loading_state){
+  <div class="h-96">
+    <lib-loader></lib-loader>
+  </div>
+  }@else {
+
+  <div class="bg-[#FAFAFF] p-6 rounded-lg">
+    <div class="bg-white_color p-3 rounded-lg shadow">
+      <div class="px-4 mb-8">
+        <img src="images/Controls.png" alt="">
+      </div>
+        <div >
+          <div class="header flex items-center justify-between p-4 mb-4 border-b border-gray_light">
+            <h1 class=" capitalize text-2xl font-semibold text-gray-800">{{dashboard_config?.dashboard_Title}}</h1>
+
+              @if(_PermissionSystemService.can('DASHBOURD' , 'PREVIEW' , 'PRINT')){
+            <div class="action_btn">
+
+              <button (click)="printReport()" class="btn flex items-center gap-2">
+                <i class="fi fi-rr-print"></i>
+                <span>{{'BUTTONS.Print' | translate}}</span>
+              </button>
+            </div>
+          }
+          </div>
+          <div class="dashboard_builder">
+            <lib-dashboard-builder [mode]="'view'" [dashboard_config]="dashboard_config"></lib-dashboard-builder>
+          </div>
+        </div>
+    </div>
+  </div>
+  }
+</div>

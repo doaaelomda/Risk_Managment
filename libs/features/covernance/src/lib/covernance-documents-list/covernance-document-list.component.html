@@ -1,0 +1,53 @@
+
+
+<section>
+  <lib-new-table
+    [loading]="loadingTable"
+    [table_data]="dataTable"
+    [table_title]="'BREAD_CRUMB_TITLES.GOVERNANCE_DOCUMENTS_LIST' | translate"
+    [badge_title]="'HEARDE_TABLE.GOVERNANCE_DOCUMENTS' | translate"
+    [dataViewId]="86"
+    [entityID_Name]="'govDocumentID'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="items"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{ module: 'GOVERNANCE', feature: 'GOVDOCUMENT', action: 'VIEW' }"
+  >
+  @if(_PermissionSystemService.can('GOVERNANCE' , 'GOVDOCUMENT' , 'ADD')){
+
+     <button
+      addition_action
+      [routerLink]="'/gfw-portal/governance/Document-action'"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+    >
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'HEARDE_TABLE.ADD_NEW_DOCUMENT' | translate }}</span>
+    </button>
+  }
+  </lib-new-table>
+</section>
+
+<lib-delete-confirm-popup
+  [titleDelete]="'DOCUMENTS.DELETE_DOCUMENT_TITLE'"
+  [descriptionDelete]="'DOCUMENTS.DELETE_DOCUMENT_DESC'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteDocument()"
+        [loading]="loadDeleted"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

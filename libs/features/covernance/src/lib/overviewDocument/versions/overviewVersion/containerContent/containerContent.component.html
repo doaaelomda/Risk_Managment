@@ -1,0 +1,94 @@
+<div class="grid grid-cols-1 lg:grid-cols-2 my-4">
+  <p class="not_comments">
+    {{ 'contentVersions.SelectContentType' | translate }}
+  </p>
+
+</div>
+
+<div class="types grid grid-cols-12 gap-[10px] mt-[10px] mb-6">
+  @for (type of types; track $index) {
+  <div class="col-span-12 lg:col-span-4">
+    <button (click)="setActiveType(type.id)" class="flex justify-between type-card"
+      [ngClass]="{ active: selected_type === type.id }">
+      <div class="flex flex-1 gap-3 items-center">
+        <div
+          class="type-ico w-[40px] h-[40px] rounded-full flex items-center justify-center bg-[#F2F4F7] text-[#7A5AF8] text-[24px]">
+          @if(type.icon){
+          <i [class]="type.icon"></i>
+          }@else if(type.image){
+          <img [src]="type.image" alt="{{ type.name }}__img" />
+          }
+        </div>
+        <span class="text-[#344054] text-[16px] font-[500]">
+          {{ type.name }}
+        </span>
+      </div>
+      <!-- <p-radioButton [inputId]="'type_' + type.id" name="category" [value]="type.id" [(ngModel)]="selected_type" /> -->
+    </button>
+  </div>
+  }
+</div>
+@switch (selected_type) { @case (1) {
+
+<div>
+  <lib-new-attach-list [loadingSatate]="loadingState" (action_emiter)="handleActionSingleFile($event)"
+    (add_emiter)="handleShowAdd($event)" [files]="contents_attachments" [showSearch]="contents_attachments?.length < 1">
+  </lib-new-attach-list>
+</div>
+
+<lib-attachments-ui [dataEntityId]="id" [dataEntityTypeId]="112" [fileUsageTypeID]="'103'"
+  [show_add_dailog]="show_add_dailog" (added)="handleAdded($event)"></lib-attachments-ui>
+
+<lib-view-attachement (modelVisibleEmiter)="handleHideView($event)" [modelVisible]="displayModal"
+  [selected_file_Input$]="selected_file_show"></lib-view-attachement>
+
+<lib-edit-attachment [visible]="edit_file_name" [title]="current_title_update" [loading]="loadUpdate"
+  (save)="handleUpdateTitle($event)" (cancel_Modal)="edit_file_name = false"></lib-edit-attachment>
+@for(file of contents_attachments ; track $index){
+<div
+  [ngClass]="file?.fileUrl ? '' :'add_attach p-[26px] col-span-12 lg:col-span-4 md:col-span-6 gap-4 rounded-lg border border-gray_light justify-center my-3'">
+  @if(file?.fileUrl){
+  @if(file?.fileExtension?.toLowerCase()?.includes('pdf')) {
+  <lib-pdf-preview [pdfSrc]="env + file?.fileUrl?.substring(1)"></lib-pdf-preview>
+  } @else if(file?.fileExtension?.toLowerCase()?.includes('docx') ||
+  file?.fileExtension?.toLowerCase()?.includes('doc')) {
+  <lib-docs-preview [wordSrc]="env + file?.fileUrl?.substring(1)"></lib-docs-preview>
+  }
+
+
+  }
+  @else {
+  <lib-empty-state-files></lib-empty-state-files>
+  }
+</div>
+}
+
+
+} @case (2) {
+<div class="col-span-12 overflow-hidden">
+  <form [formGroup]="editor_form">
+    <lib-editor [control]="editor_form.get('content')!" [controlNameInput]="'content'" [height]="'150px'">
+    </lib-editor>
+    <span class="text-sm text-gray-500 font-normal">
+      {{ 'RISK_ACTION.CHARACTERS_LEFT' | translate:{ count: 275- editor_form.get('content')?.value?.length
+      }
+      }}
+    </span>
+    <div class="col-span-12 flex items-center gap-4 justify-end py-6">
+      <div class="action_btn">
+        <p-button [label]="'BUTTONS.SAVE' | translate" [loading]="isLoading" (onClick)="submit()"></p-button>
+      </div>
+    </div>
+  </form>
+</div>
+} @case (3) {
+<div class="col-span-12">
+  <lib-content-document></lib-content-document>
+</div>
+}}
+
+
+@if(types.length ===0) {
+<lib-empty-state [loading]="loadingState"></lib-empty-state>
+
+}

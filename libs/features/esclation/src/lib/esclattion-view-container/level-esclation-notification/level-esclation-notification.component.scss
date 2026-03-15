@@ -1,0 +1,49 @@
+h3.label {
+  color: #344054;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+::ng-deep .messageEditor {
+  .p-editor-content {
+    height: 400px;
+  }
+}
+.icon_head {
+  width: 48px;
+  height: 48px;
+  border-radius: 28px;
+  background: #ebe9fe;
+  border: 8px solid #f4f3ff;
+  color: #6938ef;
+}
+::ng-deep .action_dailog {
+  .p-dialog-header {
+    padding: 1rem;
+  }
+  .p-dialog-header .p-dialog-header-icons {
+    display: none;
+  }
+}
+.var_btn {
+
+  padding: 8px 14px;
+  border: 1px solid #6938ef;
+  color: #7a5af8;
+  box-shadow: 0px 1px 2px 0px #1018280d;
+
+  &.selected {
+    background-color: #7a5af8 !important ;
+    color: white !important;
+  }
+    @apply rounded-lg;
+}
+.content_preview {
+  border: 1px solid #d0d5dd;
+  padding: 26px 16px;
+  border-radius: 10px;
+}
+.disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+}

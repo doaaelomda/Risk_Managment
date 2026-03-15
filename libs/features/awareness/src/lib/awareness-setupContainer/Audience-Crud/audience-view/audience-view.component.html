@@ -1,0 +1,72 @@
+<section class="space-y-6 grid grid-cols-12">
+  <div [ngClass]="hasActions ? 'col-span-8' : 'col-span-12'">
+
+    <div class="grid grid-cols-12 gap-4">
+      <!-- Campaign Name -->
+      <div class="col-span-12 lg:col-span-6">
+        <h3 class="header-title header-para mb-3">{{ 'ADUIANCE.CAMPAIGN_ID' | translate }}</h3>
+        @if (!loading) {
+        <p class="text-gray-600 text-base font-normal whitespace-pre-line">{{ dataAudience?.campaignName || '-' }}</p>
+        } @else {
+        <p-skeleton width="16rem"></p-skeleton>
+        }
+      </div>
+
+      <!-- Audience Scope Type -->
+      <div class="col-span-12 lg:col-span-6">
+        <h3 class="header-title header-para mb-3">{{ 'ADUIANCE.SCOPE_TYPE' | translate }}</h3>
+        @if (!loading) {
+        <p class="text-gray-600 text-base font-normal whitespace-pre-line">{{ dataAudience?.audienceScopeName || '-' }}</p>
+        } @else {
+        <p-skeleton width="10rem"></p-skeleton>
+        }
+      </div>
+
+      <!-- Organizational Unit -->
+      <div class="col-span-12 lg:col-span-6">
+        <h3 class="header-title header-para mb-3">{{ 'ADUIANCE.ORG_UNIT' | translate }}</h3>
+        @if (!loading) {
+        <p class="text-gray-600 text-base font-normal whitespace-pre-line">{{ dataAudience?.organizationalUnitName || '-' }}</p>
+        } @else {
+        <p-skeleton width="8rem"></p-skeleton>
+        }
+      </div>
+
+      <!-- Role -->
+      <div class="col-span-12 lg:col-span-6">
+        <h3 class="header-title header-para mb-3">{{ 'ADUIANCE.ROLE' | translate }}</h3>
+        @if (!loading) {
+        <p class="text-gray-600 text-base font-normal whitespace-pre-line">{{ dataAudience?.roleName || '-' }}</p>
+        } @else {
+        <p-skeleton width="8rem"></p-skeleton>
+        }
+      </div>
+
+      <!-- Third Party -->
+      <div class="col-span-12 lg:col-span-6">
+        <h3 class="header-title header-para mb-3">{{ 'ADUIANCE.THIRD_PARTY' | translate }}</h3>
+        @if (!loading) {
+        <p class="text-gray-600 text-base font-normal whitespace-pre-line">{{ dataAudience?.thirdPartyName || '-' }}</p>
+        } @else {
+        <p-skeleton width="8rem"></p-skeleton>
+        }
+      </div>
+
+      <!-- User -->
+      <div class="col-span-12 lg:col-span-6">
+        <h3 class="header-title header-para mb-3">{{ 'ADUIANCE.USER' | translate }}</h3>
+        @if (!loading) {
+        <p class="text-gray-600 text-base font-normal whitespace-pre-line">{{ dataAudience?.userName || '-' }}</p>
+        } @else {
+        <p-skeleton width="8rem"></p-skeleton>
+        }
+      </div>
+
+    </div>
+  </div>
+
+  <div [hidden]="!hasActions" class="lg:col-span-4 col-span-12">
+    <lib-system-actions (foundActionEmitter)="onFoundAction($event)" [dataEntityTypeId]="71"
+      [entityId]="audienceId"></lib-system-actions>
+  </div>
+</section>

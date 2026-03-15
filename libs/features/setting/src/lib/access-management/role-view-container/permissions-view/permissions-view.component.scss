@@ -1,0 +1,118 @@
+::ng-deep {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  .permissionsAccordion {
+    .p-accordion-header-link {
+      flex-direction: row-reverse;
+      border-radius: 8.74px;
+      padding: 17.48px;
+      border: 0.87px solid #9b8afb;
+      .expand-icon-wrapper {
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 7px;
+        background-color: #f4f3ff;
+        color: #7a5af8;
+        font-size: 18px !important;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .p-accordion-toggle-icon {
+        display: none ;
+      }
+    }
+  }
+}
+.permissionDiv{
+    flex-direction: row-reverse;
+      border-radius: 8.74px;
+      padding: 17.48px;
+      border: 0.87px solid #9b8afb;
+}
+::ng-deep .actionBtn,.actionBtn {
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  &.saveBtn {
+    background-color: #f4f3ff;
+    border: 1px solid #f4f3ff;
+    box-shadow: 0px 1px 2px 0px #1018280d;
+    color: #5925dc;
+  }
+  &.duplicateBtn {
+    color: #ffffff;
+    background-color: #7a5af8;
+  }
+}
+
+.input-wrapper {
+  width: 100%;
+  max-width: 327px;
+}
+.arrow_right {
+  color: #98a2b3;
+  font-size: 18px;
+}
+.perm-container {
+  span {
+    font-size: 16px;
+    font-weight: 500;
+   color: #1d2939;
+  }
+  &.not_accordion {
+    border-radius: 8.74px;
+    padding: 17.48px;
+    cursor: pointer;
+    border: 0.87px solid #9b8afb;
+  }
+}
+
+.perm-icon {
+  color: #7a5af8;
+  font-size: 20px;
+}
+
+.selected_permissions_container {
+  .header {
+    color: #101828;
+    font-size: 20px;
+    font-weight: 600;
+    padding-bottom: 8px;
+  }
+  border: 1px solid #d0d5dd;
+  padding: 24px;
+  border-radius: 12px;
+  .icon-wrapper {
+    width: 40px;
+    height: 40px;
+    background-color: #ebe9fe;
+    border-radius: 50%;
+    .perm-icon {
+      color: #6938ef;
+    }
+  }
+  .selected_permission {
+    padding: 20px 16px;
+    border-radius: 8px;
+    border: 1px solid #eaecf0;
+    box-shadow: 0px 1px 2px 0px #1018280f;
+
+    box-shadow: 0px 1px 3px 0px #1018281a;
+
+    .text {
+      color: #344054;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    .tag {
+      padding: 2px 8px;
+      border-radius: 16px;
+      background-color: #f4f3ff;
+      color: #5925dc;
+      font-size: 12px;
+      font-weight: 500;
+    }
+  }
+}

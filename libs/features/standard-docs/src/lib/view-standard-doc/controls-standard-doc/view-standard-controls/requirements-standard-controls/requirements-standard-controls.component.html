@@ -1,0 +1,169 @@
+<section>
+  <lib-new-table
+    [loading]="loadingTable"
+    [table_data]="dataTable"
+    [table_title]="'ControlRequirement.TABLE_TITLE' | translate"
+    [badge_title]="'ControlRequirement.TABLE_BADGE' | translate"
+    [dataViewId]="124"
+    [entityID_Name]="'governanceStandardControlRequirementID'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="items"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{ module: 'LIBRARY', feature: 'STANDARDDOCUMENTS_CONTROLS_REQUIREMENTS', action: 'VIEW' }"
+
+  >
+  @if(_PermissionSystemService.can('LIBRARY' , 'STANDARDDOCUMENTS_CONTROLS_REQUIREMENTS' , 'ADD')){
+        <button
+      addition_action
+      (click)="openModalControlMangment()"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+    >
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'ControlRequirement.ADD_NEW' | translate }}</span>
+    </button>
+  }
+  </lib-new-table>
+</section>
+
+<lib-delete-confirm-popup
+  [titleDelete]="'ControlRequirement.DELETE_TITLE'"
+  [descriptionDelete]="'ControlRequirement.DELETE_DESC'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteControlRequirement()"
+        [loading]="loadDeleted"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+<div class="action_dailog">
+  <p-dialog
+    header="{{
+      current_update_id
+        ? ('ControlRequirement.UPDATE' | translate)
+        : ('ControlRequirement.ADD_NEW' | translate)
+    }}"
+    [(visible)]="visiableModalMangment"
+    (onHide)="onModalClose()"
+    [modal]="true"
+    [dismissableMask]="true"
+    [draggable]="false"
+      styleClass="w-[60%]"
+    [closable]="false"
+  >
+    <div class="container p-4">
+      <!-- Form -->
+      <form [formGroup]="requirement_form" class="grid grid-cols-12 gap-6 mb-6">
+        <!-- Requirement Text EN -->
+        <div class="md:col-span-6 col-span-12">
+          <lib-input-text
+            [placeholder]="'ControlRequirement.TEXT_EN' | translate"
+            [inputLabel]="'ControlRequirement.TEXT_EN' | translate"
+            [control]="requirement_form.get('requirementText')!"
+            [controlNameInput]="'requirementText'"
+            [validations]="validationsRequired"
+          ></lib-input-text>
+        </div>
+
+        <!-- Requirement Text AR -->
+        <div class="md:col-span-6 col-span-12">
+          <lib-input-text
+            [placeholder]="'ControlRequirement.TEXT_AR' | translate"
+            [inputLabel]="'ControlRequirement.TEXT_AR' | translate"
+            [control]="requirement_form.get('requirementTextAr')!"
+            [controlNameInput]="'requirementTextAr'"
+          ></lib-input-text>
+        </div>
+
+        <!-- <div class="md:col-span-6 col-span-12">
+          <lib-ui-dropdown
+            [placeholder]="'ACTIVITY.RESPONSIBLE_ROLE_PLACEHOLDER' | translate"
+            [label]="'ACTIVITY.RESPONSIBLE_ROLE' | translate"
+            [control]="requirement_form.get('responsibleRoleID')!"
+            [formControlNameInput]="'responsibleRoleID'"
+            [options]="Roles"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+          >
+          </lib-ui-dropdown>
+        </div> -->
+        <!-- <div class="md:col-span-6 col-span-12">
+          <lib-user-dropdown
+            [placeholder]="'ASSESSMENT_RISK.REVIEWR'"
+            [label]="'RISK_MANAGMENT.ResponsibleUser'"
+            [control]="requirement_form.get('responsibleUserID')!"
+            [options]="users"
+            optionLabel="name"
+            optionValue="id"
+            [formControlNameInput]="'responsibleUserID'"
+          >
+          </lib-user-dropdown>
+        </div> -->
+
+        <!-- <div class="md:col-span-6 col-span-12">
+          <lib-tree-select-ui
+            [nodes_input]="organizationUnitOptions"
+            [placeholder]="'RISK_ACTION.SELECT_DEPARTMENT' | translate"
+            [label]="'RISK_ACTION.DEPARTMENT' | translate"
+            [control]="requirement_form.get('organizationalUnitID')!"
+            [formControlNameInput]="'organizationalUnitID'"
+          >
+          </lib-tree-select-ui>
+        </div> -->
+        <!-- Order Number -->
+        <div class="md:col-span-6 col-span-12">
+          <lib-input-number
+            [placeholder]="'ControlRequirement.ORDER_NUMBER' | translate"
+            [inputLabel]="'ControlRequirement.ORDER_NUMBER' | translate"
+            [control]="requirement_form.get('orderNumber')!"
+            [controlNameInput]="'orderNumber'"
+            [validations]="validationsRequired"
+          ></lib-input-number>
+        </div>
+
+        <!-- External Reference -->
+        <div class="md:col-span-6 col-span-12">
+          <lib-input-text
+            [placeholder]="'ControlRequirement.EXTERNAL_REF' | translate"
+            [inputLabel]="'ControlRequirement.EXTERNAL_REF' | translate"
+            [control]="requirement_form.get('externalReference')!"
+            [controlNameInput]="'externalReference'"
+          ></lib-input-text>
+        </div>
+      </form>
+
+      <!-- Actions -->
+      <div
+        class="col-span-12 flex items-center gap-4 justify-end border-t border-gray_light py-3"
+      >
+        <div class="cancel_btn">
+          <button (click)="visiableModalMangment = false">
+            {{ 'BUTTONS.CANCEL' | translate }}
+          </button>
+        </div>
+
+        <div class="action_btn">
+          <p-button
+            [label]="'BUTTONS.SAVE' | translate"
+            [loading]="isLoading"
+            (onClick)="submit()"
+          ></p-button>
+        </div>
+      </div>
+    </div>
+  </p-dialog>
+</div>

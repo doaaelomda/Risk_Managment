@@ -1,0 +1,105 @@
+export const arLang = {
+  lang: 'ar',
+  data: {
+    PLACEHOLDERS: {
+      SEND_MESSAGE: 'أرسل رسالة...',
+    },
+    Comments: {
+      No_Comments: 'لا توجد تعليقات بعد',
+      Click_send: 'انقر لإضافة تعليقك وتعيين طلبات التدقيق',
+    },
+    BUTTONS: {
+      CANCEL: 'إلغاء',
+      DELETE: 'حذف',
+      UNASSIGN: 'إلغاء التعيين',
+      SAVE: 'حفظ',
+      SEND: 'إرسال',
+      ALL: 'الكل',
+      UPDATE: 'تحديث',
+      MY_TASKS: 'مهامي',
+      TASKS_TO_VERIFY: 'المهام للتحقق',
+      SELECT: 'اختر',
+      add: 'إضافة',
+      START_NOW: 'ابدأ الآن',
+      SKIP: 'تخطي',
+      SAVE_AND_CONTINUE: 'حفظ ومتابعة',
+      PREVIOUS: 'السابق',
+                "CLOSE": "إغلاق"
+
+    },
+    UPLOAD: {
+      CLICK_TO_UPLOAD: 'انقر للرفع',
+      OR_DRAG_AND_DROP: 'أو اسحب وأفلت',
+      SUPPORTED_FORMATS: 'SVG، PNG، JPG أو GIF (الحد الأقصى: 800×400 بكسل)',
+    },
+    QUESTIONNAIRE_INFO: {
+      CONDUCTED_BY: 'تم إجراؤه بواسطة',
+      COMPANY_NAME: 'شركة زين للاتصالات',
+      SUBMISSION_DATE: 'تاريخ التقديم',
+      DEADLINE: 'آخر موعد للتقديم: 23 يونيو 2026',
+      PURPOSE_TITLE: 'هدف الاستبيان',
+      PURPOSE_DESC: 'لتقييم الامتثال، وتحليل الأداء، وتحديد مجالات التحسين.',
+    },
+    QUESTIONNAIRE: {
+      PLURAL_TITLE: 'الاستبيانات',
+      TITLE: 'الاستبيان',
+      THANKS_TITLE: 'شكرًا لمشاركتك!',
+      THANKS_DESC:
+        'شكرًا لإكمال الاستبيان. لقد أجبت على جميع الأسئلة المطلوبة — لا حاجة لأي إجراء إضافي. إذا كانت هناك أي متابعة مطلوبة، سيتواصل معك فريقنا قريبًا.',
+      WHAT_IS_QUESTIONNAIRE: 'ما هو الاستبيان؟',
+      DESCRIPTION:
+        'الاستبيان هو نموذج موجه يُستخدم لجمع الآراء والبيانات الواقعية. يساعد على تقييم الوعي والأداء والالتزام التنظيمي. مشاركتك تضمن الشفافية وتساهم في التحسين المستمر.',
+      TIMEOUT_TITLE: 'انتهت فترة الاستبيان',
+      TIMEOUT_DESC:
+        'شكرًا لاهتمامك بالمشاركة. لقد أُغلق الآن موعد تقديم الاستبيان. لم يعد بإمكانك الوصول أو تعديل الإجابات بعد انتهاء الموعد النهائي. إذا تم إعادة فتح الاستبيان، سيتم إعلامك.',
+      COMPLETION: 'الإكمال',
+      ANSWER: 'الإجابة',
+      ATTACHMENTS: 'المرفقات',
+      COMMENTS: 'التعليقات',
+      ACCESS_DENIED: '! تم رفض الوصول',
+ACCESS_DENIED_MESSAGE: 'ليس لديك صلاحية للوصول إلى هذه الصفحة. يرجى التواصل مع مسؤول النظام إذا كنت تعتقد أن هذا خطأ',
+        "CLOSE_QUESTIONNAIRE_TITLE": "إغلاق الاستبيان",
+  "CLOSE_QUESTIONNAIRE_DESCRIPTION": "هل أنت متأكد أنك تريد إغلاق هذا الاستبيان؟"
+
+    },
+    EMPTY_STATE: {
+      QUESTIONS_NOT_FOUND: 'لم يتم العثور على أسئلة.',
+    },
+    ATTACHMENT: {
+      EDIT_FILE_TITLE: 'التعديل علي اسم الفايل',
+      ADD_NEW: 'إضافة مرفق جديد',
+      UPDATE_INFO: 'املأ النموذج أدناه لإضافة أو تعديل تفاصيل المرفق',
+      TYPE: 'النوع',
+      FILE: 'ملف',
+      EDIT_TITLE: ' تعديل العنوان',
+      ADD_OR_USE_FILE: 'أضف ملف جديد أو استخدم ملف موجود',
+      ALLOWED_FORMATS: 'الصيغ المسموح بها: Png, PDF, URL',
+      LINK: 'رابط',
+      TITLE: 'العنوان',
+      PLACEHOLDER_TITLE: 'أدخل عنوان الملف',
+      SELECT_TYPE: 'اختر نوع الملف',
+      CLASSIFICATION: 'التصنيف',
+      SELECT_CLASSIFICATION: 'اختر التصنيف',
+      ATTACH_FILE: 'إرفاق ملف',
+      UPLOADED: 'تم الرفع',
+      PLACEHOLDER_LINK: 'أدخل الرابط هنا',
+      SEARCHABLE: 'قابل للبحث في النظام؟',
+      YES: 'نعم',
+      NO: 'لا',
+      MY_FILES: 'ملفاتي',
+      ALL_FILES: 'كل الملفات',
+      SEARCH: 'البحث في المرفقات',
+      ATTACHMENT_IMAGE_ALT: 'صورة المرفق',
+      FILE_SIZE_UNIT: 'ميغابايت',
+      FILE_PUBLISHED: 'تم نشر هذا الملف. سيتمكن أعضاء الفريق من عرضه وتعديله.',
+      UPLOADED_BY: 'تم الرفع بواسطة:',
+      BACK_TO_HOME: 'العودة للرئيسية',
+    },
+    TABS: {
+      ADD_NEW_FILE: 'إضافة ملف جديد',
+    },
+    PERMISSIONS: {
+      SEARCH: 'بحث',
+    },
+  },
+};

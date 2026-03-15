@@ -1,0 +1,40 @@
+::ng-deep .desc p {
+  padding: 0 !important;
+}
+
+::ng-deep  .welcome{
+  font-size: 14px !important;
+}
+.progress_span,.progress_span2,.progress_span3,.progress_span4 {
+  font-size: 16px !important;
+}
+::ng-deep .card-status,.card-status2,.card-status3,.card-status4{
+  background-color: white;
+  box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.06);
+  border: 1px solid rgba(208, 213, 221, 1);
+  padding: 16px;
+
+}
+ .paraggarpStauts i{
+    font-size: 24px;
+ }
+::ng-deep .progress_span3,.progress_span2,.progress_span,.progress_span4{
+  height: 31px !important;
+}
+
+.respon_div {
+  border-right: 2px solid rgba(208, 213, 221, 1);
+  height: 52px;
+  display: flex;
+  align-items: center;
+
+}
+.non_border{
+  border: 0;
+}
+.overview-container{
+    @apply  p-3 border-[1px] border-gray_light rounded-lg
+}
+.overview-header {
+    @apply font-semibold text-lg pb-2
+}

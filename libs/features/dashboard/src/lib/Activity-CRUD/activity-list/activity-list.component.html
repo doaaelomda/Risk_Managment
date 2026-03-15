@@ -1,0 +1,51 @@
+<section>
+
+
+
+    <lib-new-table
+    [table_actions_permissions]="{ module: 'THIRDPARTIES', feature: 'THIRDPARTYACTIVITY', action: 'VIEW' }"
+
+    [loading]="loadingTable"
+    [table_data]="dataTable"
+    [table_title]="'ACTIVITY.LIST_TITLE' | translate"
+    [badge_title]="'ACTIVITY.activity' | translate"
+    [dataViewId]="60"
+    [entityID_Name]="'activityID'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="items"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+  >
+  @if(_PermissionSystemService.can('THIRDPARTIES' , 'THIRDPARTYACTIVITY' , 'ADD')
+){
+        <button addition_action (click)="addActivity()"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'ACTIVITY.ADD_BUTTON' | translate }}</span>
+    </button>
+  }
+  </lib-new-table>
+</section>
+
+<lib-delete-confirm-popup
+  [titleDelete]="'ACTIVITY.DELETE_TITLE' | translate"
+  [descriptionDelete]="'ACTIVITY.DELETE_DESC' | translate"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteActivity()"
+        [loading]="loadDeleted"
+        [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

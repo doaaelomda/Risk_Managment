@@ -1,0 +1,112 @@
+<!-- Handle Evidence List in New Table -->
+<lib-new-table
+  [table_actions_permissions]="{ module: 'COMPLIANCE', feature: 'EVIDENCECOMPLIANCEVERSION', action: 'VIEW' }"
+  [loading]="loadingTable" [table_data]="dataTable"
+  [table_title]="'BREAD_CRUMB_TITLES.EVIDENCE_VERSION_LIST' | translate"
+  (openModal)="handleModal($event)"
+  [badge_title]="'HEARDE_TABLE.EVIDENCE_VERSION' | translate" [dataViewId]="146"
+  [columnControl]="columnControl"
+  [entityID_Name]="'evidenceTypeVersionID'" [isShownAction]="true" (payload_emiter)="handleDataTable($event)"
+  [action_items]="items" (currentActionRow)="setSelectedRow($event)" [columnControl]="columnControl">
+  @if(_PermissionSystemService.can('COMPLIANCE' , 'EVIDENCECOMPLIANCEVERSION' , 'ADD')
+  ){
+  <button addition_action [routerLink]="`/gfw-portal/compliance/evidenceType/${evidenceId}/add-EvidenceVersion`"
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+    <i class="fi fi-br-plus w-5 h-5 "></i>
+    <span>{{'HEARDE_TABLE.ADD_NEW_EVIDENCE_VERSION' | translate}}
+    </span>
+  </button>
+  }
+</lib-new-table>
+
+<!-- Delete Popup Evidence Compliance -->
+<lib-delete-confirm-popup [titleDelete]="'EVIDENCE_VERSION.DELETE_TITLE'"
+  [descriptionDelete]="'EVIDENCE_VERSION.DELETE_DESC'" (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible">
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+    <div class="delete_btn w-40">
+      <p-button (onClick)="deleteEvidenceVersion()" [loading]="loadDeleted" [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+
+<!-- Modal View Data -->
+<p-dialog [header]="singleTaskData?.evidenceTypeName" [(visible)]="showViewModal" (onHide)="onModalClose()"
+  [modal]="true" [dismissableMask]="true" [draggable]="false" styleClass="w-3/4 action_dailog">
+
+  <div class="p-4 grid  grid-cols-12 mb-4">
+
+    <div class="col-span-12 lg:col-span-8 grid grid-cols-12">
+
+      <!-- Status -->
+      @if( !this.loadingView){
+      <div class="header-para mb-4 col-span-12 lg:col-span-4 ">
+        {{ 'EVIDENCE_VERSION.STATUS' | translate }}
+        <p class="badge  my-3">{{ singleTaskData?.evidenceTypeVersionStatusTypeName ?? "-" }}</p>
+      </div>
+      }@else{
+      <div class="header-para mb-4">
+        <p-skeleton width="6rem"></p-skeleton>
+      </div>
+      }
+      <!-- Version Number -->
+      @if(!this.loadingView){
+      <div class="header-para mb-4 col-span-12 lg:col-span-4 ">
+        {{ 'EVIDENCE_VERSION.VERSION_NUMBER' | translate }}
+        <p class="welcome my-3 ">{{ singleTaskData?.versionNumber }}</p>
+      </div>
+      }@else{
+      <div class="header-para mb-4">
+        <p-skeleton width="6rem"></p-skeleton>
+      </div>
+      }
+
+
+      @if(!this.loadingView){
+      <!-- Verified Date -->
+      <div class="header-para mb-4 col-span-12 lg:col-span-4 ">
+        {{ 'EVIDENCE_VERSION.EXPIRY_DATE' | translate }}
+        <p class="welcome flex  my-3"> <img src="images/icons/calendar.svg" alt="">{{ (singleTaskData?.expiryDate |
+          date: 'MMM d, y')
+          }}</p>
+      </div>
+      }
+    </div>
+
+
+    <div class="lg:col-span-4 col-span-12">
+      @if(showViewModal){
+
+        <lib-system-actions [dataEntityTypeId]="64" [entityId]="current_row_selected" ></lib-system-actions>
+      }
+    </div>
+
+  </div>
+
+
+
+  <div class="grid grid-cols-12">
+    @if(showViewModal && !loadingState){
+      <div class="col-span-12">
+
+        <lib-shared-file-viewer [file]="attachments" ></lib-shared-file-viewer>
+      </div>
+    }
+  </div>
+
+
+
+
+  <div class="flex flex-col gap-3">
+    <div class="cancel_btn  w-fit ms-auto">
+      <button (click)="showViewModal = false">{{ 'WORKFLOW_STEPS.BUTTONS.BACK_TO_LIST' |
+        translate }}</button>
+    </div>
+  </div>
+</p-dialog>

@@ -1,0 +1,86 @@
+<div
+  [attr.dir]="Direction"
+  class="table-pagination border  border-t-0 rounded-b-lg bg-white_color p-2 px-4 flex flex-wrap gap-2 justify-between md:flex flex-wrap-nowrap sm:flex flex-wrap-wrap items-center"
+>
+  <div class="table-pagination__total-section">
+    <span [ngClass]="paginationStyleText ? 'pagination-text-sm' : 'pagination-text-base'" class="text-gray_color">
+      <span class="text-gray-800">{{ Showing }}</span>
+      <span class="text-gray-800 pagination-text-sm">
+        {{
+          rowPerPageValue > (paginationObject?.totalItems || 0)
+            ? paginationObject?.totalItems
+            : rowPerPageValue
+        }}
+      </span>
+      {{ Of }}
+      <span class="text-gray-800 pagination-text-sm">
+        {{ paginationObject?.totalItems }}
+      </span>
+    </span>
+  </div>
+
+  <div class="table-pagination__total-pages flex flex-wrap flex flex-wrap-1 justify-center m-2 lg:m-0">
+    <div class="inner_pagination flex flex-wrap gap-2 lg:gap:4  items-center">
+      <button
+        class="pagination-button text-gray_color border border-gray_light rounded cursor-pointer"
+        [class]="currentPage === 1 || isDisabled ? 'disabledStep' : ''"
+        (click)="goToFirstPage()"
+      >
+        <i [class]="firstIcon"></i>
+      </button>
+      <button
+        class="pagination-button text-gray_color border border-gray_light rounded cursor-pointer"
+        [class]="currentPage === 1 || isDisabled ? 'disabledStep' : ''"
+        (click)="prevPage()"
+      >
+        <i [class]="prevIcon"></i>
+      </button>
+
+      <span class="text-gray_color pagination-text-base">{{ Page }}</span>
+
+      <div class="table-pagination__pages flex flex-wrap gap-2 items-center">
+        <button
+          [ngClass]="isDisabled ? 'disabledStep':''"
+          class="text-gray-800 pagination-text-sm border border-gray_light rounded-lg py-1 px-3 cursor-pointer"
+        >
+          {{ currentPage }}
+        </button>
+      </div>
+
+      <span class="text-gray_color pagination-text-base">{{ Of }} {{ pagesSize.length }}</span>
+
+      <!-- Next Page -->
+      <button
+        class="pagination-button text-gray_color border border-gray_light rounded cursor-pointer"
+        [class]="currentPage >= pagesSize.length || isDisabled ? 'disabledStep' : ''"
+        (click)="nextPage()"
+      >
+        <i [class]="nextIcon"></i>
+      </button>
+
+      <!-- Last Page -->
+      <button
+        class="pagination-button text-gray_color border border-gray_light rounded cursor-pointer"
+        [class]="currentPage === pagesSize.length || isDisabled ? 'disabledStep' : ''"
+        (click)="goToLastPage()"
+      >
+        <i [class]="lastIcon"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="table-pagination__row-per-page">
+    <div class="table-pagination__row-per-page-inner flex flex-wrap items-center text-sm text-gray_color gap-2">
+      <span [ngClass]="paginationStyleText ? 'pagination-text-sm' : 'text-sm'" class="per_page_text">
+        {{ RowsPerPage }}
+      </span>
+
+      <p-dropdown
+        (onChange)="changePageSize()"
+        [options]="rowPerPage"
+        [(ngModel)]="rowPerPageValue"
+        styleClass="perPageOption"
+      ></p-dropdown>
+    </div>
+  </div>
+</div>

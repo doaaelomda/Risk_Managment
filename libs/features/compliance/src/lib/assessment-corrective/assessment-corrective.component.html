@@ -1,0 +1,9 @@
+<lib-entity-action
+  [canView]="_PermissionSystemService.can('COMPLIANCE' , 'ONGOINGASSSESSMENT_CONTROLS_CORRECTIVEACTION' , 'VIEW')"
+  [canDelete]="_PermissionSystemService.can('COMPLIANCE' , 'ONGOINGASSSESSMENT_CONTROLS_CORRECTIVEACTION' , 'DELETE')"
+  [canAdd]="_PermissionSystemService.can('COMPLIANCE' , 'ONGOINGASSSESSMENT_CONTROLS_CORRECTIVEACTION' , 'ADD')"
+  [canEdit]="_PermissionSystemService.can('COMPLIANCE' , 'ONGOINGASSSESSMENT_CONTROLS_CORRECTIVEACTION' , 'EDIT')"
+   [HEADER_DESC]="'RISK_ACTION.DESC_CORRECTIVE' | translate" [fileUsageTypeId]="19"
+  [HEADER_TITLE]="'RISK_ACTION.HEADER_CORRECTIVE' | translate"
+  [UPDATE_TITLE]="'RISK_ACTION.UPDATE_CORRECTIVE' | translate" [entityID]="entityID" [dataEntityTypeID]="19" [businessTaskTypeID]="7"></lib-entity-action>
+

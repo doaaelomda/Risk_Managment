@@ -1,0 +1,20 @@
+<div class="tabs flex flex-wrap items-center border-b border-gray_light my-4">
+  @for(tab of tabs ; track tab){
+      <button
+
+        (click)="tab.setActive(tab.id)"
+        class="tab"
+        [ngClass]="{ 'small-text': tabs.length > 6, 'active_tab': tab.id === current_selected_tab }"
+      >
+        <i [class]="tab.icon" class="fi"></i>
+        <span>{{ tab.name | translate }}</span>
+      </button>
+
+  }
+</div>
+
+
+
+
+<ng-template #tabContent >
+</ng-template>

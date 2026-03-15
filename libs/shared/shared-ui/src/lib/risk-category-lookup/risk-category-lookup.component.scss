@@ -1,0 +1,198 @@
+::ng-deep .frameworkAccordion {
+    .p-accordion-header-link {
+        height: 52px;
+        padding: 12px 16px;
+        border-radius: 7px;
+        background-color: #F9FAFB;
+          color: #6938EF;
+            font-size: 18px;
+            font-weight: 500;
+        .p-accordion-toggle-icon{
+            display: none;
+        }
+    }
+   .p-accordion-tab{
+     border: 1px solid #D0D5DD;
+     border-radius: 8px;
+
+   }
+
+}
+
+
+.col_container{
+  cursor: move;
+}
+
+
+.col_container.dis_curs{
+  cursor: not-allowed	!important;
+}
+
+.header{
+    box-shadow: 0px 1px 2px 0px #1018280F;
+
+box-shadow: 0px 1px 3px 0px #1018281A;
+}
+
+.table_container{
+  box-shadow: 0px 1px 2px 0px #1018280F;
+
+box-shadow: 0px 1px 3px 0px #1018281A;
+
+}
+
+.apply_btn:disabled{
+  cursor: auto;
+  pointer-events: none;
+}
+
+
+
+.avatar img{
+  width: 60 ;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.table_title_header{
+  color: rgba(16, 24, 40, 1);
+  font-size: 18px;
+  font-weight: 500;
+}
+::ng-deep .action_btn{
+  background-color: transparent;
+  border-color: rgba(122, 90, 248, 1)
+
+}
+.progress_outer{
+  @apply bg-success_color/25 rounded-md h-2;
+  .inner{
+    @apply bg-success_color rounded-md h-2;
+  }
+}
+
+
+
+.custom_height{
+  max-height: 500px  ;
+  overflow: hidden;
+}
+
+
+
+.header{
+  border-color: #EAECF0
+}
+
+
+::ng-deep .editor {
+  .p-editor-content {
+    height: 120px;
+  }
+
+}
+.color-bg {
+
+  .small_doted {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    @apply bg-primary;
+  }
+
+  @apply font-[500] py-1 px-2 gap-2 relative rounded-2xl bg-primary/10 text-primary_custom text-sm w-fit flex items-center;
+}
+
+.badge {
+  .small_doted {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    @apply bg-primary;
+  }
+
+  @apply font-[500] py-1 px-2 gap-2 relative rounded-2xl bg-primary/10 text-primary_custom text-sm w-fit flex items-center;
+
+  &.Blue,
+  &.blue {
+    background-color: #F4F3FF;
+    color: #5925DC;
+
+    .small_doted {
+      background-color: #5925DC;
+    }
+  }
+
+  &.Blue-Light,
+  &.blue-light {
+    background-color: #F0F9FF;
+    color: #026AA2;
+
+    .small_doted {
+      background-color: #5925DC;
+    }
+  }
+
+
+  &.Red,
+  &.red {
+    background-color: #FEF3F2;
+    color: #B42318;
+
+    .small_doted {
+      background-color: #B42318;
+    }
+  }
+
+  &.Green,
+  &.green {
+    background-color: #ECFDF3;
+    color: #027A48;
+
+    .small_doted {
+      background-color: #027A48;
+    }
+  }
+
+  &.Yellow,
+  &.yellow {
+    background-color: #FFFAEB;
+    color: #B54708;
+
+    .small_doted {
+      background-color: #B54708;
+    }
+  }
+
+
+  &.Gray,
+  &.gray {
+    background-color: #F2F4F7;
+    color: #344054;
+
+    .small_doted {
+      background-color: #344054;
+    }
+  }
+
+  &.Orange,
+  &.orange {
+    background-color: #FFFAEB;
+    color: #B54708;
+
+    .small_doted {
+      background-color: #B54708;
+    }
+  }
+
+  &.Blue,
+  &.blue {
+    @apply bg-info_bg text-info_text;
+  }
+
+  &.Gold,
+  &.gold {
+    @apply bg-danger_bg text-danger_text;
+  }
+}

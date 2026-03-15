@@ -1,0 +1,23 @@
+.event_item {
+  .icon {
+    @apply w-[50px] h-[50px] flex justify-center items-center rounded-full bg-[#EBE9FE] text-2xl text-[#6938EF];
+  }
+
+  &.active {
+    border-width: 3px 1px 1px 1px;
+    border-style: solid;
+    border-color: #7a5af8;
+  }
+  .name {
+    @apply text-[#344054] font-medium text-base text-center w-full break-words overflow-hidden line-clamp-2;
+  }
+  @apply border-[1px] border-[#EAECF0] p-4 rounded-md flex flex-col justify-center items-center gap-2 w-[164px] h-[142px] text-wrap shrink-0;
+}
+
+.list_container {
+  border: 1px solid #d0d5dd;
+  padding: 12px 24px 24px 24px;
+  .header {
+    padding: 16px 24px 24px;
+  }
+}

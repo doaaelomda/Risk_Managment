@@ -1,0 +1,180 @@
+<div class="grid grid-cols-3 gap-4 gap-y-4 ">
+  <div [ngClass]="hasActions ? 'col-span-2' : 'col-span-3'" class="flex flex-col my-1 gap-4">
+    <div>
+      <h3 class="title">{{ 'Control_view.ControlMaiInfo' | translate }}</h3>
+
+<div class="grid grid-cols-1 border-r-2 border-gray-300 gap-6 py-3">
+
+  <!-- Name (Full width) -->
+   @if(dataAssessmnetCompliance?.name){
+  <div class="flex flex-col my-1 ">
+    <span class="label font-semibold text-gray-600 mb-1">{{'INFO.NAME' | translate}}</span>
+    <span class="value">{{ dataAssessmnetCompliance?.name }}</span>
+  </div>
+}
+
+  <div class="grid grid-cols-3 gap-4">
+
+    <!-- Start Date -->
+      @if(dataAssessmnetCompliance?.startDate){
+    <div class="flex flex-col my-1 border-r border-gray-200">
+      <span class="label font-semibold text-gray-600 mb-1">{{'INFO.START_DATE' | translate}}</span>
+      <span class="value flex items-center gap-2">
+        <i class="fi fi-rr-calendar text-gray-500"></i>
+        {{ dataAssessmnetCompliance?.startDate | date:'MMM d, y' }}
+      </span>
+    </div>
+  }
+
+    <!-- Evidence Gathering Due Date -->
+      @if(dataAssessmnetCompliance?.evidenceGatheringDueDate){
+    <div class="flex flex-col my-1 border-r border-gray-200">
+      <span class="label font-semibold text-gray-600 mb-1">{{'INFO.EVIDENCE_GATHERING_DUE_DATE' | translate}}</span>
+      <span class="value flex items-center gap-2">
+        <i class="fi fi-rr-calendar text-gray-500"></i>
+        {{ dataAssessmnetCompliance?.evidenceGatheringDueDate | date:'MMM d, y' }}
+      </span>
+    </div>
+  }
+
+    <!-- Stage -->
+      @if(dataAssessmnetCompliance?.complianceAssessmentStageName){
+    <div class="flex flex-col my-1">
+      <span class="label font-semibold text-gray-600 mb-1">{{'INFO.STAGE' | translate}}</span>
+      <span class="value">{{ dataAssessmnetCompliance?.complianceAssessmentStageName }}</span>
+    </div>
+  }
+    <!-- Expected Close Date -->
+      @if(dataAssessmnetCompliance?.expectedCloseDate){
+    <div class="flex flex-col my-1 border-r border-gray-200">
+      <span class="label font-semibold text-gray-600 mb-1">{{'INFO.EXPECTED_CLOSE_DATE' | translate}}</span>
+      <span class="value flex items-center gap-2">
+        <i class="fi fi-rr-calendar text-gray-500"></i>
+        {{ dataAssessmnetCompliance?.expectedCloseDate | date:'MMM d, y' }}
+      </span>
+    </div>
+  }
+
+    <!-- Close Date -->
+      @if(dataAssessmnetCompliance?.closeDate){
+    <div class="flex flex-col my-1 border-r border-gray-200">
+      <span class="label font-semibold text-gray-600 mb-1">{{'INFO.CLOSE_DATE' | translate}}</span>
+      <span class="value flex items-center gap-2">
+        <i class="fi fi-rr-calendar text-gray-500"></i>
+        {{ dataAssessmnetCompliance?.closeDate | date:'MMM d, y' }}
+      </span>
+    </div>
+  }
+    <!-- Status -->
+      @if(dataAssessmnetCompliance?.complianceAssessmentStatusTypeName){
+    <div class="flex flex-col my-1 border-r border-gray-200">
+      <span class="label font-semibold text-gray-600 mb-1">{{'INFO.STATUS' | translate}}</span>
+      <span class="badge flex items-center gap-2" [ngClass]="dataAssessmnetCompliance?.complianceAssessmentStatusTypeColor">
+        {{ dataAssessmnetCompliance?.complianceAssessmentStatusTypeName  }}
+      </span>
+    </div>
+  }
+    <!-- Assessment Type -->
+     @if(dataAssessmnetCompliance?.complianceAssessmentScopeTypeName){
+    <div class="flex flex-col my-1">
+      <span class="label font-semibold text-gray-600 mb-1">{{'INFO.ASSESSMENT_TYPE' | translate}}</span>
+      <span class="badge">
+        {{ dataAssessmnetCompliance?.complianceAssessmentScopeTypeName  }}
+      </span>
+    </div>
+  }
+    <!-- Responsible Role -->
+     @if(dataAssessmnetCompliance?.responsableRoleName){
+    <div class="flex flex-col my-1 border-r border-gray-200">
+      <span class="label font-semibold text-gray-600 mb-1">{{'INFO.RESPONSIBLE_ROLE' | translate}}</span>
+      <div class="flex items-center gap-2">
+        <!-- <img class="w-8 h-8 rounded-full" src="images/Avatar2.svg" alt="User Avatar" /> -->
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0.800781" y="0.601562" width="28.8" height="28.8" rx="14.4" fill="#F4F3FF" />
+          <path
+            d="M22.2012 21.3031V19.9031C22.2012 18.5984 21.3088 17.5022 20.1012 17.1913M17.6512 8.90666C18.6773 9.32203 19.4012 10.328 19.4012 11.5031C19.4012 12.6782 18.6773 13.6842 17.6512 14.0996M18.7012 21.3031C18.7012 19.9985 18.7012 19.3462 18.488 18.8316C18.2039 18.1455 17.6588 17.6004 16.9727 17.3163C16.4581 17.1031 15.8058 17.1031 14.5012 17.1031H12.4012C11.0965 17.1031 10.4442 17.1031 9.92966 17.3163C9.24358 17.6004 8.69849 18.1455 8.41431 18.8316C8.20117 19.3462 8.20117 19.9985 8.20117 21.3031M16.2512 11.5031C16.2512 13.0495 14.9976 14.3031 13.4512 14.3031C11.9048 14.3031 10.6512 13.0495 10.6512 11.5031C10.6512 9.95673 11.9048 8.70312 13.4512 8.70312C14.9976 8.70312 16.2512 9.95673 16.2512 11.5031Z"
+            stroke="#6938EF" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span class="value">{{ dataAssessmnetCompliance?.responsableRoleName }}</span>
+      </div>
+    </div>
+  }
+    <!-- Responsible User -->
+     @if(dataAssessmnetCompliance?.responsableUserName){
+    <div class="flex flex-col my-1 border-r border-gray-200">
+      <span class="label font-semibold text-gray-600 mb-1">{{'INFO.RESPONSIBLE_USER' | translate}}</span>
+      <div class="flex items-center gap-2">
+        <!-- <img class="w-8 h-8 rounded-full" src="images/Avatar2.svg" alt="User Avatar" /> -->
+        <lib-img-system [userId]="dataAssessmnetCompliance?.responsableUserID"></lib-img-system>
+        <span class="value">{{ dataAssessmnetCompliance?.responsableUserName }}</span>
+      </div>
+    </div>
+  }
+  </div>
+@if(dataAssessmnetCompliance?.assessors?.length > 0) {
+  <div class="flex flex-col my-1">
+    <span class="label font-semibold text-gray-600 mb-1">
+      {{ 'INFO.ASSESSOR' | translate }}
+    </span>
+
+    <div class="grid grid-cols-3 gap-4">
+      @for (assessor of dataAssessmnetCompliance.assessors; track $index) {
+        <div class="flex items-center gap-2 border-r border-gray-200">
+          <!-- <img class="w-8 h-8 rounded-full" src="images/Avatar2.svg" alt="User Avatar" /> -->
+          <lib-img-system [userId]="assessor?.assessorUserID"></lib-img-system>
+          <span class="value">{{ assessor.assessorUserName }}</span>
+        </div>
+      }
+    </div>
+  </div>
+}
+
+
+</div>
+
+    </div>
+  </div>
+  <div [hidden]="!hasActions" class="col-span-3 lg:col-span-1 flex flex-col my-1 gap-2">
+    <div class="my-3">
+      <lib-system-actions (foundActionEmitter)="onFoundAction($event)" [dataEntityTypeId]="19" [entityId]="assessmnetId">
+      </lib-system-actions>
+    </div>
+    <!-- <div class="">
+      @for (status of controlStatuses; track $index) {
+      <div class="card p-3 control_stataus mb-5">
+        <div class="header flex justify-between mb-3">
+          <h3 class="title">{{ status?.title }}</h3>
+          <lib-tag [theme]="status.theme" [beforeTag]="status.value" [tag]="'HEARDE_TABLE.CONTROL' | translate"
+            [icon]="status.arrowIco"></lib-tag>
+        </div>
+        <div class="flex items-center gap-3 p-4 status_value_wrapper"
+          [ngStyle]="{ backgroundColor: getTheme(status.theme).wrapColor }">
+          <div class="ico_wrap rounded-full flex justify-center items-center w-10 h-10"
+            [ngStyle]="{ 'background-color': getTheme(status.theme).bg }">
+            <i class="fi fi-rr-heart-rate" [ngStyle]="{ color: getTheme(status.theme).text }"></i>
+          </div>
+
+          <div class="flex flex-col my-1 flex-grow">
+            <div class="flex justify-between mb-1">
+              <span class="font-semibold" [ngStyle]="{ color: getTheme(status.theme).text }">
+                {{ status?.name }}
+              </span>
+              <span [ngStyle]="{ color: getTheme(status.theme).text }">
+                {{ status?.percentage }}%
+              </span>
+    </div>
+
+            <div [ngStyle]="{ backgroundColor: getTheme(status.theme).bg }"
+              class="progress_bar w-full h-2 bg-gray-200 rounded relative overflow-hidden">
+              <div class="absolute top-0 left-0 h-full rounded" [ngStyle]="{
+                  width: status.percentage + '%',
+                  backgroundColor: getTheme(status.theme).text
+                }"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+    </div> -->
+  </div>
+</div>

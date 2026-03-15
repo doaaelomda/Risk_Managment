@@ -1,0 +1,74 @@
+<section>
+  <div class="header mb-6">
+    <div class="title flex items-center gap-4 justify-between flex-wrap">
+      <div class="flex justify-between items-center">
+        @if(loading_data){
+        <p-skeleton width="15rem" styleClass="mb-2" />
+        <p-skeleton width="10rem" styleClass="mb-2" />
+        }@else {
+        <h2 class="text-2xl font-semibold text-gray-800 ">{{ current_risk_data?.riskTitle }}</h2>
+        <p class="text-gray_color m-0">
+          {{ '(' + current_risk_data?.riskCode + ')' }}
+        </p>
+        }
+      </div>
+      <div class="flex justify-between flex-wrap items-center gap-5">
+        @if(current_risk_data?.riskImpactName ){
+        <div class="flex items-center gap-2">
+          <p class="m-0 font-medium text-gray_color">
+            {{ 'TABS.RISK_RATING' | translate }}
+          </p>
+          <span class="badge">{{
+            current_risk_data?.riskImpactName
+            }}</span>
+        </div>
+        }
+        @if(current_risk_data?.riskResponseTypeName ){
+        <div class="flex items-center gap-2">
+          <p class="m-0 font-medium text-gray_color">
+            {{ 'TABS.MITIGATION' | translate }}
+          </p>
+          <span class=" badge" [ngClass]="current_risk_data?.riskResponseTypeColor">{{
+            current_risk_data?.riskResponseTypeName
+            }}</span>
+        </div>
+        }
+        @if(current_risk_data?.riskRecordStatusTypeName ){
+        <div class="flex items-center gap-2">
+          <p class="m-0 font-medium text-gray_color">
+            {{ 'TABS.STATUS' | translate }}
+          </p>
+          <span class="badge">{{
+            current_risk_data?.riskRecordStatusTypeName
+            }}</span>
+        </div>
+        }
+        <div class="content flex flex-wrap items-center gap-4">
+          @if (current_risk_data?.organizationalUnits?.length > 0) {
+          <div class="flex items-center gap-2">
+            <p class="m-0 font-medium text-gray_color">
+              {{ 'TABS.DEPARTMENT' | translate }}
+            </p>
+            <ng-container>
+              @for (unit of current_risk_data.organizationalUnits; track $index) {
+              <ng-container>
+                @if (unit?.label) {
+                <span class="font-semibold text-gray-800">
+                  {{ unit.label }}
+                </span>
+                } </ng-container>}
+            </ng-container>
+          </div>
+          }@else {
+          <span class="font-semibold">-</span>
+          }
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <lib-shared-tabs [permissionFeature]="{module:'RISKS' , feature:'RISK'}" [tabs]="tabs"></lib-shared-tabs>
+
+  <router-outlet></router-outlet>
+</section>

@@ -1,0 +1,102 @@
+<section>
+  <lib-new-table
+    [loading]="loadingEvidence"
+    [table_data]="evidenceList"
+    [table_title]="'ControlRequirement.EVIDENCE_LIST' | translate"
+    [badge_title]="'ControlRequirement.EVIDENCE' | translate"
+    [dataViewId]="144"
+    [entityID_Name]="'governanceStandardControlID'"
+    [isShownAction]="true"
+    (payload_emiter)="handleEvidenceDataTable($event)"
+    [action_items]="evidence_table_items"
+    (currentActionRow)="setSelectedLinkedEvidence($event)"
+    [table_actions_permissions]="{
+      module: 'RISKS',
+      feature: 'RISK',
+      action: 'VIEW'
+    }"
+    [columnControl]="{ type: 'modal' }"
+  >
+    @if(_PermissionSystemService.can('LIBRARY' ,
+    'STANDARDDOCUMENTS_CONTROLSLINKEDEVIDENCE' , 'ADD')){
+
+    <button
+      addition_action
+      (click)="isAddingEvidence = true"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+    >
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'ControlRequirement.ADD_EVIDENCE' | translate }}</span>
+    </button>
+    }
+  </lib-new-table>
+</section>
+
+<div class="action_dailog">
+  <p-dialog
+    [header]="'ControlRequirement.ADD_EVIDENCE' | translate"
+    [modal]="true"
+    [(visible)]="isAddingEvidence"
+    [dismissableMask]="true"
+    [draggable]="false"
+    (onShow)="getSelectedIDS()"
+    (onHide)="onModalClose(); selected_ids = []; selected_linked_template_ids = []"
+    styleClass="w-[85%] h-[95%]"
+  >
+    @if(isAddingEvidence){
+    <lib-new-table
+      (selectionEmitter)="setSelectedLinkedTemplate($event)"
+      [selections_input]="selected_ids"
+      [loading]="loadingTemplateList"
+      [table_data]="templateList"
+      [table_title]="'ControlRequirement.EVIDENCE_TEMPLATE_LIST' | translate"
+      [badge_title]="'ControlRequirement.EVIDENCE_TEMPLATE' | translate"
+      [dataViewId]="73"
+      [entityID_Name]="'templateEvidenceTypeID'"
+      [isShownAction]="false"
+      (payload_emiter)="handleTemplateDataTable($event)"
+      [columnControl]="modalColumnControl"
+      [table_config]="{ type: 'multiSelect' }"
+    >
+      @if(_PermissionSystemService.can('LIBRARY' ,
+      'STANDARDDOCUMENTS_CONTROLSLINKEDEVIDENCE' , 'ADD')){
+      <p-button
+        addition_action
+        [disabled]="!control_id"
+        class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+        [label]="'Save Changes'"
+        [loading]="savingEvidence"
+        icon="pi pi-check"
+        (click)="saveTemplateEvidenceType()"
+      />
+      }
+    </lib-new-table>
+    }
+  </p-dialog>
+</div>
+
+<!-- <lib-delete-confirm-popup
+  [titleDelete]="'ControlRequirement.DELETE_EVIDENCE_TITLE'"
+  [descriptionDelete]="'ControlRequirement.DELETE_EVIDENCE_DESC'"
+  (hideEmiter)="actionDeleteVisible = false; selected_linked_evidence = null"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button
+        class="w-40"
+        (click)="actionDeleteVisible = false; selected_linked_evidence = null"
+      >
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteEvidence()"
+        [loading]="deleting"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup> -->

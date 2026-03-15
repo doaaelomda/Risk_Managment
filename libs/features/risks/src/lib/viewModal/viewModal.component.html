@@ -1,0 +1,348 @@
+<div class="action_dailog">
+  <p-dialog
+    header="Header"
+    [dismissableMask]="true"
+    (onHide)="hide_emitter.emit(false)"
+    [(visible)]="show_prop"
+    [modal]="true"
+    [draggable]="false"
+    styleClass="taskViewDialog w-[936px] h-[660px]"
+  >
+    <ng-template pTemplate="header">
+      <div class="flex justify-between w-full items-center">
+        <div class="flex flex-col">
+          <h1 class="dialog-header">
+            {{ singleTaskData?.name }}
+          </h1>
+          <div class="flex items-center gap-3">
+            <div class="flex gap-1 items-center">
+              <span class="dialog-label">
+                {{ 'MODAL_VIEW.DUE_DATE' | translate }}:
+              </span>
+              <span class="value">
+                {{
+                  singleTaskData?.dueDate
+                    ? (singleTaskData?.dueDate | date)
+                    : '-'
+                }}
+              </span>
+            </div>
+
+            <div class="flex gap-1 items-center">
+              <span class="dialog-label"
+                >{{ 'MODAL_VIEW.PRIORITY' | translate }}:</span
+              >
+              <span
+                class="badge {{
+                  singleTaskData?.businessTaskPriorityLevelColor
+                }}"
+              >
+                {{ singleTaskData?.businessTaskPriorityLevelName }}
+              </span>
+            </div>
+            <div class="flex gap-1 items-center">
+              <span class="dialog-label"
+                >{{ 'MODAL_VIEW.STATUS' | translate }}:</span
+              >
+              <span
+                class="badge {{
+                  singleTaskData?.businessTaskWFStatusTypeColor
+                }}"
+              >
+                {{ singleTaskData?.businessTaskWFStatusTypeName }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        @if(singleTaskData?.viewRoute){
+        <div>
+          <a
+            href="{{ singleTaskData?.viewRoute }}"
+            target="_blank"
+            class="p-button-text text-primaryColor-500 flex items-center gap-2"
+          >
+            <i class="fi fi-rr-up-right-from-square text-lg font-medium"></i>
+            <span class="text-lg font-medium"> View Task </span>
+          </a>
+        </div>
+        }
+      </div>
+    </ng-template>
+
+    <div class="container_view">
+      <div
+        class="tabs items-center gap-1 border-b border-gray_light grid grid-cols-12 mb-3"
+      >
+        @for(tab of tabs ; track tab){
+        <button
+          (click)="current_tab = tab.id"
+          [ngClass]="{ active_tab: current_tab === tab.id }"
+          class="flex col-span-4 outline-none justify-center items-center gap-2 font-medium px-4 py-3 min-w-32 tab"
+        >
+          <i [class]="tab.icon" class="fi"></i>
+          <span>{{ tab.name }}</span>
+        </button>
+        }
+      </div>
+
+      @switch (current_tab) { @case(1){
+      <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-12 lg:col-span-6 grid grid-cols-12">
+          <div class="col-span-12 border-b-2 border-light_white py-3">
+            <h3 class="user__card_title mb-2">
+              {{ 'MODAL_VIEW.DEPARTMENT' | translate }}
+            </h3>
+            <span class="user__card_position">{{
+              singleTaskData?.department || '-'
+            }}</span>
+          </div>
+
+          <div class="col-span-12">
+            <h3 class="user__card_position py-3 dark">
+              {{ 'MODAL_VIEW.DESCRIPTION' | translate }}
+            </h3>
+            <span class="description">
+              {{
+                singleTaskData?.description
+                  ? isDescExpanded
+                    ? singleTaskData?.description
+                    : singleTaskData?.description?.length > 100
+                    ? (singleTaskData?.description | slice : 0 : 100) + '...'
+                    : singleTaskData?.description
+                  : '-'
+              }}
+            </span>
+            @if(singleTaskData?.description?.length > 100){
+            <button class="btn expandBtn self-start" (click)="toggleReadMore()">
+              {{ isDescExpanded ? 'Read less' : 'Read more' }}
+            </button>
+            }
+          </div>
+          @if(singleTaskData?.successCriteria){
+
+          <div class="col-span-12">
+            <h3 class="user__card_position py-3 dark">Success Criteria</h3>
+            <span class="description">
+              {{
+                singleTaskData?.successCriteria
+                  ? isDescExpandedSuccess
+                    ? singleTaskData?.successCriteria
+                    : singleTaskData?.successCriteria?.length > 100
+                    ? (singleTaskData?.successCriteria | slice : 0 : 100) +
+                      '...'
+                    : singleTaskData?.successCriteria
+                  : '-'
+              }}
+            </span>
+            @if(singleTaskData?.successCriteria?.length > 100){
+            <button
+              class="btn expandBtn self-start"
+              (click)="isDescExpandedSuccess = !isDescExpandedSuccess"
+            >
+              {{ isDescExpandedSuccess ? 'Read less' : 'Read more' }}
+            </button>
+            }
+          </div>
+          }
+
+          <div class="col-span-6 user__card border-b-2 border-light_white py-3">
+            <h3 class="user__card_title mb-2">
+              {{ 'MODAL_VIEW.ASSIGNEE_ROLE' | translate }}
+            </h3>
+            <div class="flex gap-2 items-center">
+              <lib-img-system
+                [userId]="singleTaskData?.assigneeRoleId"
+              ></lib-img-system>
+
+              <div class="flex flex-col gap-1 justify-center">
+                <h3 class="user__card_position">
+                  {{ singleTaskData?.assigneeRoleName || '-' }}
+                </h3>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-span-6 user__card border-b-2 border-light_white py-3">
+            <h3 class="user__card_title mb-2">
+              {{ 'MODAL_VIEW.ASSIGNEE_USER' | translate }}
+            </h3>
+            <div class="flex gap-2 items-center">
+              <lib-img-system
+                [userId]="singleTaskData?.assigneeUserID"
+              ></lib-img-system>
+              <div class="flex flex-col gap-1 justify-center">
+                <h3 class="user__card_position">
+                  {{ singleTaskData?.assigneeUserName || '-' }}
+                </h3>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-span-6 user__card border-b-2 border-light_white py-3">
+            <h3 class="user__card_title mb-2">
+              {{ 'MODAL_VIEW.VERIFICATION_USER' | translate }}
+            </h3>
+            <div class="flex gap-2 items-center">
+              <lib-img-system
+                [userId]="singleTaskData?.verificationUserID"
+              ></lib-img-system>
+              <div class="flex flex-col gap-1 justify-center">
+                <h3 class="user__card_position">
+                  {{ singleTaskData?.verificationUserName || '-' }}
+                </h3>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-span-6 user__card border-b-2 border-light_white py-3">
+            <h3 class="user__card_title mb-2">
+              {{ 'MODAL_VIEW.FOLLOW_UP_USER' | translate }}
+            </h3>
+            <div class="flex gap-2 items-center">
+              <lib-img-system
+                [userId]="singleTaskData?.followUpUserID"
+              ></lib-img-system>
+
+              <div class="flex flex-col gap-1 justify-center">
+                <h3 class="user__card_position">
+                  {{ singleTaskData?.followUpUserName || '-' }}
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <div class="flex flex-col gap-3">
+            @if(actionBtns.length){
+
+            <div class="card action_card flex flex-col gap-3">
+              <h2>{{ 'MODAL_VIEW.RESPONSE_ACTIONS' | translate }}</h2>
+
+              <div class="btns-wrapper flex gap-2 items-center flex-wrap">
+                @for (btn of actionBtns; track $index) {
+                <p-button
+                  [loading]="btn.isLoading"
+                  [disabled]="isAllDisabled"
+                  styleClass="btn-{{
+                    btn?.businessTaskTypeActionColor[0]?.toUpperCase() +
+                      btn?.businessTaskTypeActionColor?.substring(1)
+                  }}"
+                  (onClick)="
+                    handleActionBtnClick(btn, singleTaskData?.businessTaskID)
+                  "
+                >
+                  {{ btn?.businessTaskTypeActionName }}
+                </p-button>
+                }
+              </div>
+            </div>
+            }
+            <div class="card status_card flex flex-col gap-3">
+              @if (singleTaskData?.excutionStatues) {
+              <div class="flex justify-between items-center">
+                <h2>{{ 'MODAL_VIEW.EXECUTION_STATUS' | translate }}</h2>
+                <span
+                  class="badge {{
+                    singleTaskData?.businessTaskWFStatusTypeColor
+                  }}"
+                  >{{ singleTaskData?.businessTaskWFStatusTypeName }}
+                </span>
+              </div>
+              }
+
+              <div
+                class="flex items-center gap-3 p-4 status_value_wrapper"
+                [ngStyle]="{ backgroundColor: getTheme('green').wrapColor }"
+              >
+                <div
+                  class="ico_wrap rounded-full flex justify-center items-center w-10 h-10"
+                  [ngStyle]="{ 'background-color': getTheme('green').bg }"
+                >
+                  <i
+                    class="fi fi-rr-heart-rate"
+                    [ngStyle]="{ color: getTheme('green').text }"
+                  ></i>
+                </div>
+
+                <div class="flex flex-col flex-grow">
+                  <div class="flex justify-between mb-1">
+                    <span
+                      class="font-semibold"
+                      [ngStyle]="{ color: getTheme('green').text }"
+                    >
+                      {{ 'MODAL_VIEW.PROGRESS' | translate }}
+                    </span>
+                    <span [ngStyle]="{ color: getTheme('green').text }">
+                      {{ singleTaskData?.progress || 0 }}%
+                    </span>
+                  </div>
+
+                  <div
+                    [ngStyle]="{ backgroundColor: getTheme('green').bg }"
+                    class="progress_bar w-full h-2 bg-gray-200 rounded relative overflow-hidden"
+                  >
+                    <div
+                      class="absolute top-0 left-0 h-full rounded"
+                      [ngStyle]="{
+                        width: (singleTaskData?.progress || 0) + '%',
+                        backgroundColor: getTheme('green').text
+                      }"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      } @case (2) {
+
+      <div class="">
+        <lib-new-attach-list
+          [loadingSatate]="loadingState"
+          (action_emiter)="handleActionSingleFile($event)"
+          (add_emiter)="handleShowAdd($event)"
+          [files]="attachments"
+        >
+        </lib-new-attach-list>
+      </div>
+
+      <lib-attachments-ui
+        [dataEntityId]="singleTaskData?.businessTaskID"
+        [dataEntityTypeId]="relatedEntityId"
+        [fileUsageTypeID]="fileUsageTypeId"
+        [show_add_dailog]="show_add_dailog"
+        (added)="handleAdded($event)"
+      ></lib-attachments-ui>
+
+      <lib-view-attachement
+        (modelVisibleEmiter)="handleHideView($event)"
+        [modelVisible]="displayModal"
+        [selected_file_Input$]="selected_file_show"
+      ></lib-view-attachement>
+
+      <lib-edit-attachment
+        [visible]="edit_file_name"
+        [title]="current_title_update"
+        [loading]="loadUpdate"
+        (save)="handleUpdateTitle($event)"
+        (cancel_Modal)="edit_file_name = false"
+      ></lib-edit-attachment>
+
+      } @case (3) {
+      <lib-comment-section
+        (deleteCommentEvent)="deleteComment($event)"
+        (updateCommentEvent)="updateMessage($event.newContent, $event.message)"
+        [action_items]="items"
+        [relatedColumnId]="singleTaskData?.businessTaskID"
+        [relatedEntityId]="relatedEntityId"
+      >
+      </lib-comment-section>
+      } @case(6){
+      <lib-shared-linked-module [group_id]="4"></lib-shared-linked-module>
+      } }
+    </div>
+  </p-dialog>
+</div>

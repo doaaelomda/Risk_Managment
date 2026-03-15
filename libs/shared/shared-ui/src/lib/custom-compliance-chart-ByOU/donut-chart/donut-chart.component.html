@@ -1,0 +1,37 @@
+  <div class="border border-gray_light rounded-lg shadow-sm p-4">
+    @if(loading_widget_data){
+<p-skeleton  height="10rem" />
+    }@else {
+
+      <div class="header mb-4">
+        <h2 class="font-medium text-center">{{current_org()?.groupName}}</h2>
+      </div>
+
+
+      <div   class="flex items-center gap-6 ">
+        <div class="w-6/12" >
+          <div   #EchartD class="dounght_chart">
+          </div>
+        </div>
+
+
+
+          <div>
+            @for (label of labels; track $index) {
+              <div class="flex items-center gap-4 mb-4">
+                <div [style.backgroundColor]="label?.color" class="custom_doted"></div>
+                <div>
+                  <p class="text-gray-500 font-medium"> {{ label.label }}</p>
+                  <p class="text-lg font-bold">{{ label.value }} <span class="text-sm text-gray-500">({{ label.per }})</span></p>
+                </div>
+              </div>
+            }
+          </div>
+
+
+
+      </div>
+    }
+  </div>
+
+

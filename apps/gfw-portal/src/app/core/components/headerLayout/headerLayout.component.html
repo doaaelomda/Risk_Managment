@@ -1,0 +1,215 @@
+<header class="px-8 py-2 border-b flex flex-wrap items-center">
+  <div
+    class="header_container w-full flex flex-wrap items-center justify-between"
+  >
+    <div class="flex items-center gap-3 flex-wrap">
+      <button (click)="isMobile ? toggleOverlay() : toggleSidebar()">
+        <i class="fi fi-br-menu-burger"></i>
+      </button>
+      <app-breadcrumb></app-breadcrumb>
+    </div>
+
+    <div class="flex flex-wrap items-center">
+      <div class="action_btn">
+        <p-button
+          (onClick)="resfreshUserPermission()"
+          [label]="'Refresh Permissions'"
+        >
+        </p-button>
+      </div>
+      <button
+        (click)="toggleLang()"
+        class="flex items-center gap-1 sm:gap-2 p-4 text-sm"
+      >
+        <img src="images/icons/globe-02.png" class="w-5" alt="lang" />
+        <span class="inline lang">{{ getLangLabel(selctedLang) }}</span>
+      </button>
+
+      <button
+        (click)="op.toggle($event)"
+        class="relative xs:flex items-center w-10 h-10 mr-4"
+      >
+        <img src="images/icons/bell@2x.png" class="w-5 m-auto" alt="bell" />
+        <span
+          class="absolute position_bill w-2 h-2 bg-primary rounded-full animate-ping"
+        ></span>
+        <span
+          class="absolute position_bill w-2 h-2 bg-primary rounded-full"
+        ></span>
+      </button>
+
+      <button
+        (click)="menu.toggle($event)"
+        class="user_info flex items-center gap-2 sm:gap-3"
+      >
+        <lib-img-system [userId]="userId"></lib-img-system>
+        <!-- <img src="images/Avatar2.svg" class="w-10 h-10" alt="" /> -->
+        <!-- <p class="username">{{userName}}</p> -->
+        <!-- <span class="hidden xs:inline text-sm">
+          <span class="hidden lg:inline">Welcome </span>
+          <span class="font-semibold">Admin</span>
+        </span> -->
+      </button>
+    </div>
+  </div>
+</header>
+
+<p-menu #menu [appendTo]="'body'" [model]="items" [popup]="true">
+  <!-- <ng-template pTemplate="start"> </ng-template> -->
+  <!-- <ng-template pTemplate="submenuheader" let-item>
+    <span class="text-primary font-bold">{{ item.label }}</span>
+  </ng-template> -->
+  <ng-template pTemplate="item" let-item>
+    <a pRipple class="flex align-items-center p-menuitem-link">
+      @if(item?.icon){
+      <i [class]="item?.icon"></i>
+      }
+
+      <span class="ml-2">{{ item.label | titlecase }}</span>
+    </a>
+  </ng-template>
+</p-menu>
+
+<p-overlayPanel styleClass="w-[35rem]" #op>
+  <div
+    [dir]="selctedLang === 'en' ? 'ltr' : 'rtl'"
+    class="notifications w-full"
+  >
+    <div class="head p-4 flex flex-wrap items-center justify-between">
+      <h6 class="label_pending">
+        {{ 'NOTIFICATION_SETTING.NOTFICATION' | translate }}
+      </h6>
+
+      <!-- <button>
+        <i class="fi fi-rr-envelope-open"></i>
+      </button> -->
+    </div>
+
+    <div
+      class="tabs flex flex-wrap items-center gap-4 border-b border-gray_light my-2"
+    >
+      @for(tab of tabs ; track tab){
+      <button
+        (click)="selectTab(tab.id)"
+        [class.active_tab]="active_tab === tab.id"
+        class="flex justify-center items-center gap-3 font-medium px-3 py-3 min-w-20"
+      >
+        <i [class]="tab.icon" class="fi"></i>
+        <span>{{ tab.name }}</span>
+      </button>
+      }
+    </div>
+
+    <div class="max-h-[400px] overflow-y-auto">
+      @if(loading_notification && notifications_messages.length === 0) {
+
+      <p-skeleton height="2rem" width="100%" styleClass="mb-2" />
+      <p-skeleton height="2rem" width="100%" styleClass="mb-2" />
+      <p-skeleton height="2rem" width="100%" styleClass="mb-2" />
+      <p-skeleton height="2rem" width="100%" styleClass="mb-2" />
+      <p-skeleton height="2rem" width="100%" styleClass="mb-2" />
+
+      }@else if (!loading_notification && notifications_messages.length > 0) {
+      @for(not of notifications_messages; track not ;let idx = $index ) {
+      <button class="flex w-full text-left" (click)="openNotification(not, op)">
+        <div class="notification_item w-full flex items-center gap-4 px-2 py-4">
+          <div class="avatar">
+            <img [src]="'images/icons/notify.svg'" alt="" srcset="" />
+          </div>
+
+          <div class="flex-1 relative content">
+            <div class="flex gap-2 justify-between items-center">
+              <p class="text-sm font-semibold">
+                {{
+                  selctedLang === 'en'
+                    ? not.notificationTitle
+                    : not.notificationTitleAr || 'No Title '
+                }}
+              </p>
+              <p class="text-xs text-gray_dark">
+                {{ not.createdDate | date : 'MMM d, HH:MM a' }}
+              </p>
+            </div>
+            <div class="flex flex-col gap-1 items-start">
+              <p
+                class="text-sm text-gray_dark"
+                [innerHTML]="
+                  selctedLang === 'en'
+                    ? not.notificationContent
+                    : (not.notificationContentAr | safeHtml)
+                "
+              ></p>
+              <p class="font-bold forget">{{ not?.notificationFrom }}</p>
+            </div>
+          </div>
+        </div>
+      </button>
+      } }@else {
+      <div class="text-center">
+        <img class="m-auto" src="images/notification_bell.svg" alt="" />
+        <h1 class="empty_state mt-[31px] mb-2.5">
+          {{ 'NOTIFICATION_SETTING.no_notification' | translate }}
+        </h1>
+        <p class="para_empty_state">
+          {{ 'NOTIFICATION_SETTING.par_no_notification' | translate }}
+        </p>
+      </div>
+      }
+    </div>
+
+    <div>
+      <button
+        (click)="viewAllNotification(op)"
+        class="w-full font-bold forget p-4 text-center"
+      >
+        {{ 'NOTIFICATION_SETTING.ViewAll' | translate }}
+      </button>
+    </div>
+  </div>
+</p-overlayPanel>
+
+<div class="action_dailog">
+  <p-dialog
+    [(visible)]="openModalNotification"
+    [modal]="true"
+    [dismissableMask]="true"
+    [draggable]="false"
+    styleClass="w-[60%]"
+    [closable]="true"
+  >
+    <div class="container py-4 px-2">
+      <div class="flex gap-6 items-start">
+        <img src="images/icons/notify.svg" alt="" class="w-[48px] h-[48px]" />
+
+        <div class="content_notifaication mb-8">
+          <h1 class="headers_view mb-2">
+            {{
+              selctedLang === 'en'
+                ? notificationData?.notificationTitle
+                : notificationData?.notificationTitleAr
+            }}
+          </h1>
+          <p class="welcome">
+            {{
+              selctedLang === 'en'
+                ? notificationData?.notificationContent
+                : notificationData?.notificationContentAr
+            }}
+          </p>
+        </div>
+      </div>
+      @if(notificationData?.isRead === false) {
+
+      <div class="flex justify-end">
+        <div class="action_btn">
+          <p-button
+            (onClick)="readNotification(notificationData.notificationMessageID)"
+          >
+            {{ 'BUTTONS.Confirm' | translate }}
+          </p-button>
+        </div>
+      </div>
+      }
+    </div>
+  </p-dialog>
+</div>

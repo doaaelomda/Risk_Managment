@@ -1,0 +1,42 @@
+
+
+<section>
+  <lib-new-table
+    [loading]="isLoading"
+    [table_data]="pendingList"
+    [table_title]="'BREAD_CRUMB_TITLES.Pending_Assessment' | translate"
+    [badge_title]="'SETTING.ASSESSMENT' | translate"
+    [dataViewId]="33"
+    [entityID_Name]="'complianceAssessmentID'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="action_items"
+    (currentActionRow)="setSelectedRow($event)"
+    [columnControl]="{type:'route',data:'/gfw-portal/compliance/pending-assessments'}"
+    [table_actions_permissions]="{ module: 'COMPLIANCE', feature: 'ONGOINGASSESSMENT', action: 'VIEW' }"
+  >
+ 
+  </lib-new-table>
+</section>
+
+<lib-delete-confirm-popup
+  [titleDelete]="'RISK_MANAGMENT.ASSESSMENT_DELETE_TITLE'"
+  [descriptionDelete]="'RISK_MANAGMENT.DELETE_ASSESSMENT_DESC'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="handleClosedDelete()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteAsssessment()"
+        [loading]="isDeleting"
+        [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

@@ -1,0 +1,244 @@
+<section class="section p-0 border border-[#D0D5DD] rounded-lg">
+  <div class=" ">
+    <div class="flex gap-2 items-center headerDataWrapper mb-3 py-4 px-6">
+      <div class="head-icon-wrap flex justify-center items-center">
+        <i [class]="headerData.icon"></i>
+      </div>
+
+      <div class="flex flex-col head-txt-wrap">
+        <h2>{{ getHeaderTitle() }}</h2>
+        @if(data.orderNumber){
+        <p>
+          {{ 'WORKFLOW_STEPS.FIELDS.ORDER' | translate }}:{{ data.orderNumber }}
+        </p>
+        }
+      </div>
+    </div>
+    @if(creationForm){
+    <form
+      [formGroup]="creationForm"
+      class="grid grid-cols-12 gap-4 actionAccordion py-4 px-6"
+    >
+      <div class="col-span-12 lg:col-span-6">
+        <lib-input-text
+          [placeholder]="'WORKFLOW_STEPS.PLACEHOLDERS.NAME_EN' | translate"
+          [control]="creationForm.get('name')!"
+          [inputLabel]="('WORKFLOW_STEPS.FIELDS.NAME_EN' | translate) + ' * '"
+          [controlNameInput]="'name'"
+        >
+        </lib-input-text>
+      </div>
+
+      <div class="col-span-12 lg:col-span-6">
+        <lib-input-text
+          [placeholder]="'WORKFLOW_STEPS.PLACEHOLDERS.NAME_AR' | translate"
+          [control]="creationForm.get('nameAr')!"
+          [inputLabel]="'WORKFLOW_STEPS.FIELDS.NAME_AR' | translate"
+          [controlNameInput]="'nameAr'"
+        >
+        </lib-input-text>
+      </div>
+      <div class="col-span-12 lg:col-span-6">
+        <lib-input-text
+          [placeholder]="'WORKFLOW_STEPS.PLACEHOLDERS.COLOR' | translate"
+          [control]="creationForm.get('color')!"
+          [inputLabel]="'WORKFLOW_STEPS.FIELDS.COLOR' | translate"
+          [controlNameInput]="'color'"
+        >
+        </lib-input-text>
+      </div>
+      <div class="col-span-12 lg:col-span-6">
+        <lib-input-number
+          [placeholder]="'WORKFLOW_STEPS.PLACEHOLDERS.ORDER' | translate"
+          [control]="creationForm.get('orderNumber')!"
+          [inputLabel]="'WORKFLOW_STEPS.FIELDS.ORDER' | translate"
+          [controlNameInput]="'orderNumber'"
+        >
+        </lib-input-number>
+      </div>
+      <div class="col-span-12">
+        <div class="flex justify-between mb-2">
+          <h3 class="sectionTitle py-3">
+            {{ 'WORKFLOW_STEPS.FIELDS.WORKFLOW_ACTION_TYPE' | translate }} *
+          </h3>
+          <p-dialog
+            header="Edit Item Data"
+            [modal]="true"
+            [(visible)]="addingNewItem"
+            styleClass="w-[60rem]"
+          >
+            <div class="grid grid-cols-12 gap-2">
+              <div class="col-span-12 lg:col-span-6">
+                <h3 class="sectionTitle mb-2">
+                  {{
+                    'WORKFLOW_STEPS.FIELDS.DATA_ENTITY_TYPE_ATTRIBUTE'
+                      | translate
+                  }}
+                </h3>
+                <p-dropdown
+                  appendTo="body"
+                  styleClass="w-full"
+                  [options]="dataEntityActions"
+                  [(ngModel)]="dataEntityTypeAttributeID"
+                  [ngModelOptions]="{ standalone: true }"
+                  optionLabel="Name"
+                  optionValue="ID"
+                ></p-dropdown>
+              </div>
+              <div class="col-span-12 lg:col-span-6">
+                <h3 class="sectionTitle mb-2">
+                  {{
+                    'WORKFLOW_STEPS.FIELDS.DATA_ENTITY_TYPE_ATTRIBUTE'
+                      | translate
+                  }}
+                </h3>
+                <p-dropdown
+                  appendTo="body"
+                  styleClass="w-full"
+                  [options]="dataEntityActions"
+                  [(ngModel)]="dataEntityTypeAttributeID"
+                  [ngModelOptions]="{ standalone: true }"
+                  optionLabel="Name"
+                  optionValue="ID"
+                ></p-dropdown>
+              </div>
+              <div class="col-span-12 flex gap-2 items-center justify-end">
+                <p-button
+                  (onClick)="addingNewItem = false"
+                  [label]="'BUTTONS.CANCEL' | translate"
+                  styleClass="default_btn cancel"
+                ></p-button>
+                <p-button
+                  [label]="'BUTTONS.SAVE' | translate"
+                  (onClick)="saveItem()"
+                  styleClass="default_btn"
+                >
+                </p-button>
+              </div>
+            </div>
+          </p-dialog>
+          <!-- should be && if actionId -->
+          @if(creationForm.get('wfActionTypeID')?.value === 2 && !actionId){
+          <button (click)="toggleItemDialog()" class="default_btn">
+            {{ 'WORKFLOW_STEPS.BUTTONS.ADD_NEW_ITEM' | translate }}
+          </button>
+          }
+        </div>
+        <div class="grid grid-cols-12 gap-3">
+          @for (type of actionTypes; track $index) {
+          <button
+            [disabled]="isUpdating || actionId"
+            (click)="!isUpdating && handleTypeClick(type)"
+            class="col-span-12 lg:col-span-4 typeCard flex gap-2 items-center"
+          >
+            <div
+              class="flex items-center justify-center rounded-full icon_wrap"
+            >
+              <i [class]="type.icon"></i>
+            </div>
+            <div class="flex flex-col flex-1 text-start">
+              <h3 class="name">{{ type.name }}</h3>
+              <p class="desc">{{ type.desc }}</p>
+            </div>
+
+            <div class="flex align-items-center">
+              <p-radioButton
+                [disabled]="isUpdating || actionId"
+                [value]="type.id"
+                formControlName="wfActionTypeID"
+              ></p-radioButton>
+            </div>
+          </button>
+
+          }
+        </div>
+      </div>
+      <!-- should be if actionId -->
+      @if(!actionId){
+      <div class="grid grid-cols-12 col-span-12">
+        @if(creationForm.get('wfActionTypeID')?.value === 1 ||
+        creationForm.get('wfActionTypeID')?.value === 3){
+        <div class="col-span-12 lg:col-span-6 py-3">
+          <h3 class="sectionTitle mb-2">
+            {{
+              (isStep()
+                ? 'WORKFLOW_STEPS.FIELDS.NEXT_STEP'
+                : 'WORKFLOW_STEPS.PLACEHOLDERS.ACTION_ON_ITEM'
+              ) | translate
+            }}
+          </h3>
+          <p-dropdown
+            appendTo="body"
+            styleClass="w-full"
+            [options]="isStep() ? steps : actions"
+            [(ngModel)]="selectedOption"
+            [ngModelOptions]="{ standalone: true }"
+            optionLabel="label"
+            optionValue="id"
+            [placeholder]="
+              (isStep()
+                ? 'WORKFLOW_STEPS.PLACEHOLDERS.SELECT_STEP'
+                : 'WORKFLOW_STEPS.PLACEHOLDERS.SELECT_ACTION'
+              ) | translate
+            "
+          ></p-dropdown>
+        </div>
+        }
+      </div>
+      }
+    </form>
+    @if(creationForm.get('wfActionTypeID')?.value === 2){
+    <div class="col-span-12 changes_wrapper">
+      <div class="col-span-12 header_wrapper">
+        <h3 class="header">
+          {{
+            'WORKFLOW_STEPS.TEXTS.LAST_CHANGES_WORKFLOW_ACTION_TYPE' | translate
+          }}
+        </h3>
+      </div>
+      <div class="changes_cards grid grid-cols-12 gap-3">
+        @for (change of lastChanges; track $index) {
+    <div
+          class="col-span-12 lg:col-span-4 item_card flex gap-2 items-center flex-wrap"
+        >
+          <div class="txt flex-1 flex flex-col gap-2">
+            <h3 class="title"> {{change?.title}} </h3>
+            <span class="status"> {{change?.status}} </span>
+          </div>
+          <button class="edit_btn" (click)="handleEditItem(change)">
+            <i class="fi fi-rr-edit"></i>
+          </button>
+        </div>
+        }
+
+      </div>
+    </div>
+    } }
+  </div>
+</section>
+
+<div>
+  <div class="col-span-12 flex gap-2 items-center justify-end p-3">
+    <p-button
+      (onClick)="onCancel()"
+      [label]="'BUTTONS.CANCEL' | translate"
+      styleClass="default_btn cancel"
+    ></p-button>
+    <!-- should be if actionId -->
+    @if(!actionId){
+    <p-button
+      [loading]="isSavingWFActionType"
+      (onClick)="updateWFActionType()"
+      [label]="'BUTTONS.SAVE' | translate"
+      styleClass="default_btn"
+    ></p-button>
+    }@else {
+    <p-button
+      [loading]="isSavingAction"
+      (onClick)="saveAction()"
+      [label]="'BUTTONS.SAVE' | translate"
+      styleClass="default_btn"
+    ></p-button>
+    }
+  </div>
+</div>

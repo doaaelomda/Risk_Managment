@@ -1,0 +1,204 @@
+<section>
+  <lib-new-table
+    [table_actions_permissions]="{ module: 'THIRDPARTIES', feature: 'THIRDPARTYCONTACT', action: 'VIEW' }"
+
+  
+  [loading]="loadingTable" [table_data]="dataTable"
+    [table_title]="'THIRD_PARTY.' + FEATURE_LIST_NAME | translate"
+    [badge_title]="'THIRD_PARTY.' + FEATURE_PLURAL_NAME | translate" [dataViewId]="DATA_VIEW_ID"
+    [entityID_Name]="ENTITY_ID_NAME" [isShownAction]="true" (payload_emiter)="handleDataTable($event)"
+    [action_items]="items" (currentActionRow)="setSelected($event)" [columnControl]="columnControl">
+  @if(_PermissionSystemService.can('THIRDPARTIES' , 'THIRDPARTYCONTACT' , 'ADD')
+){
+        <button (click)="visible_save_dialog = true" addition_action
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'THIRD_PARTY.ADD_NEW_' + FEATURE_NAME | translate }}</span>
+    </button>
+  }
+  </lib-new-table>
+</section>
+
+<p-dialog (onHide)="resetForm()" [header]="
+    (current_row_selected ? 'THIRD_PARTY.UPDATE_' : 'THIRD_PARTY.ADD_NEW_') + FEATURE_NAME
+      | translate
+  " [modal]="true" [(visible)]="visible_save_dialog" styleClass="w-[50rem]">
+  @if(form){
+  <form [formGroup]="form">
+    <div class="grid grid-cols-12 gap-6 mb-6">
+      <!--  Name -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-text [placeholder]="'CONTENT.PLACEHOLDERS.NAME' | translate"
+          [inputLabel]="'CONTENT.NAME' | translate" [control]="form.get('name')!" [controlNameInput]="'name'">
+        </lib-input-text>
+      </div>
+
+      <!-- 🧑‍💼 Job Title -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-text [placeholder]="'THIRD_PARTY.JOB_TITLE_PLACEHOLDER' | translate"
+          [inputLabel]="'THIRD_PARTY.JOB_TITLE' | translate" [control]="form.get('jobTitle')!"
+          [controlNameInput]="'jobTitle'">
+        </lib-input-text>
+      </div>
+
+      <!-- 📧 Email -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-text [placeholder]="'THIRD_PARTY.EMAIL_PLACEHOLDER' | translate"
+          [inputLabel]="'THIRD_PARTY.EMAIL' | translate" [control]="form.get('email')!" [controlNameInput]="'email'">
+        </lib-input-text>
+      </div>
+
+      <!-- ☎️ Phone -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-number [placeholder]="'THIRD_PARTY.PHONE_PLACEHOLDER' | translate"
+          [inputLabel]="'THIRD_PARTY.PHONE' | translate" [control]="form.get('phone')!" [controlNameInput]="'phone'">
+        </lib-input-number>
+      </div>
+
+      <!-- 📱 Mobile -->
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-number [placeholder]="'THIRD_PARTY.MOBILE_PLACEHOLDER' | translate"
+          [inputLabel]="'THIRD_PARTY.MOBILE' | translate" [control]="form.get('mobile')!" [controlNameInput]="'mobile'">
+        </lib-input-number>
+      </div>
+
+      <!-- ⚙️ Status (isPrimary) -->
+      <div class="md:col-span-6 col-span-12">
+        <div class="flex gap-2 items-center">
+          <label for="isPrimary"> {{'THIRD_PARTY.PRIMARY_'+FEATURE_NAME | translate}} </label>
+          <p-inputSwitch inputId="isPrimary" formControlName="isPrimary" />
+        </div>
+      </div>
+
+      <!-- 🗒️ Notes -->
+      <div class="col-span-12">
+        <lib-textarea-ui [placeholder]="'THIRD_PARTY.NOTES_PLACEHOLDER' | translate"
+          [inputLabel]="'THIRD_PARTY.NOTES' | translate" [control]="form.get('notes')!" [controlNameInput]="'notes'">
+        </lib-textarea-ui>
+      </div>
+    </div>
+  </form>
+  }
+  <ng-template pTemplate="footer">
+    <p-button styleClass="default_btn cancel" (onClick)="resetForm()" [label]="'BUTTONS.CANCEL' | translate"></p-button>
+    <p-button [disabled]="form.invalid" styleClass="default_btn ms-4" (onClick)="add()" [loading]="addLoading"
+      [label]="'BUTTONS.SAVE' | translate"></p-button>
+  </ng-template>
+</p-dialog>
+
+<lib-delete-confirm-popup [titleDelete]="`THIRD_PARTY.${FEATURE_NAME}_DELETE_TITLE` | translate"
+  [descriptionDelete]="`THIRD_PARTY.${FEATURE_NAME}_DELETE_DESC` | translate" (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible">
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="handleClosedDelete()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+    <div class="delete_btn w-40">
+      <p-button (onClick)="delete()" [loading]="loadDeleted" [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+
+
+<p-dialog [(visible)]="visibleOverview" [modal]="true" styleClass="w-[45rem]" [closable]="false">
+  <div class="grid grid-cols-12 gap-4">
+    @if (overviewData?.name){
+    <div class="col-span-6">
+      <p class="label">
+        {{ 'CONTENT.NAME' | translate }}
+      </p>
+      @if (loading) {
+      <p-skeleton height="1rem" width="70%"></p-skeleton>
+      } @else if (overviewData?.name) {
+      <p class="value">
+        {{ overviewData.name }}
+      </p>
+      }
+    </div>
+    }
+    @if (overviewData?.thirdPartyName){
+    <div class="col-span-6">
+      <p class="label">
+        {{ 'THIRD_PARTY.THIRD_PARTY_NAME' | translate }}
+      </p>
+      @if (loading) {
+      <p-skeleton height="1rem" width="70%"></p-skeleton>
+      } @else if (overviewData?.thirdPartyName) {
+      <p class="value">
+        {{ overviewData.thirdPartyName }}
+      </p>
+      }
+    </div>
+    }
+    @if (overviewData?.jobTitle){
+    <div class="col-span-6">
+      <p class="label">
+        {{ 'THIRD_PARTY.JOB_TITLE' | translate }}
+      </p>
+      @if (loading) {
+      <p-skeleton height="1rem" width="60%"></p-skeleton>
+      } @else if (overviewData?.jobTitle) {
+      <p class="value">
+        {{ overviewData.jobTitle }}
+      </p>
+      }
+    </div>
+    }
+
+    @if (overviewData?.email){
+    <div class="col-span-6">
+      <p class="label">
+        {{ 'THIRD_PARTY.EMAIL' | translate }}
+      </p>
+      @if (loading) {
+      <p-skeleton height="1rem" width="80%"></p-skeleton>
+      } @else if (overviewData?.email) {
+      <p class="value">
+        {{ overviewData.email }}
+      </p>
+      }
+    </div>
+    }
+
+    @if (overviewData?.phone){
+
+    <div class="col-span-6">
+      <p class="label">
+        {{ 'THIRD_PARTY.PHONE' | translate }}
+      </p>
+      @if (loading) {
+      <p-skeleton height="1rem" width="60%"></p-skeleton>
+      } @else if (overviewData?.phone) {
+      <p class="value">
+        {{ overviewData.phone }}
+      </p>
+      }
+    </div>
+    }
+
+    @if (overviewData?.mobile){
+    <div class="col-span-6">
+      <p class="label">
+        {{ 'THIRD_PARTY.MOBILE' | translate }}
+      </p>
+      @if (loading) {
+      <p-skeleton height="1rem" width="60%"></p-skeleton>
+      } @else if (overviewData?.mobile) {
+      <p class="value">
+        {{ overviewData.mobile }}
+      </p>
+      }
+    </div>
+    }
+  </div>
+
+
+
+  <ng-template pTemplate="footer">
+    <p-button styleClass="default_btn" (onClick)="visibleOverview = false"
+      [label]="'BUTTONS.BACKTOHOME' | translate"></p-button>
+  </ng-template>
+</p-dialog>

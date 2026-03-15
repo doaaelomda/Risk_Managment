@@ -1,0 +1,123 @@
+<div class="action_section mb-6">
+  <p-accordion [activeIndex]="0" class="w-full" expandIcon="fi fi-rr-angle-small-down" collapseIcon="fi fi-rr-angle-small-up">
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div>
+          <h2 class="text-lg font-semibold text-gray-800">{{ 'RISK_VIEW.ASSESSMENT' | translate }}</h2>
+        </div>
+      </ng-template>
+
+      <div class="tabs flex mb-6">
+        @for(tab of assessmentTypesTabs ; track tab){
+        <button (click)="setActiveTab(tab)" [ngClass]="{ active_tab: active_tab_assessment === tab.id }"
+          class="flex items-center gap-3 font-medium px-4 py-3 min-w-20">
+          <span>{{ tab.name | translate }}</span>
+        </button>
+        }
+      </div>
+
+      @if(active_tab_assessment !== 4){
+
+        <div class="contant p-4">
+
+          <div class=" flex items-center gap-12 justify-between">
+            <div class="w-fit flex flex-col gap-4">
+              <div class="impact">
+                <p class="text-gray-700 font-medium mb-4">{{"RISK_VIEW.RISK_IMPACT"|translate}}</p>
+                <div class="flex items-center gap-4 mb-3">
+                  @for(impact of assessmentState[this.active_tab_assessment].impacts; track impact){
+                  <button (click)="handleSelectedImpact(impact)" [class]="impact?.color"
+                    class="custom_checkBox flex items-center gap-2">
+                    @if(impact.selected){
+                    <p-checkbox [(ngModel)]="impact.selected" [binary]="true" inputId="binary" />
+                    }
+                    <span class="font-medium">{{ isAr ? impact?.nameAr : impact?.name }}</span>
+                  </button>
+                  }
+                </div>
+                @if(assessmentState[this.active_tab_assessment]?.selectedImpact){
+                <p class="text-gray-500 text-sm">{{isAr ? assessmentState[this.active_tab_assessment]?.selectedImpact?.nameAr : assessmentState[this.active_tab_assessment]?.selectedImpact?.name }} :
+                  {{isAr ?  assessmentState[this.active_tab_assessment]?.selectedImpact?.descriptionAr : assessmentState[this.active_tab_assessment]?.selectedImpact?.description }}</p>
+                }
+              </div>
+
+              <div class="multiply flex items-center justify-center">
+                <div class="multi_icon">
+                  <i class="fi fi-br-cross-small"></i>
+                </div>
+              </div>
+
+              <div class="impact">
+                <p class="text-gray-700 font-medium mb-4">{{"RISK_VIEW.RISK_LIKLEHOOD"|translate}}</p>
+                <div class="flex items-center gap-4 mb-3">
+                  @for(likelhood of assessmentState[this.active_tab_assessment].likelhoods; track likelhood){
+                  <button (click)="handleSelectedLikelhood(likelhood)" [class]="likelhood?.color"
+                    class="custom_checkBox flex items-center gap-2">
+                    @if(likelhood.selected){
+                    <p-checkbox [(ngModel)]="likelhood.selected" [binary]="true" inputId="binary" />
+                    }
+                    <span class="font-medium">{{ isAr ? likelhood?.nameAr : likelhood?.name }}</span>
+                  </button>
+                  }
+                </div>
+                @if(assessmentState[this.active_tab_assessment]?.selectedLikehood){
+                <p class="text-gray-500 text-sm">{{isAr ? assessmentState[this.active_tab_assessment]?.selectedLikehood?.nameAr : assessmentState[this.active_tab_assessment]?.selectedLikehood?.name }} :
+                  {{isAr ? assessmentState[this.active_tab_assessment]?.selectedLikehood?.descriptionAr : assessmentState[this.active_tab_assessment]?.selectedLikehood?.description}}</p>
+                }
+              </div>
+            </div>
+
+            <div class="w-1/2 flex items-center gap-6">
+              <div class="multiply flex items-center justify-center">
+                <div class="multi_icon">
+                  <i class="fi fi-bs-equals"></i>
+                </div>
+              </div>
+              <div class="flex-1 relative">
+                <div class="header mb-6">
+                  <h2 class="current_risk mb-2">
+                    {{ 'RISK_VIEW.CURRENT_RISK_RATING' | translate }}
+                  </h2>
+                  <h3 class="high_header">
+                    {{ isAr ? assessmentState[active_tab_assessment].levels[
+                    assessmentState[active_tab_assessment].currentLevelIndex
+                    ]?.nameAr : assessmentState[active_tab_assessment].levels[
+                    assessmentState[active_tab_assessment].currentLevelIndex
+                    ]?.name }}
+                    ({{ assessmentState[active_tab_assessment].riskScore }})
+                  </h3>
+                </div>
+                @if (assessmentState[active_tab_assessment].currentLevelIndex !== null) {
+                <button class="risk-arrow focus:outline-none absolute" [style.left.%]="getArrowLeftPercent()"
+                  aria-label="Toggle risk details">
+                  <img src="images/Vector.svg" alt="">
+                </button>
+                }
+                <div [ngClass]="{'flex-row-reverse':isAr}" class="progress-container justify-end py-8 ">
+                  @for (level of assessmentState[this.active_tab_assessment].levels; track level) {
+                  <div class="progress-segment flex-1" [style.background]="level.color"></div>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      }@else {
+        <lib-list (dataRiskEmiter)="handledForAction($event)" [isRisk]="true" ></lib-list>
+      }
+
+
+      @if(isShowSave){
+        <div class="flex justify-start">
+
+          <div class="action_btn">
+      <p-button [label]="'RISK_MANAGMENT.SaveChanges' | translate" [loading]="isLoading" (onClick)="submit()">
+      </p-button>
+    </div>
+        </div>
+      }
+
+    </p-accordionTab>
+  </p-accordion>
+</div>

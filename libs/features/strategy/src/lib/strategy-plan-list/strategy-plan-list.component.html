@@ -1,0 +1,49 @@
+
+
+<section>
+  <lib-new-table
+    [loading]="loadingTable"
+    [table_data]="dataTable"
+    [table_title]="'STRATEGY.'+translateKey+'_TABLENAME' | translate"
+    [badge_title]="'STRATEGY.'+translateKey | translate"
+    [dataViewId]="dataViewId"
+    [entityID_Name]="entityID_Name"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="items"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="{type:'route',data:view_entityRouter}"
+    [table_actions_permissions]="{ module: 'STRATEGY', feature: 'PLAN', action: 'VIEW' }"
+  >
+  @if(_PermissionSystemService.can('STRATEGY' , 'PLAN' , 'ADD')){
+
+    <button
+      routerLink="/gfw-portal/strategy/add-plan"
+      addition_action
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+    >
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'STRATEGY.ADD_NEW_'+translateKey | translate }}</span>
+    </button>
+  }
+  </lib-new-table>
+</section>
+
+<lib-delete-confirm-popup
+  [titleDelete]="'STRATEGY.DELETE_'+translateKey+'_TITLE'"
+  [descriptionDelete]="'STRATEGY.DELETE_'+translateKey+'_DESC'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="actionDeleteVisible"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button (onClick)="deleteItem()" [loading]="isDeleteLoading" [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>

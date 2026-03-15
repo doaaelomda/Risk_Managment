@@ -1,0 +1,10 @@
+<div class="grid grid-cols-12 gap-4">
+  <div [ngClass]="hasActions ? 'col-span-8' : 'col-span-12'">
+    <lib-shared-overview [dataLoading]="isLoadingData" [data]="viewedData" [entries]="entries"></lib-shared-overview>
+  </div>
+
+  <div [hidden]="!hasActions" class="col-span-12 lg:col-span-4">
+    <lib-system-actions (foundActionEmitter)="onFoundAction($event)" [dataEntityTypeId]="35" [entityId]="PlanStagyId">
+    </lib-system-actions>
+  </div>
+</div>

@@ -1,0 +1,147 @@
+<section>
+
+
+
+    <lib-new-table
+    [loading]="loading"
+    [table_data]="dataTable"
+    [table_title]="'Tolerance.TABLE_TITLE' | translate"
+    [badge_title]="'Tolerance.TABLE_BADGE' | translate"
+    [dataViewId]="98"
+    [entityID_Name]="'riskToleranceID'"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="items"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{ module: 'RISKS', feature: 'METHODOLOGYTOLERANCE', action: 'VIEW' }"
+  >
+  @if(_PermissionSystemService.can('RISKS' , 'METHODOLOGYTOLERANCE' , 'ADD')){
+        <button
+      addition_action [routerLink]="`/gfw-portal/risks-management/methodolgy/${riskMethodologyID}/add-tolerance`"
+      class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+      <i class="fi fi-br-plus w-5 h-5"></i>
+      <span>{{ 'Tolerance.ADD_NEW' | translate }}</span>
+    </button>
+  }
+  </lib-new-table>
+</section>
+
+<lib-delete-confirm-popup
+  [titleDelete]="'Tolerance.DELETE_TITLE'"
+  [descriptionDelete]="'Tolerance.DELETE_DESC'"
+  (hideEmiter)="closeDeleteModal()"
+  [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button (onClick)="deleteTolerance()" [loading]="loadDeleted" [label]="'BUTTONS.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+<div class="action_dailog">
+  <p-dialog header="{{ 'Tolerance.VIEW' | translate }}"
+            [(visible)]="showViewOptionPopup"
+            [modal]="true"
+            [dismissableMask]="true"
+            [draggable]="false"
+            styleClass="w-[60%]"
+            [closable]="true">
+
+    <div class="container p-4">
+      <div class="grid grid-cols-12 gap-4">
+
+        <!-- Name in English -->
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-title header-para mb-3">{{ 'Tolerance.TEXT_EN' | translate }}</h3>
+          @if (!loading) {
+            <p class="welcome">{{ toleranceData?.nameAr || '-' }}</p>
+          } @else {
+            <p-skeleton width="12rem"></p-skeleton>
+          }
+        </div>
+
+        <!-- Name in Arabic -->
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-title header-para mb-3">{{ 'Tolerance.TEXT_AR' | translate }}</h3>
+          @if (!loading) {
+            <p class="welcome">{{ toleranceData?.name || '-' }}</p>
+          } @else {
+            <p-skeleton width="12rem"></p-skeleton>
+          }
+        </div>
+
+        <!-- Description English -->
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-title header-para mb-3">{{ 'Tolerance.DESCRIPTION_EN' | translate }}</h3>
+          @if (!loading) {
+            <p class="welcome">{{ toleranceData?.description || '-' }}</p>
+          } @else {
+            <p-skeleton width="12rem"></p-skeleton>
+          }
+        </div>
+
+        <!-- Description Arabic -->
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-title header-para mb-3">{{ 'Tolerance.DESCRIPTION_AR' | translate }}</h3>
+          @if (!loading) {
+            <p class="welcome">{{ toleranceData?.descriptionAr || '-' }}</p>
+          } @else {
+            <p-skeleton width="12rem"></p-skeleton>
+          }
+        </div>
+
+        <!-- From Risk Rating -->
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-title header-para mb-3">{{ 'Tolerance.FROM_RISK_RATING' | translate }}</h3>
+          @if (!loading) {
+            <p class="welcome">{{ toleranceData?.fromRiskRating || '-' }}</p>
+          } @else {
+            <p-skeleton width="12rem"></p-skeleton>
+          }
+        </div>
+
+        <!-- To Risk Rating -->
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-title header-para mb-3">{{ 'Tolerance.TO_RISK_RATING' | translate }}</h3>
+          @if (!loading) {
+            <p class="welcome">{{ toleranceData?.toRiskRating || '-' }}</p>
+          } @else {
+            <p-skeleton width="12rem"></p-skeleton>
+          }
+        </div>
+
+        <!-- Importance Order -->
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-title header-para mb-3">{{ 'Tolerance.IMPORTANCE_ORDER' | translate }}</h3>
+          @if (!loading) {
+            <p class="welcome">{{ toleranceData?.importanceOrder || '-' }}</p>
+          } @else {
+            <p-skeleton width="12rem"></p-skeleton>
+          }
+        </div>
+
+        @if(toleranceData?.color){
+          <div class="col-span-12 lg:col-span-6">
+          <h3 class="header-title header-para mb-3">{{ 'Tolerance.COLOR' | translate }}</h3>
+          @if (!loading ) {
+            <span class="badge {{ toleranceData?.color }}">{{ toleranceData?.color }}</span>
+          } @else {
+            <p-skeleton width="12rem"></p-skeleton>
+          }
+        </div>
+        }
+
+
+      </div>
+    </div>
+
+  </p-dialog>
+</div>

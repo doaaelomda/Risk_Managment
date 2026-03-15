@@ -1,0 +1,238 @@
+<lib-cards-list
+  (selected_item_emiter)="setSelected($event)"
+  [items_actions]="item_actions"
+  [data_list]="data_list"
+  [badge_title]="'ESCLATION.LEVELS' | translate"
+  [list_title]="'ESCLATION.ESCLATION_LEVELS' | translate"
+  [total_items]="data_list.length"
+  [loadingState]="loadingList"
+  (openModal)="onViewModal($event)"
+  [view_entityRouter]="'openModal=true'"
+  [externalAction]="_PermissionSystemService.can('ESCLATIONS' , 'ESCLATIONCRITERIA' , 'VIEW')
+ ?{toolTip:'ESCLATION.VIEW_CRITERIA'|translate, label:'ESCLATION.CRITERIA' |translate} : null"
+  (externalActionEmitter)="_PermissionSystemService.can('ESCLATIONS' , 'ESCLATIONCRITERIA' , 'VIEW')
+ ?navigateToCriteria($event) : null"
+>
+  @if(_PermissionSystemService.can('ESCLATIONS' , 'ESCLATIONLEVELS' , 'ADD')
+){
+      <button
+    actions
+    (click)="handleAddLevelClick()"
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+  >
+    <i class="fi fi-br-plus w-5 h-5"></i>
+    <span> {{ 'ESCLATION.ADD_NEW_LEVEL' | translate }} </span>
+  </button>
+  }
+</lib-cards-list>
+<p-dialog
+  (onHide)="initForm(); levelId = ''"
+  [(visible)]="addingLevel"
+  [modal]="true"
+  [dismissableMask]="true"
+  [draggable]="false"
+  styleClass="w-[50rem]"
+  [position]="'center'"
+>
+  <ng-template pTemplate="header">
+    <h3 class="text-gray-800 font-bold text-1xl">
+      {{
+        levelId
+          ?('ESCLATION.UPDATE_LEVEL' | translate) :('ESCLATION.ADD_NEW_LEVEL' | translate)
+
+      }}
+    </h3>
+  </ng-template>
+
+  <div class="border-b border-gray_light my-4"></div>
+  <ng-template pTemplate="content">
+    @if(levelForm){
+    <form
+      [formGroup]="levelForm"
+      class="grid grid-cols-12 gap-6 mb-6"
+      (ngSubmit)="submit()"
+    >
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-text
+          [placeholder]="'ESCLATION.NAME_EN' | translate"
+          [inputLabel]="'ESCLATION.NAME_EN' | translate"
+          [control]="levelForm.get('name')!"
+          [controlNameInput]="'name'"
+        >
+        </lib-input-text>
+      </div>
+      <div class="md:col-span-6 col-span-12">
+        <lib-input-text
+          [placeholder]="'ESCLATION.NAME_AR' | translate"
+          [inputLabel]="'ESCLATION.NAME_AR' | translate"
+          [control]="levelForm.get('nameAr')!"
+          [controlNameInput]="'nameAr'"
+        >
+        </lib-input-text>
+      </div>
+    </form>
+    }
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <div class="flex flex-wrap justify-end gap-2">
+      <p-button
+        (onClick)="addingLevel = false"
+        styleClass="default_btn cancel"
+        [label]="'BUTTONS.CANCEL' | translate"
+        icon="pi pi-times"
+      />
+
+      <p-button
+        styleClass="default_btn"
+        [label]="'BUTTONS.SAVE' | translate"
+        [loading]="loadingBtn"
+        [disabled]="levelForm.invalid"
+        icon="pi pi-check"
+        (click)="submit()"
+      />
+    </div>
+  </ng-template>
+</p-dialog>
+<lib-delete-confirm-popup
+  [titleDelete]="'ESCALATION.LEVEL_DELETE_TITLE'"
+  [descriptionDelete]="'ESCALATION.LEVEL_DELETE_DESC'"
+  (hideEmiter)="handleClosedDelete($event)"
+  [visibleInput]="deletingLevel"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="closeDeleteModal()">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="deleteLevel()"
+        [loading]="loadDeleted"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+<p-dialog
+  [(visible)]="viewingLevel"
+  (onHide)="viewingLevel = false"
+  [modal]="true"
+  [dismissableMask]="true"
+  [draggable]="false"
+  styleClass="w-[45rem] action_dailog"
+>
+    <div class="container">
+      <h2 class="font-medium text-gray-800 text-lg">
+        {{ viewed_data?.name || '-' }}
+      </h2>
+      <div class="grid grid-cols-12 gap-4 py-3 border-b border-gray_light">
+        @if(viewed_data?.notifyRoleName){
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="label  mb-1">
+            {{ 'ESCLATION.NOTIFY_ROLE_NAME' | translate }}
+          </h3>
+          <p class="value">
+            @if (!loadingViewedData) {
+            {{ viewed_data?.notifyRoleName }} } @else {
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+          </p>
+        </div>
+      }
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="label  mb-1">
+            {{ 'ESCLATION.NOTIFY_USER_NAME' | translate }}
+          </h3>
+          <p class="value">
+            @if (!loadingViewedData) {
+            {{ viewed_data?.notifyUserName || '-' }} } @else {
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+          </p>
+        </div>
+      </div>
+      <div class="grid grid-cols-12 gap-4 py-3 border-b border-gray_light">
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="label  mb-1">
+            {{ 'ESCLATION.STATUS' | translate }}
+          </h3>
+          <p class="value">
+            @if (!loadingViewedData) {
+            <lib-tag
+              [tag]="viewed_data?.active ? 'Active' : 'Inactive'"
+            ></lib-tag
+            >} @else {
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+          </p>
+        </div>
+        @if(viewed_data?.levelOder){
+        <div class="col-span-12 lg:col-span-6">
+          <h3 class="label  mb-1">
+            {{ 'ESCLATION.LEVEL_ORDER' | translate }}
+          </h3>
+          <p class="value">
+            @if (!loadingViewedData) {
+            {{ viewed_data?.levelOder || '-' }} } @else {
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+          </p>
+        </div>
+      }
+      </div>
+      <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-12 pt-3">
+          <h3 class="label  mb-1">
+            {{ 'ESCLATION.NOTFICATION_SUBJECT' | translate }}
+          </h3>
+          <p class="value">
+            @if (!loadingViewedData) {
+            {{ viewed_data?.notificationSubject || '-' }} } @else {
+            <p-skeleton width="2rem" styleClass="mb-2" />
+            }
+          </p>
+        </div>
+        <div class="col-span-12">
+          <h3 class="label  mb-1">
+            {{ 'ESCLATION.NOTFICATION_MESSAGE' | translate }}
+          </h3>
+          @if(!loadingViewedData){
+
+          <p
+            class="value"
+            [innerHTML]="
+              viewed_data?.notificationMessage?.isDescExpanded
+                ? viewed_data?.notificationMessage?.value
+                : updateTruncatedValue(viewed_data?.notificationMessage) |safeHtml
+            "
+          ></p>
+          }@else {
+          <p-skeleton width="2rem" styleClass="mb-2" />
+          } @if (viewed_data?.notificationMessage?.value?.length > 100) {
+          <button
+            class="btn expandBtn self-start"
+            (click)="toggleReadMore(viewed_data?.notificationMessage)"
+          >
+            {{
+              (viewed_data?.notificationMessage.isDescExpanded
+                ? 'WORKFLOW_STEPS.TEXTS.READ_LESS'
+                : 'WORKFLOW_STEPS.TEXTS.READ_MORE'
+              ) | translate
+            }}
+          </button>
+          }
+        </div>
+      </div>
+
+        <div class="flex flex-col gap-3">
+    <div class="cancel_btn  w-fit ms-auto">
+      <button (click)="viewingLevel = false">{{ 'WORKFLOW_STEPS.BUTTONS.BACK_TO_LIST' |
+        translate }}</button>
+    </div>
+  </div>
+    </div>
+
+</p-dialog>

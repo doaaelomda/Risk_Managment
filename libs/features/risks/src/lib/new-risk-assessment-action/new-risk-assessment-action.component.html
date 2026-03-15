@@ -1,0 +1,393 @@
+<div class="header flex items-center justify-between flex-wrap mb-3">
+  <div class="title flex items-center gap-4 flex-wrap">
+    @if(loading){
+    <p-skeleton width="15rem" styleClass="mb-2" />
+    <p-skeleton width="10rem" styleClass="mb-2" />
+    }@else {
+    <h2 class="text-2xl font-semibold text-gray-800">
+      {{ riskData?.riskTitle || '-' }}
+    </h2>
+    <p class="text-gray_color m-0">
+      {{ '(' + riskData?.riskCode + ')' || '-' }}
+    </p>
+    }
+  </div>
+  <div class="content flex flex-wrap items-center gap-4">
+    <div class="flex items-center gap-2">
+      <p class="m-0 font-medium text-gray_color">
+        {{ 'TABS.RISK_RATING' | translate }} :
+      </p>
+      <span class="badge Red">{{ riskData?.riskImpactName ?? '-' }}</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <p class="m-0 font-medium text-gray_color">
+        {{ 'TABS.MITIGATION' | translate }} :
+      </p>
+      <span class="font-semibold badge" [ngClass]="riskData?.riskResponseTypeColor">{{ riskData?.riskResponseTypeName ??
+        '-' }}</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <p class="m-0 font-medium text-gray_color">
+        {{ 'TABS.STATUS' | translate }} :
+      </p>
+      <span class="font-semibold">{{
+        riskData?.riskRecordStatusTypeName ?? '-'
+        }}</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <p class="m-0 font-medium text-gray_color">
+        {{ 'TABS.DEPARTMENT' | translate }}
+      </p>
+      @if (riskData?.organizationalUnits?.length > 0) {
+      <ng-container>
+        @for (unit of riskData.organizationalUnits; track $index) {
+
+        <ng-container>
+          @if(unit?.label){
+          <span class="font-semibold">
+            {{ unit.label }}
+          </span>
+          }
+        </ng-container>
+        }
+      </ng-container>
+      }@else {
+      <span class="font-semibold">-</span>
+      }
+    </div>
+  </div>
+</div>
+@if(nameSubRisk){
+<h6 class="text-primary font-bold text-2xl mb-9 mx-4">└─{{ nameSubRisk }}</h6>
+}
+
+<section class="main_info p-6 rounded-lg bg-sec_color mb-8">
+  <div class="header border-b border-gray_light pb-6">
+    <h2 class="text-lg font-semibold">
+      {{ 'RISK_MANAGMENT.MAIN_INFO' | translate }}
+    </h2>
+    <p class="text-sm text-gray_color">
+      {{ 'RISK_MANAGMENT.REQUIRED_DATA' | translate }}
+    </p>
+  </div>
+
+  <form [formGroup]="form_main_info" class="grid grid-cols-12 gap-6 pt-6">
+    <div class="col-span-12 lg:col-span-6">
+      <lib-input-text [placeholder]="'ASSESSMENT_RISK.EN_ASSESSMENT_CODE' | translate"
+        [control]="form_main_info.get('assessmentCode')!" [inputLabel]="'ASSESSMENT_RISK.ASSESSMENT_CODE' | translate"
+        [controlNameInput]="'assessmentCode'">
+      </lib-input-text>
+    </div>
+
+    <div class="col-span-12 lg:col-span-6">
+      <lib-input-text [placeholder]="'ASSESSMENT_RISK.EN_ASS_TITLE' | translate" [validations]="[]"
+        [control]="form_main_info.get('assessmentText')!" [inputLabel]="'ASSESSMENT_RISK.ASSESSMENT_TITLE' | translate"
+        [controlNameInput]="'assessmentText'">
+      </lib-input-text>
+    </div>
+
+    <div class="col-span-12 lg:col-span-6">
+      <lib-ui-dropdown [placeholder]="'ASSESSMENT_RISK.SELECT_WF' | translate"
+        [label]="'ASSESSMENT_RISK.WORK_FLOW' | translate" [control]="form_main_info.get('wfid')!" [options]="work_flows"
+        [optionLabel]="'label'" [optionValue]="'id'" [formControlNameInput]="'wfid'">
+      </lib-ui-dropdown>
+    </div>
+
+    <div class="col-span-12 lg:col-span-6">
+      <lib-ui-dropdown [placeholder]="'ASSESSMENT_RISK.SE_ASS_TYPE' | translate"
+        [label]="'ASSESSMENT_RISK.ASS_TYPE' | translate" [control]="form_main_info.get('riskAssessmentTypeID')!"
+        [options]="AssessmentStatusType" [optionLabel]="'label'" [optionValue]="'id'"
+        [formControlNameInput]="'riskAssessmentTypeID'">
+      </lib-ui-dropdown>
+    </div>
+
+    <div class="col-span-12 lg:col-span-6">
+      <lib-textarea-ui [placeholder]="'ASSESSMENT_RISK.EN_SCOPE_DESC' | translate"
+        [inputLabel]="'ASSESSMENT_RISK.SCOPE_DESC' | translate" [control]="form_main_info.get('scope')!"
+        [controlNameInput]="'scope'">
+      </lib-textarea-ui>
+    </div>
+
+    <div class="col-span-12 lg:col-span-6">
+      <lib-textarea-ui [placeholder]="'ASSESSMENT_RISK.EN_ASSUM_DESC' | translate"
+        [inputLabel]="'ASSESSMENT_RISK.ASSUM_DESC' | translate" [control]="form_main_info.get('assumptions')!"
+        [controlNameInput]="'assumptions'">
+      </lib-textarea-ui>
+    </div>
+
+    <div class="col-span-12">
+      <lib-textarea-ui [placeholder]="'ASSESSMENT_RISK.EN_CONTEXT_SUM' | translate"
+        [inputLabel]="'ASSESSMENT_RISK.CONTEXT_SUM' | translate" [control]="form_main_info.get('contextSummary')!"
+        [controlNameInput]="'contextSummary'">
+      </lib-textarea-ui>
+    </div>
+
+
+    <!-- <div class="col-span-12 lg:col-span-6">
+      <lib-ui-dropdown
+        [placeholder]="'ASSESSMENT_RISK.Approaches_placeholder' | translate"
+        [label]="'ASSESSMENT_RISK.Approaches' | translate"
+        [control]="form_main_info.get('riskAssessmentApproachID')!"
+        [formControlNameInput]="'riskAssessmentApproachID'"
+        [options]="approaches_list"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      >
+      </lib-ui-dropdown>
+    </div> -->
+    <!-- <div class="col-span-12 lg:col-span-6">
+      <lib-ui-dropdown
+        [placeholder]="'METHODOLOGY.METHODOLOGY_PLACEHOLDER' | translate"
+        [label]="'METHODOLOGY.METHODOLOGY' | translate"
+        [control]="form_main_info.get('riskMethodologyID')!"
+        [formControlNameInput]="'riskMethodologyID'"
+        [options]="methodologies"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      >
+      </lib-ui-dropdown>
+    </div> -->
+  </form>
+</section>
+
+<!--   Effectiviness tab -->
+
+<div [ngClass]="{ invaild: showErrorResponsbility }" class="action_section mb-6">
+  <p-accordion class="w-full" expandIcon="fi fi-rr-angle-small-down" collapseIcon="fi fi-rr-angle-small-up">
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div class="flex items-center gap-4">
+          <h2>{{ 'RISK_MANAGMENT.Effectiveness' | translate }}</h2>
+          @if(showErrorResponsbility){
+          <i pTooltip="Please complete all required fields." tooltipPosition="top"
+            class="fi text-danger_color fi-rr-info"></i>
+          }
+        </div>
+      </ng-template>
+
+      <form [formGroup]="effectivinessForm" class="grid grid-cols-12 gap-12">
+
+        <div class="col-span-12  flex items-center gap-6">
+            @for (option of optionsMeasurementBasis; track $index) {
+              <button (click)="effectivinessForm.get('controlEvaluationMeasurementBasisID')?.setValue(option.id)"  class=" flex justify-center items-center gap-2 border-[1px] {{effectivinessForm.get('controlEvaluationMeasurementBasisID')?.value === option.id ? 'border-primary_custom' : 'border-gray_light'}} rounded-md p-3 cursor-pointer">
+                     <p-radioButton
+              [inputId]="`${option?.label?.replace(' ', '_')}__${option?.id}_${$index}`"
+              [value]="option?.id"
+              formControlName="controlEvaluationMeasurementBasisID"
+            />
+            <label
+              [for]="`${option?.label?.replace(' ', '_')}__${option?.id}_${$index}`"
+              class="ml-2"
+            >
+              {{ option?.label }}
+            </label>
+            </button>
+          }
+          </div>
+
+
+          @if(effectivinessForm.get('controlEvaluationMeasurementBasisID')?.value === 1){
+             <div class="col-span-12 lg:col-span-6">
+              <lib-ui-dropdown [placeholder]="'ASSESSMENT_RISK.SE_CONTRL_EFF_LEVEL' | translate"
+                [label]="'ASSESSMENT_RISK.CONTRL_EFF_LEVEL' | translate"
+                [control]="effectivinessForm.get('controlEffectivenessLevelID')!" [options]="EffectivenessLevel"
+                [optionLabel]="'label'" [optionValue]="'id'" [formControlNameInput]="'controlEffectivenessLevelID'">
+              </lib-ui-dropdown>
+            </div>
+
+          }
+
+
+          @if(effectivinessForm.get('controlEvaluationMeasurementBasisID')?.value === 2){
+
+            <div class="col-span-12 lg:col-span-6">
+              <lib-ui-dropdown [placeholder]="'ASSESSMENT_RISK.Effectiveness_Formula' | translate"
+                [label]="'ASSESSMENT_RISK.Effectiveness_Formula' | translate"
+                [control]="effectivinessForm.get('riskMethodologyControlEffectivenessFormulaID')!" [options]="effectivinessFormula"
+                [optionLabel]="'label'" [optionValue]="'id'" [formControlNameInput]="'riskMethodologyControlEffectivenessFormulaID'">
+              </lib-ui-dropdown>
+            </div>
+
+                 <div class="col-span-12 lg:col-span-6">
+              <lib-input-number [placeholder]="'ASSESSMENT_RISK.Overlap_Factor' | translate"
+                [control]="effectivinessForm.get('overlapFactor')!" [inputLabel]="'ASSESSMENT_RISK.Overlap_Factor' | translate"
+                [controlNameInput]="'overlapFactor'">
+              </lib-input-number>
+
+
+            </div>
+          }
+      </form>
+    </p-accordionTab>
+  </p-accordion>
+</div>
+<!--   Responsibilities -->
+
+<div [ngClass]="{ invaild: showErrorResponsbility }" class="action_section mb-6">
+  <p-accordion class="w-full" expandIcon="fi fi-rr-angle-small-down" collapseIcon="fi fi-rr-angle-small-up">
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div class="flex items-center gap-4">
+          <h2>{{ 'RISK_MANAGMENT.Responsibilities' | translate }}</h2>
+          @if(showErrorResponsbility){
+          <i pTooltip="Please complete all required fields." tooltipPosition="top"
+            class="fi text-danger_color fi-rr-info"></i>
+          }
+        </div>
+      </ng-template>
+
+      <form [formGroup]="resposibility_form" class="grid grid-cols-12 gap-6">
+        <div class="col-span-12 lg:col-span-6">
+          <lib-user-dropdown [placeholder]="'ASSESSMENT_RISK.ASSESSOR_BY'" [label]="'ASSESSMENT_RISK.SELECT_USER'"
+            [control]="resposibility_form.get('approvedByUserID')!" [options]="users" [optionLabel]="'name'"
+            [optionValue]="'id'" [formControlNameInput]="'approvedByUserID'">
+          </lib-user-dropdown>
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-user-dropdown [placeholder]="'ASSESSMENT_RISK.REVIEWR'" [label]="'ASSESSMENT_RISK.SEL_REVIEWR'"
+            [control]="resposibility_form.get('reviewedByUserID')!" [options]="users" [optionLabel]="'name'"
+            [optionValue]="'id'" [formControlNameInput]="'reviewedByUserID'">
+          </lib-user-dropdown>
+        </div>
+      </form>
+    </p-accordionTab>
+  </p-accordion>
+</div>
+
+<!-- Qualitative Risk Assessment -->
+@if(riskData?.riskAssessmentApproachID === 1 ){
+<div [ngClass]="{ invaild: showErrorQualitive }" class="action_section mb-6">
+  <p-accordion class="w-full" expandIcon="fi fi-rr-angle-small-down" collapseIcon="fi fi-rr-angle-small-up">
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div class="flex items-center gap-4">
+          <h2>{{ 'ASSESSMENT_RISK.QUILITIVE' | translate }}</h2>
+          @if(showErrorQualitive){
+          <i pTooltip="Please complete all required fields." tooltipPosition="top"
+            class="fi text-danger_color fi-rr-info"></i>
+          }
+        </div>
+      </ng-template>
+
+      <form [formGroup]="quilitive_form" class="grid grid-cols-12 gap-6">
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown [placeholder]="'ASSESSMENT_RISK.SE_RISK_IMPACT'" [label]="'ASSESSMENT_RISK.RISK_IMPACT'"
+            [control]="quilitive_form.get('riskImpactID')!" [options]="RiskImpact" [optionLabel]="'label'"
+            [optionValue]="'id'" [formControlNameInput]="'riskImpactID'">
+          </lib-ui-dropdown>
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown [placeholder]="'ASSESSMENT_RISK.RISK_LIELIHOOD'"
+            [label]="'ASSESSMENT_RISK.SE_RISK_LIELIHOOD'" [control]="quilitive_form.get('riskLikelihoodID')!"
+            [options]="RiskLikelihood" [optionLabel]="'label'" [optionValue]="'id'"
+            [formControlNameInput]="'riskLikelihoodID'">
+          </lib-ui-dropdown>
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-textarea-ui [placeholder]="'ASSESSMENT_RISK.EN_JUSTIFICATION_RISK_IMAPCT'"
+            [inputLabel]="'ASSESSMENT_RISK.JUSTIFICATION_RISK_IMAPCT'"
+            [control]="quilitive_form.get('justificationRiskImpact')!" [controlNameInput]="'justificationRiskImpact'">
+          </lib-textarea-ui>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <lib-textarea-ui [placeholder]="'ASSESSMENT_RISK.EN_JUSTIFI_RISK_LIKEHOOD'"
+            [inputLabel]="'ASSESSMENT_RISK.JUSTIFI_RISK_LIKEHOOD'"
+            [control]="quilitive_form.get('justificationRiskLikelihood')!"
+            [controlNameInput]="'justificationRiskLikelihood'">
+          </lib-textarea-ui>
+        </div>
+      </form>
+    </p-accordionTab>
+  </p-accordion>
+</div>
+}
+
+<!-- quaititive  -->
+@if(riskData?.riskAssessmentApproachID === 2 ||
+riskData?.riskAssessmentApproachID === 3){
+<div [ngClass]="{ invaild: showErrorResponsbility }" class="action_section mb-6">
+  <p-accordion class="w-full" expandIcon="fi fi-rr-angle-small-down" collapseIcon="fi fi-rr-angle-small-up">
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div class="flex items-center gap-4">
+          <h2>{{ 'ASSESSMENT_RISK.QUANTITIVE' | translate }}</h2>
+          @if(showErrorResponsbility){
+          <i pTooltip="Please complete all required fields." tooltipPosition="top"
+            class="fi text-danger_color fi-rr-info"></i>
+          }
+        </div>
+      </ng-template>
+
+      <form [formGroup]="quantitive_form" class="grid grid-cols-12 gap-6">
+        @if(riskData?.riskMethodologyID){
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown [placeholder]="'METHODOLOGY.FORMULA_PLACEHOLDER' | translate"
+            [label]="'METHODOLOGY.FORMULA' | translate" [control]="quantitive_form.get('riskMethodologyFormulaID')!"
+            [formControlNameInput]="'riskMethodologyFormulaID'" [options]="formulas" [optionLabel]="'name'"
+            [optionValue]="'riskMethodologyFormulaID'">
+          </lib-ui-dropdown>
+        </div>
+        } @if(formulaExpression){
+        <div class="col-span-12">
+          <pre class="expression">{{ formulaExpression }}</pre>
+        </div>
+        } @if(quantitive_form.get('riskMethodologyFormulaID')?.value){
+        @if(factordata.length){
+
+        <div class="col-span-12 grid grid-cols-12 gap-6">
+          @for (factor of factordata; track $index) {
+          @if(riskData?.riskAssessmentApproachID === 3 ){
+          <div class="col-span-12 lg:col-span-6 flex flex-col gap-2">
+            <label [for]="factor?.riskFactorId">
+              {{ factor.factorCode }}
+            </label>
+            <p-inputNumber mode="decimal" class="max-w-full" [id]="factor?.riskFactorId"
+              [placeholder]="'METHODOLOGY.ENTER_FACTOR_VALUE' | translate" [(ngModel)]="factor.value"
+              [ngModelOptions]="{ standalone: true }" />
+          </div>
+          }@else if(riskData?.riskAssessmentApproachID ===
+          2){
+          <div class="col-span-12 lg:col-span-6 flex flex-col gap-2">
+            <div class="form_group">
+              <label [for]="factor.riskFactorId">
+                {{ factor.factorCode }}
+              </label>
+              <p-dropdown [ngModelOptions]="{ standalone: true }" [options]="levelsMap.get(factor?.riskFactorId) || []"
+                [(ngModel)]="factor.value" [optionLabel]="'name'" [optionValue]="'riskFactorLevelID'"
+                placeholder="Select a Level" />
+            </div>
+          </div>
+          } }
+        </div>
+
+        } } @if(!riskData?.riskMethodologyID){
+        <h2 class="col-span-12 text-center font-semibold">
+          {{ 'RISK_VIEW.SELECT_METHODOLOGY_MESSAGE' | translate }}
+        </h2>
+        }
+      </form>
+    </p-accordionTab>
+  </p-accordion>
+</div>
+}
+
+<div class="col-span-12 flex items-center gap-4 justify-end py-6 border-t border-gray_light">
+  <div class="cancel_btn">
+    <button (click)="back()" routerLinkActive="router-link-active">
+      {{ 'RISK_MANAGMENT.Cancel' | translate }}
+    </button>
+  </div>
+  <div class="action_btn">
+    <p-button [disabled]="form_main_info.invalid || cannotProcced()" [label]="'RISK_MANAGMENT.SaveChanges' | translate"
+      [loading]="submitting" (onClick)="submit()">
+    </p-button>
+  </div>
+</div>
+<!--
+
+      [disabled]="quantitive_form.invalid || emptyFactors()"
+
+-->

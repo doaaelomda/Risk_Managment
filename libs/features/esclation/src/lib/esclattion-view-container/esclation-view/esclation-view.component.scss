@@ -1,0 +1,50 @@
+.esclation_card {
+  background-color: #fcfcfd;
+  border-radius: 8px;
+  border: 1px solid #d0d5dd;
+  padding: 24px;
+
+  .header {
+    font-size: 18px;
+    font-weight: 500;
+    padding-bottom: 10px;
+
+    .title {
+      color: #101828;
+    }
+    .code {
+      color: #475467;
+    }
+  }
+  .content {
+    padding-top: 10px;
+    font-weight: 500;
+    .label {
+      font-size: 14px;
+      color: #667085;
+    }
+    .value {
+      font-size: 16px;
+      color: #344054;
+    }
+  }
+  .description {
+    font-size: 16px;
+    .description__header {
+      color: #101828;
+
+      font-weight: 500;
+    }
+    .description__content {
+      color: #667085;
+      font-weight: 400;
+      white-space: pre-line;
+
+    }
+  }
+}
+  .expandBtn {
+    color: #5925dc;
+    font-weight: 500;
+    font-size: 14px;
+  }

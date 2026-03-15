@@ -1,0 +1,9 @@
+
+<div class="grid grid-cols-12">
+   <div [ngClass]="hasActions ? 'col-span-12 lg:col-span-8' : 'col-span-12'">
+     <lib-shared-overview [dataLoading]="loading" [data]="data" [entries]="entries"></lib-shared-overview>
+   </div>
+   <div [hidden]="!hasActions" class="col-span-4">
+        <lib-system-actions [dataEntityTypeId]="dataentityTypeId" [entityId]="controlId"></lib-system-actions>
+    </div>
+</div>

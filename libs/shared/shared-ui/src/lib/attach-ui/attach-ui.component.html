@@ -1,0 +1,27 @@
+<div>
+
+  @if(isLabelVisible()){
+    <div class="head mb-2">
+      <h2 class=" font-semibold">{{"RISK_MANAGMENT.Attachment"|translate}}</h2>
+    </div>
+  }
+
+
+  <div [class.drag-over]="isDragOver" (drop)="onDrop($event)" (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    class="attach_container flex items-center justify-center px-6 py-4 border border-gray_light  rounded-lg bg-white_color">
+    <div class="attach_inner flex flex-col items-center justify-center text-center">
+      <div class="icon">
+        <img src="images/Featured icon.svg" alt="">
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button class="btn_upload" [disabled]="is_disabled" (click)="handleOpenUploadWindow()"> {{'UPLOAD.CLICK_TO_UPLOAD'|translate}} </button>
+        <p> {{'UPLOAD.OR_DRAG_AND_DROP'|translate}} </p>
+      </div>
+      <p>{{'UPLOAD.SUPPORTED_FORMATS'|translate}}</p>
+    </div>
+  </div>
+
+
+</div>

@@ -1,0 +1,11 @@
+.tab {
+  &.small-text {
+    @apply text-sm;
+  }
+
+  &.active_tab {
+    @apply bg-primaryColor-50 border-b-2 border-primaryColor-500 text-primaryColor-500;
+  }
+
+  @apply text-base font-medium text-gray-500 flex justify-center items-center gap-2 px-2 py-3 flex-1 whitespace-nowrap;
+}

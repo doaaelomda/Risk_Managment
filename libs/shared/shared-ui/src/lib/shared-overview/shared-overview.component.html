@@ -1,0 +1,143 @@
+
+<section>
+  <div class="content grid grid-cols-12 gap-6">
+    @if(dataLoading){
+    <div class="col-span-12 md:col-span-6 lg:col-span-4">
+      <p-skeleton width="5rem" styleClass="mb-2" />
+      <p-skeleton width="15rem" styleClass="mb-2" />
+    </div>
+    <div class="col-span-12 md:col-span-6 lg:col-span-4">
+      <p-skeleton width="5rem" styleClass="mb-2" />
+      <p-skeleton width="15rem" styleClass="mb-2" />
+    </div>
+    <div class="col-span-12 md:col-span-6 lg:col-span-4">
+      <p-skeleton width="5rem" styleClass="mb-2" />
+      <p-skeleton width="15rem" styleClass="mb-2" />
+    </div>
+    <div class="col-span-12 md:col-span-6 lg:col-span-4">
+      <p-skeleton width="5rem" styleClass="mb-2" />
+      <p-skeleton width="15rem" styleClass="mb-2" />
+    </div>
+    <div class="col-span-12 md:col-span-6 lg:col-span-4">
+      <p-skeleton width="5rem" styleClass="mb-2" />
+      <p-skeleton width="15rem" styleClass="mb-2" />
+    </div>
+    <div class="col-span-12 md:col-span-6 lg:col-span-4">
+      <p-skeleton width="5rem" styleClass="mb-2" />
+      <p-skeleton width="15rem" styleClass="mb-2" />
+    </div>
+    <div class="col-span-12">
+      <p-skeleton width="8rem" styleClass="mb-2" />
+      <p-skeleton height="3rem" styleClass="mb-2" />
+    </div>
+    <div class="col-span-12">
+      <p-skeleton width="8rem" styleClass="mb-2" />
+      <p-skeleton height="3rem" styleClass="mb-2" />
+    </div>
+    } @if(data && entries && !dataLoading) { @for (entry of entries; track
+    $index) { @let i = $index; @let value = data[entry.key]; @if (entry.type ===
+    'description') {
+    <div class="col-span-12 border-gray-200 pt-[12px]" [ngClass]="{'border-t-2':!entry.hasNoBorder}">
+      <p class="label mb-2">{{ entry.label | translate }}</p>
+
+        <p class="value whitespace-break-spaces" [innerHTML]="value
+              ? (isExpanded(entry.key)
+                  ? (value | nl2br | safeHtml)
+                  : (value | nl2br | truncate:300 | safeHtml))
+              : '-'">
+        </p>
+
+      @if(value?.length > 300) {
+      <button
+        class="btn expandBtn self-start"
+        (click)="toggleExpanded(entry.key)"
+      >
+        {{
+          (isExpanded(entry.key)
+            ? 'WORKFLOW_STEPS.TEXTS.READ_LESS'
+            : 'WORKFLOW_STEPS.TEXTS.READ_MORE'
+          ) | translate
+        }}
+      </button>
+      }
+    </div>
+    } @else { @let lastInRow = (i + 1) % perRow === 0;
+    <div
+      class="col-span-12 md:col-span-6 lg:col-span-{{
+        perRow === 3 ? '4' : '6'
+      }} border-gray_light"
+      [ngClass]="{
+        'lg:border-r': !lastInRow,
+        'rtl:lg:border-r-0 rtl:lg:border-l': !lastInRow,
+
+      }"
+    >
+    @if(entry.type !== 'user' && entry.type !== 'role'){<p class="label mb-2">{{ entry.label | translate }}</p>}
+
+
+      @switch (entry.type){ @case('text') {
+      <p class="value" [innerHTML]="(value ? value  : '-') | nl2br | safeHtml "></p>
+      } @case('number') {
+      <p class="value">{{ value }}</p>
+      } @case('boolean') {
+      <p class="value">
+        {{
+          (value ? 'GOVERNANCE_STANDARDS.YES' : 'GOVERNANCE_STANDARDS.NO')
+            | translate
+        }}
+      </p>
+      } @case('date') {
+      <p class="value flex gap-2 items-center">
+        <i class="fi fi-rr-calendar"></i> {{ value | date }}
+      </p>
+      } @case('color') {
+      <p class="badge  {{ value }} flex gap-2 items-center">
+        <span class="small_doted"></span> <span>{{ value || '-' }}</span>
+      </p>
+      } @case('user'){
+      <lib-owner-user
+        [hasBorder]="false"
+        [roleOrUser]="'user'"
+        [title]="entry.label"
+        [loading]="dataLoading"
+        [postionOwner]="value"
+        [image]=""
+        [userId]="data[entry.id]"
+        [subtitle]="data[entry.role || ''] ? data[entry.role || ''] :  data[entry.position || '']"
+      ></lib-owner-user>
+
+      }
+      @case('role'){
+      <lib-owner-user
+        [hasBorder]="false"
+        [roleOrUser]="'role'"
+        [title]="entry.label"
+        [loading]="dataLoading"
+        [postionOwner]="value"
+        [image]=""
+        [userId]="data[entry.id]"
+        [subtitle]="data[entry.role || ''] ? data[entry.role || ''] :  data[entry.position || '']"
+      ></lib-owner-user>
+
+      }
+       @case('badge') {
+      <p
+        class="badge flex gap-2 items-center {{value === true ? entry.true_color :entry.false_color}}"
+        [ngClass]="entry.colorKey ? data[entry.colorKey] : ''"
+      >
+        <span class="small_doted"></span>
+        @if(value === true || value === false && entry.true_value || entry.false_value){
+          <span>{{value === true ? entry.true_value : entry.false_value }}</span>
+        }@else {
+           <span>{{value || '-'}}</span>
+        }
+
+      </p>
+
+      } @default {
+      <p class="value">{{ value || '-' }}</p>
+      } }
+    </div>
+    } } }
+  </div>
+</section>

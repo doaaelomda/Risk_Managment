@@ -1,0 +1,248 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+
+
+
+<section>
+  <lib-new-table
+    [loading]="loading"
+    [table_data]="tableData"
+    [table_title]="labels.table | translate"
+    [badge_title]="labels.badge | translate"
+    [dataViewId]="dataEntityId"
+    [entityID_Name]="entityIdField"
+    [isShownAction]="true"
+    (payload_emiter)="handleDataTable($event)"
+    [action_items]="actionItems"
+    (currentActionRow)="setSelected($event)"
+    [columnControl]="columnControl"
+    [table_actions_permissions]="{ module: 'GOVERNANCE', feature: 'REVIEWS', action: 'VIEW' }"
+  >
+  @if(_PermissionSystemService.can('GOVERNANCE' , 'REVIEWS' , 'ADD')){
+
+    <button
+       (click)="handleAddClick()"
+       addition_action
+       class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg"
+     >
+       <i class="fi fi-br-plus w-5 h-5"></i>
+       <span>{{ labels.add | translate }}</span>
+     </button>
+  }
+
+
+  </lib-new-table>
+</section>
+
+<!-- 🔸 Delete Confirmation Popup -->
+<lib-delete-confirm-popup
+  [titleDelete]="labels.titleDelete | translate"
+  [descriptionDelete]="labels.descDelete | translate"
+  [visibleInput]="deleteModalVisible"
+  (hideEmiter)="toggleDeleteModal(false)"
+>
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <!-- Cancel -->
+    <div class="cancel_btn">
+      <button class="w-40" (click)="toggleDeleteModal(false)">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <!-- Confirm Delete -->
+    <div class="delete_btn w-40">
+      <p-button
+        (onClick)="delete()"
+        [loading]="loadingDelete"
+        [label]="'BUTTONS.DELETE' | translate"
+      />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+
+<div class="action_dailog">
+  <p-dialog
+    [(visible)]="visible_dialog"
+    [modal]="true"
+    [dismissableMask]="true"
+    (onHide)="closeDialog()"
+    [draggable]="false"
+    styleClass="w-[50rem]"
+    [position]="'center'"
+  >
+    <ng-template pTemplate="header">
+      <h3 class="text-gray-800 font-bold text-1xl">
+        {{
+          (selectedRow ? 'VERSION.UPDATE_REVIEW' : 'VERSION.ADD_NEW_REVIEW')
+            | translate
+        }}
+      </h3>
+    </ng-template>
+
+    <div class="border-b border-gray_light mb-4"></div>
+
+    <!-- Reviewer Type -->
+    <h6 class="header-para mb-2.5">
+      {{ 'VERSION.REVIEWER_TYPE' | translate }}
+    </h6>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <lib-radio-option
+        label="VERSION.USER_REVIEWER"
+        value="user"
+        name="reviewer_type"
+        [(model)]="selectedReviewer"
+        image="images/icons/approvalUser.svg"
+        inputId="typeUser"
+        (clicked)="handleReviewerUser()"
+      >
+      </lib-radio-option>
+
+      <lib-radio-option
+        label="VERSION.ROLE_REVIEWER"
+        value="role"
+        name="reviewer_type"
+        [(model)]="selectedReviewer"
+        image="images/icons/userApproval.svg"
+        inputId="typeRole"
+        (clicked)="handleReviewerRole()"
+      >
+      </lib-radio-option>
+    </div>
+
+    <form [formGroup]="form">
+      @if(selectedReviewer === 'user'){
+      <div class="field flex flex-wrap items-center py-4">
+        <label class="font-bold w-1/4">{{ 'SETTING.USER' | translate }}</label>
+        <div class="w-3/4">
+          <lib-user-dropdown
+            [placeholder]="'SETTING.USER' | translate"
+            [control]="form.get('reviewerUserID')!"
+            [formControlNameInput]="'reviewerUserID'"
+            [options]="users"
+            optionLabel="name"
+            optionValue="id"
+          ></lib-user-dropdown>
+        </div>
+      </div>
+      } @if(selectedReviewer === 'role'){
+      <div class="field flex flex-wrap items-center py-4">
+        <label class="font-bold w-1/4">{{ 'SETTING.ROLES' | translate }}</label>
+        <div class="w-3/4">
+          <lib-role-dropdown
+            [placeholder]="'SETTING.ROLES' | translate"
+            [control]="form.get('reviewerRoleID')!"
+            [formControlNameInput]="'reviewerRoleID'"
+            [options]="roles"
+            optionLabel="label"
+            optionValue="id"
+          ></lib-role-dropdown>
+        </div>
+      </div>
+      }
+
+      <div class="field flex flex-wrap items-start py-4">
+        <label class="font-bold w-1/4">{{
+          'ASSESSMENT_RISK.SCOPE_DESC' | translate
+        }}</label>
+        <div class="w-3/4">
+          <lib-textarea-ui
+            [placeholder]="'ASSESSMENT_RISK.EN_SCOPE_DESC' | translate"
+            [control]="form.get('scope')!"
+            [controlNameInput]="'scope'"
+          ></lib-textarea-ui>
+        </div>
+      </div>
+    </form>
+
+    <!-- COMMON FIELDS -->
+    <!-- <form [formGroup]="form">
+      <div class="field flex flex-wrap items-center py-4">
+        <label class="font-bold w-1/4">{{
+          'VERSION.START_DATE' | translate
+        }}</label>
+        <div class="w-3/4">
+          <lib-date-packer
+            [placeholder]="'VERSION.START_DATE_PLACEHOLDER' | translate"
+            [control]="form.get('reviewStartDate')!"
+            [controlNameInput]="'reviewStartDate'"
+          ></lib-date-packer>
+        </div>
+      </div>
+
+      <div class="field flex flex-wrap items-center py-4">
+        <label class="font-bold w-1/4">{{
+          'VERSION.DUE_DATE' | translate
+        }}</label>
+        <div class="w-3/4">
+          <lib-date-packer
+            [placeholder]="'VERSION.DUE_DATE_PLACEHOLDER' | translate"
+            [control]="form.get('reviewDueDate')!"
+            [controlNameInput]="'reviewDueDate'"
+          ></lib-date-packer>
+        </div>
+      </div>
+
+      <div class="field flex flex-wrap items-center py-4">
+        <label class="font-bold w-1/4">{{
+          'VERSION.STATUS' | translate
+        }}</label>
+        <div class="w-3/4">
+          <lib-ui-dropdown
+            [placeholder]="'VERSION.STATUS_PLACEHOLDER' | translate"
+            [control]="form.get('govDocumentReviewStatusTypeID')!"
+            [formControlNameInput]="'govDocumentReviewStatusTypeID'"
+            [options]="reviewStatuses"
+            optionLabel="label"
+            optionValue="id"
+          ></lib-ui-dropdown>
+        </div>
+      </div>
+
+      <div class="field flex flex-wrap items-center py-4">
+        <label class="font-bold w-1/4">{{
+          'VERSION.COMPLETION_DATE' | translate
+        }}</label>
+        <div class="w-3/4">
+          <lib-date-packer
+            [placeholder]="'VERSION.COMPLETION_DATE_PLACEHOLDER' | translate"
+            [control]="form.get('reviewCompletionDate')!"
+            [controlNameInput]="'reviewCompletionDate'"
+          ></lib-date-packer>
+        </div>
+      </div>
+
+      <div class="field flex flex-wrap items-start py-4">
+        <label class="font-bold w-1/4">{{
+          'VERSION.FEEDBACK' | translate
+        }}</label>
+        <div class="w-3/4">
+          <lib-textarea-ui
+            [control]="form.get('overallFeedback')!"
+            [controlNameInput]="'overallFeedback'"
+            placeholder="Enter feedback"
+          ></lib-textarea-ui>
+        </div>
+      </div>
+    </form> -->
+
+    <!-- FOOTER -->
+    <div
+      class="col-span-12 flex items-center gap-4 justify-end py-6 border-t border-gray_light"
+    >
+      <div class="cancel_btn">
+        <button (click)="closeDialog()">
+          {{ 'RISK_MANAGMENT.Cancel' | translate }}
+        </button>
+      </div>
+
+      <div class="action_btn">
+        <p-button
+          [disabled]="cannotSave()"
+          [label]="'RISK_MANAGMENT.SaveChanges' | translate"
+          [loading]="isLoading"
+          (onClick)="submit()"
+        ></p-button>
+      </div>
+    </div>
+  </p-dialog>
+</div>

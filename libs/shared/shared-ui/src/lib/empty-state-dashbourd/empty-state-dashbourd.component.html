@@ -1,0 +1,9 @@
+<div class="min-h-52 flex flex-col items-center justify-center">
+  @if(loadingState ){
+  <lib-loader></lib-loader>
+}@else {
+  <img src="images/empty-state-dashbourd.svg" alt="" class="h-[200px]">
+  <p  class="text-gray-900 text-base font-medium">{{'MESSAGES.NO_DATA_DASH' | translate}} </p>
+  <p class="text-gray-500 text-sm font-normal text-center">{{'MESSAGES.description_DASH' | translate}}</p>
+}
+</div>

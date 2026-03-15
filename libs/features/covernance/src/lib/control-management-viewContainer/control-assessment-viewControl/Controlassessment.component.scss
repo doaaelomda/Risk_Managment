@@ -1,0 +1,36 @@
+::ng-deep .progress_span2 {
+  font-size: 21px !important;
+}
+button{
+  text-align:start
+}
+.cancel_btn button{
+  text-align: center !important;
+}
+
+.progress_span,.progress_span2,.progress_span3,.progress_span4 {
+  font-size: 16px !important;
+}
+::ng-deep .card-status,.card-status2,.card-status3,.card-status4{
+  background-color: white;
+  box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.06);
+  border: 1px solid rgba(208, 213, 221, 1)
+
+}
+ .paraggarpStauts i{
+    font-size: 20px;
+ }
+
+
+ .card{
+  box-shadow: 0px 1px 2px 0px #1018280F;
+
+box-shadow: 0px 1px 3px 0px #1018281A;
+
+ }
+
+
+
+ .active_type{
+  @apply bg-primaryColor-50 border border-primaryColor-400;
+ }

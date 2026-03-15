@@ -1,0 +1,37 @@
+<!-- Handle New Table to Show Data -->
+<lib-new-table
+  [table_actions_permissions]="{ module: 'RISKS', feature: 'METHODOLOGYFACTORS', action: 'VIEW' }"
+
+[loading]="isLoading" [table_data]="factorList"
+  [table_title]="'FACTOR.TABLE_TITLE' | translate" [badge_title]="'FACTOR.BADGE_TITLE' | translate"
+  [dataViewId]="129" [entityID_Name]="'riskFactorID'" [isShownAction]="true" (payload_emiter)="handleDataTable($event)"
+  [action_items]="action_items" (currentActionRow)="setSelectedRow($event)" [columnControl]="columnControl">
+
+  @if(_PermissionSystemService.can('RISKS' , 'METHODOLOGYFACTORS' , 'ADD')
+){
+      <button addition_action (click)="addNewFactor()"
+    class="flex items-center gap-3 bg-primary text-white_color px-4 font-medium py-2 rounded-lg">
+    <i class="fi fi-br-plus w-5 h-5"></i>
+    <span>{{ 'FACTOR.ADD_BUTTON' | translate }}</span>
+  </button>
+  }
+</lib-new-table>
+
+<!-- Handle Delete Popup -->
+<lib-delete-confirm-popup [titleDelete]="'FACTOR.DELETE_TITLE' | translate"
+  [descriptionDelete]="'FACTOR.DELETE_DESC' | translate" (hideEmiter)="handleClosedDelete()"
+  [visibleInput]="actionDeleteVisible">
+
+  <div class="flex flex-wrap items-center gap-4 justify-end" actions>
+    <div class="cancel_btn">
+      <button class="w-40" (click)="handleClosedDelete()">
+        {{ 'FACTOR.CANCEL' | translate }}
+      </button>
+    </div>
+
+    <div class="delete_btn w-40">
+      <p-button (onClick)="deleteFactor()" [loading]="isDeleting" [label]="'FACTOR.DELETE' | translate" />
+    </div>
+  </div>
+</lib-delete-confirm-popup>
+

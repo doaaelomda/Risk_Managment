@@ -1,0 +1,111 @@
+  <section class="form_sec">
+  <div class="header border-b border-gray_light pb-6 mb-6">
+    <h2 class="text-lg font-medium text-[#101828]">
+      {{ procedureId ? ('PROCEDURE.UPDATE_TITLE' | translate) : ('PROCEDURE.ADD_TITLE' | translate) }}
+    </h2>
+  </div>
+
+<form [formGroup]="procedureForm" class="grid grid-cols-12 gap-6 mb-6">
+
+  <!-- Reference Code -->
+  <div class="col-span-12 lg:col-span-6">
+    <lib-input-text
+      [placeholder]="'PROCEDURE.REFERENCE_CODE_PLACEHOLDER' | translate"
+      [inputLabel]="'PROCEDURE.REFERENCE_CODE' | translate"
+      [control]="procedureForm.get('referenceCode')!"
+      [controlNameInput]="'referenceCode'"
+      >
+    </lib-input-text>
+  </div>
+
+  <!-- Objective (English) -->
+  <div class="col-span-12 lg:col-span-6">
+    <lib-input-text
+      [placeholder]="'PROCEDURE.OBJECTIVE_PLACEHOLDER' | translate"
+      [inputLabel]="'PROCEDURE.OBJECTIVE' | translate"
+      [control]="procedureForm.get('objective')!"
+      [controlNameInput]="'objective'"
+      >
+    </lib-input-text>
+  </div>
+
+  <!-- Objective (Arabic) -->
+  <div class="col-span-12 lg:col-span-6">
+    <lib-input-text
+      [placeholder]="'PROCEDURE.OBJECTIVE_AR_PLACEHOLDER' | translate"
+      [inputLabel]="'PROCEDURE.OBJECTIVE_AR' | translate"
+      [control]="procedureForm.get('objectiveAr')!"
+      [controlNameInput]="'objectiveAr'">
+    </lib-input-text>
+  </div>
+
+   <div class="col-span-12 lg:col-span-6">
+    <lib-input-text
+      [placeholder]="'PROCEDURE.CURRENT_BUSINESS_PROCEDURE' | translate"
+      [inputLabel]="'PROCEDURE.CURRENT_BUSINESS_PROCEDURE' | translate"
+      [control]="procedureForm.get('currentBusinessProcedure')!"
+      [controlNameInput]="'currentBusinessProcedure'" [validations]="validationsRequired" (keypress)="allowOnlyNumbers($event)" >
+    </lib-input-text>
+  </div>
+
+    <div class="md:col-span-6 col-span-12">
+    <!-- <lib-tree-select-ui
+      [nodes_input]="organizationalUnits"
+      [placeholder]="'INDICATORS.ORGANIZATIONAL_UNIT_ID_PLACEHOLDER' | translate"
+      [label]="'INDICATORS.ORGANIZATIONAL_UNIT_ID' | translate"
+      [control]="procedureForm.get('organizationalUnitID')!"
+      [validations]="[]"
+      [formControlNameInput]="'organizationalUnitID'">
+    </lib-tree-select-ui> -->
+
+          <lib-ui-dropdown [placeholder]="'PLACEHOLDERS.Select_Organizational_Unit' | translate"
+          [label]="'RISK_MANAGMENT.ORG_UNIT' | translate" [control]="procedureForm.get('organizationalUnitID')!"
+          [formControlNameInput]="'organizationalUnitID'" [options]="  organizationalUnits"
+          [optionLabel]="'label'" [optionValue]="'id'">
+        </lib-ui-dropdown>
+  </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown [placeholder]="'FINDING.OWNER_ROLE' | translate" [label]="'FINDING.OWNER_ROLE' | translate"
+            [control]="procedureForm.get('ownerRoleID')!" [formControlNameInput]="'ownerRoleID'" [options]="assigneeRoleID"
+            [optionLabel]="'label'" [optionValue]="'id'">
+          </lib-ui-dropdown>
+        </div>
+  <!-- Scope (English) -->
+  <div class="col-span-12">
+    <lib-textarea-ui
+      [placeholder]="'PROCEDURE.SCOPE_PLACEHOLDER' | translate"
+      [inputLabel]="'PROCEDURE.SCOPE' | translate"
+      [control]="procedureForm.get('scope')!"
+      [controlNameInput]="'scope'">
+    </lib-textarea-ui>
+  </div>
+
+  <!-- Scope (Arabic) -->
+  <div class="col-span-12">
+    <lib-textarea-ui
+      [placeholder]="'PROCEDURE.SCOPE_AR_PLACEHOLDER' | translate"
+      [inputLabel]="'PROCEDURE.SCOPE_AR' | translate"
+      [control]="procedureForm.get('scopeAr')!"
+      [controlNameInput]="'scopeAr'">
+    </lib-textarea-ui>
+  </div>
+
+</form>
+
+
+
+    <div class="flex justify-end gap-4 py-4">
+    <div class="cancel_btn">
+      <button [routerLink]="[`/gfw-portal/BPM/viewProcess/${processId}/procedure`]">
+        {{ 'BUTTONS.CANCEL' | translate }}
+      </button>
+    </div>
+    <div class="action_btn">
+      <p-button [label]='procedureId ? ("BUTTONS.UPDATE" | translate) : ("BUTTONS.SAVE" | translate)'
+        [outlined]="true" [loading]="isLoading" severity="secondary" (onClick)="submit()">
+      </p-button>
+    </div>
+  </div>
+
+  </section>

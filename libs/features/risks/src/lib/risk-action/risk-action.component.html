@@ -1,0 +1,1030 @@
+<section class="main_info p-6 rounded-lg bg-sec_color mb-8">
+  <div class="header border-b border-gray_light pb-6">
+    <h2 class="text-lg font-semibold text-gray-800">
+      {{ 'RISK_MANAGMENT.MAIN_INFO' | translate }}
+    </h2>
+    <p class="text-sm text-gray_color">
+      {{ 'RISK_MANAGMENT.REQUIRED_DATA' | translate }}
+    </p>
+  </div>
+
+  <form [formGroup]="form" class="grid grid-cols-12 gap-6 pt-6">
+    <div class="col-span-12 lg:col-span-6">
+      <lib-input-text [placeholder]="'PLACEHOLDERS.enter_risk_code'" [validations]="validationsCode"
+        [control]="form.get('riskCode')!" [inputLabel]="'RISK_MANAGMENT.RISK_CODE'" [controlNameInput]="'riskCode'">
+      </lib-input-text>
+    </div>
+
+    <div class="col-span-12 lg:col-span-6">
+      <lib-input-text [placeholder]="'PLACEHOLDERS.enter_risk_title'" [validations]="validations"
+        [control]="form.get('riskTitle')!" [inputLabel]="'RISK_MANAGMENT.RISK_TITLE'" [controlNameInput]="'riskTitle'">
+      </lib-input-text>
+    </div>
+
+    <!-- <div class="col-span-12 lg:col-span-6">
+      <lib-date-packer [placeholder]="'PLACEHOLDERS.Select_Date' " [validations]="validationsDate"
+        [inputLabel]="'RISK_MANAGMENT.IDENTIFIED_DATE' " [control]="form.get('identifiedDate')!"
+        [controlNameInput]="'identifiedDate'">
+      </lib-date-packer>
+    </div> -->
+
+    <!-- <div class="col-span-12 lg:col-span-6">
+      <lib-tree-multiselect [multiChoose]="true" [nodes_input]="OrganizationalUnit"
+        [placeholder]="'PLACEHOLDERS.Select_Organizational_Unit' " [label]="'RISK_MANAGMENT.ORG_UNIT' "
+        [validations]="validationsStatus" [control]="form.get('organizationalUnitIDs')!"
+        [formControlNameInput]="'organizationalUnitIDs'">
+      </lib-tree-multiselect>
+    </div> -->
+
+    <div class="col-span-12">
+      <lib-textarea-ui [placeholder]="'PLACEHOLDERS.Enter_Description'" [inputLabel]="'RISK_MANAGMENT.RISK_DESCRIPTION'"
+        [validations]="validationsDesc" [control]="form.get('riskDescription')!" [controlNameInput]="'riskDescription'">
+      </lib-textarea-ui>
+    </div>
+    <div class="col-span-12">
+      <lib-textarea-ui [placeholder]="'PLACEHOLDERS.ENTER_EXTERNALREFERENCE'"
+        [inputLabel]="'RISK_MANAGMENT.EXTERNALREFERENCE_DESCRIPTION'" [validations]="validationsDesc"
+        [control]="form.get('externalReference')!" [controlNameInput]="'externalReference'">
+      </lib-textarea-ui>
+    </div>
+    <div class="col-span-12">
+      <lib-textarea-ui [placeholder]="'PLACEHOLDERS.ENTER_AFFECTEDASSETSDESCRIPTION'"
+        [inputLabel]="'RISK_MANAGMENT.AFFECTEDASSETS_DESCRIPTION'" [validations]="validationsDesc"
+        [control]="form.get('affectedAssetsDescription')!" [controlNameInput]="'affectedAssetsDescription'">
+      </lib-textarea-ui>
+    </div>
+
+    <!-- <div class="col-span-4 flex items-center gap-4">
+      <lib-switch-ui [controlNameInput]="'show_asset'" [control]="form.get('show_asset')!"></lib-switch-ui>
+      <p class="font-medium">{{"RISK_MANAGMENT.AvailableAssets" |translate}}</p>
+    </div> -->
+
+    <!-- @if(form.get('show_asset')?.value){ -->
+    <!-- <div class="col-span-12 lg:col-span-6">
+      <lib-tree-multiselect [multiChoose]="true" [nodes_input]="nodes_assets" [placeholder]="'PLACEHOLDERS.Select_Assets' "
+        [label]="'RISK_MANAGMENT.ASSETS' " [validations]="validationsStatus" [control]="form.get('assets')!"
+        [formControlNameInput]="'assets'">
+      </lib-tree-multiselect>
+    </div> -->
+    <!-- } -->
+    <!-- <div class="col-span-12 lg:col-span-6">
+      <lib-ui-dropdown
+        [placeholder]="'METHODOLOGY.METHODOLOGY_PLACEHOLDER' | translate"
+        [label]="'METHODOLOGY.METHODOLOGY' | translate"
+        [control]="form.get('riskMethodologyID')!"
+        [formControlNameInput]="'riskMethodologyID'"
+        [options]="methodologies"
+        [optionLabel]="'label'"
+        [optionValue]="'id'"
+      >
+      </lib-ui-dropdown>
+    </div> -->
+  </form>
+</section>
+<!-- Classifications -->
+<div [ngClass]="{ invaild: showErrorClassfication }" class="action_section mb-6">
+  <p-accordion class="w-full" expandIcon="fi fi-rr-angle-small-down" collapseIcon="fi fi-rr-angle-small-up">
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div class="flex items-center gap-4">
+          <h2 class="text-lg font-semibold text-gray-800">{{ 'RISK_MANAGMENT.CLASSIFICATIONS' | translate }}</h2>
+          @if(showErrorClassfication){
+          <i pTooltip="Please complete all required fields." tooltipPosition="top"
+            class="fi text-danger_color fi-rr-info"></i>
+          }
+        </div>
+      </ng-template>
+
+      <form [formGroup]="classfication_form" class="grid grid-cols-12 gap-6">
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown [placeholder]="'PLACEHOLDERS.Select_category'" [label]="'RISK_MANAGMENT.CATEGORY'"
+            [control]="classfication_form.get('riskCategoryID')!" [options]="riskCategories" [optionLabel]="'label'"
+            [optionValue]="'id'" [validations]="riskCategoryIDValidations" [formControlNameInput]="'riskCategoryID'">
+          </lib-ui-dropdown>
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown [placeholder]="'PLACEHOLDERS.Select_Domain'" [label]="'RISK_MANAGMENT.DOMAIN'"
+            [control]="classfication_form.get('riskDomainID')!" [options]="riskDomains" [optionLabel]="'label'"
+            [validations]="riskDomainIDValidations" [optionValue]="'id'" [formControlNameInput]="'riskDomainID'">
+          </lib-ui-dropdown>
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown [placeholder]="'PLACEHOLDERS.Select_Source'" [label]="'RISK_MANAGMENT.SOURCE'"
+            [control]="classfication_form.get('riskSourceID')!" [options]="sources" [optionLabel]="'label'"
+            [optionValue]="'id'" [validations]="riskSourceIDValidations" [formControlNameInput]="'riskSourceID'">
+          </lib-ui-dropdown>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown [placeholder]="'PLACEHOLDERS.SELECT_RISK_STAGE'" [label]="'RISK_MANAGMENT.RISK_STAGE'"
+            [control]="classfication_form.get('riskStageID')!" [options]="RiskStage" [optionLabel]="'label'"
+            [optionValue]="'id'" [formControlNameInput]="'riskStageID'">
+          </lib-ui-dropdown>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown [placeholder]="'PLACEHOLDERS.SELECT_RISK_RESPONSE_TYPE'"
+            [label]="'RISK_MANAGMENT.RISK_RESPONSE_TYPE'" [control]="classfication_form.get('riskResponseTypeID')!"
+            [options]="RiskResponseType" [optionLabel]="'label'" [optionValue]="'id'"
+            [formControlNameInput]="'riskResponseTypeID'">
+          </lib-ui-dropdown>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown [placeholder]="'PLACEHOLDERS.SELECT_RISK_FREQUENCY_TYPE'"
+            [label]="'RISK_MANAGMENT.RISK_FREQUENCY_TYPE'" [control]="classfication_form.get('riskFrequencyTypeID')!"
+            [options]="riskFrequencies" [optionLabel]="'label'" [optionValue]="'id'"
+            [formControlNameInput]="'riskFrequencyTypeID'">
+          </lib-ui-dropdown>
+        </div>
+
+        <!--
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown [placeholder]="'PLACEHOLDERS.Select_Frequency' " [label]="'RISK_MANAGMENT.FREQUENCY' "
+            [control]="classfication_form.get('riskFrequencyTypeID')!" [options]="riskFrequencies"
+            [optionLabel]="'label'" [optionValue]="'id'" [validations]="riskFrequencyTypeIDValidations"
+            [formControlNameInput]="'riskFrequencyTypeID'">
+          </lib-ui-dropdown>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <div class="w-1/4 ">
+            <label for="Attributes">{{'RISK_MANAGMENT.Attributes' | translate}}</label>
+          </div>
+          <div class="flex-1 ">
+            <lib-dropdown-checkbox [placeholder]="'PLACEHOLDERS.Attributes' "
+              [control]="classfication_form.get('attributyIds')!" [options]="Attributes" [optionLabel]="'label'"
+              [optionValue]="'id'" [formControlNameInput]="'attributyIds'">
+            </lib-dropdown-checkbox>
+          </div>
+        </div> -->
+      </form>
+    </p-accordionTab>
+  </p-accordion>
+</div>
+<!-- Responsibilities -->
+<div [ngClass]="{ invaild: showErrorResponsbility }" class="action_section mb-6">
+  <p-accordion class="w-full" expandIcon="fi fi-rr-angle-small-down" collapseIcon="fi fi-rr-angle-small-up">
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div class="flex items-center gap-4">
+          <h2 class="text-lg font-semibold text-gray-800">{{ 'RISK_MANAGMENT.Responsibilities' | translate }}</h2>
+          @if(showErrorResponsbility){
+          <i pTooltip="Please complete all required fields." tooltipPosition="top"
+            class="fi text-danger_color fi-rr-info"></i>
+          }
+        </div>
+      </ng-template>
+
+      <form [formGroup]="resposibility_form" class="grid grid-cols-12 gap-6">
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown [placeholder]="'PLACEHOLDERS.SELECT_RISK_OWNERS'" [label]="'RISK_MANAGMENT.RISK_ROLE_OWNERS'"
+            [control]="resposibility_form.get('riskOwnerRolesID')!" [options]="owners" [optionLabel]="'label'"
+            [optionValue]="'id'" [validations]="ownerValidations" [formControlNameInput]="'riskOwnerRolesID'">
+          </lib-ui-dropdown>
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-role-dropdown [placeholder]="'PLACEHOLDERS.SELECT_RISK_MANAGER_ROLES'"
+            [label]="'RISK_MANAGMENT.RISK_MANAGER_ROLES'" [control]="resposibility_form.get('riskManagerRolesID')!"
+            [options]="manger_team" optionLabel="label" optionValue="id" [formControlNameInput]="'riskManagerRolesID'">
+          </lib-role-dropdown>
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-user-dropdown [label]="'RISK_MANAGMENT.RISK_MANAGER_USERS'"
+            placeholder="PLACEHOLDERS.SELECT_RISK_MANAGER_USERS" [formControlNameInput]="'riskManagerUsersID'"
+            [options]="mangerUsers" optionLabel="name" optionValue="id"
+            [control]="resposibility_form.get('riskManagerUsersID')!"></lib-user-dropdown>
+        </div>
+      </form>
+    </p-accordionTab>
+  </p-accordion>
+</div>
+<!-- Timelines -->
+<div class="action_section mb-6">
+  <p-accordion class="w-full" expandIcon="fi fi-rr-angle-small-down" collapseIcon="fi fi-rr-angle-small-up">
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div>
+          <h2 class="text-lg font-semibold text-gray-800">{{ 'RISK_MANAGMENT.Timelines' | translate }}</h2>
+        </div>
+      </ng-template>
+
+      <form [formGroup]="timelines_from" class="grid grid-cols-12 gap-6">
+        <!-- <div class="col-span-12 lg:col-span-4">
+          <lib-ui-dropdown [placeholder]="'PLACEHOLDERS.Select_Stage' " [label]="'RISK_MANAGMENT.STAGE' "
+            [control]="timelines_from.get('riskStageID')!" [options]="RiskStage" [optionLabel]="'label'"
+            [optionValue]="'id'" [formControlNameInput]="'riskStageID'">
+          </lib-ui-dropdown>
+        </div> -->
+        <div class="col-span-12 lg:col-span-4">
+          <lib-date-packer [placeholder]="'PLACEHOLDERS.SELECT_IDENTIFIED_DATE'"
+            [inputLabel]="'RISK_MANAGMENT.IDENTIFIED_DATE'" [control]="timelines_from.get('identifiedDate')!"
+            [controlNameInput]="'identifiedDate'">
+          </lib-date-packer>
+        </div>
+
+        <div class="col-span-12 lg:col-span-4">
+          <lib-date-packer [placeholder]="'PLACEHOLDERS.SELECT_EXPECTED_CLOSE_DATE'" [validations]="expectedCloseDate"
+            [inputLabel]="'RISK_MANAGMENT.EXPECTED_CLOSE_DATE'" [control]="timelines_from.get('expectedCloseDate')!"
+            [controlNameInput]="'expectedCloseDate'">
+          </lib-date-packer>
+        </div>
+        <div class="col-span-12 lg:col-span-4">
+          <lib-date-packer [placeholder]="'PLACEHOLDERS.SELECT_ACTUAL_CLOSE_DATE'"
+            [inputLabel]="'RISK_MANAGMENT.ACTUAL_CLOSE_DATE'" [control]="timelines_from.get('actualCloseDate')!"
+            [controlNameInput]="'actualCloseDate'">
+          </lib-date-packer>
+        </div>
+
+        <div class="col-span-12 lg:col-span-4">
+          <lib-date-packer [placeholder]="'PLACEHOLDERS.SELECT_NEXT_REVIEW_DATE'"
+            [inputLabel]="'RISK_MANAGMENT.NEXT_REVIEW_DATE'" [control]="timelines_from.get('nextReviewDate')!"
+            [controlNameInput]="'nextReviewDate'">
+          </lib-date-packer>
+        </div>
+      </form>
+    </p-accordionTab>
+  </p-accordion>
+</div>
+
+<div class="action_section mb-6">
+  <p-accordion class="w-full" expandIcon="fi fi-rr-angle-small-down" collapseIcon="fi fi-rr-angle-small-up">
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div>
+          <h2 class="text-lg font-semibold text-gray-800">{{ 'RISK_MANAGMENT.STATUS_AND_IMPLEMENTATION' | translate }}
+          </h2>
+        </div>
+      </ng-template>
+
+      <form [formGroup]="statusAndImplemenationsForm" class="grid grid-cols-12 gap-6">
+        <!-- Risk Record Status -->
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown [placeholder]="'RISK_MANAGMENT.RISK_RECORD_STATUS_PLACEHOLDER'"
+            [label]="'RISK_MANAGMENT.RISK_RECORD_STATUS'" [control]="
+              statusAndImplemenationsForm.get('riskRecordStatusTypeID')!
+            " [options]="status" [optionLabel]="'label'" [optionValue]="'id'"
+            [formControlNameInput]="'riskRecordStatusTypeID'">
+          </lib-ui-dropdown>
+        </div>
+
+        <!-- Risk Existence Status -->
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown [placeholder]="'RISK_MANAGMENT.RISK_EXISTENCE_STATUS_PLACEHOLDER'"
+            [label]="'RISK_MANAGMENT.RISK_EXISTENCE_STATUS'" [control]="
+              statusAndImplemenationsForm.get('riskExistenceStatusTypeID')!
+            " [options]="RiskExistenceStatusType" [optionLabel]="'label'" [optionValue]="'id'"
+            [formControlNameInput]="'riskExistenceStatusTypeID'">
+          </lib-ui-dropdown>
+        </div>
+
+        <!-- Risk Execution Status -->
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown [placeholder]="'RISK_MANAGMENT.EXECUTION_STATUS_PLACEHOLDER'"
+            [label]="'RISK_MANAGMENT.EXECUTION_STATUS'" [control]="
+              statusAndImplemenationsForm.get('riskExecutionStatusTypeID')!
+            " [options]="RiskExecutionStatusType" [optionLabel]="'label'" [optionValue]="'id'"
+            [formControlNameInput]="'riskExecutionStatusTypeID'">
+          </lib-ui-dropdown>
+        </div>
+
+        <!-- Workflow ID -->
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown [placeholder]="'RISK_MANAGMENT.WORKFLOW_ID_PLACEHOLDER'"
+            [label]="'RISK_MANAGMENT.WORKFLOW_ID'" [control]="statusAndImplemenationsForm.get('wfID')!"
+            [options]="workflowarray" [optionLabel]="'label'" [optionValue]="'id'" [formControlNameInput]="'wfID'">
+          </lib-ui-dropdown>
+        </div>
+      </form>
+    </p-accordionTab>
+  </p-accordion>
+</div>
+
+<!-- <div class="action_section mb-6">
+  <p-accordion
+    class="w-full"
+    expandIcon="fi fi-rr-angle-small-down"
+    collapseIcon="fi fi-rr-angle-small-up"
+  >
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div>
+          <h2>
+            {{ 'RISK_MANAGMENT.CURRENT_RATING_HEADER' | translate }}
+          </h2>
+        </div>
+      </ng-template>
+
+      <form [formGroup]="currentRatingForm" class="grid grid-cols-12 gap-6">
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown
+            [placeholder]="
+              'RISK_MANAGMENT.CURRENT_IMPACT_PLACEHOLDER' | translate
+            "
+            [label]="'RISK_MANAGMENT.CURRENT_IMPACT' | translate"
+            [control]="currentRatingForm.get('riskImpactID')!"
+            [options]="RiskImpact"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+            [formControlNameInput]="'riskImpactID'"
+          >
+          </lib-ui-dropdown>
+        </div>
+
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown
+            [placeholder]="
+              'RISK_MANAGMENT.CURRENT_LIKELIHOOD_PLACEHOLDER' | translate
+            "
+            [label]="'RISK_MANAGMENT.CURRENT_LIKELIHOOD' | translate"
+            [control]="currentRatingForm.get('riskLikelihoodID')!"
+            [options]="RiskLikelihood"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+            [formControlNameInput]="'riskLikelihoodID'"
+          >
+          </lib-ui-dropdown>
+        </div>
+
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown
+            [placeholder]="
+              'RISK_MANAGMENT.CURRENT_RISK_LEVEL_PLACEHOLDER' | translate
+            "
+            [label]="'RISK_MANAGMENT.CURRENT_RISK_LEVEL' | translate"
+            [control]="currentRatingForm.get('riskLevelID')!"
+            [options]="RiskLevel"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+            [formControlNameInput]="'riskLevelID'"
+          >
+          </lib-ui-dropdown>
+        </div>
+
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-input-number
+            [placeholder]="'RISK_MANAGMENT.RISK_SCORE_PLACEHOLDER' | translate"
+            [inputLabel]="'RISK_MANAGMENT.RISK_SCORE' | translate"
+            [control]="currentRatingForm.get('riskScore')!"
+            [controlNameInput]="'riskScore'"
+          >
+          </lib-input-number>
+        </div>
+      </form>
+    </p-accordionTab>
+  </p-accordion>
+</div>
+
+<div class="action_section mb-6">
+  <p-accordion
+    class="w-full mt-4"
+    expandIcon="fi fi-rr-angle-small-down"
+    collapseIcon="fi fi-rr-angle-small-up"
+  >
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div>
+          <h2>
+            {{ 'RISK_MANAGMENT.TARGET_RATING_HEADER' | translate }}
+          </h2>
+        </div>
+      </ng-template>
+
+      <form [formGroup]="targetRatingForm" class="grid grid-cols-12 gap-6">
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown
+            [placeholder]="
+              'RISK_MANAGMENT.TARGET_IMPACT_PLACEHOLDER' | translate
+            "
+            [label]="'RISK_MANAGMENT.TARGET_IMPACT' | translate"
+            [control]="targetRatingForm.get('targetRiskImpactID')!"
+            [options]="targetRiskImpact"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+            [formControlNameInput]="'targetRiskImpactID'"
+          >
+          </lib-ui-dropdown>
+        </div>
+
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown
+            [placeholder]="
+              'RISK_MANAGMENT.TARGET_LIKELIHOOD_PLACEHOLDER' | translate
+            "
+            [label]="'RISK_MANAGMENT.TARGET_LIKELIHOOD' | translate"
+            [control]="targetRatingForm.get('targetRiskLikelihoodID')!"
+            [options]="targetRiskLikelihood"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+            [formControlNameInput]="'targetRiskLikelihoodID'"
+          >
+          </lib-ui-dropdown>
+        </div>
+
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown
+            [placeholder]="
+              'RISK_MANAGMENT.TARGET_RISK_LEVEL_PLACEHOLDER' | translate
+            "
+            [label]="'RISK_MANAGMENT.TARGET_RISK_LEVEL' | translate"
+            [control]="targetRatingForm.get('targetRiskLevelID')!"
+            [options]="[]"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+            [formControlNameInput]="'targetRiskLevelID'"
+          >
+          </lib-ui-dropdown>
+        </div>
+
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-input-number
+            [placeholder]="
+              'RISK_MANAGMENT.TARGET_RISK_SCORE_PLACEHOLDER' | translate
+            "
+            [inputLabel]="'RISK_MANAGMENT.TARGET_RISK_SCORE' | translate"
+            [control]="targetRatingForm.get('targetRiskScore')!"
+            [controlNameInput]="'targetRiskScore'"
+          >
+          </lib-input-number>
+        </div>
+      </form>
+    </p-accordionTab>
+  </p-accordion>
+</div>
+
+<div class="action_section mb-6">
+  <p-accordion
+    class="w-full"
+    expandIcon="fi fi-rr-angle-small-down"
+    collapseIcon="fi fi-rr-angle-small-up"
+  >
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div>
+          <h2>
+            {{ 'RISK_MANAGMENT.INHERENT_RISK_HEADER' | translate }}
+          </h2>
+        </div>
+      </ng-template>
+
+      <form [formGroup]="inherentRiskForm" class="grid grid-cols-12 gap-6">
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown
+            [placeholder]="
+              'RISK_MANAGMENT.INHERENT_IMPACT_PLACEHOLDER' | translate
+            "
+            [label]="'RISK_MANAGMENT.INHERENT_IMPACT' | translate"
+            [control]="inherentRiskForm.get('inherentRiskImpactID')!"
+            [options]="[]"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+            [formControlNameInput]="'inherentRiskImpactID'"
+          >
+          </lib-ui-dropdown>
+        </div>
+
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown
+            [placeholder]="
+              'RISK_MANAGMENT.INHERENT_LIKELIHOOD_PLACEHOLDER' | translate
+            "
+            [label]="'RISK_MANAGMENT.INHERENT_LIKELIHOOD' | translate"
+            [control]="inherentRiskForm.get('inherentRiskLikelihoodID')!"
+            [options]="[]"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+            [formControlNameInput]="'inherentRiskLikelihoodID'"
+          >
+          </lib-ui-dropdown>
+        </div>
+
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown
+            [placeholder]="
+              'RISK_MANAGMENT.INHERENT_RISK_LEVEL_PLACEHOLDER' | translate
+            "
+            [label]="'RISK_MANAGMENT.INHERENT_RISK_LEVEL' | translate"
+            [control]="inherentRiskForm.get('inherentRiskLevelID')!"
+            [options]="[]"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+            [formControlNameInput]="'inherentRiskLevelID'"
+          >
+          </lib-ui-dropdown>
+        </div>
+
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-input-number
+            [placeholder]="
+              'RISK_MANAGMENT.INHERENT_RISK_SCORE_PLACEHOLDER' | translate
+            "
+            [inputLabel]="'RISK_MANAGMENT.INHERENT_RISK_SCORE' | translate"
+            [control]="inherentRiskForm.get('inherentRiskScore')!"
+            [controlNameInput]="'inherentRiskScore'"
+          >
+          </lib-input-number>
+        </div>
+      </form>
+    </p-accordionTab>
+  </p-accordion>
+</div>
+
+<div class="action_section mb-6">
+  <p-accordion
+    class="w-full"
+    expandIcon="fi fi-rr-angle-small-down"
+    collapseIcon="fi fi-rr-angle-small-up"
+  >
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div>
+          <h2>
+            {{ 'RISK_MANAGMENT.RESIDUAL_RISK_HEADER' | translate }}
+          </h2>
+        </div>
+      </ng-template>
+
+      <form [formGroup]="residualRiskForm" class="grid grid-cols-12 gap-6">
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown
+            [placeholder]="
+              'RISK_MANAGMENT.RESIDUAL_IMPACT_PLACEHOLDER' | translate
+            "
+            [label]="'RISK_MANAGMENT.RESIDUAL_IMPACT' | translate"
+            [control]="residualRiskForm.get('residualRiskImpactID')!"
+            [options]="[]"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+            [formControlNameInput]="'residualRiskImpactID'"
+          >
+          </lib-ui-dropdown>
+        </div>
+
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown
+            [placeholder]="
+              'RISK_MANAGMENT.RESIDUAL_LIKELIHOOD_PLACEHOLDER' | translate
+            "
+            [label]="'RISK_MANAGMENT.RESIDUAL_LIKELIHOOD' | translate"
+            [control]="residualRiskForm.get('residualRiskLikelihoodID')!"
+            [options]="[]"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+            [formControlNameInput]="'residualRiskLikelihoodID'"
+          >
+          </lib-ui-dropdown>
+        </div>
+
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown
+            [placeholder]="
+              'RISK_MANAGMENT.RESIDUAL_RISK_LEVEL_PLACEHOLDER' | translate
+            "
+            [label]="'RISK_MANAGMENT.RESIDUAL_RISK_LEVEL' | translate"
+            [control]="residualRiskForm.get('residualRiskLevelID')!"
+            [options]="[]"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+            [formControlNameInput]="'residualRiskLevelID'"
+          >
+          </lib-ui-dropdown>
+        </div>
+
+
+        <div class="col-span-12 lg:col-span-6">
+          <lib-input-number
+            [placeholder]="
+              'RISK_MANAGMENT.RESIDUAL_RISK_SCORE_PLACEHOLDER' | translate
+            "
+            [inputLabel]="'RISK_MANAGMENT.RESIDUAL_RISK_SCORE' | translate"
+            [control]="residualRiskForm.get('residualRiskScore')!"
+            [controlNameInput]="'residualRiskScore'"
+          >
+          </lib-input-number>
+        </div>
+      </form>
+    </p-accordionTab>
+  </p-accordion>
+</div> -->
+
+<div class="action_section mb-6">
+  <p-accordion class="w-full" expandIcon="fi fi-rr-angle-small-down" collapseIcon="fi fi-rr-angle-small-up">
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div>
+          <h2 class="text-lg font-semibold text-gray-800">
+            {{ 'RISK_MANAGMENT.METHODOLOGY_APPETITE_HEADER' | translate }}
+          </h2>
+        </div>
+      </ng-template>
+
+      <form [formGroup]="methodologyAndAppetiteForm" class="grid grid-cols-12 gap-6">
+        <!-- Risk Methodology -->
+        <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown [placeholder]="
+              'RISK_MANAGMENT.RISK_METHODOLOGY_PLACEHOLDER' | translate
+            " [label]="'RISK_MANAGMENT.RISK_METHODOLOGY' | translate"
+            [control]="methodologyAndAppetiteForm.get('riskMethodologyID')!" [options]="methodologies"
+            [optionLabel]="'label'" [optionValue]="'id'" [formControlNameInput]="'riskMethodologyID'">
+          </lib-ui-dropdown>
+        </div>
+
+        <!-- Risk Appetite -->
+        <!-- <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown
+            [placeholder]="
+              'RISK_MANAGMENT.RISK_APPETITE_PLACEHOLDER' | translate
+            "
+            [label]="'RISK_MANAGMENT.RISK_APPETITE' | translate"
+            [control]="methodologyAndAppetiteForm.get('riskAppetiteID')!"
+            [options]="[]"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+            [formControlNameInput]="'riskAppetiteID'"
+          >
+          </lib-ui-dropdown>
+        </div> -->
+
+        <!-- Risk Tolerance -->
+        <!-- <div class="col-span-12 lg:col-span-6">
+          <lib-ui-dropdown
+            [placeholder]="
+              'RISK_MANAGMENT.RISK_TOLERANCE_PLACEHOLDER' | translate
+            "
+            [label]="'RISK_MANAGMENT.RISK_TOLERANCE' | translate"
+            [control]="methodologyAndAppetiteForm.get('riskToleranceID')!"
+            [options]="[]"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+            [formControlNameInput]="'riskToleranceID'"
+          >
+          </lib-ui-dropdown>
+        </div> -->
+      </form>
+    </p-accordionTab>
+  </p-accordion>
+</div>
+
+<!-- work flow -->
+<!-- <div class="action_section mb-6">
+  <p-accordion
+    class="w-full"
+    expandIcon="fi fi-rr-angle-small-down"
+    collapseIcon="fi fi-rr-angle-small-up"
+  >
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div>
+          <h2>{{ 'RISK_MANAGMENT.Workflow' | translate }}</h2>
+        </div>
+      </ng-template>
+
+      <form [formGroup]="workflow_form" class="grid grid-cols-12 gap-6">
+        <div class="col-span-12 lg:col-span-4">
+          <lib-ui-dropdown
+            [placeholder]="'RISK_MANAGMENT.SELECT_W_F'"
+            [label]="'RISK_MANAGMENT.WORK_FLOW'"
+            [control]="workflow_form.get('wfid')!"
+            [options]="workflowarray"
+            [optionLabel]="'label'"
+            [optionValue]="'id'"
+            [formControlNameInput]="'wfid'"
+          >
+          </lib-ui-dropdown>
+        </div>
+      </form>
+    </p-accordionTab>
+  </p-accordion>
+</div> -->
+
+<!-- Threat & Vulnerability's & Attributes -->
+
+<!-- <div class="action_section mb-6">
+  <p-accordion
+    class="w-full"
+    expandIcon="fi fi-rr-angle-small-down"
+    collapseIcon="fi fi-rr-angle-small-up"
+  >
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div>
+          <h2>{{ 'RISK_VIEW.OTHER_INFO2' | translate }}</h2>
+        </div>
+      </ng-template>
+
+      <form [formGroup]="OTHER_INFO" class="grid grid-cols-12 gap-6">
+        <div class="col-span-12 block lg:flex items-center">
+          <div class="w-1/4">
+            <label for="threats">{{
+              'RISK_MANAGMENT.Threats' | translate
+            }}</label>
+          </div>
+          <div class="w-3/4 flex items-center gap-4">
+            <div class="flex-1">
+              <lib-dropdown-checkbox
+                [placeholder]="'PLACEHOLDERS.Threats'"
+                [control]="OTHER_INFO.get('threatIds')!"
+                [options]="Threats"
+                [optionLabel]="'label'"
+                [optionValue]="'id'"
+                [formControlNameInput]="'threatIds'"
+              >
+              </lib-dropdown-checkbox>
+            </div>
+
+            <div class="add_new_plus action_btn">
+              <p-button
+                [icon]="'fi fi-rr-plus'"
+                [label]="'RISK_VIEW.Add_New' | translate"
+              >
+              </p-button>
+            </div>
+          </div>
+        </div>
+        @if(selectedThreats.length > 0){
+        <div class="grid grid-cols-12 col-span-12">
+          <div class="col-span-3"></div>
+          <div class="col-span-9 select_actions flex items-center">
+            @for (threat of selectedThreats; track $index) {
+
+            <div class="p-2 gap-2">
+              <span class="badge gap-x-2"
+                >{{ threat.label }}
+
+                <button
+                  type="button"
+                  class="text-red-500 hover:text-red-700 font-bold"
+                  (click)="removethreads(threat)"
+                >
+                  <svg
+                    width="8"
+                    height="8"
+                    viewBox="0 0 8 8"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M7 1L1 7M1 1L7 7"
+                      stroke="#7A5AF8"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </button>
+              </span>
+            </div>
+            }
+          </div>
+        </div>
+        }
+
+        <div class="col-span-12 block lg:flex items-center">
+          <div class="w-1/4">
+            <label for="vulnerabilityIds">{{
+              'RISK_MANAGMENT.Vulnerability_Attributes' | translate
+            }}</label>
+          </div>
+          <div class="w-3/4 flex items-center gap-4">
+            <div class="flex-1">
+              <lib-dropdown-checkbox
+                [placeholder]="'PLACEHOLDERS.Vulnerability_Attributes'"
+                [control]="OTHER_INFO.get('vulnerabilityIds')!"
+                [options]="Vulnerability_Attributes"
+                [optionLabel]="'label'"
+                [optionValue]="'id'"
+                [formControlNameInput]="'vulnerabilityIds'"
+              >
+              </lib-dropdown-checkbox>
+            </div>
+            <div class="add_new_plus action_btn">
+              <p-button
+                [icon]="'fi fi-rr-plus'"
+                [label]="'RISK_VIEW.Add_New' | translate"
+              >
+              </p-button>
+            </div>
+          </div>
+        </div>
+        @if (selectedvulnerabilityIds.length > 0) {
+        <div class="grid grid-cols-12 col-span-12">
+          <div class="col-span-3"></div>
+          <div class="col-span-9 select_actions flex items-center">
+            @for (vulnerability of selectedvulnerabilityIds; track $index) {
+            <div class="p-2 gap-2">
+              <span class="badge gap-x-2"
+                >{{ vulnerability.label }}
+                <button
+                  type="button"
+                  class="text-red-500 hover:text-red-700 font-bold"
+                  (click)="removeVulnerability(vulnerability)"
+                >
+                  <svg
+                    width="8"
+                    height="8"
+                    viewBox="0 0 8 8"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M7 1L1 7M1 1L7 7"
+                      stroke="#7A5AF8"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </button>
+              </span>
+            </div>
+            }
+          </div>
+        </div>
+        }
+      </form>
+    </p-accordionTab>
+  </p-accordion>
+</div> -->
+
+<div class="action_section mb-6" [formGroup]="form_tabs">
+  <p-accordion class="w-full" expandIcon="fi fi-rr-angle-small-down" collapseIcon="fi fi-rr-angle-small-up">
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div>
+          <h2 class="text-lg font-semibold text-gray-800">{{ 'RISK_VIEW.SWOT_Analysis' | translate }}</h2>
+        </div>
+      </ng-template>
+
+      <div class="tabs flex">
+        @for(tab of tabs ; track tab){
+        <button (click)="activeTab = tab.id" [ngClass]="{ active_tab: activeTab === tab.id }"
+          class="flex items-center gap-3 font-medium px-4 py-3 min-w-20">
+          <span>{{ tab.name }}</span>
+        </button>
+        }
+      </div>
+
+      @if (activeTab === 1) {
+      <div class="mt-4">
+        <lib-textarea-ui [placeholder]="'RISK_MANAGMENT.CONTEXT_STRENGTHS_PLACEHOLDER'" [validations]="validationsDesc"
+          [control]="form_tabs.get('strengths')!" [controlNameInput]="'strengths'">
+        </lib-textarea-ui>
+      </div>
+      } @if (activeTab === 2) {
+      <div class="mt-4">
+        <lib-textarea-ui [placeholder]="'RISK_MANAGMENT.CONTEXT_WEAKNESSES_PLACEHOLDER'" [validations]="validationsDesc"
+          [control]="form_tabs.get('weaknesses')!" [controlNameInput]="'weaknesses'">
+        </lib-textarea-ui>
+      </div>
+      } @if (activeTab === 3) {
+
+      <div class="mt-4">
+        <lib-textarea-ui [placeholder]="'RISK_MANAGMENT.RISK_OPPORTUNITIES_PLACEHOLDER'" [validations]="validationsDesc"
+          [control]="form_tabs.get('opportunities')!" [controlNameInput]="'opportunities'">
+        </lib-textarea-ui>
+      </div>
+
+      } @if (activeTab === 4) {
+      <div class="mt-4">
+        <lib-textarea-ui [placeholder]="'RISK_MANAGMENT.RISK_THREATS_PLACEHOLDER'" [validations]="validationsDesc"
+          [control]="form_tabs.get('discraptionThreats')!" [controlNameInput]="'discraptionThreats'">
+        </lib-textarea-ui>
+      </div>
+
+      }
+    </p-accordionTab>
+  </p-accordion>
+</div>
+<!-- <div class="action_section mb-6">
+  <p-accordion class="w-full" expandIcon="fi fi-rr-angle-small-down" collapseIcon="fi fi-rr-angle-small-up">
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <div>
+          <h2 class="text-lg font-semibold text-gray-800">{{ 'RISK_VIEW.ASSESSMENT' | translate }}</h2>
+        </div>
+      </ng-template>
+
+      <div class="tabs flex mb-6">
+        @for(tab of assessmentTypesTabs ; track tab){
+        <button (click)="active_tab_assessment = tab.id" [ngClass]="{ active_tab: active_tab_assessment === tab.id }"
+          class="flex items-center gap-3 font-medium px-4 py-3 min-w-20">
+          <span>{{ tab.name | translate }}</span>
+        </button>
+        }
+      </div>
+
+      <div class="contant p-4">
+
+        <div class=" flex items-center gap-12 justify-between">
+          <div class="w-fit flex flex-col gap-4">
+            <div class="impact">
+              <p class="text-gray-700 font-medium mb-4">Risk Impact</p>
+              <div class="flex items-center gap-4 mb-3">
+                @for(impact of assessmentState[this.active_tab_assessment].impacts; track impact){
+                <button (click)="handleSelectedImpact(impact)" [class]="impact?.color"
+                  class="custom_checkBox flex items-center gap-2">
+                  @if(impact.selected){
+                  <p-checkbox [(ngModel)]="impact.selected" [binary]="true" inputId="binary" />
+                  }
+                  <span class="font-medium">{{ impact?.name }}</span>
+                </button>
+                }
+              </div>
+              @if(current_selected_impact){
+              <p class="text-gray-500 text-sm">{{current_selected_impact?.name}} :
+                {{current_selected_impact?.description}}</p>
+              }
+            </div>
+
+            <div class="multiply flex items-center justify-center">
+              <div class="multi_icon">
+                <i class="fi fi-br-cross-small"></i>
+              </div>
+            </div>
+
+            <div class="impact">
+              <p class="text-gray-700 font-medium mb-4">Risk Liklehood</p>
+              <div class="flex items-center gap-4 mb-3">
+                @for(likelhood of assessmentState[this.active_tab_assessment].likelhoods; track likelhood){
+                <button (click)="handleSelectedLikelhood(likelhood)" [class]="likelhood?.color"
+                  class="custom_checkBox flex items-center gap-2">
+                  @if(likelhood.selected){
+                  <p-checkbox [(ngModel)]="likelhood.selected" [binary]="true" inputId="binary" />
+                  }
+                  <span class="font-medium">{{ likelhood?.name }}</span>
+                </button>
+                }
+              </div>
+              @if(current_selected_likehood){
+              <p class="text-gray-500 text-sm">{{current_selected_likehood?.name}} :
+                {{current_selected_likehood?.description}}</p>
+              }
+            </div>
+          </div>
+
+          <div class="w-1/2 flex items-center gap-6">
+            <div class="multiply flex items-center justify-center">
+              <div class="multi_icon">
+                <i class="fi fi-bs-equals"></i>
+              </div>
+            </div>
+            <div class="flex-1 relative">
+              <div class="header mb-6">
+                <h2 class="current_risk mb-2">
+                  {{ 'RISK_VIEW.CURRENT_RISK_RATING' | translate }}
+                </h2>
+                <h3 class="high_header">
+                  {{ assessmentState[active_tab_assessment].levels[
+                  assessmentState[active_tab_assessment].currentLevelIndex
+                  ]?.name }}
+                  ({{ assessmentState[active_tab_assessment].riskScore }})
+                </h3>
+              </div>
+              @if (assessmentState[active_tab_assessment].currentLevelIndex !== null) {
+              <button class="risk-arrow focus:outline-none absolute" [style.left.%]="getArrowLeftPercent()"
+                aria-label="Toggle risk details">
+                <img src="images/Vector.svg" alt="">
+              </button>
+              }
+              <div class="progress-container justify-end py-8 ">
+                @for (level of assessmentState[this.active_tab_assessment].levels; track level) {
+                <div class="progress-segment flex-1" [style.background]="level.color"></div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </p-accordionTab>
+  </p-accordion>
+</div> -->
+
+<!-- Buttons -->
+<div class="col-span-12 flex items-center gap-4 justify-end py-6 border-t border-gray_light">
+  <div class="cancel_btn">
+    <button [routerLink]="['/gfw-portal/risks-management/risks-list']" routerLinkActive="router-link-active">
+      {{ 'RISK_MANAGMENT.Cancel' | translate }}
+    </button>
+  </div>
+  <div class="action_btn">
+    <p-button [label]="'RISK_MANAGMENT.SaveChanges' | translate" [loading]="isLoading" (onClick)="submit()">
+    </p-button>
+  </div>
+</div>

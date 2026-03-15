@@ -1,0 +1,97 @@
+<div class="list_container p-6 border border-gray_light rounded-lg">
+  <div
+    class="header mb-6 border-b border-gray_light pb-4 flex items-center justify-between"
+  >
+    <div class="table_title flex flex-wrap items-center gap-4">
+      <h3 class="table_title_header">{{ list_title() }}</h3>
+
+      <span class="badge_small_table"
+        >{{ total_items() }} {{ badge_title() }}</span
+      >
+    </div>
+
+    <ng-content select="[actions]"></ng-content>
+  </div>
+
+  @if(loadingState() && data_list()?.length === 0){
+  <lib-loader></lib-loader>
+  }@else if (!loadingState() && data_list()?.length === 0) {
+  <div class="flex flex-col gap-2 items-center empty_state_wrapper">
+    <lib-empty-state [loading]="loadingState()"></lib-empty-state>
+  </div>
+  }@else {
+
+  <div class="list">
+    @for(item of data_list() ; track $index ){
+
+    <button
+      type="button"
+      class="single_item flex mb-4 items-center justify-between p-3 border border-gray_light rounded-lg text-left w-full"
+      (click)="handleColumnClick(item, $index)">
+      <div class="content_container flex items-center gap-4">
+        @if(item?.icon){
+        <div
+          class="w-10 h-10 rounded-md text-2xl font-bold bg-gray-100 text-priflex items-center justify-center flex"
+        >
+          <i class="text-primaryColor-500" [class]="item?.icon"></i>
+        </div>
+        }
+
+        <div>
+          <p class="text-[#475467] font-semibold text-lg">
+            {{ item.title || item.name || item[card_title_selector] }}
+          </p>
+          <p class="text-[#667085] text-sm">
+            {{ item.sub || item[card_sub_selector] }}
+          </p>
+        </div>
+      </div>
+
+      <div class="actions flex gap-2 items-center">
+        @if(externalAction && externalAction.label){
+        <button
+          [pTooltip]="externalAction.toolTip || ''"
+          class="flex items-center py-2 px-[18px] gap-2 rounded-lg text-[#7A5AF8] font-medium text-base border-[1px] border-[#7A5AF8]"
+          [ngClass]="{ ' has-label ': externalAction.label }"
+          (click)="emitExternalAction($event, item)"
+        >
+          <span> {{ externalAction.label }} </span>
+          <i
+            class="fi fi-rr-arrow-small-{{
+                currentLang === 'en' ? 'right' : 'left'
+            }}"
+          ></i>
+        </button>
+        }
+        <button
+          type="button"
+          (click)="
+                        menu.toggle($event);
+                        selected_item_emiter.emit(item);
+                        $event.stopPropagation()
+          "
+          class="action_btn"
+        >
+            <i class="fi fi-bs-menu-dots"></i>
+          </button>
+      </div>
+    </button>
+
+    }
+  </div>
+
+  }
+</div>
+
+
+  <p-menu #menu [model]="items_actions()" [popup]="true">
+            <ng-template pTemplate="item" let-item>
+              @if(item?.visible()){
+              <button (click)="item.command()"
+                class="p-menuitem-link w-full flex items-center gap-3 px-4 py-2 hover:bg-gray_color-100">
+                <i [class]="item.icon"></i>
+                <span class="p-menuitem-text">{{ item.label | translate }}</span>
+              </button>
+              }
+            </ng-template>
+  </p-menu>

@@ -1,0 +1,65 @@
+<div class="header py-4">
+  <!-- <h2 class="text-xl font-medium mb-2">{{groupData?.name}}</h2>
+  <p class="text-gray_light">{{groupData?.description}}</p> -->
+</div>
+
+<p-accordion styleClass="frameworkAccordion" [activeIndex]="activeIndex">
+  @for (list of listsDefinations; track $index) {
+  <p-accordionTab
+    tabStyleClass="mb-4"
+    (selectedChange)="handleAccordionChange(list, $index, $event)"
+  >
+    <ng-template pTemplate="header">
+      <div class="flex gap-2 w-full">
+        <i [class]="list?.icon"></i>
+        <span>{{ list.title }}</span>
+        <div class="expand-icon-wrapper ms-auto flex items-center">
+          <i
+            [ngClass]="{
+              'fi fi-rr-angle-small-up': list?.isExpanded,
+              'fi fi-rr-angle-small-down': !list?.isExpanded
+            }"
+          ></i>
+        </div>
+      </div>
+    </ng-template>
+    @if(activeIndex === $index){
+    <lib-shared-ui
+      #sharedUiComp
+      [isActionShow]="false"
+      [view_entityRouter]="''"
+      [entityID_Name]="list.entityID_Name"
+      [dataViewId]="list?.dataViewId"
+      [selected_profile_column]="selected_profile_column"
+      (filter_emitter)="handleFilter($event)"
+      [filter_id_input]="list?.dataViewId"
+      [action_items]="[]"
+      [loadingState]="loadingTable"
+      (sortEmiter)="handleSort($event)"
+      [total_items_input]="pageginationObj.totalItems"
+      (selected_emiter)="setSelected($event)"
+      [badge_name]="list.badge_name | translate"
+      [table_name]="list.table_name | translate"
+      [loadingState]="isGettingData"
+      (paginationEvent)="getCurrentData($event)"
+      (showDeleteEvent)="handleShowDelete($event)"
+      [dataList]="dataList"
+      [defultprofile]="defultProfile"
+      [profilesList]="currentProfiles"
+    >
+      <div addition_action class="action_btn">
+        <button (click)="showLinkTable = true" class="btn">
+          Link Items
+        </button>
+      </div>
+    </lib-shared-ui>
+    }
+  </p-accordionTab>
+  }
+</p-accordion>
+
+
+
+@if(showLinkTable){
+  <lib-linked-module-selected [current_entity_id]="current_entity_id" [checked_selected_items]="dataList" [current_data_view]="current_link_module" (show_linkedChange)="handleLinkTable($event)" [show_linked]="showLinkTable" ></lib-linked-module-selected>
+}

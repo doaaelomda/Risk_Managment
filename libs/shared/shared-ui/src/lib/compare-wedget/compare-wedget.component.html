@@ -1,0 +1,24 @@
+<div class="card_wedget m-2 lg:m-0">
+  <div class="card_header mb-5 flex items-center justify-between">
+    <h3 class="font-medium text-lg">{{current_title}}</h3>
+
+    <div class="icon">
+      <i class="fi fi-rr-menu-dots-vertical text-gray_color"></i>
+    </div>
+  </div>
+
+  <div class="content flex items-center flex-wrap  justify-between gap-4">
+    <div class="analysis">
+      <p class="mb-2 text-3xl font-semibold">2,420</p>
+      <p>
+        <span></span>
+        <span>vs last month</span>
+      </p>
+    </div>
+
+    <div class="chart max-w-48 min-w-48">
+      <p-chart #revChart  height="4rem"  type="line" [data]="dataRevChart" [options]="options" />
+    </div>
+  </div>
+
+</div>

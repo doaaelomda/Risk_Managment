@@ -1,0 +1,7 @@
+<section class="grid grid-cols-12 gap-6">
+  @for(widget of riskDashboardWidgets ; track widget ){
+    <div class="col-span-4 ">
+      <lib-chart-bar [chart_config_input]="widget" ></lib-chart-bar>
+    </div>
+  }
+</section>

@@ -1,0 +1,8 @@
+@if(!loading){
+    <h1 class="header-para"> {{data.requirementText || '-'}} </h1>
+}@else {
+    <p-skeleton width="15rem" height="5rem"></p-skeleton>
+}
+<lib-shared-tabs [permissionFeature]="{module:'LIBRARY' , feature:'STANDARDDOCUMENTS_CONTROLS_REQUIREMENTS'}"
+></lib-shared-tabs>
+<router-outlet></router-outlet>

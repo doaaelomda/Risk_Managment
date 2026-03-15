@@ -1,0 +1,52 @@
+<section>
+  <div class="header flex items-center justify-between flex-wrap mb-2">
+    <div class="title flex items-center gap-4 flex-wrap">
+      @if(loadDataDocumnet){
+      <p-skeleton width="15rem" styleClass="mb-2" />
+      <p-skeleton width="10rem" styleClass="mb-2" />
+      }@else {
+      <h2 class="text-2xl font-semibold text-gray-800">{{ DocumnetData?.name }}</h2>
+      <p class="text-gray_color m-0">
+        {{ '(' + DocumnetData?.govDocumentTypeName + ')'  }}
+      </p>
+      }
+    </div>
+    <div class="flex flex-wrap items-center gap-4">
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">
+          {{ 'GOV_DOC.Revision_DATE' | translate }} :
+        </p>
+        <span class="font-semibold">{{
+          DocumnetData?.revisionDate | date:'MMM d, y'
+        }}</span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">
+          {{ 'Control_view.GOV_DOCUMENT_TYPE' | translate }} :
+        </p>
+        <span class="font-semibold badge "  >{{
+          DocumnetData?.govDocumentTypeName ?? '- '
+        }}</span>
+      </div>
+
+                <div class="flex items-center gap-2">
+        <p class="m-0 font-medium text-gray_color">
+          {{ 'TABS.DEPARTMENT' | translate }} :
+        </p>
+
+             <span class="font-semibold">{{
+          DocumnetData?.organizationalUnitName
+        }}</span>
+      </div>
+    </div>
+
+  </div>
+  <h6 class="text-primary font-bold text-2xl mb-3 mx-4">
+    └─{{ versionData?.name || '-' }}
+  </h6>
+
+  <lib-shared-tabs [tabs]="tabs" [permissionFeature]="{module:'GOVERNANCE' , feature:'VERSION'}"></lib-shared-tabs>
+
+  <router-outlet></router-outlet>
+</section>

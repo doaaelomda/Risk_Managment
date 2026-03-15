@@ -1,0 +1,90 @@
+.card{
+  padding: 12px 8px;
+  box-shadow: 0px 4px 4px 0px #00000014;
+  border-radius: 12px;
+  border: 1px solid #EAECF0;
+}
+
+
+
+.actions_btns{
+  .btn{
+    width: 30px;
+    height: 30px;
+    background-color: #F4F3FF;
+    @apply rounded-lg text-primary flex justify-center items-center;
+  }
+}
+
+
+.doc_card{
+  border: 1px solid #EAECF0;
+  border-radius: 8px;
+  padding: 12px;
+
+
+
+  .info{
+    @apply flex items-center gap-2 ;
+    span{
+      color: #344054;
+      @apply font-semibold text-sm;
+    }
+
+    p{
+      color: #667085;
+      @apply text-sm font-medium;
+    }
+  }
+
+
+  .status{
+    border: 1px solid #EAECF0;
+    border-radius: 8px;
+    padding: 20px 16px;
+
+
+    .case_bo{
+      border:  1px solid #D0D5DD;
+      box-shadow: 0px 1px 2px 0px #1018280F;
+      box-shadow: 0px 1px 3px 0px #1018281A;
+      border-radius: 8px;
+      padding: 8px;
+    }
+  }
+
+
+
+  .anaiysis_card{
+    padding: 8px 12px;
+    border: 1px solid #EAECF0;
+    border-radius: 8px;
+  }
+}
+
+
+
+.bordered_badge {
+  @apply px-3 py-1 rounded-full text-sm font-medium flex items-center justify-center;
+  color: rgba(208, 213, 221, 1);
+    border: 1px solid;
+  &.green {
+    color: #027A48;
+}
+
+  &.red {
+    color: #B42318;
+  }
+
+    &.green {
+    color: #12B76A;
+  }
+
+  &.yellow {
+    color: #B54708;
+      }
+}
+
+
+
+
